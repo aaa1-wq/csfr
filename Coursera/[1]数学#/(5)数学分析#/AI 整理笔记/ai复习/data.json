@@ -1,0 +1,549 @@
+{
+  "version": 1,
+  "vaultName": "数分I期中复习",
+  "generatedAt": "2026-10-21",
+  "masterIndexContent": "```mermaid\ngraph LR\n  Ch1[\"第1章 实数系与极限基础\"]:::core --> Ch2[\"第2章 数列极限\"]:::core\n  Ch1 --> Ch3[\"第3章 函数极限与连续\"]:::core\n  Ch3 --> Ch4[\"第4章 导数与微分\"]:::core\n  Ch4 --> Ch5[\"第5章 微分中值定理\"]:::core\n  Ch2 -.-> Ch3\n  classDef core fill:#f9d\n```",
+  "chapters": {
+    "01": {
+      "id": "01",
+      "slug": "01_第1章_实数系与极限基础",
+      "number": 1,
+      "name": "第1章 实数系与极限基础",
+      "star": 3,
+      "keypoints": [
+        {
+          "number": 1,
+          "title": "上确界与下确界",
+          "star": 3,
+          "body": "设 $A$ 非空。**上确界** $\\sup A$ 为最小上界：$\\forall a\\in A,\\ a\\le\\sup A$；且 $\\forall y<\\sup A,\\exists a_0\\in A,a_0>y$。**下确界** $\\inf A$ 为最大下界。**无上确界**：$\\forall M,\\exists x\\in S,x>M$（即无上界）。**确界原理**：非空有上界数集必有上确界。"
+        },
+        {
+          "number": 2,
+          "title": "闭区间套定理",
+          "star": 3,
+          "body": "若 $[a_{n+1},b_{n+1}]\\subset[a_n,b_n]$ 且 $\\lim(b_n-a_n)=0$，称闭区间套；则存在唯一 $\\xi\\in\\bigcap[a_n,b_n]$，且 $\\xi=\\lim a_n=\\lim b_n$。**注意**：开区间套结论不成立（$(0,1/n)$ 无公共点）。"
+        },
+        {
+          "number": 3,
+          "title": "函数极限的 ε-δ / Heine / 振幅刻画",
+          "star": 3,
+          "body": "$\\lim_{x\\to x_0}f(x)=y_0\\iff \\forall\\varepsilon>0,\\exists\\delta>0,0<|x-x_0|<\\delta\\Rightarrow|f(x)-y_0|<\\varepsilon$。无穷极限：$\\forall G>0,\\exists\\delta,|f(x)|>G$。Heine：对任意 $x_n\\to x_0$ 都有 $f(x_n)\\to y_0$。Cauchy 收敛原理：$|f(x_1)-f(x_2)|<\\varepsilon$。"
+        },
+        {
+          "number": 4,
+          "title": "上极限与下极限",
+          "star": 2,
+          "body": "$\\varlimsup x_n=\\inf_n\\sup_{k\\ge n}x_k$，$\\varliminf x_n=\\sup_n\\inf_{k\\ge n}x_k$。存在子列分别集聚于上/下极限；$\\{x_n\\}$ 收敛 $\\iff \\varlimsup=\\varliminf$。"
+        }
+      ],
+      "examples": [
+        {
+          "title": "例1.1 上确界叙述（22王勇 Q1-1）",
+          "body": "> 叙述 $A$ 的上确界定义。\n\n**解**：$\\sup A=\\min\\{M:\\forall a\\in A,a\\le M\\}$；或 (i) 是上界 (ii) 最小。"
+        },
+        {
+          "title": "例1.2 无上确界（22计算机 Q1-2）",
+          "body": "> 给出 $S$ 无上确界定义。\n\n**解**：$S$ 无上界：$\\forall M>0,\\exists x\\in S,x>M$。"
+        },
+        {
+          "title": "例1.3 闭区间套叙述（22王勇 Q1-3）",
+          "body": "> 叙述闭区间套定理（含定义）。\n\n**解**：嵌套且 $\\lim(b_n-a_n)=0$，则唯一公共点 $\\xi=\\lim a_n=\\lim b_n$。"
+        }
+      ],
+      "formulas": [
+        {
+          "name": "上确界",
+          "formula": "$$\\sup A=\\min\\{M:\\forall a\\in A,\\ a\\le M\\}$$",
+          "condition": "$A$ 非空有上界",
+          "note": "最小上界",
+          "importance": "must",
+          "meaning": "集合的最小上界",
+          "derivation": "确界原理保证存在",
+          "application": "严格叙述题的送分点",
+          "related": ""
+        },
+        {
+          "name": "闭区间套",
+          "formula": "$$\\xi=\\lim_{n\\to\\infty}a_n=\\lim_{n\\to\\infty}b_n$$",
+          "condition": "嵌套且 $b_n-a_n\\to0$",
+          "note": "唯一公共点",
+          "importance": "must",
+          "meaning": "嵌套闭区间收缩到唯一一点",
+          "derivation": "由单调有界原理",
+          "application": "证明连续函数性质",
+          "related": ""
+        },
+        {
+          "name": "上极限",
+          "formula": "$$\\varlimsup_{n\\to\\infty}x_n=\\inf_n\\sup_{k\\ge n}x_k$$",
+          "condition": "有界数列",
+          "note": "最大聚点",
+          "importance": "familiar",
+          "meaning": "最大聚点",
+          "derivation": "—",
+          "application": "收敛判据",
+          "related": ""
+        }
+      ],
+      "quizQuestions": [
+        {
+          "title": "自测1（闭区间套 vs 开）",
+          "question": "判断：开区间套 $(a_n,b_n)$ 嵌套且 $\\lim(b_n-a_n)=0$，是否 $\\forall n,\\exists!\\xi\\in(a_n,b_n)$ 为公共点？",
+          "answer": "**错**。反例 $(0,1/n)$，长度 $\\to0$ 但交集为空。闭区间套定理的\"闭\"不可换成\"开\"。"
+        },
+        {
+          "title": "自测2（上确界）",
+          "question": "$A=\\{1-1/n:n\\in\\mathbb N^+\\}$，求 $\\sup A,\\inf A$。",
+          "answer": "$\\sup A=1$（取不到），$\\inf A=0$（取得到）。"
+        },
+        {
+          "title": "自测3（上下极限）",
+          "question": "$x_n=(-1)^n+1/n$，求上下极限。",
+          "answer": "$\\varlimsup=1,\\ \\varliminf=-1$，不收敛。"
+        }
+      ],
+      "examMapping": "# 题库\n\n## 真题映射\n\n### 2022-11-09 数分A 期中（王勇）\n\n**Q1-1（4分，严格叙述）** 叙述数集 $A$ 的上确界定义。\n> 答：$\\sup A$ 为最小上界：$\\forall a\\in A,a\\le\\sup A$；且 $\\forall y<\\sup A,\\exists a_0\\in A,a_0>y$。\n\n**Q1-3（4分，严格叙述）** 叙述闭区间套定理（含闭区间套定义）。\n> 答：嵌套且 $\\lim(b_n-a_n)=0$ 的闭区间列，存在唯一 $\\xi\\in\\bigcap[a_n,b_n]$，$\\xi=\\lim a_n=\\lim b_n$。\n\n### 2022 数分BI 期中（计算机学院）\n\n**Q1-1（3分）** 给出非空数集 $S$ 有下界、有最小数的定义。\n**Q1-2（3分）** 给出非空数集 $S$ 无上确界的定义。\n**Q1-3（3分）** 给出函数极限 $\\lim_{x\\to x_0^-}f(x)=-\\infty$ 的 Heine 定理。\n**Q1-4（3分）** 给出函数极限 $\\lim_{x\\to\\infty}f(x)$ 情形下的 Cauchy 收敛原理。\n\n### 2014-2015 数分B 期中 A卷\n\n**一-1（3分）** 给出 $\\lim_{x\\to\\infty}f(x)=y_0\\in\\mathbb R$ 的 $\\varepsilon$-$\\delta$ 语言表述（Cauchy 叙述）并图示。\n**一-2（3分）** 给出闭区间上连续函数的所有性质。\n**一-3（3分）** 给出点列极限的分析性质（由确界存在性定理开始）。\n\n### 2018-2019 数分B 一元微分学测试\n\n**一-1（5分）** 叙述函数极限的集聚刻画、序列刻画、振幅刻画。\n**一-3（5分）** 叙述有界函数上、下极限的定义。\n\n### 2022-2023 数分B(I) 一元微分学阶段考\n\n**一（10分）** 证明 Fermat 引理：可微极值点导数必为零（Rolle 型结论、Cauchy 中值定理）。\n\n### 2021 数分I 期中（王勇）\n\n**1-叙述题** (1) 函数 $f(x)$ 在区间 $I$ 上**不一致连续**（否定式叙述）；(2) $f(x)$ 在 $x_0$ **可微**；(3) $f(x)$ **下凸**。\n> 一致连续否定：$\\exists\\varepsilon_0>0,\\forall\\delta>0,\\exists x_1,x_2\\in I,|x_1-x_2|<\\delta$ 而 $|f(x_1)-f(x_2)|\\ge\\varepsilon_0$。\n\n---\n\n## 自测\n\n### 自测 1（闭区间套 vs 开区间套）\n\n判断：若有开区间套 $(a_1,b_1)\\supset(a_2,b_2)\\supset\\cdots$ 且 $\\lim(b_n-a_n)=0$，则 $\\forall n,\\exists!\\xi\\in(a_n,b_n)$ 使 $\\lim a_n=\\lim b_n=\\xi$。\n\n> [!faq]- 点击展开答案\n> **错。** 开区间套不必有公共点。反例：$(0,\\tfrac1n)$，两两嵌套且长度 $\\tfrac1n\\to0$，但 $\\bigcap(0,\\tfrac1n)=\\varnothing$，无公共点。闭区间套定理的\"闭\"不可换成\"开\"。\n\n### 自测 2（上确界）\n\n设 $A=\\{1-\\tfrac1n: n\\in\\mathbb N^+\\}$，求 $\\sup A,\\inf A$。\n\n> [!faq]- 点击展开答案\n> $A$ 单调递增、有上界 1，故 $\\sup A=1$（取不到）；最小元为 $0=\\inf A$（取到）。\n\n### 自测 3（上下极限）\n\n设 $x_n=(-1)^n+\\tfrac1n$，求 $\\varlimsup x_n$ 与 $\\varliminf x_n$。\n\n> [!faq]- 点击展开答案\n> 偶数子列 $\\to 1$，奇数子列 $\\to -1$。故 $\\varlimsup x_n=1,\\ \\varliminf x_n=-1$，数列不收敛。\n",
+      "deps": [],
+      "depTypes": {},
+      "files": {
+        "讲解.md": "01_第1章_实数系与极限基础/讲解.md",
+        "题库.md": "01_第1章_实数系与极限基础/题库.md",
+        "速查.md": "01_第1章_实数系与极限基础/速查.md"
+      }
+    },
+    "02": {
+      "id": "02",
+      "slug": "02_第2章_数列极限",
+      "number": 2,
+      "name": "第2章 数列极限",
+      "star": 3,
+      "keypoints": [
+        {
+          "number": 1,
+          "title": "Stolz 定理",
+          "star": 3,
+          "body": "$b_n$ 严格递增且 $\\to+\\infty$（或 $a_n,b_n\\to0$）且 $\\lim\\frac{a_{n+1}-a_n}{b_{n+1}-b_n}=L$，则 $\\lim\\frac{a_n}{b_n}=L$。用于 $n^{1/n}$、$\\frac{a_1+\\cdots+a_n}{n}$。"
+        },
+        {
+          "number": 2,
+          "title": "重要极限 $(1+1/n)^n$",
+          "star": 3,
+          "body": "$e=\\lim(1+1/n)^n=\\lim(1+1/n)^{n+1}$。$x_n$ 增、$y_n$ 减，共同极限 $e$（例2.4.6）。"
+        },
+        {
+          "number": 3,
+          "title": "单调有界原理与递推数列",
+          "star": 3,
+          "body": "单调 + 有界 ⇒ 收敛。递推三步：证有界+单调 → 得极限存在设 $A$ → 递推式取极限解方程舍根。"
+        },
+        {
+          "number": 4,
+          "title": "上下极限与子列",
+          "star": 2,
+          "body": "有界数列必有收敛子列；$\\varlimsup$ 最大聚点、$\\varliminf$ 最小聚点；$\\lim(x_{n+1}+\\lambda x_n)=l,0<\\lambda<1$ ⇒ $\\{x_n\\}$ 收敛。"
+        }
+      ],
+      "examples": [
+        {
+          "title": "例2.1 $n^{1/n}$ 型（22王勇 Q2-4）",
+          "body": "> (1) $\\lim n^{1/n}$；(2) $\\lim\\frac{n}{\\ln n}(n^{1/n}-1)$。\n\n**解**：(1) $=e^{\\ln n/n}\\to1$；(2) 由 $e^x=1+x+o(x)$，$=1$。"
+        },
+        {
+          "title": "例2.2 根式递推（18-19 Q8）",
+          "body": "> $|x_1|\\le2,x_{n+1}=\\sqrt{4-x_n}$，求极限。\n\n**解**：有界；$A=\\sqrt{4-A}\\Rightarrow A=\\frac{-1+\\sqrt{17}}{2}$。"
+        },
+        {
+          "title": "例2.3 $(1+1/n)^n$ 与 e（22王勇 Q4-2）",
+          "body": "> 证单调、共同极限 $e$；证 $\\frac35<\\ln2<\\frac34$。\n\n**解**：见例2.4.6；$e<(1+1/n)^{n+1}$ 取 n=4 得 $e^{3/5}<125/64<2$；$e>(1+1/n)^n$ 取 n=8。"
+        }
+      ],
+      "formulas": [
+        {
+          "name": "Stolz",
+          "formula": "$$\\lim\\frac{a_n}{b_n}=\\lim\\frac{a_{n+1}-a_n}{b_{n+1}-b_n}$$",
+          "condition": "$b_n$ 严格增 $\\to\\infty$",
+          "note": "数列洛必达",
+          "importance": "must",
+          "meaning": "数列形式的洛必达法则",
+          "derivation": "由 Lagrange 中值定理",
+          "application": "$n^{1/n}$、均值和",
+          "related": ""
+        },
+        {
+          "name": "重要极限 e",
+          "formula": "$$e=\\lim_{n\\to\\infty}\\Big(1+\\frac1n\\Big)^n=\\lim_{n\\to\\infty}\\Big(1+\\frac1n\\Big)^{n+1}$$",
+          "condition": "$n\\to\\infty$",
+          "note": "单调有界",
+          "importance": "must",
+          "meaning": "自然对数的底",
+          "derivation": "单调有界原理",
+          "application": "e 的估计不等式",
+          "related": ""
+        }
+      ],
+      "quizQuestions": [
+        {
+          "title": "自测1（递推）",
+          "question": "$x_1=1,x_{n+1}=\\frac{1}{2+x_n}$，证收敛并求极限。",
+          "answer": "$0<x_n\\le1$；$A=\\frac{1}{2+A}\\Rightarrow A=\\sqrt2-1$。"
+        },
+        {
+          "title": "自测2（Stolz）",
+          "question": "$\\lim\\frac{1+2+\\cdots+n}{n^2}$。",
+          "answer": "Stolz：$\\frac{n+1}{2n+1}\\to\\frac12$。"
+        },
+        {
+          "title": "自测3（递推+λ）",
+          "question": "$\\lim(x_{n+1}+\\lambda x_n)=l,0<\\lambda<1$，证收敛求极限。",
+          "answer": "迭代展开 $x_n\\to\\frac{l}{1+\\lambda}$。"
+        }
+      ],
+      "examMapping": "# 题库\n\n## 真题映射\n\n### 2022-11-09 数分A 期中（王勇）\n\n**Q2-4（7分）** 计算 (1) $\\lim n^{1/n}$；(2) $\\lim \\frac{n}{\\ln n}(n^{1/n}-1)$。\n> (1) $=1$（Stolz）；(2) $=1$（$e^x=1+x+o(x)$）。\n\n**Q4-2（10分）** $x_n=(1+\\frac1n)^n,y_n=(1+\\frac1n)^{n+1}$：证单调、共同极限 $e$；证 $\\frac35<\\ln2<\\frac34$。\n\n### 2022 数分BI 期中（计算机学院）\n\n**四-1（5分）** 求 $\\displaystyle\\lim_{n\\to\\infty}\\Big(\\frac12+\\frac{3}{2^2}+\\frac{5}{2^3}+\\cdots+\\frac{2n-1}{2^n}\\Big)$。\n> 错位相减/级数型，极限为 3。\n**五-2（5分）** 当 $x\\to+\\infty$，给出 $x^a,(\\log_b x)^k,c^x$（$a>0,k>0,b>1,c>1$）从低阶到高阶顺序并证明。\n\n### 2014-2015 数分B 期中 A卷\n\n**三-1（8分）** 利用 Stolz 定理求 $\\displaystyle\\lim_{n\\to\\infty}\\frac{1^p+2^p+\\cdots+n^p}{n^{p+1}}$（$p$ 正整数）。\n> 用 Stolz：$=\\frac{n^p}{(n+1)^{p+1}-n^{p+1}}\\to\\frac{1}{p+1}$。\n\n### 2018-2019 数分B 一元微分学测试\n\n**三-3（10分）** 计算 $\\lim_{n\\to+\\infty}n^2(\\sqrt[n]{a}-\\sqrt[n+1]{a})$，$a>0$。\n> $=\\ln a$（泰勒展开）。\n**三-6（10分）** 计算 $\\lim_{n\\to+\\infty}\\frac{n}{a^{n+1}}\\big(a+\\frac{a^2}{2}+\\cdots+\\frac{a^n}{n}\\big)$，$a>1$。\n> 用 Stolz，结果为 ... （见原卷）。\n\n### 2022-2023 数分B(I) 阶段考\n\n**二-1（10分）** 计算数列极限：(1) $\\lim n\\big[(1+\\frac{1}{n+1})^n-e\\big]$；(2) $\\lim\\big[1+\\sin(\\pi\\sqrt{1+4n^2})\\big]^n$。\n> (1) $=-\\frac e2$；(2) $=e^{\\pi/4}$。\n\n### 2019-2020 数分AI 期中\n\n**三（20分）** (1) $\\lim_{n\\to\\infty}\\frac{1+\\frac1{\\sqrt2}+\\cdots+\\frac1{\\sqrt n}}{\\sqrt n}$；(2) $\\lim_{n\\to\\infty}\\frac1{\\sqrt n}\\sum_{k=1}^n\\frac{\\sqrt k}{\\sqrt{n+1-k}}$。\n> (1) Stolz ⇒ 2；(2) 对称性/夹逼 ⇒ 1。\n\n### 2021 数分I 期中（王勇）\n\n**2-是非题 (1)** $y_n$ 严格单调正无穷大量，且 $\\lim\\frac{x_n-x_{n-1}}{y_n-y_{n-1}}=\\infty$，则 $\\lim\\frac{x_n}{y_n}=\\infty$。（正确，Stolz 定理）\n**3-计算题 (1)** $S_n=\\sum_{k=1}^n a_k$ 当 $n\\to\\infty$ 有极限，$\\{p_n\\}$ 单调递增正无穷大量，求 $\\lim_{n\\to\\infty}\\frac{p_1a_1+p_2a_2+\\cdots+p_na_n}{p_n}$。\n> 应 Abel/Stolz：利用 $\\sum a_k$ 收敛，得极限 $=0$。\n\n---\n\n## 自测\n\n### 自测 1（递推数列）\n\n设 $x_1=1$，$x_{n+1}=\\dfrac{1}{2+x_n}$，证明极限存在并求之。\n\n> [!faq]- 点击展开答案\n> $0<x_n\\le1$，且 $x_{n+2}-x_{n+1}$ 与 $x_{n+1}-x_n$ 反号，振荡收敛；解 $A=\\frac{1}{2+A}\\Rightarrow A^2+2A-1=0\\Rightarrow A=\\sqrt2-1$。\n\n### 自测 2（Stolz）\n\n求 $\\displaystyle\\lim_{n\\to\\infty}\\frac{1+2+\\cdots+n}{n^2}$。\n\n> [!faq]- 点击展开答案\n> Stolz：$\\dfrac{(n+1)}{(n+1)^2-n^2}=\\dfrac{n+1}{2n+1}\\to\\dfrac12$。\n\n### 自测 3（上下极限）\n\n设 $\\lim(x_{n+1}+\\lambda x_n)=l$，$0<\\lambda<1$，证明 $\\{x_n\\}$ 收敛并求极限。\n\n> [!faq]- 点击展开答案\n> 先证有界；记 $y_n=x_{n+1}+\\lambda x_n\\to l$。可写成 $x_{n+1}=y_n-\\lambda x_n$，迭代展开 $x_n=\\sum(-1)^k\\lambda^k y_{n-1-k}+(-\\lambda)^{n-1}x_1$，取极限得 $x_n\\to\\dfrac{l}{1+\\lambda}$。\n",
+      "deps": [
+        "01"
+      ],
+      "depTypes": {
+        "01": "dependency"
+      },
+      "files": {
+        "讲解.md": "02_第2章_数列极限/讲解.md",
+        "题库.md": "02_第2章_数列极限/题库.md",
+        "速查.md": "02_第2章_数列极限/速查.md"
+      }
+    },
+    "03": {
+      "id": "03",
+      "slug": "03_第3章_函数极限与连续",
+      "number": 3,
+      "name": "第3章 函数极限与连续",
+      "star": 3,
+      "keypoints": [
+        {
+          "number": 1,
+          "title": "函数极限计算（泰勒/等价无穷小）",
+          "star": 3,
+          "body": "常用展开：$\\sin x=x-x^3/6+o(x^3)$，$\\cos x=1-x^2/2+x^4/24+o(x^4)$，$\\ln(1+x)=x-x^2/2+x^3/3+o$，$e^x=1+x+x^2/2+o$。等价：$\\sin x\\sim x,1-\\cos x\\sim x^2/2$。加减不能直接等价替换。"
+        },
+        {
+          "number": 2,
+          "title": "间断点分类",
+          "star": 2,
+          "body": "第一类：左右极限都存在（相等⇒可去；不等⇒跳跃）；第二类：至少一个不存在/∞/振荡。"
+        },
+        {
+          "number": 3,
+          "title": "一致连续",
+          "star": 3,
+          "body": "$\\forall\\varepsilon>0,\\exists\\delta>0,|x_1-x_2|<\\delta\\Rightarrow|f(x_1)-f(x_2)|<\\varepsilon$。Cantor：闭区间连续⇒一致连续。否证：找 $|x_n-x_n'|\\to0$ 而 $|f(x_n)-f(x_n')|\\not\\to0$。"
+        },
+        {
+          "number": 4,
+          "title": "有界性与最值定理",
+          "star": 2,
+          "body": "闭区间连续函数：有界、取最值、介值、零点存在；单调+值域为区间⇒连续（反函数存在性）。"
+        }
+      ],
+      "examples": [
+        {
+          "title": "例3.1 等价无穷小（22王勇 Q2-1）",
+          "body": "> $\\lim_{x\\to\\pi/2}(x-\\pi/2)\\tan x$。\n\n**解**：令 $u=x-\\pi/2$，$-u\\cot u\\to-1$。"
+        },
+        {
+          "title": "例3.2 间断点分类（22王勇 Q2-2）",
+          "body": "> $f(x)=\\frac{x}{\\ln|x|}$ 间断点类型。\n\n**解**：$x\\to0$ 可去；$x\\to\\pm1$ 第二类（∞）。"
+        },
+        {
+          "title": "例3.3 一致连续（22王勇 Q4-1）",
+          "body": "> (1) $f$ 有界且一致连续，证 $f\\sin x$ 一致连续；(2) $x\\sin x$ 不一致连续。\n\n**解**：(1) $|f(x_1)\\sin x_1-f(x_2)\\sin x_2|\\le|f(x_1)-f(x_2)|+M|x_1-x_2|$。(2) $x_n=2n\\pi,x_n'=2n\\pi+1/n$。"
+        }
+      ],
+      "formulas": [
+        {
+          "name": "常用泰勒",
+          "formula": "$$\\sin x=x-\\frac{x^3}{6}+o(x^3),\\ \\cos x=1-\\frac{x^2}{2}+\\frac{x^4}{24}+o(x^4)$$",
+          "condition": "$x\\to0$",
+          "note": "逐项展开",
+          "importance": "must",
+          "meaning": "局部多项式逼近",
+          "derivation": "泰勒公式",
+          "application": "所有分式极限计算",
+          "related": ""
+        },
+        {
+          "name": "等价无穷小",
+          "formula": "$$\\sin x\\sim x,\\ \\ln(1+x)\\sim x,\\ e^x-1\\sim x,\\ 1-\\cos x\\sim\\frac{x^2}{2}$$",
+          "condition": "$x\\to0$，乘除可用",
+          "note": "加减慎用",
+          "importance": "must",
+          "meaning": "一阶近似",
+          "derivation": "泰勒取首项",
+          "application": "极限速算",
+          "related": ""
+        },
+        {
+          "name": "一致连续",
+          "formula": "$$\\forall\\varepsilon>0,\\exists\\delta>0:|x_1-x_2|<\\delta\\Rightarrow|f(x_1)-f(x_2)|<\\varepsilon$$",
+          "condition": "$x_1,x_2\\in I$",
+          "note": "δ 与点无关",
+          "importance": "must",
+          "meaning": "全局统一连续性",
+          "derivation": "定义",
+          "application": "证明/否证一致连续",
+          "related": ""
+        }
+      ],
+      "quizQuestions": [
+        {
+          "title": "自测1（泰勒）",
+          "question": "$\\lim_{x\\to0}\\frac{\\cos x-e^{-x^2/2}}{x^4}$。",
+          "answer": "$=-\\frac1{12}$。"
+        },
+        {
+          "title": "自测2（间断点）",
+          "question": "$f(x)=\\frac{\\sin x}{|x|}$ 在 0 处类型。",
+          "answer": "跳跃间断点（左 -1 右 1）。"
+        },
+        {
+          "title": "自测3（一致连续）",
+          "question": "$x^2$ 在 $[0,+\\infty)$ 一致连续？",
+          "answer": "否。$x_n=\\sqrt{n+1},x_n'=\\sqrt n$，差 $\\to0$ 但函数差 $=1$。"
+        }
+      ],
+      "examMapping": "# 题库\n\n## 真题映射\n\n### 2022-11-09 数分A 期中（王勇）\n\n**Q1-2（4分）** 叙述 $\\lim_{x\\to x_0}f(x)=\\infty$ 的定义。\n**Q2-1（7分）** 计算 $\\lim_{x\\to\\pi/2}(x-\\frac\\pi2)\\tan x$。→ $-1$\n**Q2-2（7分）** 求 $f(x)=\\frac{x}{\\ln|x|}$ 的间断点并分类。\n**Q4-1（8分）** (1) 有界+一致连续之 $f$ 与 $\\sin x$ 之积一致连续；(2) $x\\sin x$ 不一致连续。\n\n### 2022 数分BI 期中（计算机学院）\n\n**四-2（5分）** 求 $\\lim_{x\\to0}\\frac{\\ln(e^{\\sin x}+\\sqrt[3]{1-\\cos x})-\\sin x}{\\arctan(4\\sqrt[3]{1-\\cos x})}$。\n**四-5（5分）** 当 $x\\to0$，$e^x+\\ln(1-x)-1$ 与 $x^n$ 同阶无穷小，求 $n$。→ $n=2$\n**三-3（6分）** 判断 $f(x)=\\frac{|\\sin x|}{x}$ 在 $(-1,0)\\cup(0,1)$ 上是否一致连续。\n\n### 2014-2015 数分B 期中 A卷\n\n**二-1（5分）** $f$ 在 $(0,1]$ 连续，则 $f$ 在 $(0,1]$ 上有界？（判断+证明/反例）\n**三-7（8分）** $f$ 在 $[a,b]$ 连续，证明 $f$ 在 $[a,b]$ 上一致连续。\n\n### 2018-2019 数分B 一元微分学测试\n\n**二-1（5分）** 判断：一点单侧连续⇒单侧可导？单侧可导⇒单侧连续？\n**二-2（5分）** 判断：$(a,b)$ 上两个一致连续函数之积是否一致连续？\n**二-4（5分）** 判断：$\\tilde x_n-\\hat x_n\\to0\\Rightarrow f(\\tilde x_n)-f(\\hat x_n)\\to0$ 是否等价于一致连续。\n**三-1（10分）** 计算 $\\lim_{x\\to0}\\frac{\\cos(\\sin x)-\\cos x}{x^4}$。→ $\\frac16$\n**三-2（10分）** 展开 $\\ln(x+\\sqrt{x^2+1})$ 至 $o(x^3)$。→ $x-\\frac{x^3}{6}+o(x^4)$\n**三-4（10分）** 求 $y=\\frac{\\arcsin(\\sin^2 x)^{\\arctan^2 x}}{\\arccos(\\cos^2 x)}$ 的一阶导数。\n\n### 2022-2023 数分B(I) 阶段考\n\n**三-2（10分）** 计算函数极限 (1) $\\lim(1+x^{-3}e^{-1/x}\\sin\\frac1{x^4})^{x^{-3}}$；(2) $\\lim\\frac{1-\\frac{1}{x^2}\\cos^2 x}{1+x^2-\\cos^2 x}$。\n\n### 2019-2020 数分AI 期中（5 题 × 20 分）\n\n**一（20分）** $\\alpha>0,x>0$，$f(x)=\\lim_{n\\to\\infty}\\left(1-\\frac{x}{n^\\alpha}\\right)^n$，讨论 $f$ 在 $(0,+\\infty)$ 上连续性。\n> 关键：$n^\\alpha\\to\\infty$ 时 $(1-\\frac{x}{n^\\alpha})^n\\to e^{-x\\,n^{1-\\alpha}}$ 型；$\\alpha>1$ 时 $f\\equiv1$（连续）；$\\alpha=1$ 时 $f=e^{-x}$（连续）；$0<\\alpha<1$ 时需分段讨论。\n\n**五（20分）** $f,g$ 在 $\\mathbb R$ 上一致连续：(1) $f,g$ 有界 ⇒ $fg$ 一致连续；(2) $\\lim_{x\\to\\infty}xg(x)=0$ ⇒ $fg$ 一致连续；(3) 是否存在 $\\alpha\\in(0,1)$ 使 $\\lim|x|^\\alpha g(x)=0$ 可推出 $fg$ 一致连续？\n\n### 2021 数分I 期中（王勇，9 页）\n\n**1（叙述）** (1) $f$ 在区间 $I$ 上不一致连续；(2) $f$ 在 $x_0$ 可微；(3) $f$ 下凸。\n**2-是非题（部分）** (2) $\\lim_{u\\to a}f(u)=b,\\lim_{x\\to x_0}g(x)=a$，则 $\\lim_{x\\to x_0}f(g(x))=b$（错，需 $f$ 在 $a$ 连续或 $g\\ne a$）；(3) 若 $f$ 在有限开区间 $(a,b)$ 上一致连续，则 $f$ 在 $(a,b)$ 上有界（对）；(4) 一致连续函数之积仍一致连续（错，须至少一个有界）。\n**3-计算题** (2) $\\lim_{n\\to\\infty}\\left(\\frac{1}{n+\\sqrt1}+\\frac{1}{n+\\sqrt2}+\\cdots+\\frac{1}{n+\\sqrt n}\\right)$；(3) $\\lim_{x\\to0}(x+e^x)^{1/x}$；(4) $\\lim_{x\\to+\\infty}x^{3/2}(\\sqrt{x+1}+\\sqrt{x-1}-2\\sqrt x)$。\n> (2) 夹逼 $=\\frac{n}{n+\\sqrt n}\\le\\cdot\\le\\frac{n}{n+1}$ ⇒ 1；(3) $=e^2$；(4) 有理化/展开 $=\\frac14$ 或 $0$（按最高阶）。\n\n---\n\n## 自测\n\n### 自测 1（泰勒）\n\n求 $\\displaystyle\\lim_{x\\to0}\\dfrac{\\cos x-e^{-x^2/2}}{x^4}$。\n\n> [!faq]- 点击展开答案\n> $\\cos x=1-\\frac{x^2}{2}+\\frac{x^4}{24}+o(x^4)$，$e^{-x^2/2}=1-\\frac{x^2}{2}+\\frac{x^4}{8}+o(x^4)$，差为 $(\\frac1{24}-\\frac18)x^4=-\\frac1{12}x^4$，故极限 $=-\\frac1{12}$。\n\n### 自测 2（间断点）\n\n求 $f(x)=\\dfrac{\\sin x}{|x|}$ 在 $x=0$ 处的间断类型。\n\n> [!faq]- 点击展开答案\n> 左极限 $-1$，右极限 $1$，都存在但不等 ⇒ 跳跃间断点（第一类）。\n\n### 自测 3（一致连续）\n\n判断 $f(x)=x^2$ 在 $[0,+\\infty)$ 上是否一致连续。\n\n> [!faq]- 点击展开答案\n> 否。取 $x_n=\\sqrt{n+1},\\ x_n'=\\sqrt n$，$|x_n-x_n'|\\to0$ 但 $|x_n^2-x_n'^2|=1\\not\\to0$，故不一致连续。\n",
+      "deps": [
+        "01"
+      ],
+      "depTypes": {
+        "01": "dependency"
+      },
+      "files": {
+        "讲解.md": "03_第3章_函数极限与连续/讲解.md",
+        "题库.md": "03_第3章_函数极限与连续/题库.md",
+        "速查.md": "03_第3章_函数极限与连续/速查.md"
+      }
+    },
+    "04": {
+      "id": "04",
+      "slug": "04_第4章_导数与微分",
+      "number": 4,
+      "name": "第4章 导数与微分",
+      "star": 3,
+      "keypoints": [
+        {
+          "number": 1,
+          "title": "可导的定义",
+          "star": 3,
+          "body": "$f(x)=f(x_0)+A(x-x_0)+o(x-x_0)$，$A=f'(x_0)$。反例：$\\lim\\frac{f(x_0+h)-f(x_0-h)}{h}$ 存在不能推出可导（$|x|$）。"
+        },
+        {
+          "number": 2,
+          "title": "Leibniz 高阶导",
+          "star": 3,
+          "body": "$(uv)^{(n)}=\\sum_{k=0}^n\\binom nk u^{(k)}v^{(n-k)}$。求 $x^m f(x)$ 在某点 $n$ 阶导，$n>m$ 时仅少数项非零。"
+        },
+        {
+          "number": 3,
+          "title": "隐函数/参数方程求导",
+          "star": 3,
+          "body": "参数：$\\frac{dy}{dx}=\\frac{\\dot y}{\\dot x}$，$\\frac{d^2y}{dx^2}=\\frac{\\ddot y\\dot x-\\dot y\\ddot x}{\\dot x^3}$。隐函数两边求导解 $y'$。反函数 $\\frac{dx}{dy}=1/y'$。"
+        },
+        {
+          "number": 4,
+          "title": "导数与连续",
+          "star": 2,
+          "body": "可导⇒连续，反之不成立。导函数有介值性（Darboux）。"
+        }
+      ],
+      "examples": [
+        {
+          "title": "例4.1 Leibniz（22王勇 Q2-5）",
+          "body": "> $f=x^{2022}\\cos x$ 在 0 处 2024 阶导。\n\n**解**：仅 $k=2$ 项非零，$f^{(2024)}(0)=\\binom{2024}{2}2022!(-1)=-\\frac{2024!}{2}$。"
+        },
+        {
+          "title": "例4.2 隐函数+极坐标（22王勇 Q2-3）",
+          "body": "> $(x^2+y^2)^2=x^2-y^2$ 第一象限，$y'=0$ 时 $x$。\n\n**解**：$x^2+y^2=\\frac12,x^2-y^2=\\frac14\\Rightarrow x=\\frac{\\sqrt6}{4}$。"
+        },
+        {
+          "title": "例4.3 参数+隐函数（22计算机 Q4-3）",
+          "body": "> $x=t+\\cos t,e^y+ty+\\sin t=1$ 在 $t=0$ 切线。\n\n**解**：$x=1,y=0$；斜率 $-1$；切线 $x+y=1$。"
+        }
+      ],
+      "formulas": [
+        {
+          "name": "Leibniz",
+          "formula": "$$(uv)^{(n)}=\\sum_{k=0}^{n}\\binom{n}{k}u^{(k)}v^{(n-k)}$$",
+          "condition": "$u,v$ $n$ 阶可导",
+          "note": "高阶导乘积",
+          "importance": "must",
+          "meaning": "乘积高阶导数展开",
+          "derivation": "归纳法",
+          "application": "$x^m\\cos x$ 型高阶导",
+          "related": ""
+        },
+        {
+          "name": "参数方程二阶导",
+          "formula": "$$\\frac{dy}{dx}=\\frac{\\dot y}{\\dot x},\\quad \\frac{d^2y}{dx^2}=\\frac{\\ddot y\\dot x-\\dot y\\ddot x}{\\dot x^3}$$",
+          "condition": "$\\dot x\\ne0$",
+          "note": "—",
+          "importance": "familiar",
+          "meaning": "参数曲线斜率与曲率相关",
+          "derivation": "链式法则",
+          "application": "切线/曲率",
+          "related": ""
+        },
+        {
+          "name": "可导定义",
+          "formula": "$$f(x)=f(x_0)+A(x-x_0)+o(x-x_0)$$",
+          "condition": "$x\\to x_0$",
+          "note": "$A=f'(x_0)$",
+          "importance": "must",
+          "meaning": "局部线性逼近",
+          "derivation": "定义",
+          "application": "可导性判定",
+          "related": ""
+        }
+      ],
+      "quizQuestions": [
+        {
+          "title": "自测1（导数定义）",
+          "question": "$f=x^2\\sin\\frac1x(x\\ne0),f(0)=0$，求 $f'(0)$ 及 $f'$ 在 0 连续性。",
+          "answer": "$f'(0)=0$；$f'=2x\\sin\\frac1x-\\cos\\frac1x$ 振荡，0 处不连续。"
+        },
+        {
+          "title": "自测2（Leibniz）",
+          "question": "$(x^3e^x)^{(4)}|_{x=0}$。",
+          "answer": "$k=3$ 项：$\\binom43\\cdot6=24$。"
+        },
+        {
+          "title": "自测3（参数二阶导）",
+          "question": "$x=t-\\sin t,y=1-\\cos t$，求 $\\frac{d^2y}{dx^2}$。",
+          "answer": "$\\frac{dy}{dx}=\\cot\\frac t2$；$\\frac{d^2y}{dx^2}=-\\frac{1}{4\\sin^4(t/2)}$。"
+        }
+      ],
+      "examMapping": "# 题库\n\n## 真题映射\n\n### 2022-11-09 数分A 期中（王勇）\n\n**Q1-4（4分）** 叙述 $f$ 在 $x_0$ 可微的定义。\n**Q2-3（7分）** 方程 $(x^2+y^2)^2=x^2-y^2$ 第一象限隐函数，求 $y'=0$ 时 $x$。→ $\\frac{\\sqrt6}{4}$\n**Q2-5（7分）** 求 $x^{2022}\\cos x$ 在 0 处 2024 阶导。→ $-\\frac{2024!}{2}$\n**Q3-1（6分，判断）** 对称差商 $\\lim\\frac{f(x_0+h)-f(x_0-h)}{h}=A$ 是否推出 $f'(x_0)=A/2$？→ 否（$|x|$）。\n\n### 2022 数分BI 期中（计算机学院）\n\n**四-3（5分）** 曲线 $x=t+\\cos t,\\ e^y+ty+\\sin t=1$，求 $t=0$ 切线。\n**四-5（5分）** $e^x+\\ln(1-x)-1$ 与 $x^n$ 同阶，求 $n$。\n**五-3（5分）** $f$ 在 $[a,+\\infty)$ 二阶可导，$f(a)>0,f'(a)<0,f''\\le0$，证 $(a,+\\infty)$ 内 $f=0$ 恰有一根。\n\n### 2014-2015 数分B 期中 A卷\n\n**二-2（5分）** 判断：$f$ 在 $(-\\delta,\\delta)$ 有一阶导数且连续，是否二阶可导？→ 否。\n**三-2（8分）** 求 $f(x)=x+\\frac{b}{2a^2}\\arctan\\frac{a+b}{a-b}\\tanh\\frac{x}{2}$ 的导数（$0\\le|b|<a$）。\n**三-3（8分）** 确定 $A,B,C,D$ 使 $e^x=\\frac{1+Ax+Bx^2}{1+Cx+Dx^2}+o(x^4)$。\n\n### 2018-2019 数分B 一元微分学测试\n\n**三-4（10分）** 求 $y=\\frac{\\arcsin(\\sin^2x)^{\\arctan^2x}}{\\arccos(\\cos^2x)}$ 的一阶导。\n**三-5（10分）** $f(x)=x\\sin\\frac\\pi x(x\\ne0),f(0)=0$：求 0 点导数，并说明 0 的任意邻域都有不可导点。\n**三-10（10分）** $\\varphi$ 连续、$\\varphi(0)=0$、$\\varphi\\to+\\infty$，研究 $\\lim\\varphi(x)\\sin x$ 存在性；及 $\\cos(\\varphi(x)\\sin x)$ 一致连续性。\n\n### 2022-2023 数分B(I) 阶段考\n\n**二-4（10分）** 设有 $\\lim\\frac{f(x)+2x}{x}=0$，相关求导分析。\n\n### 2019-2020 数分AI 期中\n\n**二（20分）** 分段 $f(x)$（含 $e^{2x-1}+1$、$\\frac1{2x}+1$、$1+\\cos x\\sin x$），$x_{n+1}=f(x_n)$，讨论 $\\{x_n\\}$ 是否收敛；不收敛举反例，收敛证并求极限。\n\n### 2021 数分I 期中（王勇）\n\n**2-是非题** (5) $f$ 在 $(a,b)$ 可导，$x_1,x_2\\in(a,b)$，$f'(x_1)f'(x_2)<0$ ⇒ 存在 $\\xi$ 使 $f'(\\xi)=0$（正确，导数 Darboux 介值性）；(6) 设 $f$ 在 $(a,b)$ 可导，则 $f'(x)$ 只可能存在第二类间断点（正确）。\n**3-计算题** (5) 已知 $2y\\sin x+x\\ln y=0$，求 $\\frac{d^2y}{dx^2}$；(6) $x=\\sin at,\\ y=\\cos bt$，求 $\\frac{d^2y}{dx^2}$。\n> (6) $\\frac{dy}{dx}=\\frac{-b\\sin bt}{a\\cos at}$，再对 $x$ 求导得 $\\frac{d^2y}{dx^2}=\\frac{-ab^2\\cos at\\cos bt-a^2b\\sin at\\sin bt}{a^3\\cos^3 at}$ 型。\n**3-计算题** (7) 求 $y=\\frac{x^2}{1+x}$ 的渐近线。\n> 垂直渐近线 $x=-1$；斜渐近线 $y=x-1$。\n\n---\n\n## 自测\n\n### 自测 1（导数定义）\n\n设 $f(x)=x^2\\sin\\frac1x(x\\ne0)$，$f(0)=0$。求 $f'(0)$ 并判断 $f'$ 在 0 处是否连续。\n\n> [!faq]- 点击展开答案\n> $f'(0)=\\lim\\frac{x^2\\sin(1/x)}{x}=\\lim x\\sin(1/x)=0$。而 $x\\ne0$ 时 $f'(x)=2x\\sin\\frac1x-\\cos\\frac1x$，当 $x\\to0$ 振荡无极限，故 $f'$ 在 0 处不连续（但 $f$ 在 0 可导）。\n\n### 自测 2（Leibniz）\n\n求 $(x^3e^x)^{(4)}\\big|_{x=0}$。\n\n> [!faq]- 点击展开答案\n> 只有 $k=0$（$u=x^3$ 求 4 阶为 0 项之外）…逐项：$(x^3e^x)^{(4)}=\\sum\\binom4k (x^3)^{(k)}e^x$。$x=0$ 时只剩 $(x^3)^{(3)}=6$ 项，$k=3$：$\\binom43\\cdot6\\cdot e^0=4\\cdot6=24$。\n\n### 自测 3（参数方程二阶导）\n\n$x=t-\\sin t,\\ y=1-\\cos t$，求 $\\frac{d^2y}{dx^2}$。\n\n> [!faq]- 点击展开答案\n> $\\dot x=1-\\cos t,\\ \\dot y=\\sin t$，$\\frac{dy}{dx}=\\frac{\\sin t}{1-\\cos t}=\\cot\\frac t2$。$\\frac{d^2y}{dx^2}=\\frac{d}{dt}(\\cot\\frac t2)/(1-\\cos t)=\\frac{-\\frac12\\csc^2(t/2)}{2\\sin^2(t/2)}=-\\frac{1}{4\\sin^4(t/2)}$。\n",
+      "deps": [
+        "03"
+      ],
+      "depTypes": {
+        "03": "dependency"
+      },
+      "files": {
+        "讲解.md": "04_第4章_导数与微分/讲解.md",
+        "题库.md": "04_第4章_导数与微分/题库.md",
+        "速查.md": "04_第4章_导数与微分/速查.md"
+      }
+    },
+    "05": {
+      "id": "05",
+      "slug": "05_第5章_微分中值定理与应用",
+      "number": 5,
+      "name": "第5章 微分中值定理与应用",
+      "star": 3,
+      "keypoints": [
+        {
+          "number": 1,
+          "title": "三大中值定理",
+          "star": 3,
+          "body": "Fermat：可微极值点 $f'=0$。Rolle：连续+可导+端点等⇒$\\exists\\xi,f'=0$。Lagrange：$f(b)-f(a)=f'(\\xi)(b-a)$。Cauchy：$\\frac{f(b)-f(a)}{g(b)-g(a)}=\\frac{f'(\\xi)}{g'(\\xi)}$。链路 Fermat⇒Rolle⇒Lagrange⇒Cauchy。"
+        },
+        {
+          "number": 2,
+          "title": "构造辅助函数（倒推法）",
+          "star": 3,
+          "body": "把末尾结论整理成 $H'(x)=0$。常见：$f'=k\\to H=f-kx$；$f'=\\lambda f\\to H=e^{-\\lambda x}f$；$f(\\xi)=\\xi\\to H=f-x$。"
+        },
+        {
+          "number": 3,
+          "title": "不等式证明",
+          "star": 3,
+          "body": "三件套：(1) Lagrange 中值定理夹 $f'$ 上下界；(2) 单调性（构造 $F=$左−右）；(3) Taylor 带余项。经典 $\\frac{x}{1+x}<\\ln(1+x)<x$。"
+        },
+        {
+          "number": 4,
+          "title": "根的个数与定性作图",
+          "star": 2,
+          "body": "单调+端点异号⇒恰一实根。作图：$f'$ 定单调极值，$f''$ 定凹凸拐点，渐近线 $a=\\lim f/x,b=\\lim(f-ax)$。"
+        }
+      ],
+      "examples": [
+        {
+          "title": "例5.1 Rolle 构造（18-19 Q9）",
+          "body": "> $f(0)=f(1)=0,f(1/2)=1$。(1) $f(\\xi)=\\xi$；(2) $\\forall\\lambda,f'(\\eta)-\\lambda[f(\\eta)-\\eta]=1$。\n\n**解**：(1) $\\varphi=f-x$，$\\varphi(1/2)>0,\\varphi(1)<0$。(2) $\\varphi=e^{-\\lambda x}(f-x)$，Rolle。"
+        },
+        {
+          "title": "例5.2 不等式（14-15 Q三-4）",
+          "body": "> 证 $x-\\frac{x^2}{2}<\\ln(1+x)<x(x>0)$。\n\n**解**：$F=\\ln(1+x)-x$ 递减；$G=\\ln(1+x)-x+\\frac{x^2}{2}$ 递增。"
+        },
+        {
+          "title": "例5.3 恰一实根（22计算机 五-3）",
+          "body": "> $f(a)>0,f'(a)<0,f''\\le0$，证 $(a,+\\infty)$ 内 $f=0$ 恰一根。\n\n**解**：$f''\\le0\\Rightarrow f'\\le f'(a)<0$ 严格减；$f\\to-\\infty$，介值+单调⇒唯一。"
+        }
+      ],
+      "formulas": [
+        {
+          "name": "Rolle 定理",
+          "formula": "$$f(a)=f(b)\\Rightarrow\\exists\\xi\\in(a,b),\\ f'(\\xi)=0$$",
+          "condition": "$f\\in C[a,b]$，$(a,b)$ 可导",
+          "note": "中值定理基石",
+          "importance": "must",
+          "meaning": "端点等高则内部有水平切线",
+          "derivation": "Fermat 引理",
+          "application": "存在 ξ 构造题",
+          "related": ""
+        },
+        {
+          "name": "Lagrange 中值定理",
+          "formula": "$$f(b)-f(a)=f'(\\xi)(b-a)$$",
+          "condition": "连续+可导",
+          "note": "有限增量",
+          "importance": "must",
+          "meaning": "平均变化率=某点瞬时变化率",
+          "derivation": "Rolle 定理",
+          "application": "不等式、估计",
+          "related": ""
+        },
+        {
+          "name": "Cauchy 中值定理",
+          "formula": "$$\\frac{f(b)-f(a)}{g(b)-g(a)}=\\frac{f'(\\xi)}{g'(\\xi)}$$",
+          "condition": "$g'\\ne0$",
+          "note": "参数形式",
+          "importance": "must",
+          "meaning": "两函数增量比",
+          "derivation": "Rolle 定理",
+          "application": "推导洛必达/泰勒",
+          "related": ""
+        }
+      ],
+      "quizQuestions": [
+        {
+          "title": "自测1（Rolle）",
+          "question": "$f$ 在 $[0,1]$ 连续可导，$f(0)=f(1)=0$，证 $\\exists\\xi,f'(\\xi)=f(\\xi)$。",
+          "answer": "$H=e^{-x}f$，$H(0)=H(1)=0$，Rolle ⇒ $f'(\\xi)=f(\\xi)$。"
+        },
+        {
+          "title": "自测2（不等式）",
+          "question": "证 $x>0$ 时 $e^x>1+x+x^2/2$。",
+          "answer": "$F=e^x-1-x-x^2/2$，$F''=e^x-1>0$ ⇒ $F'>0$ ⇒ $F>0$。"
+        },
+        {
+          "title": "自测3（根的个数）",
+          "question": "$x^3-3x+1=0$ 在 $[-2,2]$ 实根个数。",
+          "answer": "极值 $x=\\pm1$，端点符号交替，3 个实根。"
+        }
+      ],
+      "examMapping": "# 题库\n\n## 真题映射\n\n### 2022-11-09 数分A 期中（王勇）\n\n**Q3-2（6分，判断）** $u(x)$ 在 $(0,\\delta_0)$ 上满足 $\\forall0<\\varepsilon<1,u=o(x^{1-\\varepsilon})$，是否 $u=O(x)$？→ 否（$u=x\\ln\\frac1x$）。\n**Q3-3（6分，判断）** 连续 $f$，$\\lim_{x\\to+\\infty}|f(x)|=\\infty$ ⇒ 要么 $+\\infty$ 要么 $-\\infty$？→ 正确（连续性 + 零点存在，反证）。\n**Q3-4（6分，判断）** $\\forall\\varepsilon>0,p,\\exists N,n>N\\Rightarrow|x_{n+p}-x_n|<\\varepsilon$，是否收敛？→ 否（$x_n=1+\\frac12+\\cdots+\\frac1n$）。\n\n### 2022 数分BI 期中（计算机学院）\n\n**三-1（6分）** $\\lim a_n=\\infty\\Rightarrow\\lim\\frac{a_1+\\cdots+a_n}{n}=\\infty$？→ 正确。\n**五-1（5分）** 证明有界数列必有收敛子列。\n**五-3（5分）** $f(a)>0,f'(a)<0,f''\\le0$ ⇒ $(a,+\\infty)$ 内 $f=0$ 恰一根。\n\n### 2014-2015 数分B 期中 A卷\n\n**三-4（8分）** 证 $x-\\frac{x^2}{2}<\\ln(1+x)<x$（$x>0$）。\n**三-6（8分）** $f$ 在 $[a,b]$ 二阶连续可微，$f(a)=f(b)=0$，证 $\\sup|f'|\\le\\frac{b-a}{2}\\sup|f''|$。\n**四（10分）** 基于渐近性/单调/凹凸，作 $f$ 图像（已知 $f',f''$）。\n**五（10分）** 有界变差数列 $\\sum|x_{k}-x_{k-1}|<C$ ⇒ 收敛。\n\n### 2018-2019 数分B 一元微分学测试\n\n**三-7（10分）** 证 $\\sqrt{x+1}-\\sqrt x=\\frac{1}{2\\sqrt{x+\\theta(x)}},\\theta\\in(0,1)$，并求 $x\\to0^+,+\\infty$ 时 $\\theta$ 极限（$\\frac14,\\frac12$）。\n**三-9（10分）** $f$ 连续可导，$f(0)=f(1)=0,f(\\frac12)=1$：证 $f(\\xi)=\\xi$；$\\forall\\lambda,\\exists\\eta,f'(\\eta)-\\lambda[f(\\eta)-\\eta]=1$。\n**四（10分）** 上下极限三条结论（子列集聚、收敛子列介于上下极限、$\\lim(x_{n+1}+\\lambda x_n)$）。\n\n### 2022-2023 数分B(I) 阶段考\n\n**一部分（10分）** 证 Fermat 引理、Darboux 定理（导函数介值性）、Cauchy 中值定理。\n\n### 2019-2020 数分AI 期中\n\n**四（20分）** 证明：不存在 $\\mathbb R$ 上实连续函数 $f$ 满足 $f(f(x))=x^4-e^x$。\n> 关键：$f(f(x))$ 的不动点结构 / 周期性矛盾。若 $f$ 连续且 $f\\circ f$ 有唯一零点、单调性冲突，导出矛盾（注意 $x^4-e^x$ 在 $\\mathbb R$ 上非单射、无不动点等性质）。\n\n### 2021 数分I 期中（王勇）\n\n**4-证明题 (1)** 若 $f$ 在 $[x_1,x_2]$ 可微且 $x_1x_2>0$，则 $\\dfrac{x_1f(x_2)-x_2f(x_1)}{x_1-x_2}=f(\\xi)-\\xi f'(\\xi),\\ x_1<\\xi<x_2$。\n> 提示：对 $\\varphi(x)=f(x)/x$ 用 Cauchy/Lagrange 中值定理变形，$x_1x_2>0$ 保证分母不为零。\n**4-证明题 (2)** $f$ 在 $[a,b]$ 二阶可导，$f(a)=f(b)=0$，证 $\\max_{[a,b]}|f(x)|\\le\\dfrac18(b-a)^2\\max_{[a,b]}|f''(x)|$。\n> 提示：Taylor 在极值点（$f'(c)=0$）向两端展开，$|f(c)|\\le\\frac12|f''||c-a|^2$ 且 $\\le\\frac12|f''||c-b|^2$，取 $|c-a|,|c-b|$ 几何平均得 $\\frac18(b-a)^2$。\n\n---\n\n## 自测\n\n### 自测 1（Rolle 构造）\n\n设 $f$ 在 $[0,1]$ 连续、$(0,1)$ 可导，$f(0)=f(1)=0$。证明 $\\exists\\xi\\in(0,1)$ 使 $f'(\\xi)=f(\\xi)$。\n\n> [!faq]- 点击展开答案\n> 取 $H(x)=e^{-x}f(x)$，$H(0)=H(1)=0$，由 Rolle $\\exists\\xi,H'(\\xi)=e^{-\\xi}[f'(\\xi)-f(\\xi)]=0$ ⇒ $f'(\\xi)=f(\\xi)$。\n\n### 自测 2（不等式）\n\n证明当 $x>0$ 时 $e^x>1+x+\\frac{x^2}{2}$。\n\n> [!faq]- 点击展开答案\n> 令 $F(x)=e^x-1-x-\\frac{x^2}{2}$，$F(0)=0$，$F'(x)=e^x-1-x$，$F'(0)=0$，$F''(x)=e^x-1>0(x>0)$ ⇒ $F'$ 增 ⇒ $F'>0$ ⇒ $F$ 增 ⇒ $F>0$。\n\n### 自测 3（根的个数）\n\n讨论 $x^3-3x+1=0$ 在 $[-2,2]$ 的实根个数。\n\n> [!faq]- 点击展开答案\n> $f'=3x^2-3=3(x-1)(x+1)$，极大点 $x=-1,f(-1)=3$，极小点 $x=1,f(1)=-1$。$f(-2)=-1<0,f(-1)=3>0,f(1)=-1<0,f(2)=3>0$ ⇒ 三个区间各一根，共 3 个实根。\n",
+      "deps": [
+        "04"
+      ],
+      "depTypes": {
+        "04": "dependency"
+      },
+      "files": {
+        "讲解.md": "05_第5章_微分中值定理与应用/讲解.md",
+        "题库.md": "05_第5章_微分中值定理与应用/题库.md",
+        "速查.md": "05_第5章_微分中值定理与应用/速查.md"
+      }
+    }
+  },
+  "chaptersNote": "7 份期中卷锚点（含 2019-2020 数分AI、2021 王勇数分I）"
+}

@@ -1,0 +1,783 @@
+第8章 函数
+8.1写两个函数，分别求两个整数的最大公约数和最小公倍数，用主函数调用这两个函数，并输出结果，两个整数由键盘输入。
+解：设两个整数为u和v，用碾转相除法求最大公约数的算法如下：
+最小公倍数＝u×v/最大公约数。据此写出程序：
+int hcf(int u,int v)
+{int t,r;
+ if (v>u)
+   {t=u;u=v;v=t;}
+ while ((r=u%v)!=0)
+   {u=v;
+v=r;}
+ return(v);
+}
+
+int lcd(int u,int v,int h)
+{
+ return(u*v/h);
+}
+
+main ( )
+{int u,v,h,l;
+ scanf(“%d,%d”,&u,&v);
+ h=hcf(u,v);
+ printf(“H.C.F=%d\n”,h);
+ l=lcd(u,v,h);
+ printf(“L.C.D=%d\n”,l);
+}
+
+运行结果如下：
+24,16↙
+H.C.F=8
+L.C.D=48
+
+8.2
+求方程ax2+bx+c=0的根，用3个函数分别求当b2-4ac大于0，等于0和小于0时的根，并输出结果。从主函数输入a，b，c的值。
+解：程序如下：
+# include <math.h>
+float x1,x2,disc,p,q;
+greater_than_zero(float a,float b)          /*定义一个函数，用来求disc>0时方程的根*/
+{x1=(-b+sqrt(disc))/(2*a)
+ x2=(-b-sqrt(disc))/(2*a)
+}
+
+equal_to_zero(float a,float b)             /*定义一个函数，用来求disc=0时方程的根*/
+{
+x1=x2=(-b)/(2*a);
+}
+
+smaller_than_zero(float a,float b)          /*定义一个函数，用来求disc<0时方程的根*/
+{
+p=-b/(2*a)
+q=sqrt(disc)/(2*a);
+}
+
+main ( )
+{
+ float a,b,c;
+ printf(“\nInput a,b,c:”);
+ scanf(“%f,%f,%f”,&a,&b,&c); 
+ printf(“\nequation:%5.2f*x*x+%5.2f*x+%5.2f=0\n”,a,b,c);
+ disc=b*b-4*a*c;
+ printf(“root:\n”);
+ if (disc>0)
+   {
+great_than_zero(a,b);
+printf(“x1=%5.2f\tx2=%5.2f\n\n”,x1,x2);
+}
+ else if (disc==0)
+{equal_to_zero(a,b);
+ printf(“x1=%5.2f\tx2=%5.2f\n\n”,x1,x2);
+}
+ else
+{smaller_than_zero(a,b);
+ printf(“x1=5.2f+5.2fi\tx2=%5.2f-%%5.2fi\n”,p,q,p,q);
+}
+}
+
+运行结果：
+Input a,b,c:1,2,1↙
+equation:1.00*x*x+2.00*x+1.00=0
+root:
+x1=-1.00x2=-1.00
+
+8.3写一个判素数的函数，在主函数输入一个整数，输出是否素数的信息。
+解：
+main ( )
+{int prime(int);                        /*函数原型声明*/
+ int n;
+ printf(“\nInput an integer:”);
+ if (prime(n))
+   printf(“\n %d is a prime.”,n);
+ else
+   printf(“\n %d is not a prime.”,n);
+}
+
+int prime(int n)
+{int flag=1,i;
+ for (i=2;i<n/2 && flag==1;i++)
+   if (n%i==0)
+flag=0;
+ return(flag);
+}
+
+运行结果：
+Input an integer:17↙
+17 is a prime.
+
+8.4写一函数，使给定的一个二维数组（3×3）转置，即行列互换。
+解：
+# define N 3
+int array[N][N];
+convert(int array[3][3])                   /*定义转置数组的函数*/
+{int i,j,t;
+ for (i=0;i<N;i++)
+   for (j=i+1;j<N;j++)
+{t=array[i][j];
+ array[i][j]=array[j][i];
+ array[j][i]=t;
+}
+}
+
+main ( )
+{int i,j;
+ printf(“Input array:\n”);
+ for (i=0;i<N;i++)
+   for (j=0;j<N;j++)
+scanf(“%d”,array[i][j]);
+ printf(“\noriginal array : \n”);
+ for (i=0;i<N;i++)
+{for (j=0;j<N;j++)
+    printf(“%5d”,array[i][j]);
+  printf(“\n”);
+ }
+}
+
+convert (array);
+{printf(“convert array:\n”);
+ for (i=0;i<N;i++)
+{for (j=0;j<N;j++)
+    printf(“%sd”,array[i][j]);
+ printf(“\n”);
+}
+}
+
+运行结果：
+Input array:
+1 2 3 4 5 6 7 8 9↙
+original array:
+  1  2  3 
+4	5  6
+7  8  9
+convert array:
+  1  4  7
+  2  5  8
+  3  6  9
+
+8.5写一函数，使输入的一个字符串按反序存放，在主函数中输入和输出字符串。
+解：
+main ( )
+{int inverse (char str[ ]);                /*函数原型声明*/
+ char str[100];
+ printf(“Input string:”);
+ scanf(“%s”,str);
+ inverse(str);
+ printf(“Inverse string:%s\n”,str);
+}
+
+int inverse (char str[ ])                  /*函数定义*/
+{char t;
+ int i,j;
+ for (i=0,j=strlen(str);i<strlen(str)/2;i++,j--)
+{t=str[i];
+ str[i]=str[j-1];
+ str[j-1]=t;
+}
+}
+
+运行结果：
+Input string：abcdefg↙
+Inverse string：gfedcba
+
+8.6写一函数，将两个字符串连接。
+解：
+char concatenate(char string1[ ],char string2[ ],char string[ ])
+{int i,j;
+ for (i=0;string1[i]!=’\0’;i++)
+   string[i]=string1[i];
+ for (j=0;string2[j]!=’\0’;j++)
+   string[i+j]=string2[j];
+ string[i+j]=’\0’;
+}
+
+main ( )
+{char s1[100],s2[100],s[100];
+ printf(“\nInput string1：”);
+ scanf(“%s”,s1);
+ printf(“Input string2：”);
+ scanf(“%s”,s2);
+ concatenate(s1,s2,s);
+ printf(“The new string is %s\n”,s);
+}
+
+运行结果：
+Input string1：country↙
+Input string2：side↙
+The new string is countryside
+
+8.7写一函数，输入一个4位数字，要求输出这4个数字字符，但每两个数字之间有一个空格。如输入1990，应输出”1 9 9 0”。
+解:
+main ( )
+{char str[80];
+ void insert(char str[]);
+ printf(“\nInput four digits:”);
+ scanf(“%s”,str);
+ insert(str);
+}
+
+void insert(char str[])
+{int i;
+ for (i=strlen(str);i>0;i--)
+ {str[2*i]=str[i];
+  str[2*i-1]=’ ’;
+  }
+ printf(“\nOutput:\n%s”,str);
+}
+
+运行结果：
+Input four digits:1357↙
+Output:
+1	3  5  7
+
+8.8编写一函数，有实参传来一个字符串，统计此字符串中字母，数字，空格和其它字符的个数，在主函数中输入字符串以及输出上述的结果。
+解：
+int letter,digit,space,others;               /* 全局变量 */
+main ( )
+{int count(char str[ ]);                   /* 函数声明 */
+ char text[80];
+ printf(“\nInput string:\n”);
+ gets(text);
+ printf(“string:”);
+ puts(text);
+ letter=0;
+ digit=0; 
+ space=0;
+ others=0;
+ count(text);
+ printf(“letter:%d,digit:%d,space:%d,others:%d\n”,letter,digit,space,others);
+}
+
+int count(char str[ ])
+{int i;
+ for (i=0;str[i]!=’\0’;i++)
+ if ((str[i]>=’a’ && str[i]<=’z’) || (str[i]>=’A’ && str[i]<=’Z’))
+   letter++;
+ else if (str[i]>=’0’ && str[i]<=’9’)
+   digit++;
+ else if (strcmp(str[i],’ ’)==0)
+   space++;
+ else 
+   others++;
+}
+运行结果：
+Input string：
+My address is #123 Shanghai Road, Beijing, 100045.↙
+String：My address is #123 Shanghai Road, Beijing, 100045
+Letter：30，digit：9，space：5；other：4
+
+8.9写一函数，输入一行字符，将此字符串中最长的单词输出。
+解：认为单词是由全字母组成的字符串，程序中设longest函数，作用是找最长单词的位置。此函数的返回值是该行字符中最长单词的起始位置。
+函数alphabetic的作用是判断当前字符是否字母，若是则返回1，否则返回0。
+程序如下：
+int alphabetic(char c)              /*判断当前字符是否字母，若是则返回1，否则返回0*/
+{if ((c>=’a’ && c<=’z’) || (c>=’A’ && c<=’Z’)
+   return(1);
+ else
+   return(0);
+}
+
+int longest(char string[ ])                    /*寻找最长单词的起始位置*/
+{int len=0,i,length=0,flag=1,place=0,point;
+ for (i=0;i<=strlen(string);i++)
+   if (alphabetic(string[i]))
+if (flag)
+  {point=i;
+   flag=0;
+  }
+else
+  len++;
+   else
+{flag=1;
+ if(len>=length)
+  {length=len;
+   place=point;
+   len=0;
+   }
+}
+return(place);
+}
+
+main ( )
+{int i;
+ char line[100];
+ printf(“Input one line:\n”);
+ gets (line);
+ printf(“\nThe longest word is ：”);
+ for (i=longest(line);alphabetic(line[i]);i++)
+printf(“%c”,line[i]);
+ printf(“\n”);
+}
+
+运行结果：
+Input one line：
+I am a student.↙
+The longest word is ：student
+
+8.10写一函数，用“起泡法”对输入的10个字符按由小到大的顺序排列。
+解:sort ( )函数的作用是排序。程序如下：
+#define N 10
+char str[N];
+main ( )
+{void sort(char str[]);
+ int i,flag;
+ for (flag=1;flag==1;)
+    {printf("\nInput string:\n");
+     scanf("%s",&str);
+     if (strlen(str)>N)
+       printf("String too long,input again!");
+     else 
+       flag=0;
+     }
+ sort(str);
+ printf("string sorted:\n");
+ for (i=0;i<N;i++)
+     printf("%C",str[i]);
+}
+
+void sort(char str[])
+{int i,j;
+ char t;
+ for (j=1;j<N;j++)
+   for (i=0;(i<N-j) && (str[i]!='\0');i++)
+      if (str[i]>str[i+1])
+         {t=str[i];
+          str[i]=str[i+1];
+          str[i+1]=t;
+         }
+}
+
+运行结果：
+Input string:
+reputation
+string sorted:
+aeionprttu
+
+8.11用弦截法求根。
+方程为ax3+bx2+cx+d=0，系数a,b,c,d的值依次为1,2,3,4。
+求x在1附近的一个实根。求出根后由主函数输出。
+解：有关弦截法的算法已在《C语言程序设计》一书的例7.6中作了介绍。
+在主函数中输入系数a,b,c,d并输出结果。在函数root中求出x的近似根。
+程序如下：
+# include<math.h>
+float root (float a,float b,float c,float d)
+{float x1,x2,x,y1,y2,y;
+ do
+   {printf("\ninput x1,x2:");
+    scanf("%f,%f",&x1,&x2); 
+    y1=a*x1*x1*x1+b*x1*x1+c*x1+d;
+    y2=a*x2*x2*x2+b*x2*x2+c*x2+d;
+   }while (y1*y2>=0);
+do 
+   {x=(x1*y2-x2*y1)/(y2-y1);
+    y=a*x*x*x+b*x*x+c*x+d;
+    if (y*y1>0)
+       {x1=x;
+        y1=y;}
+    else
+       x2=x;
+    }while (fabs(y)>=0.0001);
+    return(x);
+}
+
+main ( )
+{
+ float a,b,c,d;
+ printf("\nInput a,b,c,d:");
+ scanf("%f,%f,%f,%f",&a,&b,&c,&d);
+ printf("Equation is:%5.2fx^3+%5.2fx^2+%5.2fx+%5.2f=0",a,b,c,d);
+ printf(“\nx=%10.7f\n”,root(a,b,c,d));
+}
+  root函数的形参a,b,c,d的值由主函数实参a,b,c,d传递过来。在执行root函数过程中输入用户预设的两个点x1,x2的值，计算出相应于x1和x2的函数值y1=f(x1)和y2=f(x2)。如果y1和y2同号，表示(x1,x2)区间无实根，程序要求重新输入x1和x2，直到y1和y2异号为止（此时在（x1,x2）区间应有一实根）。在第二个do-while循环中，先求出y1与y2的连线和x轴的交点x（即弦截点），再求出相应于该点的函数值y=f(x)。如果y和y1同号，表示根不在(x1,x)区间内，而在(x,x2)区间内。所以用x的值作为新的x1的值，用y的值取代y1原值，再进行下一次循环。如此反复进行，直到y的绝对值小于10－4为止。此时x的值就是近似根。将x作为函数值带回主函数中输出。
+请思考：在root函数的第二个do-while循环中，如果y*y1<=0，则表示在(x1,x)区间有一实根，此时在else后面为什么只写“x2=x；”，而不写“x2=x；y2=y；”？
+程序运行情况如下：
+Input a,b,c,d：1,2,3,4↙
+Equation is ：1.00x^3+2.00x^2+3.00x+4.00=0
+Input x1,x2：-1,1↙                      (在(-1,1)区间无实根)
+Input x1,x2：-2,2↙                      （重新输入x1,x2）
+x=-1.6506474                            (这是方程的近似根)
+
+8.12输入10个学生5门课的成绩，分别用函数求：（1）每个学生的平均分；（2）每门课的平均分；（3）找出最高的分数所对应的学生和课程；（4）求出平均分方差；
+б=  －[ ]2， 为某一学生的平均分。
+解：函数input_stu的执行结果是给全程变量学生成绩数组score各元素输入初值。
+函数aver_stu的作用是计算每个学生的平均分，并将结果赋给全程变量数组a_stu中各元素。
+函数aver_cour的作用是计算每门课的平均成绩，计算结果存入全程变量数组a_cour。
+函数highest的返回值是最高分，r,c是两个全局变量，分别代表最高分所在的行，列号。
+函数s_var的返回值是平均分的方差。
+程序如下：
+
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+
+/*学生人数*/
+# define N 10
+
+/*课程数*/
+# define M 5
+
+/* 函数原型声明 */
+
+float s_var(float a_stu[N]);
+void highest(int score[N][M]);                     /* 函数原型声明 */
+void input_stu(int score[N][M]);                    /* 函数原型声明 */
+void aver_stu(int score[N][M],float a_stu[N]);      /* 函数原型声明 */
+void aver_cour(int score[N][M],float a_cour[M]);    /* 函数原型声明 */
+
+void main()
+{
+    int score [N][M];  /*学生成绩*/
+    float a_stu [N],a_cour[M];  /*各个学生平均分，各门课程平均分*/
+    int i,j;
+
+    /*随机产生50个成绩。若要手工输入成绩，注释以下四行*/
+    srand(1);
+    for(i=0;i<N;i++)
+        for(j=0;j<M;j++)
+            score[i][j]=rand()%100;
+
+    /*若要手工输入成绩，取消下行注释*/
+    /*input_stu( );*/                   /* 函数调用，输入10个学生成绩 */
+
+    aver_stu(score,a_stu);              /* 函数调用，计算10个学生平均成绩 */
+    aver_cour(score,a_cour);            /* 函数调用，计算5门课平均成绩 */
+
+    /*输出结果*/
+    printf("\n NO.     cour1   cour2   cour3   cour4   cour5   aver");
+    for (i=0;i<N;i++)
+    {
+        printf("\n NO.%2d ",i+1);       /* 输出某个学生号码 */
+        for (j=0;j<M;j++)               /* 输出某个学生各门课的成绩 */
+            printf("%8d",score[i][j]);
+        printf("%8.2f",a_stu[i]);       /* 输出某个学生的平均成绩 */
+    }
+
+    printf("\nAverage:");
+    for (j=0;j<M;j++)                   /* 输出各门课平均成绩 */
+        printf("%8.2f",a_cour[j]);
+
+    highest(score);     /* 调用函数，求最高分和它属于哪个学生，哪门课 */
+
+    printf("\nVariance:%8.2f\n",s_var(a_stu));   /* 调用函数，计算和输出方差 */
+
+    system("pause");
+ }
+
+void input_stu(int score[N][M]) /* 输入10个学生成绩的函数 */
+{
+    int i,j;
+    for (i=0;i<N;i++)
+    {
+        printf("\nInput score of student%2d:\n",i+1);  /* 学生号从1开始 */
+        for (j=0;j<M;j++)
+            scanf("%d",&score[i][j]);
+    }
+}
+
+void aver_stu(int score[N][M],float a_stu[N])  /* 计算各个学生平均成绩的函数 */
+{
+    int i,j;
+    float s;
+    for (i=0;i<N;i++)
+    {
+        s=0;
+        for (j=0;j<M;j++)
+            s+=score[i][j];
+        a_stu[i]=s/M;
+    }
+}
+
+void aver_cour(int score[N][M],float a_cour[M]) /* 计算各门课的平均成绩的函数 */
+{
+    int i,j;
+    float s;
+    for (j=0;j<M;j++)
+    {
+        s=0;
+        for (i=0;i<N;i++)
+            s+=score[i][j];
+        a_cour[j]=s/N;
+    }
+}
+
+void highest(int score[N][M])  /* 求最高分和它属于哪个学生，哪门课的函数 */
+{
+    int high;
+    int i,j,row,column;
+
+    high=score[0][0];
+    for (i=0;i<N;i++)
+        for (j=0;j<M;j++)
+    if (score[i][j]>high)
+    {
+        high=score[i][j];
+        row=i+1;        /* 数组行号i从0开始，学生号r从1开始，故row=i+1 */
+        column=j+1;     /*数组列号j从0开始，学生号c从1开始，故column=j+1 */
+    }
+    /* 输出最高分和学生号，课程号 */
+    printf("\nHighest score is:%3d,NO.%2d student,course %2d\n",high,row,column);
+}
+
+float s_var(float a_stu[N])     /* 求方差的函数 */
+{
+    int i,j;
+    float sumx,sumxn;
+    sumx=0.0;
+    sumxn=0.0;
+    for (i=0;i<N;i++)
+    {
+        sumx+=a_stu[i]*a_stu[i];
+        sumxn+=a_stu[i];
+    }
+    return (sumx/N-(sumxn/N)*(sumxn/N));
+}
+运行情况如下：
+Input score of student 1:
+91 79 83 83 91↙
+Input score of student 2:
+95 71 81 80 83↙
+Input score of student 3:
+86 82 77 91 88↙
+Input score of student 4:
+85 76 79 81 82↙
+Input score of student 5:
+88 76 84 81 80↙
+Input score of student 6:
+87 72 79 91 84↙
+Input score of student 7:
+85 77 75 84 93↙
+Input score of student 8:
+66 62 64 54 70↙
+Input score of student 9:
+89 67 75 86 93↙
+Input score of student 10:
+75 73 70 85 82↙
+NO.       cour1       cour2       cour3       cour4       cour5       aver
+NO.1      91.00       79.00       83.00       83.00       91.00       85.40
+NO.2      95.00       71.00       81.00       80.00       83.00       82.00
+NO.3      86.00       82.00       77.00       91.00       88.00       84.80
+NO.4      85.00       76.00       79.00       81.00       82.00       80.00
+NO.5      88.00       76.00       84.00       81.00       80.00       81.80
+NO.6      87.00       72.00       79.00       91.00       84.00       82.60
+NO.7      85.00       77.00       75.00       84.00       93.00       82.80
+NO.8      66.00       62.00       64.00       54.00       70.00       63.20
+NO.9      89.00       67.00       75.00       86.00       93.00       82.00
+NO.10     75.00       73.00       70.00       85.00       82.00       77.00
+Average:     84.70       73.50       76.70       81.60       84.60
+Highest:     95.00       NO.2      course1
+Variance:     6.92
+
+8.13写几个函数：（1）输入10个职工的姓名和职工号；（2）按职工号由小到大排序，姓名顺序也随之调整；（3）要求输入一个职工号，用折半查找法找出该职工的姓名。
+从主函数输入要查找的职工号，输出该职工姓名。
+解：input_e函数完成10个职工的数据的录入。Sort函数的作用是选择法排序，其流程类似于7.2题。
+Search函数的作用是用折半查找的方法找出指定职工号的职工姓名。折半查找法是效率较高的一种查找方法。它的基本思路如下：
+假设由已按由小到大排好序的9个数，a[1]到a[9]，其值分别为：1，3，5，7，9，11，13，15，17。
+若输入一个数3，想查3是否在此数列中，则先找出数列中居中的数，即a[5]，再将要找的数3与a[5]比较。今a[5]的值是9，发现a[5]>3，显然3应当在a[1]到a[5]的范围内，而不会在a[6]到a[9]的范围内。这样就可以缩小查找范围，甩掉a[6]到a[9]这一部分，将查找范围缩小一半。然后找在a[1]到a[5]的范围内居中的数，即a[3]，将要找的数3与a[3]比较，a[3]的值是5。发现a[3]>3，显然3应当在a[1]到a[3]的范围内。这样又将查找的范围缩小一半。再将3与在a[1]到a[3]范围内居中的数a[2]比较，发现要找的数3等于a[2]，查找结束。一共比较了3次。如果表列中有n个数，则最多比较的次数为int(log2n)+1。
+先建立一个数组num，内有已排好序的N个元素。设置变量top,bott,loca的初值。Top和bott(bottom的缩写)是数组要查找区间的两个端点的下标。开始时要查找的范围时num[0]到num[N-1]，因此top的初值应为0，bott的初值应为N-1。用变量loca（location的缩写）存放最后查找到的数在数组中的序号（下标），开始时设loca初值为0。输入要查找的数n，然后检查n是否在数组各元素范围之内。如果超出范围，则令loca=-1，表示此数不在数组内。
+在while循环中，先计算数组中的元素下标mid（middle的缩写）。如果此居中的元素num[mid]正好等于要查找的数n，则一次查找成功，loca就取mid的值，输出结果num[loca]；
+然后使标志变量sign的值改变为－1，不再执行while循环。
+通常，第一次就查找到(即n=num[mid])的可能性不大，这时就需要将查找的范围缩小一半，继续查找。如果n<num[mid]，则表示要查找的数在数组的前半部分，即在num[0]到num[mid-1]之间，因此使bott的值改变为mid-1。这样下一次在num[top]和num[bott]范围内查找，也就是在num[0]和num[mid-1]的范围内查找。
+如果n>num[mid]，则表示要查找的数在数组的后半部分，即在num[mid+1]到num[bott]之间，因此使top的值改变为mid＋1。这样下一次num[top]和num[bott]的范围内查找，也就是在num[mid+1]和num[N-1]的范围内查找。
+如此每次缩小查找范围，直到某一次n等于num[mid]为止。当找到此数后，输出结果，并结束循环。
+如果要查找的数据超出数组包括的数值范围，则loca等于－1，如果要查找的数虽未超出数组包括的数值范围但在数组中找不到此数，则sign的值保持为1。对这两种情况都应输出“找不到此数”。
+程序如下：
+# include <stdio.h>
+# define N 10
+void input (int num[ ],char name[N][8])             /* input是输入数据的函数 */
+{int i;
+ for (i=0;i<N;i++)
+{printf(“\n Input NO.:”);
+ scanf(“%d”,&num[i]);
+ printf(“Input name:”);
+ getchar ( );
+ gets (name[i]);
+}
+}
+
+void sort (int num[ ],char name[N][8])              /*排序的数组*/
+{int i,j,min,temp1;
+ char temp2[8];
+ for (I=0;i<N-1;I++)
+{min=i;
+ for (j=i;j<N;j++)
+    if (num[min]>num[j])    min=j;
+ temp1=num[i];
+ strcpy(temp2,name[i]);
+ num[i]=num[min];
+ strcpy (name[i],name[min]);
+ num[min]=temp1;
+ strcpy(name[min],temp2);
+}
+ printf(“\n result: \n”);
+ for (i=0;i<N;i++)
+printf(“\n %5d%10s”,num[i],name[i]);
+}
+
+void search(int n,num[ ],char name[N][8])                /* 折半查找函数 */
+{int top,bott,mid,loca;
+ loca=0;
+ top=0;
+ bott=N-1;
+ if ((n<num[0]) || (n>num[N-1]))
+   loca=-1;
+ while ((sign==1) && (top<=bott))
+   {min=(bott+top)/2;
+if (n==num[mid])
+  {loca=mid;
+   printf(“NO. %d , His name is %s.\n”,n,name[loca]);
+sign=-1;
+}
+else if (n<num[mid])
+     bott=mid-1;
+   else
+     top=mid+1;
+}
+if (sign==1 || loca==-1)
+  printf(“Can’t find%d. \n”,n);
+}
+
+main ( )
+{int num[N],number,flag=1,c,n;
+ char name[N][8];
+ input(num,name);
+ sort(num,name);
+ while(flag==1)
+{printf(“\n Input number to look for:”);
+ scanf(“%d”,&number);
+ search(number,num,name);
+ printf(“Continue or not(Y/N)?”);
+ getchar ( );
+ c=getchar ( );
+ if (c==’N’ || c==’n’)
+   flag=0;
+}
+}
+
+运行结果：
+Input NO.: 1↙
+Input name: Li↙
+Input NO.: 2↙
+Input name: Wang↙
+Input NO.: 5↙
+Input name: Liu↙
+Input NO.: 8↙
+Input name: Ma↙
+Input NO.: 4↙
+Input name: Chen↙
+Input NO.: 10↙
+Input name: Zhou↙
+Input NO.: 12↙
+Input name: Zhang↙
+Input NO.: 6↙
+Input name: Xie↙
+Input NO.: 23↙
+Input name: Yuan↙
+Input NO.: 34↙
+Input name: Lu↙
+
+result：
+1	Li
+2	Wang
+4	 Chen
+5	 Liu
+6	 Xie
+8	 Ma
+10   Zhou
+12	Zhang
+23	Yuan
+34	Lu
+
+Input number to look for：3↙
+Can’t find 3.
+Continue or not (Y/N)? y↙
+Input number to look for：6↙
+NO.6 ，his name is Xie.
+Continue or not (Y/N)? n↙
+(程序运行结束)
+
+8.14写一函数，输入一个十六进制数，输出相应的十进制数。
+解：程序如下：
+# include<stdio.h>
+# define MAX 1000
+main ( )
+{char t[MAX];
+ i=0;
+ flag=0;
+ flag1=1; 
+ printf(“\nInput a hex number:”);
+ while ((c=getchar( ))!=’\0’ && i<MAX && flag1)
+{if (c>=’0’ && c<=’9’ || c>=’a’ && c<=’f’ || c>=’A’ && c<=’F’)
+  {flag=1;
+   t[i++]=c;
+  }
+ else if (flag)
+  {t[i]=’\0’;
+   printf(“decimal  number %d:\n”,htoi(t));
+   printf(“Continue or not?”);
+   c=getchar( );
+   if (c==’N’ || c==’n’)
+     flag1=0;
+   else 
+     {flag=0;
+      i=0;
+      printf(“\nInput a hex number:”);
+     }
+   }
+}
+} 
+
+htoi (char s[ ])
+{int i,n;
+ n=0;
+ for (i=0;s[i]!=’\0’;i++)
+{if (s[i]>=’0’ && s[i]<=’9’)
+   n=n*16+s[i]-‘0’;
+ if (s[i]>=’a’ && s[i]<=’f’)
+   n=n*16+s[i]-‘a’+10;
+ if (s[i]>=’A’ && s[i]<=’F’)
+   n=n*16+s[i]-‘A’+10;
+}
+  return (n);
+}
+
+运行结果：
+Input a hex number：all↙
+Decimal  number：2577
+Continue or not? y↙
+Input a hex number：10↙
+Decimal  number：16
+Continue or not? y↙
+Input a hex number：f↙
+Decimal  number：15
+Continue or not? n↙
+
+8.15给出年，月，日，计算该日是该年的第几天。
+解：主函数接收从键盘输入的日期，并调用sum_day和leap函数计算天数。
+sum_day计算输入日期的天数。leap函数返回是否闰年的信息。
+程序如下：
+main ( )
+{int year,month,day,days;
+ printf(“\nInput date(year,month,day):”);
+ scanf(“%d,%d,%d”,year,month,day);
+ days=sum_day(month,day);                        /* 调用函数1 */
+ if (leap (year) && month>=3)                      /* 调用函数2 */
+   days=days+1;
+ printf(“is the %dth day in this year. \n”,days);
+}
+
+int day_tab[13]={0,31,28,31,30,31,30,31,31,30,31,30,31};    /* 外部数组 */
+int sum_day(int month,int day)               /* 函数一：计算日期 */
+{int i;                                   /* 累计所在月之前的天数 */
+ for (i=1;i<month;i++)
+   day+=day_tab[i];
+ return (day);
+}
+
+int leap (int year)                          /* 函数二：判断是否为闰年 */
+{int leap;
+ leap=year%4==0&&year%100!=0 || year%400==0;
+ return (leap);
+}
+
+运行结果：
+Input date(year,month,day):2000,10,1↙
+2000/10/1 is the 275th day in this year.

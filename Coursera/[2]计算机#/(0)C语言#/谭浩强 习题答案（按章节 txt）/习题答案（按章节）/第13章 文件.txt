@@ -1,0 +1,669 @@
+第13章 文件
+13.3从键盘输入一个字符串，将其中的小写字母全部转换成大写字母，然后输出到一个磁盘文件”test”中保存。输入的字符串以”!”结束。
+解：
+# include <stdio.h>
+main ( )
+{
+ FILE * fp;
+ Char str[100];
+ int i=0;
+ if ((fp=fopen(“test”,”w”))==NULL)
+{printf(“Can not open the file\n”);
+ exit(0);
+}
+ printf(“Input a string:\n”);
+ gets(str);
+ while (str[i]! = ‘!’)
+{if (str[i]>=’a’ && str[i]<=’z’)
+    str[i]=str[i]-32;
+ fputc(str[i],fp);
+ i++;
+}
+ fclose(fp);
+ fp=fopen(“test”,”r”);
+ fgets(str,strlen(str)+1,fp);
+ printf(“%s\n”,str);
+ fclose(fp);
+}
+
+运行情况如下：
+Input a string:
+i love china.↙
+I LOVE CHINA.
+
+13.4有两个磁盘文件“A”和“B”，各存放一行字母，要求把这两个文件中的信息合并（按字母的顺序排列），输出到一个新文件“C”中。
+解：
+# include <stdio.h>
+main ( )
+{
+ FILE * fp;
+ Int i,j,n,i1;
+ char c[100],t,ch;
+ if ((fp=fopen(“a1”,”r”))==NULL)
+   {
+printf(“Can not open the file\n”);
+exit(0);
+   }
+ printf(“\n file A: \n”);
+ for (i=0;(ch=fgetc(fp))!=EOF;i++)
+   {
+c[i]=ch;
+putchar(c[i]);
+   }
+ fclose(fp);
+ i1=i;
+ if ((fp=fopen(“b1”,”r”))==NULL)
+   {printf(“\n Can not open the file”);
+exit(0);
+   }
+ printf(“\n file B: \n”);
+ for (i=i1;(ch=fgetc(fp))!=EOF;i++)
+{
+ c[i]=ch;
+ putchar(c[i]);
+}
+ fclose(fp);
+ n=i;
+ for (i=0;i<n;i++)
+   for (j=i+1;j<n;j++)
+if (c[i]>c[j])
+  {t=c[i];
+   c[i]=c[j];
+   c[j]=t;}
+ printf(“\n file C: \n”);
+ fp=fopen(“c1”,”w”);
+   for (i=0;i<n;i++)
+{putc(c[i],fp);
+ putchar(c[i]);
+}
+ fclose(fp);
+}
+
+运行结果：
+file A:
+I LOVE CHINA
+file B:
+I LOVE BEIJING
+file C:
+ABCEEEGHIIIIIJLLNNOOVV
+
+13.5有5个学生，每个学生有3门课的成绩，从键盘输入以上数据（包括学生号，姓名，三门课成绩），计算出平均成绩，将原有数据和计算出的平均分数存放在磁盘文件stud中。
+解法一：
+# include <stdio.h>
+struct student
+{char num[10];
+ char name[8];
+ int score[3];
+ float ave;
+}stu[5];
+main ( )
+{int i,j,sum;
+ FILE * fp;
+ /* 输入 */
+for (i=0;i<5;i++)
+{printf(“\nInput score of student %d:\n”,i+1);
+   printf(“NO.:”);
+   scanf(“%s”,stu[i].num);
+   printf(“name:”);
+   scanf(“%s”,stu[i].name);
+   sum=0;
+   for (j=0;j<3;j++)
+{printf(“score %d:”,j+1);
+ scanf(“%d”,&stu[i].score[j]);
+ sum+=stu[i].score[j];
+}
+   stu[i].ave=sum/3.0;
+  }
+/* 将数据写入文件 */
+  fp=fopen(“stud”,”w”);
+  for (i=0;i<5;i++)
+if (fwrite(&stu[i],sizeof(struct student),1,fp)!=1)
+  printf(“File write error\n”);
+  fclose(fp);
+/* 检查文件内容 */
+  fp=fopen(“stud”,”r”);
+  for (i=0;i<5;i++)
+{fread (&stu[i],sizeof(struct student),1,fp);
+ printf(“%s,%s,%d,%d,%d,%6.2f\n”,stu[i].num,stu[i].name,stu[i].score[0],
+stu[i].score[1],stu[i].score[2],stu[i].ave);}
+}
+运行情况如下：
+Input score of student 1:
+NO.: 110↙
+name: Li↙
+score 1: 90↙
+score 2: 89↙
+score 3: 88↙
+
+Input score of student 2:
+NO.: 120↙
+name: Wang↙
+score 1: 80↙
+score 2: 79↙
+score 3: 78↙
+
+Input score of student 3:
+NO.: 130↙
+name: Chen↙
+score 1: 70↙
+score 2: 69↙
+score 3: 68↙
+
+Input score of student 4:
+NO.: 140↙
+name: Ma↙
+score 1: 100↙
+score 2: 99↙
+score 3: 98↙
+
+Input score of student 5:
+NO.: 150↙
+name: Wei↙
+score 1: 60↙
+score 2: 59↙
+score 3: 58↙
+
+110,Li,90,89,88, 89.00
+120,Wang,80,79,78, 79.00
+130,Chen,70,69,68, 69.00
+140,Ma,100,99,98, 99.00
+150,Wei,60,59,58, 59.00
+
+说明：在程序的第一个for循环中，有两个printf函数语句用来提示用户输入数据，即“printf(“\ninput scoreof student %d:\n”,i+1);”和“printf(“score %d:”,j+1);”，其中用“i+1”和“j+1”而不是用i和j的用意是使显示提示时，序号从1起，即学生1和成绩1（而不是学生0和成绩0），以符合人们习惯，但在内存中，数组元素下标仍从0算起。
+程序最后5行用来检查文件stud中的内容是否正确，从结果来看，是正确的。请注意：
+用fwrite函数向文件输出数据时不是按ASCII码方式输出的，而是按内存中存储数据的方式输出的（例如一个整数占2个字节，一个实数占4个字节），因此不能用type命令输出该文件中的数据。
+解法二：本题也可以用下面程序来实现。
+# include <stdio.h>
+# define SIZE 5
+struct student
+{char name[10];
+ int num;
+ int score[3];
+ float ave;
+}stud[SIZE];
+main ( )                                    /* 函数声明 */
+{void save(void);
+ int i;
+ float sum[SIZE];
+ FILE * fp1;
+ for (i=0;i<SIZE;i++)                         /* 输入数据，并求每个学生的平均分 */
+   {scanf(“%s %d %d %d %d”,stud[i].name,&stud[i].num,&stud[i].score[0],
+          &stud[i].score[1],&stud[i].score[2]);
+sum[i]=stud[i].score[0]+stud[i].score[1]+stud[i].score[2];
+stud[i].ave=sum[i]/3;
+   }
+  save( );                  /* 调用save函数，向文件stu.dat输出数据 */
+  fp1=fopen(“stu.dat”,”rb”);   /* 用只读方式打开stu.dat文件 */
+  printf(“\n name   NO.   score1   score2   score3   ave\n”);
+  for (i=0;i<SIZE;i++)        /* 从文件读入数据并在屏幕输出 */
+{
+ fread(&stud[i],sizeof(struct student),1,fp1);
+ printf(“%-10s %3d %7d %7d %7d %8.2f\n”,stud[i].name,stud[i].num,
+   stud[i].score[0],stud[i].score[1],stud[i].score[2],stud[i].ave);
+}
+ fclose(fp1);
+}
+
+void save(void)                      /* 向文件输出数据的函数 */
+{
+ FILE * fp;
+ int i;
+ if ((fp=fopen(“stu.dat”,”wb”))==NULL)
+   {
+printf(“Can not open the file\n”);
+return;
+}
+ for (i=0;i<SIZE;i++)
+if (fwrite(&stud[i],sizeof(struct student),1,fp)!=1)
+  {printf(“File write error\n”);
+   return;
+  }
+ fclose(fp);
+}
+
+运行情况如下：
+Zhang 101 77 78 98↙
+Li 102 67 78 88↙
+Wang 103 89 99 97↙
+Wei 104 77 76 98↙
+Ten 105 78 89 97↙
+
+name     NO.     score1     score2     score3     ave
+Zhang    101       77        78        98       84.33
+Li       102       67        78        88       77.67
+Wang     103       89        99        97       95.00
+Wei      104       77        76        98       83.67
+Tan      105       78        89        97       88.00
+
+    本程序用save函数将数据写到磁盘文件上，在从文件读回，然后用printf函数输出，从运行结果可以看到文件中的数据是正确的。
+
+13.6将上题stud文件中的学生数据按平均分进行排序处理，并将已排序的学生数据存入一个新文件stu_sort中。
+解法一：
+# include <stdio.h>
+# define N 10
+struct student
+{char num[10];
+ char name[8];
+ int score[3];
+ float ave;
+}st[N],temp;
+main ( )
+{FILE * fp;
+ int I,j,n;
+/* 读文件 */
+if ((fp=fopen(“stud”,”r”))==NULL)
+  {printf(“Can not open the file.”);
+   exit(0);}
+printf(“\nfile ‘stud’: ”);
+for (i=0;fread(&st[i],sizeof(struct student),1,fp)! =0;i++)
+   {printf(“\n%8s%8s”,st[i].num,st[i].name);
+    for (j=0;j<3;j++)
+       printf(“%8d”,st[i].score[j]);
+    printf(“%10.2f”,st[i].ave);
+   }
+ fclose(fp);
+ n=i;
+ /* 排序 */
+ for (i=0;i<n;i++)
+    for (j=i+1;j<n;j++)
+       if (st[i].ave<st[j].ave)
+         {temp=st[i];
+          st[i]=st[j];
+          st[j]=temp;
+         }
+ /* 输出 */
+ printf(“\nnow:”);
+ fp=fopen(“stu_sort”,”w”);
+ for (i=0;i<n;i++)
+    {fwrite(&st[i],sizeof(struct student),1,fp);
+     printf(“\n%8s%8s”,st[i].num,st[i].name);
+     for (j=0;j<3;j++)
+        printf(“%8d”,st[i].score[j]);
+     printf(“%10.2f”,st[i].ave);
+    }
+ fclose(fp);
+}
+
+运行结果：
+file ‘stud’:
+110         Li        90       89       88        89.00
+120      Wang        80       79       78        79.00
+130      Chen        70        69       68        69.00
+140        Ma        100       99       98       99.00
+150       Wei         60       59        58       59.00
+now:
+140        Ma        100       99       98        99.00
+110        Li          90       89       88        89.00
+120      Wang         80       79       78        79.00
+130      Chen         70       69       68        69.00
+150       Wei         60       59       58        59.00
+
+解法二：
+与上题解法二相应，也可以使用下面的程序来实现本题要求。
+# include <stdio.h>
+# define SIZE
+struct student
+  {char name[10];
+   int num;
+   int score[3];
+   float ave;
+  }stud[SIZE],work;
+main ( )
+{void sort(void);
+ int i;
+ FILE * fp;
+ sort ( );
+ fp=fopen(“stud_sort.dat”,”rb”);
+ printf(“Sorted student’s scores list is as follows\n”);
+ printf(“---------------------------------------------------------------------------------------------\n”);
+ printf(“ NAME    NO.    SCORE1     SCORE2    SCORE3    AVE     \n”);
+ printf(“---------------------------------------------------------------------------------------------\n”);
+ for (i=0;i<SIZE;i++)
+    {fread (&stud[i],sizeof(struct student),1,fp);
+     printf(“%-10s %3d %8d %8d %8d %9.2f\n”,stud[i].name,stud[i].num,
+stud[i].score[0],stud[i].score[1],stud[i].score[2],stud[i].ave);
+    }
+ fclose(fp);
+}
+
+void sort(void)
+{FILE * fp1,* fp2;
+ int i,j;
+ if ((fp1=fopen(“stu.dat”,”rb”))==NULL)
+   {printf(“Can not open the file\n”);
+    exit(0);
+   }
+ if ((fp2=fopen(“stud_sort.dat”,”wb”))==NULL)
+   {printf(“The file write error\n”);
+    exit(0);
+   }
+ for (i=0;i<SIZE;i++)
+    if (fread(&stud[i],sizeof(struct student),1,fp1)!=1)
+      {printf(“file read error\n”);
+       exit(0);
+      }
+ for (i=0;i<SIZE;i++)
+    {for (j=i+1;j<SIZE;j++)
+       if (stud[i].ave<stud[j].ave)
+         {work=stud[i];
+          stud[i]=stud[j];
+          stud[j]=work;
+         }
+     fwrite(&stud[i],sizeof(struct student),1,fp2);
+    }
+ fclose(fp1);
+ fclose(fp2);
+}
+运行情况如下：
+Sorted student’s scores list is as follows
+----------------------------------------------------------------------------------------
+NAME        NO.    SCORE1    SCORE2    SCORE3   AVE
+----------------------------------------------------------------------------------------
+Wang         103       89          99         97      95.00
+Tan           105       78          89         97      88.00
+Zhang         101       77          78         98      84.33
+Wei           104       77          76         98      83.67
+Li            102       67          78         88      77.67
+本程序是将已排好序的数据存放到磁盘文件stud_sort.dat中，然后再读入内存并输出。
+
+13.7将上题已排序的学生成绩文件进行插入处理。插入一个学生的3门课成绩，程序先计算新插入学生的平均成绩，然后将它按平均成绩高低顺序插入，插入后建立一个新文件。
+解：
+# include <stdio.h>
+struct student
+  {char num[10];
+   char name[8];
+   int score[3];
+   float ave; 
+  }st[10],s;
+main ( )
+{FILE * fp; * fp1;
+ int i,j,t,n;
+ /* 输入插入的学生s的数据 */
+ printf(“\nNO.:”);
+ scanf(“%s”,s.num);
+ printf(“name:”);
+ scanf(“%s”,s.name);
+ printf(“score1,score2,score3:”);
+ scanf(“%d,%d,%d”,&s.score[0],&s.score[1],&s.score[2]);
+ s.ave=(s.score[0]+s.score[1]+s.score[2])/3.0;
+/* 从文件读数据 */
+ if ((fp=fopen(“stu_sort”,”r”))==NULL)
+   {printf(“can not open file.”);
+exit(0);
+   }
+ printf(“original data:\n”);
+ for (i=0;fread(&st[i],sizeof(struct student),1,fp)!=0;i++)
+{printf(“\n%8s%8s”,st[i].num,st[i].name);
+ for (j=0;j<3;j++)
+   printf(“%8d”,st[i].score[j]);
+ printf(“%10.2f”,st[i].ave);
+}
+ n=i;
+ for (t=0;st[t].ave>s.ave && t<n;t++)                      /* 确定插入的位置 */
+ /* 向文件写数据 */
+ printf(“\nnow:\n”);
+ fp1=fopen(“sort1.dat”,”w”);
+ for (i=0;i<t;i++)                 /* 先输出平均成绩高于学生s的学生的成绩 */
+{fwrite(&st[i],sizeof(struct student),1,fp1);
+ printf(“\n %8s%8s”,st[i].num,st[i].name);
+ for (j=0;j<3;j++)
+   printf(“%8d”,stu[i].score[j]);
+ printf(“%10.2f”,st[i].ave);
+}
+ fwrite(&s,sizeof(struct student),1,fp1);
+ printf(“\n %8s %7s %7d %7d %7d %10.2f”,s.num,s.name,s.score[0],s.score[1],
+s.score[2],s.ave);           /* 输出学生s的成绩 */
+ for (i=t;i<n;i++)                   /* 输出平均成绩低于学生s的学生的成绩 */
+   {fwrite(&st[i],sizeof(struct student),1,fp1);
+printf(“\n %8s%8s”,st[i].num,st[i].name);
+for (j=0;j<3;j++)
+   printf(“%8d”,st[i].score[j]);
+printf(“%10.2f”,st[i].ave);
+   }
+ fclose(fp);
+ fclose(fp1);
+}
+
+运行结果：
+NO.: 160↙
+name: Tan↙
+score1,score2,score3: 98,97,98↙
+original data: 
+140      Ma      100      99       98       99.00
+110      Li        90      89       88       89.00
+120     Wang      80      79       78       79.00
+130     Chen      70      69       68       69.00
+150      Wei      60      59       58        59.00
+now:
+140      Ma      100      99       98       99.00
+160      Tan      98       97       98       97.67
+110       Li      90       89       88        89.00
+120     Wang      80      79       78       79.00
+130     Chen      70      69       68       69.00
+150      Wei      60      59       58        59.00
+为节省篇幅，本题和题13.8中不再给出上题“解法二”的程序，请自己编写程序。
+
+13.8将上题的结果仍存入原有的stu_sort文件而不另建立新文件。
+解：
+# include <stdio.h>
+struct student
+{char num[10];
+ char name[8];
+ int score[3];
+ float ave;
+} st[10],s;
+main ( )
+{FILE * fp, * fp1;
+ int I,j,t,n;
+ printf(“\n No.:”);
+ scanf(“%s”,s.num);
+ printf(“name:”);
+ scanf(“%s”,s.name);
+ printf(“score1,score2,score3:”);
+ scanf(“%d,%d,%d”,&s.score[0],&s.score[1],&s.score[2]);
+ s.ave=(s.score[0]+s.score[1]+s.score[2])/3.0;
+/* 从文件读数据 */
+if((fp=fopen(“stu_sort”,”r”))==NULL)
+  {printf(“Can not open the file.”);
+   exit(0);
+  }
+printf(“original data:\n”);
+for (i=0;fread(&st[i],sizeof(struct student),1,fp)!=0;i++)
+   {printf(“\n%8s%8s”,st[i].num,st[i].name);
+for (j=0;j<3;j++)
+  printf(“%8d”,st[i].score[j]);
+printf(“%10.2f”,st[i].ave);
+}
+ fclose(fp);
+ n=i;
+ for (t=0;st[t].ave>s.ave && t<n;t++)
+ /* 向文件写数据 */
+ printf(“\nnow:\n”);
+ fp=fopen(“stu_sort”,”W”);
+ for (i=0;i<t;i++)
+   {fwrite(&st[i],sizeof(struct student),1,fp);
+printf(“\n %8s%8s”,st[i].num,st[i].name);
+for (j=0;j<3;j++)
+   printf(“%8d”,st[i].score[j]);
+printf(“%10.2f”,st[i].ave);
+}
+ fwrite(&s,sizeof(struct student),1,fp);
+ printf(“\n %9s%8s%8d%8d%8d%10.2f”,s.num,s.name,s.score[0],s.score[1],s.score[2],s.ave);
+ for (i=t;i<n;i++)
+   {fwrite(&st[i],sizeof(struct student),1,fp);
+printf(“\n %8s%8s”,st[i].num,st[i].name);
+for (j=0;j<3;j++)
+   printf(“%8d”,st[i].score[j]);
+printf(“%10.2f”,st[i].ave);
+}
+ fclose(fp);
+}
+
+运行情况如下：
+NO.: 160↙
+name: Hua↙
+score1,score2,score3: 78,89,91↙
+original data:
+140     Ma     100     99     98     99.00 
+110      Li      90     89     88     89.00
+120   Wang      80     79     78     79.00
+130    Chen     70      69     68     69.00
+150     Wei     60      59     58     59.00
+now:
+140     Ma     100     99     98     99.00 
+110      Li      90     89     88     89.00
+160     Hua      78     89     91     86.00
+120   Wang      80     79     78     79.00
+130    Chen     70      69     68     69.00
+150     Wei     60      59     58     59.00
+
+13.9有一磁盘文件emploee，内存放职工的数据。每个职工的数据包括：职工姓名，职工号，性别，年龄，住址，工资，健康状况，文化程度。要求将职工名和工资的信息单独抽出来另建一个简明的职工工资文件。
+解：
+# include <stdio.h>
+struct emploee
+{char   num[6];
+ char   name[10];
+ char   sex[2];
+ int    age;
+ char   addr[20];
+ int    salary;
+ char   health[8];
+ char   class[10];
+}em[10];
+struct emp
+{char name[10];
+ int salary;
+}em_case[10];
+main ( )
+{FILE * fp1,* fp2;
+ int i,j;
+ if ((fp1=fopen(“emploee”,”r”))==NULL)
+   {printf(“Can not open the file.”);
+exit(0);
+   }
+ printf(“\n  NO.   name   sex   age   addr   salary   health   class\n”);
+ for (i=0;fread(&em[i],sizeof(struct emploee),1,fp1)!=0;i++)
+{printf(“\n%4s%8s%4s%6d%10s%6d%10s%8s”,em[i].num,em[i].name,em[i].sex,
+em[i].age,em[i].addr,em[i].salary,em[i].health,em[i].class);
+strcpy(em_case[i].name,em[i].name);
+em_case[i].salary=em[i].salary;
+}
+ printf(“\n\n * * * * * * * * * * * * * * * * * * * * * * * * *   ”);
+ if((fp2=fopen(“emp_salary”,”wb”))==NULL)
+   {printf(“Can not open the file.”);
+exit(0);}
+ for (j=0;j<i;j++)
+{if(fwrite(&em_case[j],sizeof(struct emp),1,fp2)!=1)
+   printf(“error!”);
+ printf(“\n %12s%10d”,em_case[j].name,em_case[j].salary);
+}
+ printf(“\n   * * * * * * * * * * * * * * * * * * * * * * * * *   ”);
+ fclose(fp1);
+ fclose(fp2);
+}
+
+运行结果如下：
+NO.      name     sex     age     addr     salary     health     class
+101        Li       m      23   Beijing      670      good     P.H.D
+102      Wang      f       45  Shanghai      780      bad     master
+103        Ma      m      32    Taijin       650      good    univ.
+104       Liu       f       56     Xian      540       pass    college
+* * * * * * * * * * * * * * * * * * * * * * * * *
+        Li     670
+Wang     780
+  Ma     650
+  Liu     540
+* * * * * * * * * * * * * * * * * * * * * * * * *
+说明：数据文件emploee是事先建立好的，其中已有职工数据，而emp_salary文件则是由程序建立的。
+建立emploee文件的程序如下：
+# include <stdio.h>
+struct emploee
+{char   num[6];
+ char   name[10];
+ char   sex[2];
+ int    age;
+ char   addr[20];
+ int    salary;
+ char   health[8];
+ char   class[10];
+}em[10];
+main ( )
+{ FILE * fp;
+ int i,j;
+ printf(“input NO., name, sex, age, addr, salary, health, class\n”);
+ for (i=0;i<4;i++)
+scanf(“ %s %s %s %d %s %d %s %s”,em[i].num,em[i].name,em[i].sex,
+&em[i].age,em[i].addr,&em[i].salary,em[i].health,em[i].class);
+/* 将数据写入文件 */
+ if((fp=fopen(“emploee”,”w”))=NULL)
+   {printf(“Can not open the file.”); 
+exit(0);
+}
+ for (i=0;i<4;i++)
+if(fwrite(&em[i],sizeof(struct emploee),1,fp)!=1)
+  printf(“error\n”);
+fclose(fp);
+}
+ 
+ 在运行此程序时从键盘输入4个职工的数据，程序将它们写入emploee文件。在运行前面一个程序时从emploee文件中读出数据并输出到屏幕，然后建立一个简明文件，同时在屏幕上输出。
+
+13.10从上题的“职工工资文件”中删去一个职工的数据，再存回原文件。
+解：
+# include <stdio.h>
+# include <string.h>
+struct emploee
+{char   name[10];
+ int    salary;
+}emp[10];
+main ( )
+{FILE * fp;
+ int i,j,n,flag;
+ char name[10];
+ int salary;
+ if ((fp=fopen(“emp_salary”,”rb”))==NULL)
+   {printf(“Can not open the file.”);
+exit(0);
+}
+ printf(“\n original data:”);
+ for (i=0;fread(&emp[i],sizeof(struct emploee),1,fp)!=0;i++)
+printf(“\n  %8s  %7d”,emp[i].name,emp[i].salary);
+ fclose(fp);
+ n=i;
+ printf(“\n Input name deleted:”);
+ scanf(“%s”,name);
+ for (flag=1,i=0;flag && i<n;i++)
+{if (strcmp(name,emp[i].name)==0)
+  {for(j=i;j<n-1;j++)
+     {strcpy(emp[j].name,emp[j+1].name);
+      emp[j].salary=emp[j+1].salary;
+     }
+   flag=0;
+  }
+}
+ if(!flag)
+   n=n-1;
+ else
+   printf(“\n Not found!”);
+ printf(“\nNow,the content of file:\n”);
+ fp=fopen(“emp_salary”,”wb”);
+ for (i=0;i<n;i++)
+fwrite(&emp[i],sizeof(struct emploee),1,fp);
+ fclose(fp);
+ fp=fopen(“emp_salary”,”r”);
+ for (i=0;fread(&emp[i],sizeof(struct emploee),1,fp)!=0;i++)
+printf(“\n%8s %7d”,emp[i].name,emp[i].salary);
+ fclose(fp);
+}
+
+运行情况如下：
+original data:
+  Li      670
+  Wang   780
+  Ma     650
+  Liu     540
+Input name deleted: Ma↙
+Now,the content of file:
+  Li      670
+  Wang   780
+  Liu     540
+

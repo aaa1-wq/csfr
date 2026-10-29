@@ -1,0 +1,278 @@
+第5章 选择结构程序设计
+5.2语言中如何表示“真”和“假”？系统如何判断一个量的“真”和“假”？
+解：设有一个逻辑表达式，若其结果为“真”，则以1表示；若其结果为“假”，则以0表示。但是判断一个逻辑量的值时，以0代表“真”，以非0代表“假”。例如3&&5的值为“真”，系统会给出3&&5的值为1。
+
+5.3写出下面各逻辑表达式的值。设a=3，b=4，c=5。
+（1）a+b>c&&b==c
+（2）a||b+c&&b-c
+（3）!(a>b)&&!c||1
+（4）!(x=a)&&(y=b)&&0
+（5）!(a+b)+c-1&&b+c/2
+解：
+（1）0
+（2）1
+（3）1
+（4）0
+（5）1
+
+5.4有3个整数a，b，c，由键盘输入，输出其中最大的数。
+解：方法一：
+程序如下：
+main ( )
+{ int a,b,c;
+ printf(“请输入3个整数：”);
+ scanf(“%d,%d,%d”,&a,&b,&c);
+ if (a<b)
+   if (b<c)
+printf(“max=%d\n”,c);
+   else
+printf(“max=%d\n”,b);
+ else if (a<c)
+       printf(“max=%d\n”,c);
+else
+ printf(“max=%d\n”,a);
+}
+
+运行结果：
+请输入3个整数：12, 34, 9↙
+max=34
+
+方法二：使用条件表达式，可以使程序更简明，清晰。
+main ( )
+{ int a,b,c,temp,max ;
+ printf(“请输入3个整数：”);
+ scanf(“%d,%d,%d”,&a,&b,&c);
+ temp=(a>b)? a:b;                 /* 将a和b中的大者存入temp中 */
+ max=(temp>c)? temp:c;            /* 将a和b中的大者与c比较，取最大者 */
+ printf(“3个整数中最大数是%d\n”,max);
+}
+
+方法三：a>b?(a>c?a:c):(b>c?b:c)
+
+运行结果：
+请输入3个整数：12,34,9↙
+3个整数的最大数是34。
+
+5.5有一函数: 
+ 
+写一程序，输入x值，输出y值。
+解：程序如下
+main ( )
+{ int x,y;
+ printf(“输入x：”);
+ scanf(“%d”,&x);
+ if (x<1)                              /*  x<1  */
+ { y=x;
+  printf(“x=%d3d,    y=x=%d\n”,x,y);
+ }
+ else if (x<10)                         /*  1≤x<10  */
+{y=2*x-1;
+ printf(“x=%3d,       y=2*x-1=%d\n”,x,y);
+}
+else                             /*  x≥10  */
+ { y=3*x-11;
+  printf(“x=%3d,            y=3*x-11=%d\n”,x,y);
+ }
+}
+
+运行结果：
+①	输入x：4↙
+x=4，      y=2*x-1=7
+②	输入x：-1↙
+x=-1，      y=x=-1
+③	输入x：20↙
+    x=20，     y=3*x-11=49
+
+5.6给出一百分制成绩，要求输出成绩等级’A’、’B’、’C’、’D’、’E’。90分以上为’A’，80～89分为’B’，70～79分为’C’，60～69分为’D’，60分以下为’E’。
+解：程序如下
+#include "stdio.h"
+void main()
+{
+    float score;
+    char grade;
+    printf("请输入学生成绩：");
+    scanf("%f",&score);
+    while(score>100 || score<0)
+    {
+        printf("\n输入有误，请重输");
+        scanf("%f",&score);
+    }
+    switch((int)(score/10))
+    {
+        case 10:
+        case 9:grade='A';break;
+        case 8:grade='B';break;
+        case 7:grade='C';break;
+        case 6:grade='D';break;
+        case 5:
+        case 4:
+        case 3:
+        case 2:
+        case 1:
+        case 0:grade='E';
+    }
+    printf("\n成绩是%5.1f，相应的等级是%c。\n",score,grade);
+}
+5.7给定一个不多于5位的正整数，要求：①求它是几位数；②分别打印出每一位数字；③按逆序打印出各位数字。例如原数为321，应输出123。
+解：
+main ( )
+{ 
+ long int num;
+ int indiv,ten,hundred,thousand,ten_thousand,place;
+/*分别代表个位，十位，百位，千位，万位和位数*/
+ printf(“请输入一个整数（0～99999）：”);
+ scanf(“%ld”,&num);
+ if (num>9999)
+place=5;
+  else if (num>999)
+place=4;
+  else if (num>99)
+place=3;
+else if (num>9)
+place=2;
+else place=1;
+printf(“place=%d\n”,place);
+printf(“每位数字为：”);
+ten_thousand=num/10000;
+thousand=(int)(num-ten_thousand*10000)/1000;
+hundred=(int)(num-ten_thousand*10000-thousand*1000)/100;
+ten=(int)(num-ten_thousand*10000-thousand*1000-hundred*100)/10;
+indiv=(int)(num-ten_thousand*10000-thousand*1000-hundred*100-ten*10);
+switch(place)
+{case 5:printf(“%d,%d,%d,%d,%d”,ten_thousand,thousand,hundred,ten,indiv);
+printf(“\n反序数字为：”);
+printf(“%d%d%d%d%d\n”,indiv,ten,hundred,thousand,ten_thousand);
+break;
+case 4:printf(“%d,%d,%d,%d”,thousand,hundred,ten,indiv);
+   printf(“\n反序数字为：”);
+printf(“%d%d%d%d \n”,indiv,ten,hundred,thousand);
+break;
+case 3:printf(“%d,%d,%d”,hundred,ten,indiv);
+   printf(“\n反序数字为：”);
+printf(“%d%d%d \n”,indiv,ten,hundred);
+break;
+case 2:printf(“%d,%d”, ten,indiv);
+   printf(“\n反序数字为：”);
+printf(“%d%d \n”,indiv,ten);
+break;
+case 1:printf(“%d”, indiv);
+   printf(“\n反序数字为：”);
+printf(“%d\n”,indiv);
+break;
+   }
+}
+运行结果：
+请输入一个整数（0～99999）：98765↙
+位数＝5
+每位数字为：9，8，7，6，5
+反序数字为：56789
+
+5.8企业发放的奖金根据利润提成。利润I低于或等于10万元时，奖金可提10％；利润高于10万元，低于20万元（100000<I≤200000）时，其中10万元按10％提成，高于10万元的部分，可提成7.5%；200000 <I≤400000时，其中20万元仍按上述办法提成（下同），高于20万元的部分按5％提成；400000<I≤600000时，高于40万元的部分按3％提成；600000<I≤1000000时，高于60万的部分按1.5％提成；I>1000000时，超过100万的部分按1％提成。从键盘输入当月利润I，求应发放奖金总数。
+要求：（1）用if语句编程序；（2）用switch语句编程序。
+解：计算利润时，要特别注意不同利润的不同提成比例。例如，利润为15万元，其中由10万元按10％的比例提成，另外5万元则按7.5%提成。
+（1）	用if语句编程序，
+main ( )
+{ long i;
+ float bonus,bon1,bon2,bon4,bon6,bon10;
+ bon1=100000*0.1;                /*利润为10万元时的奖金*/
+ bon2=bon1+100000*0.075          /*利润为20万元时的奖金*/
+ bon4=bon2+100000*0.05           /*利润为40万元时的奖金*/
+ bon6=bon4+100000*0.03           /*利润为60万元时的奖金*/
+ bon10=bon6+400000*0.015;        /*利润为100万元时的奖金*/
+ printf(“请输入利润i：”);
+ scanf(“%ld”,&i);
+ if (i<=100000)
+   bonus=i*0.1;                   /*利润在10万元以内按0.1提成奖金*/
+ else if (i<=200000)
+   bonus=bon1+(i-100000)*0.075    /*利润在10万至20万元时的奖金*/
+ else if (i<=400000)
+   bonus=bon2+(i-200000)*0.05     /*利润在20万至40万元时的奖金*/
+ else if (i<=600000)
+   bonus=bon4+(i-400000)*0.03     /*利润在40万元至60万元时的奖金*/
+ else if (i<=1000000)
+   bonus=bon6+(i-600000)*0.015    /*利润在60万元至100万元时的奖金*/
+ else bonus=bon10+(i-1000000)*0.01      /*利润在100万元以上时的奖金*/
+ printf(“奖金是 %10.2f”,bonus);
+}
+
+运行结果：
+请输入利润i：234000↙
+奖金是：19200.00
+（2）	用switch语句编程序，
+main ( )
+{ long i;
+ float bonus,bon1,bon2,bon4,bon6,bon10;
+ int c;
+ bon1=100000*0.1
+ bon2=bon1+100000*0.075
+ bon4=bon2+200000*0.05
+ bon6=bon4+200000*0.03
+ bon10=bon6+400000*0.015
+ printf(“请输入利润i：”);
+ scanf(“%d”,&i);
+ c=i/100000;
+ if (c>10) then c=10;
+ switch (c)
+   { case 0: bonus=i*0.1; break;
+    case 1: bonus=bon1+(i-100000)*0.075; break;
+    case 2:
+    case 3: bonus=bon2+(i-200000)*0.05; break;
+    case 4:
+    case 5: bonus=bon4+(i-400000)*0.03; break;
+    case 6:
+    case 7:
+    case 8:
+    case 9: bonus=bon6+(i-600000)*0.015; break;
+    case 10: bonus=bon10+(i-1000000)*0.01;
+   }
+ printf(“奖金是%10.2f”,bonus);
+}
+
+运行结果：
+请输入利润i：234000↙
+奖金是：19200.00
+
+5.9输入4个整数，要求按由小到大的顺序输出。
+解：程序如下
+#include "stdio.h"
+void main()
+{
+    int t,a,b,c,d;
+    printf("请输入4个整数：");
+    scanf("%d,%d,%d,%d",&a,&b,&c,&d);
+    printf("a=%d,b=%d,c=%d,d=%d",a,b,c,d);
+    if(a>b)
+        {t=a;a=b;b=t;}
+    if(a>c)
+        {t=a;a=c;c=t;}
+    if(a>d)
+        {t=a;a=d;d=t;}
+    if(b>c)
+        {t=b;b=c;c=t;}
+    if(b>d)
+        {t=b;b=d;d=t;}
+    if(c>d)
+        {t=c;c=d;d=t;}
+    printf("排序结果如下：\n");
+    printf("%d  %d  %d  %d\n",a,b,c,d);
+}
+5.10有4个圆塔，圆心分别为（2，2），（－2，2），（2，－2），（－2，－2），圆半径为1。见图4.4。这4个塔的高度分别为10m。塔以外无建筑物。今输入任一点的坐标，求该点的建筑高度（塔外的高度为0）。
+解：程序如下
+main ( )
+{ int h=10;
+ float x1=2,y1=2,x2=-2,y2=2,x3=-2,y3=-2,x4=2,y4=-2,x,y,d1,d2,d3,d4;
+ printf(“请输入一个点(x,y)：”);
+ scanf(“%f,%f”,&x,&y);                  /*求该点到各中心点的距离*/
+ d1=(x-x1)*(x-x1)+(y-y1)* (y-y1);
+ d2=(x-x2)*(x-x2)+(y+y2)* (y+y2;
+ d3=(x+x3)*(x+x3)+(y-y3)* (y-y3);
+ d4=(x+x4)*(x+x4)+(y+y4)* (y+y4);
+ if (d1>1 && d2>1 && d3>1 && d4>1) h=0;  /*判断该点是否在塔外*/
+ printf(“该点高度为%d”,h);
+}
+
+运行情况：
+请输入一个点(x,y)：0.5,0.7↙
+该点高度为0
+请输入一个点(x,y)：2.1,2.3↙
+该点高度为10

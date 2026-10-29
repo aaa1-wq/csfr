@@ -1,0 +1,702 @@
+第11章 结构体与共用体
+11.1定义一个结构体变量（包括年，月，日）。计算该日在本年中是第几天，注意闰年问题。
+解：解法一：
+结构体变量date中的成员对应于输入的年，月，日。days为天数。
+struct
+{int year;
+ int month;
+ int day;
+}date;
+
+main ( )
+{int days;
+ printf(“Input year,month,day:”);
+ scanf(“%d,%d,%d”,&date,year,&date,month,&date,day);
+ switch(date,month)
+ {case 1:days=date.day;                break;
+  case 2:days=date.day+31;             break;
+  case 3:days=date.day+59;             break;
+  case 4:days=date.day+90;             break;
+  case 5:days=date.day+120;            break;
+  case 6:days=date.day+151;            break;
+case 7:days=date.day+181;            break;
+case 8:days=date.day+212;            break;
+case 9:days=date.day+243;            break;
+case 10:days=date.day+273;           break;
+case 11:days=date.day+304;           break;
+case 12:days=date.day+334;           break;
+}
+if ((date.year %4== 0 && date.year %100!=0 
+|| date.year %400==0) && date.month >=3) days+=1;
+printf(“\n %d / %d is the %dth day in %d.”,date.month,date.day,days,date.year);
+}
+
+运行情况如下：
+Input year,month,day:2000,10,1↙
+10 / 1 is the 275th day in 2000.
+
+解法二：
+struct date
+{int year;
+ int month;
+ int day;}
+main ( )
+{int i,days;
+ int day_tab[13]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+ printf(“Input year,month,day:”);
+ scanf(“%d,%d,%d”,&date.year,&date.month,&date.day);
+ days=0;
+ for (i=1;i<date.month;i++)
+days+=day_tab[i];
+ days+=date.day;
+ if ((date.year%4==0 && date.year%100!=0 || date.year%400==0) && date.month>=3)
+days+=1;
+ printf(“%d / %d is the %dth day in %d.”,date.month,date.day,days,date.year);
+}
+
+运行情况如下：
+Input year,month,day:2001,10,1↙
+10 / 1 is the 274th day in 2000.
+
+11.2写一个函数days，实现上面的计算。由主函数将年，月，日传递给days函数，计算后将日数传回主函数输出。
+解：解法一：
+struct y_m_d
+   {int year;
+int month;
+int day;
+}date;
+
+int days(struct y_m_d date)            /* 函数的形参date1为结构体struct y_m_d 类型 */
+{int sum;
+ switch(date1.month)
+   {case 1:sum=date1.day;               break;
+case 2:sum=date1.day+31;            break;
+case 3:sum=date1.day+59;            break;
+case 4:sum=date1.day+90;            break;
+case 5:sum=date1.day+120;           break;
+case 6:sum=date1.day+151;           break;
+case 7:sum=date1.day+181;           break;
+case 8:sum=date1.day+212;           break;
+case 9:sum=date1.day+243;           break;
+case 10:sum=date1.day+273;          break;
+case 11:sum=date1.day+304;          break;
+case 12:sum=date1.day+334;          break;
+}
+ if ((date1.year % 4 ==0 && date1.year % 100!=0 
+|| date1.year % 400==0) && date1.month>=3)
+    sum+=1;
+ return (sum);
+}
+
+main ( )
+{printf(“Input year.month.day:”);
+ scanf(“%d,%d,%d”,&date.year,&date.month,&date.day);
+ printf(“\n”);
+ printf(“%d / %d is the %dth day in %d.”,date.month,date.day,days(date),date.year);
+}
+
+运行情况如下：
+Input year,month,day:2002,10,1↙
+10 / 1 is the 274th day in 2000.
+
+注意：在main ( )函数中的printf函数用days(date)调用days函数，其返回值就是天数。
+解法二：
+
+struct y_m_d
+{int year;
+ int month;
+ int day;
+}date;
+main ( )
+{int days(int,int,int);             /* 对days函数的声明 */
+ int i,day_sum;
+ printf(“input year,month,day:”);
+ scanf(“%d,%d,%d”,&date.year,&date.month,&date.day);
+ day_sum=days(date.year,date.month,date.day);
+ printf(“\n%d / %d is the %dth day in %d.”,date.month,date.day,day_sum,date.year);
+}
+
+days (int year,int month,int day)             /* 定义days函数 */
+{int day_sum,i;
+ int day_tab[13]={0,31,28,31,30,31,,30,31,31,30,31,30,31}
+ day_sum=0; 
+ for (i=1;i<month;i++)
+day_sum+=day_tab[i];
+ day_sum+=day;
+ if ((year%4==0 && year%100!=0 || year%4==0) && month>=3)
+day_sum+=1;
+ return(day_sum);
+}
+
+运行情况如下：
+input year,month,day:2005,7,1↙
+10 / 1 is the 182th day in 2005.
+
+11.3编写一个函数print，打印一个学生的成绩数组，该数组中有5个学生的数据记录，每个记录包括num,name,score[3]，用主函数输入这些记录，用print函数输出这些记录。
+解：
+# define N 5
+struct student
+{char num[6];
+ char name[8];
+ int score[4];
+}stu[N];
+main ( )
+{int i,j;
+ for (i=0;i<N;i++)
+{printf(“\nInput score of student %d:\n”,i+1);
+ printf(“NO.:”);
+ scanf(“%s”,stu[i],num);
+ printf(“name: ”);
+ scanf(“%s”,stu[i],name);
+ for (j=0;j<3;j++)
+    {printf(“score %d:”,j+1);
+     scanf(“%d”,&stu[i].score[j]);
+    }
+ printf(“\n”);
+ }
+ print(stu);
+}
+
+print(struct student stu[6])
+{int i,j;
+ printf(“\n   NO.   name   score1   score2   score3\n”);
+ for (i=0;i<N;i++)
+{printf(“%5s%10s”,stu[i].num,stu[i].name);
+ for (j=0;j<3;j++)
+    printf(“%9d”,stu[i],score[j]);
+ printf(“\n”);
+ }
+}
+
+运行情况如下：
+Input score of student 1:
+NO.: 101↙
+name: Li↙
+score 1: 90↙
+score 2: 79↙
+score 3: 89↙
+
+Input score of student 2:
+NO.: 102↙
+name: Ma↙
+score 1: 97↙
+score 2: 90↙
+score 3: 68↙
+
+Input score of student 3:
+NO.: 103↙
+name: Wang↙
+score 1: 77↙
+score 2: 70↙
+score 3: 78↙
+
+Input score of student 4:
+NO.: 104↙
+name: Fun↙
+score 1: 67↙
+score 2: 89↙
+score 3: 56↙
+
+Input score of student 5:
+NO.: 105↙
+name: Xue↙
+score 1: 87↙
+score 2: 65↙
+score 3: 69↙
+
+NO.    name    score1    score2    score3
+101     Li       90        79       89
+102     Ma      97        90       68
+103     Wang    77        70       78
+104     Fun      67        89       56
+105     Xue      87        65       69
+
+11.4在上题的基础上，编写一个函数input，用来输入5个学生的数据记录。
+解：
+# define N 5
+struct student
+{char num[6];
+ char name[8];
+ int score[4];
+}stu[N];
+input(struct student str[ ])
+{int i,j;
+ for (i=0;i<N;i++)
+{printf(“input scores of student %d:\n”,i+1);
+ printf(“NO.:”);
+ scanf(“%s”,stu[i].num);
+ printf(“name:  ”);
+ scanf(“%s”,stu[i].name);
+ for (j=0;j<3;j++)
+    {printf(“score %d:”,j++)
+     scanf(“%d”,&stu[i].score[j]);
+    }
+ printf(“\n”);
+}
+}
+写一个main函数，调用input函数以及题11.3中提供的print函数，就可以完成对学生数据的输入和输出。
+
+11.5有10个学生，每个学生的数据包括学号，姓名，3门课的成绩，从键盘输入10个学生的数据，要求打印出3门课的总平均成绩，以及最高分的学生的数据（包括学号，姓名，3门课成绩，平均分数）。
+解：变量说明：
+max：当前最好成绩；maxi：当前最好成绩所对应的下标序号；sum：第i个学生的总成绩。
+# define N 10
+struct student
+{char num[6];
+ char name[8];
+ int score[4];
+ float avr;
+}stu [N];
+main ( )
+{int i,j,max,maxi,sum;
+ float average;
+ /* 输入 */
+ for (i=0;i<N;i++)
+{printf(“\nInput scores of student %d:\n”,i+1);
+ printf(“NO.:”);
+ scanf(“%s”,stu[i].num);
+ printf(“name:”);
+ scanf(“%s”,stu[i].name);
+ for (j=0;j<3;j++)
+{printf(“score %d:”,j+1);
+ scanf(“%d”,&stu[i].score[j]);
+}
+}
+/* 计算 */
+ average=0;
+ max=0;
+ maxi=0;
+ for (i=0;i<N;i++)
+{sum=0;
+ for (j=0;j<3;j++)
+    sum+=stu[i].score[j];
+ stu[i].avr=sum/3.0;
+ average+=stu[i].avr;
+ if (sum>max)
+   {max=sum;
+    maxi=i;
+   }
+ }
+ average/=N;
+/* 打印 */
+printf(“  NO.    name    score1    score2    score3    average\n”);
+for (i=0;i<N;i++)
+   {printf(“%5s%10s”,stu[i].num,stu[i].name);
+for (j=0;j<3;j++)
+printf(“%9d”,stu[i].score[j]);
+printf(“%8.2f\n”,stu[i].avr);
+}
+ printf(“average=%6.2f\n”,average);
+ printf(“The highest score is : %s,score total: %d.”,stu[maxi].name,max);
+}
+
+运行情况如下：
+Input scores of student 1:
+NO.: 101↙
+name: Wang↙
+score1: 93↙
+score2: 89↙
+score3: 87↙
+
+Input scores of student 2:
+NO.: 102↙
+name: Li↙
+score1: 85↙
+score2: 80↙
+score3: 78↙
+
+Input scores of student 3:
+NO.: 103↙
+name: Zhao↙
+score1: 65↙
+score2: 70↙
+score3: 59↙
+
+Input scores of student 4:
+NO.: 104↙
+name: Ma↙
+score1: 77↙
+score2: 70↙
+score3: 83↙
+
+Input scores of student 5:
+NO.: 105↙
+name: Han↙
+score1: 70↙
+score2: 67↙
+score3: 60↙
+
+Input scores of student 6:
+NO.: 106↙
+name: Zhang↙
+score1: 99↙
+score2: 97↙
+score3: 95↙
+
+Input scores of student 7:
+NO.: 107↙
+name: Zhou↙
+score1: 88↙
+score2: 89↙
+score3: 88↙
+
+Input scores of student 8:
+NO.: 108↙
+name: Chen↙
+score1: 87↙
+score2: 88↙
+score3: 85↙
+
+Input scores of student 9:
+NO.: 109↙
+name: Yang↙
+score1: 72↙
+score2: 70↙
+score3: 69↙
+
+Input scores of student 10:
+NO.: 110↙
+name: Liu↙
+score1: 78↙
+score2: 80↙
+score3: 83↙
+
+  NO.    name    score1    score2    score3    average
+  101    Wang     93        89       87       89.67
+  102       Li     85        80       78       81.00
+  103     Zhao     65        70       59       64.67
+  104      Ma     77        70       83       76.67
+  105     Han      70        67       60       65.67
+  106    Zhang     99        97       95       97.00
+  107     Zhou     88        89       88       88.33
+  108     Chen     87        88       85       86.67
+  109     Yang     72        70       69       70.33
+  110      Liu      78        80       83       80.33
+
+11.6编写一个函数new，对n个字符开辟连续的存储空间，此函数应返回一个指针（地址），指向字符串开始的空间。new(n)表示分配n个字节的内存空间。
+解：new函数是分配n个连续字符的存储区，为此，应先开辟一个足够大的连续存储区。设置字符数组newbuf[1000]，new函数将在此上进行操作。newp是指向可用存储区的起始地址的指针。每当请求new开出n个字符的存储区时，要先检查一下newbuf是否还有足够的可用空间。若有，则返回指针newp的当前值，然后修改newp为newp+n，指向下一次可用空间的开始地址；若存储不够分配，则返回NULL。
+new函数如下：
+# define NULL 0
+# define NEWSIZE 1000
+char newbuf[NEWSIZE];
+char * newp=newbuf;
+char * new(int n)                /* 定义new函数 */
+{if (newp+n<=newbuf+NEWSIZE)
+   {newp=newp+n;
+return(newp-n);
+}
+ else
+   return(NULL);
+}
+
+11.7写一函数free，将上题new函数占用的空间释放free(p)表示将p(地址)指向的单元以后的内存段释放。
+解：free的作用时将newp的值改为p的值。
+# define NULL 0
+# define NEWSIZE 1000
+char newbuf[NEWSIZE];
+char * new=newbuf;
+free(char * p)               /* 定义free函数 */
+{if ((p>=newbuf) && (p<newbuf+NEWSIZE))
+newp=p;
+}
+
+11.8已有a,b两个链表，每个链表中的结点包括学号，成绩。要求把两个链表合并，按学号升序排列。
+解：
+# include <stdio.h>
+# define NULL 0
+# define LEN sizeof(struct student)
+struct student
+{long num;
+ int score;
+ struct student * next;
+};
+struct student listA,listB;
+int n,sum=0;
+main ( )
+{struct student * creat(void);                             /* 函数声明 */
+ struct student * insert(struct student * , struct student * );      /* 函数声明 */
+ void print(struct student * );                             /* 函数声明 */
+ struct student * ahead,* bhead,* abh;
+ printf(“\nInput list a:\n”);
+ ahead=creat( );                                /* 调用creat函数，输入链表a */
+ sum=sum+n;
+ printf(“Input list b:\n”);
+ bhead=creat( );                                /* 调用creat函数，输入链表b */
+ sum=sum+n;
+ abh=insert(ahead,bhead);                        /* 调用insert函数，将两表合并 */
+ print(abh);                                    /* 输出合并后的链表 */
+}
+struct student * creat(void)                        /* 建立链表的函数 */
+{struct student * p1,* p2,* head;
+ n=0;
+ p1=p2=(struct student * )malloc(LEN);
+ printf(“Input number & scores of student:\n”);
+ printf(“If number is 0,stop inputing.\n”);
+ scanf(“%ld,%d”,&p1－>num,&p1－>score);
+ head=NULL;
+ while(p1－>num!=0)
+{n=n+1;
+ if (n==1)  head=p1;
+ else p2－>next=p1;
+ p2=p1;
+ p1=(struct student * ) malloc(LEN);
+ scanf(“%ld,%d”,&p1－>num,&p1－>score);
+}
+ p2－>next=NULL;
+ return(head);
+}
+
+struct student * insert(stuct student * ah,struct student * bh)
+                                        /* 定义insert函数，用来合并两个链表 */
+{struct student * pa1,* pa2,* pb1,* pb2;
+ pa2=pa1=ah;
+ pb2=pb1=bh;
+ do
+{while((pb1－>num>pa1－>num) && (pa1－>next!=NULL))
+   {pa2=pa1;
+    pa1=pa1－>next;
+   }
+ if (pb1－>num<=pa1－>num)
+   {if (ah==pa1)
+      ah=pb1;
+    else pa2－>next=pb1;
+    pb1=pb1－>next;
+    pb2－>next=pa1;
+    pa2=pb2;
+    pb2=pb1;
+   }
+ }while ((pa1－>next!=NULL) || (pa1==NULL && pb1!=NULL));
+ if ((pb1－>num>pa1－>num) && (pa1－>next==NULL))
+pa1－>next=pb1;
+ return(ah);
+}
+
+void print(struct student * head)                /* 输出函数 */
+{struct student * p;
+ printf(“\n There are %d records:\n”,sum);
+ p=head;
+ if (p!=NULL)
+   do
+{printf(“%ld %d\n”,p－>num,p－>score);
+ p=p－>next;
+ }while (p!=NULL);
+}
+
+运行情况如下：
+Input list a:                                  (输入链表a)
+Input number & scores of student:                (输入学生的学号和成绩)
+If number is 0,stop inputing.                     (如果学号为0，表示输入结束)
+101,89↙
+103,67↙
+107,88↙
+109,90↙
+0↙
+
+Input list b:                                  (输入链表b)
+Input number & scores of student:                (输入学生的学号和成绩)
+If number is 0,stop inputing.                     (如果学号为0，表示输入结束)
+102,100↙
+104,65↙
+105,60↙
+106,88↙
+108,100↙
+110,71↙
+120,90↙
+121,94↙
+0↙
+
+There are 12 records:
+101 89
+102 100
+103 67
+104 65
+105 60
+106 88
+107 88
+108 100
+109 90
+110 71
+120 90
+121 94
+
+11.9有两个链表a和b，设结点中包含学号，姓名。从a链表中删去与b链表中有相同学号的那些结点。
+解：
+为减少程序运行时的输入量，先设两个结构体数组a和b，并使用初始化的方法使之得到数据。建立链表时就利用这两个数组中的元素作为结点。
+# define LA 4
+# define LB 5
+# define NULL 0
+struct student
+{char num[6];
+ char name[8];
+ struct student * next;
+}A[LA],b[LB];
+main ( )
+{struct student a[LA]={{“101”,”Wang”},{“102”,”Li”},{“105”,”Zhang”},{“106”,”Wei”}};
+ struct student b[LB]={{“103”,”Zhang”},{“104”,”Ma”},{“105”,”Chen”},{“107”,”Guo”},
+{“108”,”Liu”}};
+ int i,j;
+ struct student * p,* p1,* p2,* pt,* head1,* head2;
+ /* 初始化 */
+ head1=a;
+ head2=b;
+ printf(“  list a:  \n”);
+ for (p1=head1,i=1;p1<a+LA;i++)
+{p=p1;
+ p1－>next=a+i;
+ printf(“%8s%8s\n”,p1－>num,p1－>name);
+ p1=p1－>next;
+}
+ p－>next=NULL;
+ printf(“\n list b: \n”);
+ for (p2=head2,i=1;p2<b+LB;i++)
+{p=p2;
+ p2－>next=b+i;
+ printf(“%8s%8s\n”,p2－>num,p2－>name);
+ p2=p2－>next;
+}
+ p－>next=NULL;
+ printf(“\n”);
+ /* 删除 */
+ p1=head1;
+ while (p1!=NULL)
+{p2=head2;
+ while (p2!=NULL && strcmp(p1－>num,p2－>num)!=0)
+    p2=p2－>next;
+ if (strcmp(p1－>num,p2－>num)==0)
+    if (p1==head1)
+      head1=p1－>next;
+    else
+      p－>next=p1－>next;
+    p=p1;
+    p1=p1－>next;
+}
+/* 输出 */
+p1=head1;
+printf(“\n result: \n”);
+while (p1!=NULL)
+    {printf(“%7s %7s \n”,p1－>num,p1－>name);
+     p1=p1－>next;
+    }
+}
+
+运行结果：
+list a:
+101	Wang 
+102	  Li
+105	Zhang
+106    Wei
+list b:
+103	Zhang
+104	  Ma
+105	Zhang
+     107    Guo
+     108    Lui
+result:
+101	Wang
+102	  Li
+106	Wei
+
+11.10建立一个链表，每个结点包括：学号，姓名，性别，年龄。输入一个年龄，如果链表中的结点所包含的年龄等于此年龄，则将此结点删去。
+解：
+# define NULL 0
+# define LEN sizeof(struct student)
+struct student
+{char num[6];
+ char num[8];
+ char sex[2];
+ int age;
+ struct student * next;
+}stu[10];
+main ( )
+{struct student * p,* pt,* head;
+ int i,length, iage,flag=1;
+ int find=0;                         /* 若找到待删除元素，则find=1，否则find=0 */
+ while (flag==1)
+ {printf(“Input length of list(<10):”);
+  scanf(“%d”,&length);
+  if (length<10)
+flag=0;
+ }
+/* 建立链表 */
+for (i=0;i<length;i++)
+{p=(struct student * ) malloc(LEN);
+  if (i==0)
+head=pt=p;
+  else
+pt－>next=p;
+  pt=p;
+  printf(“NO:”);
+  scanf(“%s”,p－>num);
+  printf(“name:”);
+  scanf(“%s”,p－>name);
+  printf(“sex:”);
+  scanf(“%s”,p－>sex);
+  printf(“age:”);
+  scanf(“%d”,&p－>age);
+}
+p－>next=NULL;
+p=head;
+printf(“\n NO. name sex age\n”);              /* 显示 */
+while(p!=NULL)
+{printf(“%4s%8s%6s%6d\n”,p－>num,p－>name,p－>sex,p－>age);
+ p=p－>next;}
+ /* 删除 */
+ printf(“Input age:”);                        /* 输入待删年龄 */
+ scanf(“%d”,&iage);
+ pt=head;
+ p=pt;
+ if (pt－>age==iage)                          /* 链头是待删元素 */
+   {p=pt－>next;
+head=pt=p;
+find=1;
+}
+ else                                       /* 链头不是待删元素 */
+pt=pt－>next;
+ while (pt!=NULL)
+{if (pt－>age==iage)
+   {p－>next=pt－>next;
+    find=1;
+   }
+ else                                    /* 中间结点不是待删元素 */
+    p=pt;
+ pt=pt－>next;
+}
+if (! find)
+   printf(“Not found%d.”,iage);
+p=head;
+printf(“\n NO. name sex age\n”);              /* 显示结果 */
+while (p!=NULL)
+    {
+     printf(“%4s%8s”,p－>num,p－>name);
+     printf(“%6s%6d\n”,p－>sex,p－>age);
+     p=p－>next;
+    }
+}
+
+运行情况如下：
+Input length of list(<10):4                        (输入链表长度)
+NO.: 101↙
+Name: Ma↙
+Sex: m↙
+Age: 20↙
+NO.: 102↙
+Name: Li↙
+Sex: f↙
+Age: 23↙
+NO.: 103↙
+Name: Zhang↙
+Sex: m↙
+Age: 19↙
+NO: 104↙
+Name: Wang↙
+Sex: m↙
+Age: 19↙
+   NO.       name       sex       age
+   101        Ma         m        20
+   102        Li          f         23
+   103      Zhang        m         19
+   104      Wang         m         19
+Input age: 19↙
+   NO.       name       sex       age
+   101        Ma         m        20
+   102        Li          f         23
+

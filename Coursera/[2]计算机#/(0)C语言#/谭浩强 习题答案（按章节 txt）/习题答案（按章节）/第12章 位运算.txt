@@ -1,0 +1,152 @@
+第12章 位运算
+12.1编写一个函数getbits，从一个16位的单元中取出某几位（）即该几位保留原值，其余位为0）。函数调用形式为：
+getbits(value,n1,n2)
+value为该16位（两个字节）单元中的数据值，n1位欲取出的起始位，n2为欲取出的结束位。如：
+getbits(0101675,5,8)表示对八进制101675这个数，取出它从左面起的第5位到第8位。
+解：
+main ( )
+{
+ unsigned int a;
+ int n1,n2;
+ printf(“Input an octal number:”);
+ scanf(“%d,%d”,&n1,&n2);
+ printf(“result:%o\n”,getbits(a,n1-1,n2));
+}
+getbits(unsigned value,int n1,int n2)
+{unsigned int z;
+ z=~0;
+ z=(z>>n1) & (z<<(16-n2));
+ z=value & z;
+ z=z>>(16-n2);
+ return(z);
+}
+
+运行结果：
+Input an octal number: 173253↙
+Input n1,n2: 5,8↙
+result: 6
+
+12.2写一个函数，对一个16位的二进制数取出它的奇位数（即从左边起第1，3，5，…,15位）。
+解：
+main ( )
+{unsigned getbits(unsigned);
+ unsigned int a;
+ printf(“\nInput an octal number:”);
+ scanf(“%o”,&a);
+ printf(“result:%o\n”,getbits(a));
+}
+
+unsigned getbits(unsigned value)
+{int i,j,m,n;
+ unsigned int z,a,q;
+ z=0;
+ for (i=1;i<=15;i+=2)
+{q=1;
+   for (j=1;j<=(16-i-1)/2;j++)
+      q=q*2;
+ a=value>>(16-i);
+ a=a<<15;
+ a=a>>15;
+ z=z+a*q;
+}
+ return(z);
+}
+
+运行结果：
+①Input an octal number: 145432↙
+  result: 263
+说明：八进制数145432用二进制表示为：1100101100011010
+取其奇数位得到：                1 0 1 1 0 0 1 1
+      用八进制表示为：                 2   6   3
+②Input an octal number: 043526↙
+  result: 21
+说明：八进制数145432用二进制表示为：0100011101010110
+取其奇数位得到：                0 0 0 1 0 0 0 1
+用八进制表示为：                 0   2   1
+
+12.3编一程序，检查一下你所用的计算机系统的C编译在执行右移时是按照逻辑位移的原则，还是按照算术右移的原则。如果是逻辑右移，请编一函数实现算术右移；如果是算术右移，请编一函数实现逻辑右移。
+解：
+main ( )
+{int a,n,m;
+ a=~0;
+ if ((a>>5)!=a)
+   {printf(“\nTurbo C,logical move! \n”);
+m=0;
+   }
+ else
+   {printf(“\nTurbo C,arithmetic move!\n”);
+m=1;
+   }
+ printf(“Input an octal number:”);
+ scanf(“%o”,&a); 
+ printf(“How many digit move towards the right:”);
+ scanf(“%d”,%n);
+ if (m==0)
+   printf(“Arithmetic right move,result:%o\n”,getbits1(a,n));
+ else
+   printf(“Logical right move,result:%o”,getbits2(a,n));
+}
+
+getbits1(unsigned value,int n)
+{unsigned z;
+ z=~0;
+ z=z>>n;
+ z=~z;
+ z=z|(value>>n);
+ return(z);
+}
+
+getbits2(unsigned value,int n)
+{unsigned z;
+ z=(~(1>>n)) & (value>>n);
+ return(z);
+}
+
+运行情况如下：
+Turbo C,arithmetic move!                               (Turbo C为算术右移)
+Input an octal number:173253↙                          (输入八进制数173253)
+How many digit move towards the right:4↙                 (输入右移几位)
+Logical right move,result: 7552                           (逻辑右移的结果为7552)
+说明：开始时并不知道Turbo C是算术右移还是逻辑右移，因此先检查它是采用哪一种方式。~0用二进制表示是16位都是1，即1111111111111111，将它右移5位。如果是逻辑右移，则其结果为0000011111111111；如果是算术右移，则其结果为1111111111111111。因此，若a>>5等于a，就证明是算术右移；若a>>5不等于a，就是逻辑右移；在程序中，设一个变量m，用m=0表示逻辑右移，m=1表示算术右移。
+定义两个函数getbits1和getbits2分别实现算术右移和逻辑右移（在任何C系统中都适用）。请自己分析。
+
+12.4编一函数用来实现左右循环移位。函数名为move，调用方法为：move(value,n)
+其中value为要循环位移的数，n为位移的位数。如n<0为左移；n>0为右移。如n=4，表示要右移4位；n=-3，表示要左移3位。
+解：
+main ( )
+{unsigned moveright(unsigned,int);
+ unsigned moveleft(unsigned,int);
+ unsigned a;
+ int n;
+ printf(“\nInput an octal number: ”);
+ scanf(“%o”,&a);
+ printf(“Input n: ”);
+ scanf(“%d”,&n);
+ if (n>0)
+   {moveright(a,n);
+printf(“result:%o\n”,moveright(a,n));
+   }
+ else
+   {n=-n;
+moveleft(a,n);
+printf(“result:%o\n”,moveleft(a,n));
+   }
+}
+
+unsigned moveright(unsigned value,int n)                /* 右循环移位函数 */
+   {unsigned z;
+z=(value>>n) | (value<<(16-n));
+return(z);
+   }
+unsigned moveleft(unsigned value,int n)                  /* 左循环移位函数 */
+   {unsigned z; 
+z=(value>>(16-n)) | (value<<n);
+return(z);
+   }
+
+运行情况如下：
+①Input an octal number: 152525↙
+  Input n: 4↙
+②Input an octal number: 152525↙
+  Input n: -4↙
+  Result: 52535

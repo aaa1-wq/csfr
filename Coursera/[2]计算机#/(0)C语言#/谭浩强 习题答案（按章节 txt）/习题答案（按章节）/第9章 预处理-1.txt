@@ -1,0 +1,238 @@
+第9章 预处理命令
+9.1定义一个代参数的宏，使两个参数的值互换，并写出程序，输入两个数作为使用宏时的实参。输出已交换后的两个值。
+解：
+# define SWAP(a,b) t=b;b=a;a=t
+main ( )
+{int a,b,t;
+ printf(“Input two integers a,b:”);
+ scanf(“%d,%d,”*a,*b);
+ SWAP(a,b);
+ printf(“Now,a=%d,b=%d\n”,a,b);
+}
+
+运行结果如下：
+Input two integers a,b：3,4↙
+Now,a=4,b=3
+
+9.2输入两个整数，求它们相除的余数。用带参的宏来实现，编程序。
+解：
+# define SURPLUS(a,b) a%b
+main ( )
+{int a,b;
+ printf(“Input two integers a,b:”);
+ scanf(“%d,%d”,&a,&b);
+ printf(“Remember is %d\n”,SURPLUS(a,b));
+}
+
+运行结果如下：
+Input two integers a,b：60,13↙
+Remember is 8
+
+9.3
+三角形的面积为：area=  
+其中s=  (a+b+c)，a,b,c为三角形的三边。定义两个带参的宏，一个用来求s，另一个用来求area。写程序，在程序中用带实参的宏名来求面积area。
+解：
+# include <math.h>
+# define S(a,b,c)(a+b+c)/2
+# define AREA(a,b,c) sqrt(S(a,b,c)*(S(a,b,c)-a)*(S(a,b,c)-b)*(S(a,b,c)-c))
+main ( )
+{float a,b,c;
+ printf(“Input a,b,c:”);
+ scanf(“%f,%f,%f”,&a,&b,&c);
+ if (a+b>c && a+c>b && b+c>a)
+   printf(“area:%8.2f.\n”,AREA(a,b,c));
+ else
+   printf(“It is not a triangle!”);
+}
+
+运行结果：
+①Input a,b,c：3,4,5↙
+  area：6.00
+②Input a,b,c：12,3,5↙
+  It is not a triangle!
+
+9.4给年份year定义一个宏，以判断该年份是否为闰年。
+提示：宏名可定义为LEAP_YEAR，形参为y，即定义宏的形式为：
+# define LEAP_YEAR(y)  (读者设计的字符串)
+在程序中用以下语句输出结果：
+if(LEAP_YEAR(year)) printf(“%d is a Leap year”,year);
+else printf(“%d is not a leap year”,year);
+解：
+# define LEAP_YEAR(y) (y%4==0) && (y%100!=0) || (y%400=0)
+main ( )
+{
+int year;
+printf(“\nInput year:”);
+  scanf(“%d”,&year);
+if (LEAP_YEAR(year))
+  printf(“%d is a leap year. \n”,year);
+else
+  printf(“%d is not a leap year. \n”,year);
+}
+
+运行结果：
+①Input year：1990↙
+  1990 is not a leap year.
+②Input year：2000↙
+  2000 is a leap year.
+
+9.5请分析以下一组宏所定义的输出格式：
+
+# define NL putchar(‘\n’)
+# define PR (format,value) printf(“value=%format\t”,(value))
+# define PRINT(f,x1) PR(f,x1);NL
+# define PRINT(f,x1,x2) PR(f,x1);PRINT(f,x2)
+
+如果在程序中有以下的宏引用：
+
+PR(d,x);
+PRINT1(d,x);
+PRINT2(d,x1,x2);
+
+写出宏展开后的情况，并写出应输出的结果，设x=5,x1=3,x2=8。
+解：展开后为：
+printf(“value=%format\t”,x);
+printf(“value=%format\t”,x); putchar(‘\n’);
+printf(“value=%format\t”,x1); printf(“value=%format\t”,x2);putchar(‘\n’);
+
+如果运行以下程序：
+
+# include <stdio.h>
+# define NL putchar(‘\n’)
+# define PR (format,value) printf(“value=%format\t”,(value))
+# define PRINT1(f,x1) PR(f,x1);NL
+# define PRINT2(f,x1,x2) PR(f,x1); PRINT1(f,x2)
+main ( )
+{float x=5.0,x1=3.0,x2=8.0;
+ char d;
+PR(d,x);
+PRINT1(d,x)
+PRINT2(d,x1,x2);
+}
+
+输出结果如下：
+value=5.000000ormat      value=5.000000ormat
+value=3.000000ormat      value=8.000000ormat
+通过本习题可以看到：如果用Turbo C，则不能用这种方法将输出格式和输出项都作为参数。在宏替换时对字符串中的字符不予替换，一律保留原状。
+
+9.6请设计输出实数的格式。实数用“6.2f”格式输出。
+解：
+# define PR printf
+# define NL “\n”
+# define Fs “%f”
+# define F“%6.2f”
+# define F1 F NL
+# define F2 F“\t” F NL
+# define F3 F“\t” F“\t” F NL
+main ( )
+{float a,b,c;
+ PR(“Input three floating numbers a,b,c:\n”);
+ scanf(Fs,&a);
+ scanf(Fs,&b);
+ scanf(Fs,&c);
+ PR(NL);
+ PR(“Output one floating numbers each line:\n”);
+ PR(F1,a);
+ PR(F1,b);
+ PR(F1,c);
+ PR(NL);
+ PR(“Output two floating numbers:\n”);
+ PR(F2,a,b);
+ PR(F1,c);
+ PR(NL); 
+ PR(“Output three floating numbers:\n”);
+ PR(F3,a,b,c);
+}
+
+运行情况如下：
+Input three floating number a,b,c：
+2.4   5.9   9.1↙
+Output one floating number each line：
+  2.40
+  5.90
+  9.10
+Output two floating numbers：
+	5.90
+  9.10
+Output three floating numbers：
+  2.40  5.90  9.10
+
+9.7分别用函数和带参的宏，从3个数中找出最大数。
+解：（1）用函数实现
+main ( )
+{
+ int a,b,c;
+ printf(“Enter three integers：”);
+ scanf(“%d,%d,%d”,&a,&b,&c);
+ printf(“max=%d\n”,max(a,b,c));
+}
+
+max (int x,int y,int z)
+{int t;
+ t=(x>y? x:y);
+ return(t>z? t:z);
+}
+
+运行结果：
+Input three integers：12,34,9↙
+max=34
+(2)用带参的宏实现
+# define MAX(a,b) ((a)>(b)? (a):(b))
+main ( )
+{
+ int a,b,c;
+ printf(“Input three integers:”);
+ scanf(“%d,%d,%d”,&a,&b,&c);
+ printf(“max=%d\n”,MAX(MAX(a,b),c));
+}
+
+运行结果：
+Input three integers：12,34,9↙
+max=34
+
+9.8试述“文件包含”和程序文件的连接（link）的概念，二者有何不同？
+解：“文件包含”是事先将程序中需要用到的信息分别存放在不同的“头文件”中（文件后缀为.h），用户在编写程序时，利用#include命令将该头文件的内容包含进来，成为程序的一部分。特别应当注意的是，该头文件与它所在的源文件共同组成一个文件模块（而不是两个文件模块）。在编译时它是作为一个文件进行编译的。
+连接则与此不同，它的作用是将多个目标文件连接起来。如果有两个或多个源程序文件，应先对它们分别进行编译，得到两个或多个目标文件（后缀为.obj），在连接阶段，把这些目标文件与系统提供的函数库等文件连接成一个可执行的文件（后缀为.exe）。
+
+9.9用条件编译法实现以下功能：
+输入一行电报文字，可以任选两种输出：一为原文输出；一为将字母变成其下一字母（如’a’变成’b’……’z’变成’a’。非字母的字符不变）。用#define命令来控制是否要译成密码。例如：
+# define CHANGE 1
+则输入密码。若改为
+# define CHANGE 0
+则不译成密码，按原码输出。
+解：
+# include “stdio.h”
+# define MAX 80
+# define CHANGE 1
+main ( )
+{
+ char str[MAX];
+ int i;
+ printf(“Input text:\n”);
+ gets(str);
+ # if (CHANGE)
+  {for (i=0;i<MAX;i++)
+{if ( str[i]!=’\0’)
+   if (str[i]>=’a’ && str[i]<=’z’ || str[i]=’A’ && str[i]=’Z’)
+      str[i]+=1;
+   else if (str[i]==’z’ || str[i]==’Z’)
+      str[i]-=25;
+ }
+}
+ # endif
+ printf(“Output:\n%s”,str);
+}
+
+运行结果：
+Input text:
+A Lazy Brown Fox Jumps Over A Dog.↙
+Output:
+B Mbaz Cspxo Gpy Kvnqt Pwfs B Eph.
+
+如果想输出原文，可以将程序第3行改为：
+# define CHANGE 0
+修改后在运行：
+Input text:
+A Lazy Brown Fox Jumps Over A Dog.↙
+Output:
+A Lazy Brown Fox Jumps Over A Dog.

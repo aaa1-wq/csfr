@@ -1,0 +1,686 @@
+第7章 数组
+7.1用筛法求100之内的素数。
+解：所谓“筛法”指的是“Eratosthenes筛法”。Eratosthenes是古希腊的著名数学家。他采用的方法是：在一张纸上写下1～1000之间的全部整数，然后逐个判断它们是否素数，找出一个非素数就把它挖掉，最后剩下的就是素数。
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 
+28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 …
+具体做法如下：
+（1）	先将1挖掉（因为1不是素数）。
+（2）	用2去除它后面的各个数，把能被2整除的数（如4，6，8…）挖掉，即把2的倍数挖掉。
+（3）	用3去除它后面各数，把3的倍数挖掉。
+（4）	分别用4，5…各数作为除数去除这些数以后的各数。这个过程一直进行到在除数后面的数已全被挖掉为止。例如在上表中1～50范围内的素数，要一直进行到除数为47为止。事实上，这一过程可以简化。如果需要找1～n范围内的素数，只需进行到除数为 （取其整数）即可。例如对1~50，只需进行到将7（即 的整数部分）作为除数即可。
+上面的算法可表示为：
+（1）	挖去1；
+（2）	用刚才被挖去的数的下一个数p去除p后面的各数，把p的倍数挖掉；
+（3）	检查p是否小于 的整数部分（如果n=1000，则检查p<31否），如果是，则返回（2）继续执行，否则就结束；
+（4）	纸上剩下的就是素数。
+解题的基本思路有了，但要变成计算机的操作，还要作进一步的分析。如怎样判断一个数是否已被“挖掉”，怎样找出某一个数p的倍数，怎样打印出未被挖掉的数。可以设一个数组a，a[1]到a[100]的值分别是1，2，3，…100。然后用上述方法将非素数“挖去”。如果一个数被认为是非素数，就将它的值变为零，最后将不为零的数组元素输出，就是所求的素数表。
+程序如下：
+#include <math.h>
+main ( )
+{ int i,j,n,a[101];
+ for (i=1;i<=100;i++)
+a[i] =i;
+ for (i=2;i<sqrt(100);i++)
+for (j=i+1;j<=100;j++)
+   {if (a[i]!=0 && a[j]!=0)
+     if (a[j]%a[i]==0)
+        a[j]=0;  }		/*非素数，赋值为0，“挖掉”*/
+ printf(“\n”);
+ for (i=2,n=0;i<=100;i++)
+   { if (a[i]!=0)
+{printf(“%5d”,a[i]);
+ n++; }
+ if (n==10)          /*此处if 语句的作用是在输出10个数后换行*/
+       { printf (“\n”);
+n=0; }
+}
+}
+
+运行结果：
+         2  3  5  7  11  13  17  19  23  29  31  37  41  43 
+ 47  53  59  61  67  71  73  79  83  89  97
+
+7.2用选择法对10个整数排序（从小到大）。
+解：选择排序的思路如下：
+设有10个元素a[1]~a[10]，将a[1]与a[2]~a[10]比较，若a[1]比a[2]~a[10]都小，则不进行交换，即无任何操作。若a[2]~a[10]中有一个以上比a[1]小，则将其中最小的一个（假设为a[i]）与a[1]交换，此时a[1]中存放了10个中最小的数。第二轮将a[2]与a[3]~a[10]比较，将剩下9个数中的最小者a[i]与a[2]对换，此时a[2]中存放的是10个中第2小的数。依此类推，共进行9轮比较，a[1]到a[10]就已按由小到大的顺序存放。
+程序如下：
+main ( )
+{ int i,j,min,a[11];
+ printf(“Enter data:\n”);
+for (i=1;i<=10;i++)
+   {printf(“a[%d]=”,i);
+    scanf(“%d”,&a[i]);                    /*输入10个数*/
+   }
+printf(“\n”);
+ for (i=1;i<=10;i++)
+   pritnf(“%5d”,a[i]);                        /*输出这10个数*/
+ printf(“\n”);
+ for (i=1;i<=9;i++)                          /*以下8行是对10个数排序*/
+{min=i;
+ for (j=i+1;j<=10;j++)
+    if (a[min]>a[j])  min=j;
+ a[0]=a[i];                            /*以下3行将a[i+1]~a[10]中最小者与a[i]对换*/
+ a[i]=a[min];
+ a[min]=a[0];
+}
+ printf(“\n The sorted numbers:\n”);
+ for (i=1;i<=10;i++)                         /*输出已牌好序的10个数*/
+   printf(“%5d”,a[i]);
+}
+
+运行结果：
+Enter data:
+a[1]=6↙
+a[2]=90↙
+a[3]=45↙
+a[4]=56↙
+a[5]=1↙
+a[6]=15↙
+a[7]=44↙
+a[8]=78↙
+a[9]=58↙
+a[10]=101↙
+  6  90  45  56  1  15  44  78  58  101
+The sorted number:
+  1  6  15  44  45  56  58  78  90  101
+
+说明：定义a数组有11个元素：a[0]~a[10]，但实际上只对a[1]~a[10]这10个元素输入值并排序，这样符合人们的习惯。a[0]用作两数交换时的中间变量。
+
+7.3求一个3×3矩阵对角线元素之和。
+解：
+main ( )
+{ int a[3][3],sum=0;
+ int i,j;
+ printf(“Enter data:\n”);
+ for (i=0;i<3;i++)
+for (j=0;j<3;j++)
+   scanf(“%d”,&a[i][j]);
+for (i=0;i<3;i++)
+sum=sum+a[i][i];
+printf(“sum = %5d\n”,sum);
+}
+
+运行情况如下：
+Enter data:
+1  2  3  4  5  6  7  8  9↙
+sum = 15
+此程序中用的是整型数组，运行结果是正确的。如果用的是实型数组，程序应修改为：
+main ( )
+{float a[3][3],sum=0;
+ int i,j;
+ printf(“Enter data:\n”);
+ for (i=0;i<3;i++)
+   for (j=0;j<3;j++)
+scanf (“ %f”,&a[i][j]);              /*注意：在%f前有一空格，否则无法输入数据*/
+ for (i=0;i<3;i++)
+sum=sum+a[i][i]; 
+printf(“sum = %6.2f\n”,sum);
+
+}
+该程序在Turbo C 3.0下可正常运行，得到结果：
+sum=16.50
+但在Turbo C 2.0环境下运行此程序时，出现运行错误，在输入数据后系统显示出错信息：
+scanf：floating point fomats not linked
+Abnormal program termination
+经过检查，程序的逻辑和语法都是正确的，而且在其它的C系统中（例如Borland C++）可以正常运行。出现这种情况是所用的C编译系统不完善，处理的方法有两个：一是把程序移到其它C系统上运行（但往往不方便）；二是迁就所用的C系统，修改程序，避开其缺陷，这就需要通过多次试验掌握其规律。对以上程序来说，可以有多种替代的方案，例如可以把程序中第5～7行改为：
+for (i=0;i<3;j++)
+   scanf (“  %f  %f  %f”,&a[i][0],&[i][1],&a[i][2]);
+它在效果上应与原来的第5～7行等价，但上机运行时发现仍不能正常运行，再改为：
+for (j=0;j<3;j++)
+   scanf (“  %f  %f  %f”,&a[0][j],&[1][j],&a[2][j]);
+它也是与原来的5～7行等价的，上机运行时发现可以正常运行。程序如下：
+main ( )
+{float a[3][3],sum=0;
+ int i,j;
+ printf(“Enter data:\n”)
+ for (j=0;j<3;j++)
+scanf(“ %f  %f  %f”,&a[0][j],&a[1][j],&a[2][j]);
+ for (i=0;i<3;i++)
+sum=sum+a[i][i];
+ printf(“ sum = %6.2f\n”,sum);
+}
+运行情况如下：
+Enter data:
+1.1  2.2  3.3  4.4  5.5  6.6  7.7  8.8  9.9↙
+应注意数据与元素的对应关系：1.1是a[0][0]的值，2.2是a[1][0]的值，3.3是a[2][0]的值……
+
+7.4有一个已排好序的数组，今输入一个数，要求按原来排序的规律将它插入数组中。
+解：
+程序如下：
+main ( )
+{ int a[11]={1,4,6,9,13,16,19,28,40,100};	/*注意数组a长度应足够大，以便容纳新插入的元素*/
+ int temp1,temp2,number,end,i,j;
+ printf(“array a:\n”);
+ for (i=0;i<10;i++)
+    printf(“%5d”,a[i]);
+ printf(“\n”);
+ printf(“Insert data:”);
+ scanf(“%d”,&number);
+ end=a[9];
+ if (number>end)
+   a[10]=number;
+ else 
+   {for (i=0;i<10;i++)
+    {if (a[i]>number)		/*找到合适的插入位置为i*/
+     {temp1=a[i];
+      a[i]=number;
+      for (j=i+1;j<11;j++)	/*将原来的第i个元素移至第i＋1位置，其它顺序后移*/
+         {temp2=a[j];
+          a[j]=temp1;
+          temp1=temp2;
+         }
+     break;
+     }
+    }
+}
+  printf(“Now,array a:\n”);
+  for (i=0;i<11;i++)
+printf(“%6d”,a[i]);
+} 
+
+运行情况如下：
+array a:
+1   4   6   9   13   16   19   28   40   100
+Insert data:5↙
+Now,array a:
+1   4   5   6   9   13   16   19   28   40   100
+
+加以改进后，可以采用以下方法。
+void main()
+{
+    int a[11]={1,4,6,9,13,16,19,28,40,100};
+    int temp1,temp2,number,end,i,j;
+    printf("array a:\n");
+    for (i=0;i<10;i++)
+        printf("%5d",a[i]);
+    printf("\n");
+    printf("Insert data:");
+    scanf("%d",&number);    
+    for(i=9;i>=0 && a[i]>number; i--)		/*从数组中最后一个数开始比较，凡大于number的数向后移动*/
+        a[i+1]=a[i];
+    a[i+1]=number;	/*将number插入到合适位置*/
+    for (i=0;i<11;i++)
+        printf("%5d",a[i]);
+    printf("\n");
+}
+7.5将一个数组中的值按逆序重新存放。例如原来顺序为：8,6,5,4,1。要求改为：1,4,5,6,8。
+解：
+程序如下：
+#define N 5
+main ( ) 
+{ int a[N], i, temp;
+ printf(“Enter array a:\n”);
+for (i=0;i<N;i++)
+ 	scanf(“%d”,&a[i]);
+ printf(“array a:\n”);
+ for (i=0;i<N;i++)
+printf(“%4d”,a[i]);
+ for (i=0;i<N/2;i++)
+   { temp=a[i];
+a[i]=a[N-i-1];
+a[N-i-1]=temp;
+   }
+ printf(“\n Now,array a:\n”);
+ for (i=0;i<N;i++)
+printf(“%4d”,a[i]);
+ printf(“\n”);
+}
+
+运行情况如下：
+Enter array a：
+8   6   5   4   1↙
+array a：
+8   6   5   4   1
+Now，array a：
+1   4   5   6   8
+
+程序中第二个for循环也可以写成：
+for (i=0, j=N-1; i<j; i++, j--)
+   { temp=a[i];
+a[i]=a[j];
+a[j]=temp;
+   }
+
+7.6打印出以下的杨辉三角形（要求打印出10行）。
+1
+1  1
+1  2  1
+1  3  3  1
+1  4  6  4  1
+┇  ┇  ┇  ┇
+
+解：杨辉三角形是（a+b）n展开后各项的系数。例如：
+(a+b)0展开后为1                                 系数为1
+(a+b)1展开后为a+b                               系数为1,1
+(a+b)2展开后为a2+2ab+b2                         系数为1,2,1
+(a+b)3展开后为a3+3a2b+3ab2+b3                    系数为1,3,3,1
+(a+b)4展开后为a4+4a3b+6a2b2+4ab3+b4              系数为1,4,6,4,1
+以上就是杨辉三角形的前5行。杨辉三角形各行的系数有以下规律：
+（1）	各行第一个数都是1。
+（2）	各行最后一个数都是1。
+（3）	从第3行起，除上面指出的第一个数和最后一个数外，其余各数是上一行同列和前一列2个数之和。例如第4行第2个数（3）是第3行第2个数（2）和第3行第1个数（1）之和。可以这样表示：a[i][j]=a[i-1][j]+a[i-1][j-1]，其中i为行数，j为列数。
+#define N 11
+main ( )
+{ int i,j,a[N][N];
+ for (i=1;i<N;i++)
+   {a[i][i]=1;
+a[i][1]=1;
+}
+ for (i＝3;i<N;i++)
+   for (j=2;j<=i-1;j++)
+a[i][j]=a[i-1][j-1]+a[i-1][j];
+ for (i=1;i<N;i++)
+{ for (j=1;j<=i;j++)
+     printf(“%6d”,a[i][j]);
+  printf(“\n”);
+}
+ printf(“\n”);
+}
+
+运行结果：
+1
+1   1
+1   2   1
+1   3   3   1
+1   4   6   4   1
+1   5   10  10  5   1
+1   6   15  20  15  6   1
+1   7   21  35  35  21  7   1
+1   8   28  56  70  56  28  8   1
+1   9   36  84  126 126  84  36  9  1
+
+7.7输出魔方阵。所谓魔方阵是指这样的方阵（方阵的阶数应为奇数），它的每一行、每一列和对角线之和均相等。
+例如，三阶魔方阵为 
+要求输出由1～n2之间的自然数构成的魔方阵。
+解：
+魔方阵中各数的排列规律如下：
+1)	将1放在第一行中间一列。
+2)	从2开始直到n×n止各数依次按下列规则存放：每一个数存放的行比前一个数的行数减1，列数加1（例如上面的三阶魔方阵，5在4的上一行后一列）。
+3)	如果上一个数的行数为1，则下一个数的行数为n（指最下一行），列数同样加1。例如，1在第1行第2列，则2应放在最下一行第3列。
+4)	当上一个数的列数为n时，下一个数的列数应为1，行数同样减1。例如2在第3行最后一列，则3应放在第2行第1列。
+5)	如果按上面规则确定的位置上已经有数，或上一个数是第1行第n列时，则把下一个数放在上一个数的下面。例如，按上面的规定，4应该放在第1行第2列，但该位置已经被1占据，所以4就放在3的下面。由于6是第1行第3列（即最后一列），故7放在6的下面。
+按此方法可以得到任何的魔方阵。
+
+void main()
+{
+    int a[16][16],i,j,k,p,n;
+    p=1;
+    while(p==1)
+    {
+        printf("Enter n(n=1 to 15):");
+        scanf("%d",&n);
+        if(n!=0 && n<=15 && n%2!=0)     /*要求阶数为1至15之间的奇数*/
+            p=0;
+    }
+
+    /*初始化，第0行和第0列不用，与魔方阵构造规则一致*/
+    for(i=1;i<=n;i++)
+        for(j=1;j<=n;j++)
+            a[i][j]=0;
+
+    j=n/2+1;
+    a[1][j]=1;
+
+    for(k=2;k<=n*n;k++)
+    {
+        i--;
+        j++;
+        if(i<1 && j>n)
+        {
+            i+=2;
+            j--;
+        }
+        else
+        {
+            if(i<1) i=n;
+            if(j>n) j=1;
+        }
+        if(a[i][j]==0)
+            a[i][j]=k;
+        else
+        {
+            i+=2;
+            j--;
+            a[i][j]=k;
+        }
+    }
+
+/*输出魔方阵*/
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<=n;j++)
+            printf("%7d",a[i][j]);
+        printf("\n");
+    }
+
+    system("pause");
+}
+7.8找出一个二维数组中的鞍点，即该位置上的元素在该行上最大，在该列上最小。也可能没有鞍点。
+解：
+一个二维数组最多有一个鞍点，也可能没有。解题思路是：先找出一行中值最大的元素，然后检查它是否该列中的最小值，如果是，则是鞍点（不需要再找别的鞍点了），输出该鞍点；如果不是，则再找下一行的最大数，……。如果每一行的最大数都不是鞍点，则该数组无鞍点。
+程序如下：
+# define N 10
+# define M 10
+main ( )
+{int i,j,k,m,n,flag1,flag2,a[N][M],max,maxi,maxj;
+ printf(“\n 输入行数 n：”);
+ scanf(“%d”,&n);
+ printf(“\n输入列数m：”);
+ scanf(“%d”,&m);
+ for (i=0;i<n;i++)
+{printf(“第%d行?\n”,i);
+ for (j=0;j<m;j++)
+ scanf(“%d”,&a[i][j]);
+}
+ for (i=0;i<n;i++)
+{for(j=0;j<m;j++)
+    printf(“%5d”,a[i][j]);
+ printf(“\n”);
+}
+ flag2=0;
+ for (i=0;i<n;i++)
+{max=a[i][0];
+ for (j=0;j<m;j++)
+   if (a[i][j]>max)
+     {max=a[i][j];
+      maxj=j;
+     }
+ for (k=0,flag1=1;k<n && flag1;k++)
+    if (max>a[k][maxj])
+      flag=0;
+    if (flag1)
+      {printf(“\n第%d行，第%d列的%d是鞍点\n”,i,maxj,max);
+      flag2=1;
+      }
+ }
+ if (! flag2)
+   printf(“\n矩阵中无鞍点！\n”);
+}
+
+运行结果：
+①	输入行数n：3↙
+输入列数m：4↙
+  第0行？
+  1 2 3 4↙
+  第1行？
+  4 5 5 6↙
+  第2行？
+  3 5 6 7↙
+1    2    3    4
+4    5    3    6
+3    5    6    7
+  第0行，第3列的4是鞍点
+②	输入行数n：3↙
+输入列数m：4↙
+  第0行？
+  2 4 90 7↙
+  第1行？
+  3 4 5 8↙
+  第2行？
+  9 1 2 3↙
+2    4    90   7
+3    4    5    8
+9    1    2    3
+  矩阵中无鞍点！
+
+7.9有15个数按从小到大的顺序存放在一个数组中。输入一个数，要求用折半查找法找出该数是数组中第几个元素的值。如果该数不在数组中，输出“不在表中”。
+解：
+折半查找是一种效率较高的查找方法，但前提是待查找的序列必须有序。其思路是：假定待查找序列按从大到小排列，设变量low指向待查找区间的下限（一开始时指向第一个元素），变量high指向待查找区间的上限（一开始时指向最后一个元素），令变量 ，将待查找元素与mid所指元素比较，若相等，则查找成功；若小于，由于待查找序列按从大到小排列，可以断定待查找元素只可能在mid+1～high区间，令low＝mid+1，查找区间缩小一半，然后继续在此区间进行折半查找；类似的，若大于，则令high＝mid-1。如此反复进行，如果出现low>high，则表示查找失败，即序列中不存在待查找元素。
+下面的程序演示了随机产生N－1个0～99的整数，存放在数组[1]~[N-1]单元中，主要为了与人的习惯一致，即第1个元素存放位置是[1]号单元。然后进行冒泡法排序，最后根据用户输入的数据进行折半查找（可进行多次）。
+
+#define N 16
+void main()
+{
+    int array[N],i,j,number,low,high,mid;
+    char ch;
+
+    printf("The original array is:");
+    for(i=1;i<N;i++)
+    {
+        array[i]=rand()%100;    /*产生并显示N－1个0～99的随机整数，存放在数组[1]~[N-1]单元中*/
+        printf("%3d",array[i]);
+    }
+    printf("\n");
+
+    /*冒泡法排序*/
+    for(i=1;i<N;i++)
+        for(j=1;j<N-i;j++)
+            if(array[j]<array[j+1])
+            {
+                array[0]=array[j];
+                array[j]=array[j+1];
+                array[j+1]=array[0];
+            }
+
+    /*显示排序后的数列*/
+    printf("The sorted array is:");
+    for(i=1;i<N;i++)
+        printf("%3d",array[i]);
+    printf("\n");
+
+    /*折半查找，可进行多次*/
+    while(1)
+    {
+    
+        printf("\nPlease input the number which you want to look for:");
+        scanf("%d",&number);
+        low=1;
+        high=N-1;
+        while(low<=high)
+        {
+            mid=(low+high)/2;
+            if(array[mid]==number)
+            {
+                printf("%d has been found at position %d.\n",number,mid);
+                break;
+            }
+            else if(number<array[mid])
+                low=mid+1;
+            else
+                high=mid-1;
+        }
+        if(low>high)
+            printf("Can not find %d.\n",number);
+        printf("Do you want to find another number?(Y/y):");
+        scanf(" %c",&ch);   /*注意%c前面有一个空格，为了虑除以前的回车符，否则循环只能执行一次*/
+        if(ch!='Y' && ch!='y')
+            break;
+    }
+}
+
+7.10有一篇文章，共有3行文字，每行有80个字符。要求分别统计出其中英文大写字母，小写字母，数字，空格以及其它字符的个数。
+解：
+程序如下：
+main ( )
+{ int I,j,upp,low,dig,spa,oth;
+ char text[3][80];
+ upp=low=dig=spa=oth=0;
+ for (i=0;i<3;i++)
+{printf(“\n Please input line %d:\n”,i+1);
+ gets (text[i]);
+ for (j=0;j<80 && text[i][j]!=’\0’;j++)
+    {if text[i][j]>=’A’ && text[i][j]<=’Z’}
+       upp++;
+     else if (text[i][j]>=’a’ && text[i][j]<=’z’)
+       low++;
+     else if (text[i][j]>=’0’ && text[i][j]<=’9’)
+       dig++;
+     else if (text[i][j]==‘ ’)
+       spa++;
+     else 
+       oth++;
+     }
+   }
+for (i=0;i<3;i++)
+   printf(“%s\n”,text[i]);
+printf(“upper case：%d\n”,upp);
+printf(“lower case：%d\n”,low);
+printf(“digit：%d\n”,dig);
+printf(“space：%d\n”,spa);
+printf(“other：%d\n”,oth);
+}
+
+运行情况如下：
+Please input line 1:
+I am a student.↙
+
+Please input line 2:
+123456↙
+
+Please input line 3:
+ASDFG↙
+upper case：6
+lower case：10
+digit     ：6
+space    ：3
+other     ：1
+
+说明：数组text的行号为0～2，但在提示用户输入各行数据时，要求用户输入第1行，第2行，第3行，而不是第0行，第1行，第2行，这完全是照顾人们的习惯。为此，在程序第6行输出行数时用i+1，而不用i。这样并不影响程序对数组的处理，程序其它地方数组的第1个下标值仍然是0～2。
+
+7.11打印以下图案：
+*****
+     *****
+      *****
+       *****
+        *****
+
+解：程序如下：
+main ( )
+{char a[5]={‘*’, ‘*’, ‘*’, ‘*’, ‘*’};
+ int i,j,k;
+ char space=’ ’; 
+ for (i=0;i<5;i++)                           /*输出5行*/
+{printf(“\n”);                           /*输出每行前先换行*/
+ printf(“ ”);                            /*每行前面留4个空格*/
+ for (j=1;j<=i;j++)                      
+    printf(“%c”,space);                  /*每行再留1个空格*/
+ for (k=0;k<5;k++)
+    printf(“%c”,a[k]);                   /*每行输出5个*号*/
+ }
+}
+
+或者是
+void main()
+{
+    char a[]="*****";
+    int i,j,k;
+    char space=' ';
+    for (i=0;i<5;i++)               /*输出5行*/
+    {
+        printf("    ");             /*每行前面留4个空格*/
+        for(j=1;j<=i;j++)
+            printf("%c",space);     /*每行再留1个空格*/
+        puts(a);                    /*每行输出5个*号*/
+    }
+}
+
+运行结果：
+* * * * *
+ * * * * *
+  * * * * *
+   * * * * *
+* * * * *
+
+7.12有一行电文，已按下面规律译成密码：
+A→Z      a→z
+B→Y      b→y
+C→X      c→x
+ ┇         ┇
+即第1个字母变成第26个字母，第i个字母变成第（26-i+1）个字母。非字母字符不变。要求编程序将密码译回原文，并打印出密码和原文。
+解：
+说明：字符ch[j]如果时大写字母，则它是第（ch[j]-64）个大写字母。若c[j]的值是大写字母’B’，它的ASCII码为66，它应是第（66－64）＝2个大写字母。按密码规定应将它转换为第（26-i+1）个大写字母。而26-i+1=26-(ch[j]-64)+1=26+64-ch[j]+1，即91-ch[j]（如c[j]等于’B’，91-’B’=91-66=25，C[j]应与第25个大写字母对换）。该字母的ASCII码为91-ch[j]+64，即25+64=89，89是’Y’的ASCII码。可以表示为155－ch[j]。小写字母情况与此相似，但由于’a’的ASCII码为97，因此公式应改为26＋96-ch[j]+1+96=123-ch[j]+96=219-ch[j]。若ch[j]的值为’b’，则其交换对象为219-‘b’=219-98=121，它是’y’的ASCII码。
+  由于此密码的规律是对称交换，即第一个字母与最后一个字母交换，第二个字母与倒数第二个字母交换┅┅因此从原文译为密码和从密码译为原文，都是用同一个公式。
+程序如下：
+#I nclude <stdio.h>
+main ( )
+{ int j,n;
+ char ch[80],tran[80];
+ printf(“\nInput cipher code：”);
+ gets (ch);
+ printf(“\n\ciper code：%s”,ch);
+ j=0;
+ while (ch[j]!=’0’)
+ { if ((ch[j]>=’A’) && (ch[j]<=’Z’))
+tran[j]=155-ch[j];
+  else if ((ch[j]>=’a’) && (ch[j]<=’z’))
+tran[j]=219-ch[j];
+  else
+tran[j]=ch[j];
+  j++;
+}
+n=j;
+printf(“\n original text:”);
+for (j=0;j<n;j++)
+    putchar (tran[j]);
+printf(“\n”);
+}
+
+运行情况如下：
+Input cipher code：R droo erhrg Xsrmz mvcg dvvp.↙
+
+cipher code ：R droo erhrg Xsrmz mvcg dvvp.
+original text： I will visit China next week.
+
+7.13编一个程序，将两个字符串连接起来，不要用strcat函数。
+解：
+main ( )
+{char s1[80],s2[40];
+ int i=0,j=0;
+ printf(“\nInput string1:”);
+ scanf(“%s”,s1);
+ printf(“Inpur string2:”);
+ scanf(“%s”,s2);
+ while (s1[i]!=’\0’)
+i++;
+ while (s2[j]!=’\0’)
+      s1[i++]=s2[j++];
+ s1[i]=’\0’;
+ printf(“The new string is:%s”,s1);
+}
+
+运行结果：
+Input string1:country↙
+Input string2:side↙
+The new string is:countryside
+
+7.14编一个程序，将两个字符串s1和s2进行比较。如果s1>s2，输出一个正数；s1=s2，输出0；s1<s2，输出一个负数。不要用strcmp函数。两个字符串用gets函数读入。输出的正数或负数的绝对值应是相比较的两个字符串相应字符的ASCII码的差值。例如，’A’与’C’相比，由于’A’<’C’，应输出负数，由于’A’与’C’的ASCII码的差值为2，因此，应输出”-2”。同理：’’And’’和”Aid”比较，根据第2个字符比较结果，’n’比’i’大5，因此应输出’5’。
+解：程序如下：
+# include<stdio.h>
+main ( )
+{int i,resu;
+ char s1[100],s2[100];
+ printf(“\n Input string1:”);
+ gets (s1);
+ printf(“\n Input string2:”);
+ gets (s2);
+ i=0;
+ while ((s1[i]==s2[i]) && (s1[i]!=’\0’)) i++;
+ if (s1[i]==’\0’ && s2[i]==’\0’)
+   resu=0;
+ else
+   resu=s1[i]-s2[i];
+ printf(“\n result:%d. \n”,resu);
+}
+
+运行情况如下：
+Input string1:aid↙
+Input string2:and↙
+result:-5
+
+7.15编写一个程序，将字符数组s2的全部字符拷贝到字符数组s1中，不用strcpy函数。拷贝时，’\0’也要拷过去，’\0’后面的字符不拷贝。
+解：
+程序如下：
+# include <stdio.h>
+main ( )
+{ char s1[80],s2[80];
+  int i;
+  printf(“Input s2:”);
+  scanf(“%s”,s2);
+  for (i=0;i<=strlen(s2);i++)
+s1[i]=s2[i];
+  printf(“s1: %s\n”,s1);
+}
+
+运行情况如下：
+Input s2:student↙
+s1: student
