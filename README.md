@@ -12,6 +12,7 @@
 | `Annex/工具脚本/` | 生成文档与图片的 Python 脚本 |
 | `Annex/杂项/` | 非学科资料与配图 |
 | `Paper/` | 论文笔记, 命名 `年份-论文简称.md` |
+| `.claude/skills/` | 内置技能, 共 23 个 |
 | `Skill/` | 环境配置备忘录, 一个主题一篇 |
 
 ## Coursera 学科总表
@@ -86,6 +87,36 @@
 | `Annex/杂项/其他图片/` | 14 | 1.75 MB | src_md_files 图片 |
 | `Annex/杂项/` | 2 | 0.00 MB | doc1_politics.txt, doc2_env.txt |
 
+## .claude/skills
+
+仓库内置技能共 23 个, 来自 DSH 环境的用户级、工作区级与运行时技能
+
+| 技能 | 来源 | 说明 |
+| --- | --- | --- |
+| `textbook-to-notes` | 模板 | 从教材 PDF 生成笔记的总流程 |
+| `debug-skill` | 模板 | 调试技能的流程 |
+| `pdf-bookmark` | 模板 | 扫描版教材 PDF 书签制作 |
+| `pdf-page-image` | 模板 | PDF 页面渲染成读图用页面图 |
+| `pdf-figure-crop` | 模板 | 按坐标裁出插图 |
+| `super-resolution` | 模板 | 图片 4 倍超分 |
+| `coscmd` | 模板 | 腾讯云 COS 图床操作 |
+| `push` | 模板 | 本仓库提交约定 |
+| `exam-cram-review` | 工作区 | 期末突击复习文档生成 |
+| `pdf-note-organizer` | 工作区 | PDF 与板书整理成 LaTeX 笔记 |
+| `exam-paper-pdf-to-solution-pdf` | 用户 | 试卷 PDF 生成解答 PDF |
+| `humanizer-zh` | 用户 | 中文文风润色 |
+| `math-skill` | 用户 | 数学推理与验证 |
+| `ppt-master-deck` | 用户 | 用 ppt-master 生成演示文稿 |
+| `diagnose-windows-sandbox-acl` | 运行时 | Windows 沙箱 ACL 诊断修复 |
+| `office` | 运行时 | Office 文档总入口 |
+| `office-docx` | 运行时 | Word 文档处理 |
+| `office-xlsx` | 运行时 | Excel 工作簿处理 |
+| `office-pptx` | 运行时 | PowerPoint 处理 |
+| `office-render` | 运行时 | 文档渲染预览 |
+| `office-export-pdf` | 运行时 | 导出 PDF |
+| `office-recalculate` | 运行时 | 表格公式重算 |
+| `ppt-master` | 插件 | 完整演示文稿生成工作区, 约 80 MB |
+
 ## Paper 与 Skill
 
 | 目录 | 内容 | 当前数量 |
@@ -95,8 +126,8 @@
 
 ## 统计
 
-- 受版本控制文件: 274 个
-- 仓库总体积: 约 34.15 MB
+- 受版本控制文件: 13319 个
+- 仓库总体积: 约 114.87 MB
 - Coursera 笔记文件: 168 个, 约 23.29 MB
 - Annex 文件: 61 个, 约 10.78 MB
 - 空学科: [3]物理, [5]生物, [7]英语, [8]留学生汉语, [9]生命进化论
