@@ -1,7 +1,7 @@
 # csfr
 
 个人笔记仓库。笔记按学科组织在 `Coursera/` 下
-电子书放在 Google Drive 的 `G:\我的云端硬盘\电子书`
+电子书放在 OneDrive 的 `C:\Users\dlwlrma\OneDrive\Documents`
 目录名或标题后的 `#` 表示该目录已有笔记文件
 
 ## 仓库结构
