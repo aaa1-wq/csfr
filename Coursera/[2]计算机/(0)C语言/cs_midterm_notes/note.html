@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.12.1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>程序设计：基本数据类型与运算 · 期中复习笔记</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<h1 id="程序设计基本数据类型与运算">程序设计：基本数据类型与运算</h1>
+<h2 id="题目陷阱与避坑指南-期中冲刺版">题目陷阱与避坑指南 ·
+期中冲刺版</h2>
+<blockquote>
+<p>🎯 <strong>适用</strong>：C 语言期中 / 408 基础 / 考研机试 🧭
+<strong>关键词</strong>：整型提升 · 符号位 · 短路求值 · 顺序点 ·
+<code>sizeof</code></p>
+</blockquote>
+<hr />
+<h2 id="本讲地图">📖 本讲地图</h2>
+<ul>
+<li>📌 导读：为什么基本数据类型容易出错？</li>
+<li>模块一：整型与浮点型的暗坑</li>
+<li>模块二：符号位带来的灾难（unsigned 与 signed 的较量）</li>
+<li>模块三：表达式求值与自增自减（副作用与顺序点）</li>
+<li>模块四：运算符的执行顺序与短路求值 ⭐ 本次新增</li>
+<li>模块五：看似简单的常量与 <code>sizeof</code></li>
+<li>📊 终极对比总结表</li>
+<li>💡 考场实战口诀</li>
+</ul>
+<hr />
+<h2 id="导读为什么基本数据类型容易出错">📌
+导读：为什么基本数据类型容易出错？</h2>
+<p>计算机内存只是按<strong>字节</strong>编址的一串二进制，<strong>类型</strong>只做两件事：</p>
+<ol type="1">
+<li><strong>决定占几个字节</strong>（宽度）；</li>
+<li><strong>决定这段 0/1 如何被解释</strong>（有符号？浮点？）。</li>
+</ol>
+<p>而编译器在<strong>不报错</strong>的前提下，会悄悄替你做大量转换——<strong>整型提升、算术转换、隐式截断、精度舍入</strong>。于是”看起来天经地义”的代码，跑出来却是另一个数。</p>
+<blockquote>
+<p>💡 <strong>三大万恶之源</strong></p>
+<ul>
+<li><strong>宽度不同</strong>：<code>char / short → int → long → long long</code></li>
+<li><strong>有无符号</strong>：<code>signed</code> 与
+<code>unsigned</code> 混算，负数瞬间”变”成天文数字</li>
+<li><strong>求值顺序</strong>：表达式里既有读又有写（副作用），结果由编译器”自由发挥”</li>
+</ul>
+</blockquote>
+<p><strong>结论先行</strong>：期中题里 90% 的”诡异结果”，都可以归结为
+<strong>“隐式转换” + “未定义行为”</strong>
+这两件事。下面逐模块拆解。</p>
+<hr />
+<h2 id="模块一整型与浮点型的暗坑">模块一：整型与浮点型的暗坑</h2>
+<h3 id="隐式类型转换整型提升-算术转换">💡 1.1 隐式类型转换（整型提升
+&amp; 算术转换）</h3>
+<p><strong>整型提升（Integer
+Promotion）</strong>：<code>char</code>、<code>short</code>（及
+<code>bool</code>）在参与运算前，会先被提升为 <code>int</code>（若
+<code>int</code> 装得下）。</p>
+<p><strong>寻常算术转换（Usual Arithmetic
+Conversions）</strong>：两边类型不同时，向”更宽/更精”的一方看齐：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 精度由低到高的&quot;鄙视链&quot;（简化版）</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> → <span class="dt">unsigned</span> <span class="dt">int</span> → <span class="dt">long</span> → <span class="dt">unsigned</span> <span class="dt">long</span> → <span class="dt">long</span> <span class="dt">long</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    → <span class="dt">float</span> → <span class="dt">double</span> → <span class="dt">long</span> <span class="dt">double</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 规则：低的一方被提升到高的一方，再运算</span></span></code></pre></div>
+<h4 id="陷阱-achar-相加看起来溢出其实没有">⚠️ 陷阱 A：char
+相加”看起来溢出”，其实没有</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：两个 char 相加会溢出成负数</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> a <span class="op">=</span> <span class="dv">100</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a <span class="op">+</span> b<span class="op">);</span>   <span class="co">// 输出 200 ！</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">// 原因：a、b 先被&quot;整型提升&quot;为 int，100+100=200 完全装得下</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确认知：真正溢出发生在&quot;赋值回窄类型&quot;的那一刻</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> a <span class="op">=</span> <span class="dv">100</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> a <span class="op">+</span> b<span class="op">;</span>          <span class="co">// a+b 是 int 的 200，赋给 char 时被截断</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>       <span class="co">// 输出 -56（有符号 char，8 位只留低 8 位）</span></span></code></pre></div>
+<h4 id="陷阱-b宽类型转窄类型高位直接砍掉">⚠️ 陷阱
+B：宽类型转窄类型，高位直接”砍掉”</h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：int 转 short 只是&quot;换个名字&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>  x <span class="op">=</span> <span class="dv">70000</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> s <span class="op">=</span> x<span class="op">;</span>             <span class="co">// 70000 = 0x11170，short 只留低 16 位 0x1170</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>       <span class="co">// 输出 4464（甚至可能为负，取决于符号位）</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确做法：跨宽度转换前先想清楚范围，必要时显式强转并检查</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">long</span> big <span class="op">=</span> <span class="dv">70000</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> s <span class="op">=</span> <span class="op">(</span><span class="dt">short</span><span class="op">)</span>big<span class="op">;</span>    <span class="co">// 强转是&quot;截断&quot;，不是&quot;四舍五入&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 需要保证数值不变时，应确保目标类型范围足够大（如用 int / long）</span></span></code></pre></div>
+<h4 id="陷阱-c浮点转整型不是四舍五入是向零截断">⚠️ 陷阱
+C：浮点转整型不是”四舍五入”，是”向零截断”</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：会四舍五入</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span><span class="fl">3.99</span><span class="op">;</span>       <span class="co">// 3，不是 4</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)-</span><span class="fl">3.99</span><span class="op">;</span>      <span class="co">// -3，不是 -4（向 0 方向截断）</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确做法：需要四舍五入时用库函数</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>round<span class="op">(</span><span class="fl">3.99</span><span class="op">);</span>   <span class="co">// 4</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>floor<span class="op">(-</span><span class="fl">3.99</span><span class="op">);</span>  <span class="co">// 需要向下取整时用 floor</span></span></code></pre></div>
+<h4 id="陷阱-dint-转-float-也丢精度很多人不知道">⚠️ 陷阱 D：int 转 float
+也丢精度（很多人不知道）</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：float 比 int &quot;高级&quot;，转换一定无损</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>   n <span class="op">=</span> <span class="dv">16777217</span><span class="op">;</span>        <span class="co">// 2^24 + 1</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> f <span class="op">=</span> n<span class="op">;</span>               <span class="co">// float 尾数只有 24 位有效位</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>f<span class="op">);</span>    <span class="co">// 输出 16777216 ！末位被舍掉了</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确认知：float 只能精确表示 |x| &lt;= 2^24 的整数</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">// 需要保存大整数精度时，用 double（可到 2^53）或直接保留整型</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>    n <span class="op">=</span> <span class="dv">16777217</span><span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> d <span class="op">=</span> n<span class="op">;</span>              <span class="co">// 2^24+1 在 double 中可精确表示</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.0f\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>       <span class="co">// 16777217</span></span></code></pre></div>
+<blockquote>
+<p>🛡️
+<strong>避坑口诀</strong>：<strong>“提升无害，截断要命；跨类型前，先看范围。”</strong></p>
+</blockquote>
+<hr />
+<h3 id="浮点数精度问题">💡 1.2 浮点数精度问题</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">类型</th>
+<th style="text-align: center;">典型字节</th>
+<th style="text-align: center;">有效十进制位</th>
+<th style="text-align: center;">尾数位数</th>
+<th style="text-align: left;">典型机器精度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;"><strong>约 6~7 位</strong></td>
+<td style="text-align: center;">24 bit</td>
+<td style="text-align: left;"><code>FLT_EPSILON ≈ 1.19e-7</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>double</code></td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;"><strong>约 15~16 位</strong></td>
+<td style="text-align: center;">53 bit</td>
+<td style="text-align: left;"><code>DBL_EPSILON ≈ 2.22e-16</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="陷阱-e0.1-0.2-0.3浮点不能直接">⚠️ 陷阱
+E：<code>0.1 + 0.2 != 0.3</code>（浮点不能直接 <code>==</code>）</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：直接判等</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span><span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="op">==</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;相等</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>     <span class="co">// 永远不会打印！</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 原因：0.1、0.2、0.3 在二进制里都是无限循环小数，存储时已被舍入</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">//       0.1+0.2 的实际结果 ≈ 0.30000000000000004，与 0.3 差一个 ulp</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：用&quot;误差容限 EPS&quot;判断</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define EPS </span><span class="fl">1e-9</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>fabs<span class="op">((</span><span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">-</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">&lt;</span> EPS<span class="op">)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;在误差范围内相等</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 工程上更严谨：fabs(a-b) &lt;= EPS * fmax(1.0, fmax(fabs(a), fabs(b)))</span></span></code></pre></div>
+<h4 id="陷阱-ffloat-与-double-混用比较翻车">⚠️ 陷阱
+F：<code>float</code> 与 <code>double</code> 混用，比较”翻车”</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：0.1f 和 0.1 都是 0.1</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> f <span class="op">=</span> <span class="fl">0.1</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>f <span class="op">==</span> <span class="fl">0.1</span><span class="op">)</span>            <span class="co">// 0.1f 提升为 double 后 ≠ double 的 0.1</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;相等</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>     <span class="co">// 不会打印</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确做法：统一精度，或统一用 EPS 比较</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span>  f <span class="op">=</span> <span class="fl">0.1</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> d <span class="op">=</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>fabs<span class="op">((</span><span class="dt">double</span><span class="op">)</span>f <span class="op">-</span> d<span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1e-9</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;近似相等</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<h4 id="陷阱-gprintf-scanf-格式符与类型不匹配">⚠️ 陷阱
+G：<code>printf / scanf</code> 格式符与类型不匹配</h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span>  f <span class="op">=</span> <span class="fl">3.14</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%lf\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>      <span class="co">// printf 中 %lf 与 %f 等价，尚可；</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> d <span class="op">=</span> <span class="fl">3.14</span><span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>d<span class="op">);</span>         <span class="co">// 致命！%f 要求 float*，传 double* 是未定义行为</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 用 %d 打印 size_t / 浮点，同样是未定义行为</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>   <span class="co">// 64 位下应使用 %zu</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：printf 中 float 会自动提升为 double，用 %f 即可</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="fl">3.14</span><span class="bu">f</span><span class="op">);</span>        <span class="co">// OK，float 实参被提升为 double</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%lf</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>d<span class="op">);</span>             <span class="co">// double 用 %lf</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span> <span class="co">// size_t 用 %zu</span></span></code></pre></div>
+<blockquote>
+<p>📊
+<strong>一句话总结</strong>：<strong>浮点数天生”近似”，判等必须给容差；<code>float</code>
+存小数用 <code>1.0f</code>，别和 <code>double</code> 较真。</strong></p>
+</blockquote>
+<hr />
+<h2
+id="模块二符号位带来的灾难unsigned-与-signed-的较量">模块二：符号位带来的灾难（unsigned
+与 signed 的较量）</h2>
+<h3 id="核心规则有符号遇到无符号有符号被迫从良">💡 2.1
+核心规则：有符号遇到无符号，有符号”被迫从良”</h3>
+<p>当 <code>int</code> 与 <code>unsigned int</code>
+混合运算时，<strong><code>int</code> 会被转换成
+<code>unsigned int</code></strong>（因为 <code>unsigned int</code>
+表示范围更大，<code>int</code> 无法”装下”它）。</p>
+<p><strong>结果：负数 <code>-1</code> 变成
+<code>4294967295</code>（2³²−1）。</strong></p>
+<h4 id="陷阱-h-1-1u-竟然是-假">⚠️ 陷阱 H：<code>-1 &lt; 1u</code> 竟然是
+<strong>假</strong></h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：-1 当然小于 1</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(-</span><span class="dv">1</span> <span class="op">&lt;</span> <span class="dv">1</span><span class="bu">u</span><span class="op">)</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;真</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>        <span class="co">// 不打印！</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 实际：-1 被转成 0xFFFFFFFF = 4294967295，4294967295 &lt; 1 为假</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确做法：避免有符号与无符号混比；必要时显式转成同一类型</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(-</span><span class="dv">1</span> <span class="op">&lt;</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span><span class="dv">1</span><span class="bu">u</span><span class="op">)</span>          <span class="co">// 转成 int 后比较：-1 &lt; 1 为真</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;真</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 更稳：根本不要让有符号变量去和无符号量比较</span></span></code></pre></div>
+<h4 id="陷阱-istrlen...---1-0-永远为真考试高频">⚠️ 陷阱
+I：<code>strlen(...) - 1 &gt;= 0</code> 永远为真（考试高频！）</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：想判断字符串非空</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;&quot;</span><span class="op">;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>strlen<span class="op">(</span>s<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">)</span>     <span class="co">// strlen 返回 size_t（无符号）</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;非空</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>        <span class="co">// 空串也会打印！因为 0-1 在无符号里是巨大正数</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>strlen<span class="op">(</span>s<span class="op">)</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>          <span class="co">// 直接和无符号比较，安全</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;非空</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 或先转有符号：if ((int)strlen(s) - 1 &gt;= 0) ...</span></span></code></pre></div>
+<h4 id="陷阱-jfor-unsigned-i-n-i-0-i---死循环">⚠️ 陷阱
+J：<code>for (unsigned i = n; i &gt;= 0; i--)</code> 死循环</h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：无符号变量永远 &gt;= 0</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">unsigned</span> i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> i <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> i<span class="op">--)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%u</span><span class="st"> &quot;</span><span class="op">,</span> i<span class="op">);</span>       <span class="co">// 打印到 0 后 i-- 变成 4294967295，无限循环</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法一（推荐）：用有符号循环变量</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> i <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> i<span class="op">--)</span> printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法二：确实要用无符号时，用 do-while 保证能打印到 0</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span> <span class="op">{</span> printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%u</span><span class="st"> &quot;</span><span class="op">,</span> i<span class="op">);</span> <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>i<span class="op">--</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">);</span></span></code></pre></div>
+<h4 id="陷阱-ksizeof-返回值也是无符号参与减法同样危险">⚠️ 陷阱
+K：<code>sizeof</code> 返回值也是无符号，参与减法同样危险</h4>
+<div class="sourceCode" id="cb22"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">-</span> <span class="dv">5</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>     <span class="co">// 4 - 5 在 size_t 里是巨大正数 &gt; 0，为真</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;陷阱</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：先转 int 再算，或改用无符号安全的判断</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span><span class="dt">int</span><span class="op">)</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">-</span> <span class="dv">5</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="co">/* 此时为假，逻辑正确 */</span> <span class="op">}</span></span></code></pre></div>
+<blockquote>
+<p>🛡️ <strong>避坑铁律</strong>：<strong>“有符号 + 无符号 =
+无符号；负数一进无符号，立刻变巨无霸。”</strong> 看到
+<code>size_t</code>、<code>strlen</code>、<code>sizeof</code>、<code>unsigned</code>，先警惕减法与比较。</p>
+</blockquote>
+<hr />
+<h2
+id="模块三表达式求值与自增自减副作用与顺序点">模块三：表达式求值与自增自减（副作用与顺序点）</h2>
+<h3 id="什么是顺序点">💡 3.1 什么是”顺序点”？</h3>
+<p><strong>顺序点（Sequence Point）</strong>
+是程序执行中的一个”检查站”：在它之前的所有<strong>副作用</strong>（对变量的写操作）都必须完成，之后的操作才能开始。</p>
+<p><strong>关键顺序点</strong>：<code>;</code>（分号）、<code>&amp;&amp;</code>、<code>||</code>、<code>?:</code>、逗号运算符、函数调用前的实参求值完成处。</p>
+<blockquote>
+<p>⚠️
+<strong>核心规则</strong>：<strong>在两个顺序点之间，同一个变量最多被”修改”一次</strong>。若既读又写、或写两次，就是
+<strong>未定义行为（UB）</strong>。</p>
+</blockquote>
+<blockquote>
+<p>💡 <strong>C11 小贴士</strong>：新标准把这套规则表述为”sequenced
+before /
+unsequenced”，但<strong>判定方法不变</strong>——同一变量在无顺序点间隔处被多次修改，就是
+UB。考研选择题仍按”顺序点”理解即可。</p>
+</blockquote>
+<h4 id="陷阱-li-i-经典未定义行为">⚠️ 陷阱 L：<code>i++ + ++i</code> ——
+经典未定义行为</h4>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：以为有固定结果</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> r <span class="op">=</span> i<span class="op">++</span> <span class="op">+</span> <span class="op">++</span>i<span class="op">;</span>      <span class="co">// UB！不同编译器/优化级别结果不同</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 可能是 5+7=12，也可能是 6+7=13，甚至行为不可预测</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">,</span> i<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：拆成独立语句，明确先后</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> i<span class="op">++;</span>            <span class="co">// a = 5，i 变 6</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="op">++</span>i<span class="op">;</span>            <span class="co">// i 先变 7，b = 7</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> r <span class="op">=</span> a <span class="op">+</span> b<span class="op">;</span>          <span class="co">// r = 12，结果确定</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">,</span> i<span class="op">);</span> <span class="co">// 12 7</span></span></code></pre></div>
+<h4 id="陷阱-mprintfd-d-i-i-参数求值顺序未定义">⚠️ 陷阱
+M：<code>printf("%d %d", i++, ++i)</code> 参数求值顺序未定义</h4>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：函数实参求值顺序标准未规定</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">++,</span> <span class="op">++</span>i<span class="op">);</span>   <span class="co">// UB，且读写同一变量无顺序点</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：先算好再打印</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> i<span class="op">++;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y <span class="op">=</span> <span class="op">++</span>i<span class="op">;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">);</span>       <span class="co">// 1 3（x=1, i=2, y=3）</span></span></code></pre></div>
+<h4 id="陷阱-nai-i-也是-ub">⚠️ 陷阱 N：<code>a[i] = i++</code> 也是
+UB</h4>
+<div class="sourceCode" id="cb28"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：左边用 i 做下标，右边又修改 i</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> a<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>a<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> i<span class="op">++;</span>             <span class="co">// UB：i 在同一表达式中既被读又被写</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：下标与自增分开</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> a<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>a<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> i<span class="op">;</span>               <span class="co">// 先把值放对位置</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>i<span class="op">++;</span>                    <span class="co">// 再自增</span></span></code></pre></div>
+<h4 id="陷阱-oi-i-1-i-i-同样是-ub">⚠️ 陷阱 O：<code>i = i++ + 1</code> /
+<code>i = ++i</code> 同样是 UB</h4>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i<span class="op">++</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span>            <span class="co">// UB：i 被改两次且中间无顺序点</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="op">++</span>i<span class="op">;</span>                <span class="co">// UB</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span>              <span class="co">// 想要&quot;加一&quot;，直接写清楚</span></span></code></pre></div>
+<blockquote>
+<p>🛡️
+<strong>避坑铁律</strong>：<strong>“一个顺序点内，同一变量只改一次；看见
+<code>i++</code> 与 <code>++i</code> 同框，先判 UB。”</strong></p>
+</blockquote>
+<hr />
+<h2
+id="模块四运算符的执行顺序与短路求值-新增">模块四：运算符的执行顺序与短路求值
+⭐ 新增</h2>
+<h3 id="三个概念别混淆优先级结合性求值顺序">💡 4.1
+三个概念别混淆：优先级、结合性、求值顺序</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">概念</th>
+<th style="text-align: left;">回答的问题</th>
+<th style="text-align: left;">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>优先级</strong></td>
+<td style="text-align: left;">谁先”抱团”成子表达式</td>
+<td style="text-align: left;"><code>1 + 2 * 3</code> →
+<code>1 + (2*3)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>结合性</strong></td>
+<td style="text-align: left;">同级运算符从左还是从右抱团</td>
+<td style="text-align: left;"><code>a = b = c</code> →
+<code>a = (b = c)</code>（右结合）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>求值顺序</strong></td>
+<td style="text-align: left;">各操作数<strong>谁先执行</strong></td>
+<td style="text-align: left;"><code>f() + g()</code> 中 f、g
+谁先调用？<strong>未指定</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️
+<strong>最重要的认知</strong>：<strong>优先级和结合性只决定”怎么分组（语法结构）“，并不决定”谁先算（执行顺序）“！</strong>
+这是期中判断题的高频雷区。</p>
+</blockquote>
+<h4 id="陷阱-p以为优先级高就先执行">⚠️ 陷阱
+P：以为”优先级高就先执行”</h4>
+<div class="sourceCode" id="cb32"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：* 优先级高，所以 g() 一定先于 f() 执行</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> r <span class="op">=</span> f<span class="op">()</span> <span class="op">+</span> g<span class="op">()</span> <span class="op">*</span> h<span class="op">();</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 结构确实是 f() + (g()*h())，</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 但 f、g、h 三个函数&quot;实际调用顺序&quot;标准未指定！</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确认知：C 只保证&quot;先算出 (g()*h()) 再与 f() 相加&quot;这个层级，</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">//    不保证 g()、h()、f() 的调用先后；若它们有副作用（改同一全局变量），结果不可移植</span></span></code></pre></div>
+<blockquote>
+<p>💡 <strong>只有 4
+类运算符规定了求值顺序</strong>：<code>&amp;&amp;</code>、<code>||</code>、<code>?:</code>、<code>,</code>（逗号）。其余二元运算符、函数实参，求值顺序都是
+<strong>unspecified（未指定）</strong>。</p>
+</blockquote>
+<hr />
+<h3 id="短路求值short-circuit-evaluation">💡 4.2 短路求值（Short-circuit
+Evaluation）</h3>
+<p><strong>规则</strong>：</p>
+<ul>
+<li><code>A &amp;&amp; B</code>：先算 <code>A</code>，<strong>若 A
+为假（0），直接得 0，<code>B</code> 根本不执行</strong>；</li>
+<li><code>A || B</code>：先算 <code>A</code>，<strong>若 A 为真（非
+0），直接得 1，<code>B</code> 根本不执行</strong>；</li>
+<li>逻辑运算的结果类型是 <strong><code>int</code></strong>，只有
+<code>0</code> 或 <code>1</code>。</li>
+</ul>
+<h4 id="陷阱-q判空与解引用顺序写反-空指针崩溃">⚠️ 陷阱
+Q：判空与解引用顺序写反 → 空指针崩溃</h4>
+<div class="sourceCode" id="cb34"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：先解引用，再判空</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(*</span>p <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> p <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">// 崩溃：&amp;&amp; 左边先执行，*p 直接访问空指针</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：先判空，再解引用（利用短路&quot;护住&quot;右边）</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>p <span class="op">!=</span> NULL <span class="op">&amp;&amp;</span> <span class="op">*</span>p <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">// p 为 NULL 时右边被短路，安全</span></span></code></pre></div>
+<h4 id="陷阱-r短路让副作用凭空消失">⚠️ 陷阱
+R：短路让副作用”凭空消失”</h4>
+<div class="sourceCode" id="cb36"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：以为 i++ 和 j++ 都会执行</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i<span class="op">++</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> j<span class="op">++</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">}</span>    <span class="co">// 左边 0&gt;0 为假 → 短路，j++ 根本不执行</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span>       <span class="co">// 输出 1 0（j 没变！）</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确认知：需要两边都自增，就不要依赖逻辑表达式</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>i<span class="op">++;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>j<span class="op">++;</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> j <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span>       <span class="co">// 1 1</span></span></code></pre></div>
+<blockquote>
+<p>⚠️ 同理 <code>i &gt; 0 || j++ &gt; 0</code>：只要
+<code>i &gt; 0</code> 为真，<code>j++</code> 也不会执行。</p>
+</blockquote>
+<h4 id="陷阱-s用短路做边界保护正确姿势">⚠️ 陷阱
+S：用短路做”边界保护”（正确姿势）</h4>
+<div class="sourceCode" id="cb38"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 推荐：i 越界时，a[i] 不会被访问</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i <span class="op">&gt;=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> i <span class="op">&lt;</span> <span class="dv">10</span> <span class="op">&amp;&amp;</span> a<span class="op">[</span>i<span class="op">]</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">// 第三个条件被短路，不越界</span></span></code></pre></div>
+<h4 id="陷阱-t-不短路-才短路">⚠️ 陷阱 T：<code>&amp;</code>
+不短路，<code>&amp;&amp;</code> 才短路</h4>
+<div class="sourceCode" id="cb39"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：误用位与（不短路），除零照样发生</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">0</span> <span class="op">&amp;</span> <span class="dv">1</span> <span class="op">/</span> x <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">}</span>    <span class="co">// &amp; 两边都算，1/x 除零 → 崩溃</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：逻辑与才短路</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> <span class="dv">1</span> <span class="op">/</span> x <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">}</span>   <span class="co">// 左边假，1/x 不执行，安全</span></span></code></pre></div>
+<blockquote>
+<p>📊 <strong><code>&amp;&amp;</code> /
+<code>&amp;</code>、<code>||</code> / <code>|</code> 对比</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">写法</th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">是否短路</th>
+<th style="text-align: left;">典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>&amp;&amp;</code></td>
+<td style="text-align: left;">逻辑与</td>
+<td style="text-align: left;"><strong>是</strong></td>
+<td style="text-align: left;">条件组合、判空保护</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>&amp;</code></td>
+<td style="text-align: left;">按位与</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">位掩码、清位</td>
+</tr>
+<tr>
+<td style="text-align: left;">||</td>
+<td style="text-align: left;">逻辑或</td>
+<td style="text-align: left;"><strong>是</strong></td>
+<td style="text-align: left;">条件组合</td>
+</tr>
+<tr>
+<td style="text-align: left;">|</td>
+<td style="text-align: left;">按位或</td>
+<td style="text-align: left;">否</td>
+<td style="text-align: left;">置位、标志合并</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="条件运算符">💡 4.3 条件运算符 <code>?:</code></h3>
+<ul>
+<li><strong>结合性</strong>：<strong>右结合</strong>。<code>a ? b : c ? d : e</code>
+等价于 <code>a ? b : (c ? d : e)</code>。</li>
+<li><strong>求值顺序</strong>：先算条件
+<code>a</code>，然后<strong>两个分支只算其中一个</strong>（天然短路）。</li>
+<li><strong>类型陷阱</strong>：两个分支类型不同时，会按”寻常算术转换”统一类型，整个表达式的结果类型可能被”悄悄提升”。</li>
+</ul>
+<h4 id="陷阱-u两分支类型不同结果被提升">⚠️ 陷阱
+U：两分支类型不同，结果被提升</h4>
+<div class="sourceCode" id="cb41"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：1 ? 1 : 2.0 的结果是 int</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">// 实际：2.0 是 double，两个分支被统一为 double，整个表达式类型是 double</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">1</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="fl">2.0</span><span class="op">);</span>   <span class="co">// UB！用 %d 打印 double 是未定义行为</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：类型一致，或显式强转</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">1</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">2</span><span class="op">);</span>          <span class="co">// 两分支都是 int</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">1</span> <span class="op">?</span> <span class="fl">1.0</span> <span class="op">:</span> <span class="fl">2.0</span><span class="op">);</span>      <span class="co">// 两分支都是 double</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">1</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span><span class="fl">2.0</span><span class="op">);</span>   <span class="co">// 强转统一为 int</span></span></code></pre></div>
+<h4 id="陷阱-v嵌套-的结合顺序">⚠️ 陷阱 V：嵌套 <code>?:</code>
+的结合顺序</h4>
+<div class="sourceCode" id="cb43"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 表达式：a ? 1 : b ? 2 : 3   →  右结合</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co">// 等价于：a ? 1 : (b ? 2 : 3)</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 千万别说成 (a?1:b) ? 2 : 3</span></span></code></pre></div>
+<hr />
+<h3 id="逗号运算符">💡 4.4 逗号运算符</h3>
+<ul>
+<li><strong>求值顺序</strong>：从左到右，<strong>是一个顺序点</strong>；</li>
+<li><strong>整体表达式的值</strong>：最后一个子表达式的值；</li>
+<li>⚠️
+与<strong>函数实参分隔符</strong>的逗号、<strong>声明语句</strong>里的逗号，完全不是一回事。</li>
+</ul>
+<h4 id="陷阱-w把函数实参的逗号当成逗号运算符">⚠️ 陷阱
+W：把函数实参的逗号当成逗号运算符</h4>
+<div class="sourceCode" id="cb44"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 误解：以为 f 只收到一个参数</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>f<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span>        <span class="co">// 这是&quot;两个实参&quot;，逗号是分隔符，不是逗号运算符</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 逗号运算符要用括号包成一个整体</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="op">(</span>a <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> a <span class="op">+</span> b<span class="op">);</span>   <span class="co">// 依次执行，x = 3，a=1，b=2</span></span></code></pre></div>
+<h4 id="陷阱-x声明里的逗号不是逗号运算符">⚠️ 陷阱
+X：声明里的逗号不是逗号运算符</h4>
+<div class="sourceCode" id="cb46"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">2</span><span class="op">;</span>      <span class="co">// 声明两个变量，逗号是分隔符</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">);</span>        <span class="co">// 逗号运算符，c = 2（整体取最后一个值）</span></span></code></pre></div>
+<hr />
+<h3 id="赋值运算符与连等陷阱">💡 4.5 赋值运算符与”连等”陷阱</h3>
+<ul>
+<li><strong>赋值</strong>：<strong>右结合</strong>，<code>a = b = c</code>
+等价 <code>a = (b = c)</code>；</li>
+<li><strong>赋值表达式的值</strong>：就是”被赋进去的那个值”，所以可以连用；</li>
+<li>⚠️ 但 <code>==</code>
+是<strong>左结合</strong>，<code>a == b == c</code> 是
+<code>(a == b) == c</code>，先得 0/1 再和 c 比！</li>
+</ul>
+<h4 id="陷阱-ya-b-c-不判断三者相等">⚠️ 陷阱 Y：<code>a == b == c</code>
+不判断”三者相等”</h4>
+<div class="sourceCode" id="cb47"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法：以为在判断 a、b、c 三者相等</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>a <span class="op">==</span> b <span class="op">==</span> c<span class="op">)</span>       <span class="co">// 实际是 (a==b) 得 0/1，再与 c 比较</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;相等</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>a <span class="op">==</span> b <span class="op">&amp;&amp;</span> b <span class="op">==</span> c<span class="op">)</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;三者相等</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<h4 id="陷阱-z复合赋值与自增混用">⚠️ 陷阱 Z：复合赋值与自增混用</h4>
+<div class="sourceCode" id="cb49"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 写法含义不清（且 i 被多次修改）</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> a<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>a<span class="op">[</span>i<span class="op">++]</span> <span class="op">+=</span> <span class="dv">5</span><span class="op">;</span>           <span class="co">// i 在左值里被改，虽有明确定义但极易读错</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 拆开写，意图清晰</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> a<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>a<span class="op">[</span>i<span class="op">]</span> <span class="op">+=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>i<span class="op">++;</span></span></code></pre></div>
+<hr />
+<h3 id="自增自减的左值问题">💡 4.6 自增自减的”左值”问题</h3>
+<ul>
+<li><code>i++</code> 的值是<strong>旧值</strong>，<code>++i</code>
+的值是<strong>新值</strong>；</li>
+<li><code>i++</code> <strong>不是左值</strong>，所以
+<code>(i++)++</code> 非法；<code>++i</code> 在 C
+中也<strong>不是左值</strong>（C++ 中是），故 <code>++i = 5</code> 在 C
+里非法。</li>
+</ul>
+<div class="sourceCode" id="cb51"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 非法写法</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>i<span class="op">++)++;</span>        <span class="co">// 错误：i++ 不是可修改的左值</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="op">++</span>i <span class="op">=</span> <span class="dv">5</span><span class="op">;</span>        <span class="co">// 错误：C 中 ++i 不是左值</span></span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>i<span class="op">++;</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span></code></pre></div>
+<hr />
+<h3 id="函数调用与实参求值顺序">💡 4.7 函数调用与实参求值顺序</h3>
+<ul>
+<li>函数<strong>实参的求值顺序未指定</strong>（unspecified）；</li>
+<li><code>printf("%d %d", f(), g())</code> 中，先打印 f 还是先打印 g
+<strong>无保证</strong>；</li>
+<li>若两个实参都修改同一变量 → <strong>UB</strong>。</li>
+</ul>
+<div class="sourceCode" id="cb53"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ UB：两个实参都改 i</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">++,</span> i<span class="op">++);</span></span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> i<span class="op">++;</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> i<span class="op">++;</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">,</span> b<span class="op">);</span>   <span class="co">// 0 1</span></span></code></pre></div>
+<hr />
+<h3 id="运算符优先级速记表从高到低">📊 4.8
+运算符优先级速记表（从高到低）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">级别</th>
+<th style="text-align: left;">运算符</th>
+<th style="text-align: left;">结合性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><code>()</code> <code>[]</code>
+<code>-&gt;</code> <code>.</code> 后缀 <code>++</code>
+<code>--</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">单目 <code>!</code> <code>~</code>
+<code>++</code> <code>--</code> <code>+</code> <code>-</code>
+<code>*</code> <code>&amp;</code> <code>(类型)</code>
+<code>sizeof</code></td>
+<td style="text-align: left;">右→左</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><code>*</code> <code>/</code>
+<code>%</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><code>+</code> <code>-</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><code>&lt;&lt;</code>
+<code>&gt;&gt;</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><code>&lt;</code> <code>&lt;=</code>
+<code>&gt;</code> <code>&gt;=</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;"><code>==</code> <code>!=</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;"><code>&amp;</code>（按位与）</td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;"><code>^</code>（按位异或）</td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">|（按位或）</td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td style="text-align: left;"><code>&amp;&amp;</code></td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td style="text-align: left;">||</td>
+<td style="text-align: left;">左→右</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td style="text-align: left;"><code>?:</code></td>
+<td style="text-align: left;">右→左</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td style="text-align: left;"><code>=</code> <code>+=</code>
+<code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code>
+等赋值</td>
+<td style="text-align: left;">右→左</td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td style="text-align: left;"><code>,</code>（逗号）</td>
+<td style="text-align: left;">左→右</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>高频易错点</strong>：<code>==</code>
+优先级<strong>高于</strong>
+<code>&amp;</code>、<code>^</code>、<code>|</code>；<code>+</code> 高于
+<code>&lt;&lt;</code>；所以
+<code>a &amp; b == 0</code>、<code>1 &lt;&lt; 2 + 3</code>
+都极易写错——<strong>不确定就加括号</strong>。</p>
+</blockquote>
+<h4 id="优先级典型对照">⚠️ 优先级典型对照</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">表达式</th>
+<th style="text-align: left;">易错理解</th>
+<th style="text-align: left;">实际含义</th>
+<th style="text-align: left;">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>*p++</code></td>
+<td style="text-align: left;"><code>(*p)++</code></td>
+<td style="text-align: left;"><code>*(p++)</code></td>
+<td style="text-align: left;">先取指针再加，再解引用</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-x++</code></td>
+<td style="text-align: left;"><code>(-x)++</code></td>
+<td style="text-align: left;"><code>-(x++)</code></td>
+<td style="text-align: left;"><code>++</code> 先与 x 结合</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>!x == y</code></td>
+<td style="text-align: left;"><code>!(x == y)</code></td>
+<td style="text-align: left;"><code>(!x) == y</code></td>
+<td style="text-align: left;"><code>!</code> 优先级高于
+<code>==</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>a &amp; b == 0</code></td>
+<td style="text-align: left;"><code>(a &amp; b) == 0</code></td>
+<td style="text-align: left;"><code>a &amp; (b == 0)</code></td>
+<td style="text-align: left;">应加括号</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>1 &lt;&lt; 2 + 3</code></td>
+<td style="text-align: left;"><code>(1 &lt;&lt; 2) + 3</code></td>
+<td style="text-align: left;"><code>1 &lt;&lt; (2 + 3)</code></td>
+<td style="text-align: left;"><code>32</code>，不是 <code>7</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="模块五看似简单的常量与-sizeof">模块五：看似简单的常量与
+<code>sizeof</code></h2>
+<h3 id="字面量后缀的区别">💡 5.1 字面量后缀的区别</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">字面量</th>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>123</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">默认整型</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>123L</code> / <code>123l</code></td>
+<td style="text-align: left;"><code>long</code></td>
+<td style="text-align: left;">长整型（Windows 下仍 4 字节，Linux 64 位 8
+字节）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>123LL</code></td>
+<td style="text-align: left;"><code>long long</code></td>
+<td style="text-align: left;">至少 8 字节</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>123U</code></td>
+<td style="text-align: left;"><code>unsigned int</code></td>
+<td style="text-align: left;">无符号</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>123UL</code></td>
+<td style="text-align: left;"><code>unsigned long</code></td>
+<td style="text-align: left;">无符号长整型</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>1.0</code></td>
+<td style="text-align: left;"><strong><code>double</code></strong></td>
+<td style="text-align: left;">默认浮点就是 double！</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>1.0f</code></td>
+<td style="text-align: left;"><strong><code>float</code></strong></td>
+<td style="text-align: left;">单精度</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>1.0L</code></td>
+<td style="text-align: left;"><code>long double</code></td>
+<td style="text-align: left;">长双精度</td>
+</tr>
+</tbody>
+</table>
+<h4 id="陷阱-aa1.0-是-double不是-float">⚠️ 陷阱 AA：<code>1.0</code> 是
+double，不是 float</h4>
+<div class="sourceCode" id="cb55"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：1.0 是 float</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> f <span class="op">=</span> <span class="fl">1.0</span><span class="op">;</span>          <span class="co">// 1.0 是 double，赋值时发生&quot;double → float&quot;隐式转换</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 若在重载/模板/printf 中依赖类型，就可能出错</span></span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：明确要 float 就加 f</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> f <span class="op">=</span> <span class="fl">1.0</span><span class="bu">f</span><span class="op">;</span>         <span class="co">// 无多余的精度转换，语义清晰</span></span></code></pre></div>
+<h4 id="陷阱-ab整数除法丢小数">⚠️ 陷阱 AB：整数除法丢小数</h4>
+<div class="sourceCode" id="cb57"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> avg <span class="op">=</span> <span class="dv">5</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span>     <span class="co">// 5/2 是整数除法 = 2，再转 double 得 2.000000</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> avg<span class="op">);</span>    <span class="co">// 2.000000</span></span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法：至少一边是浮点</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> avg <span class="op">=</span> <span class="dv">5</span> <span class="op">/</span> <span class="fl">2.0</span><span class="op">;</span>   <span class="co">// = 2.5</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="co">// 或 double avg = (double)5 / 2;</span></span></code></pre></div>
+<h3 id="进制书写陷阱">💡 5.2 进制书写陷阱</h3>
+<div class="sourceCode" id="cb59"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 非法常量（编译直接报错）</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">0</span><span class="er">9</span><span class="op">;</span>      <span class="co">// 错误：八进制不允许数字 9</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="dv">0</span><span class="er">8</span><span class="op">;</span>      <span class="co">// 错误：八进制不允许数字 8</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c <span class="op">=</span> <span class="bn">0x1</span><span class="er">G</span><span class="op">;</span>    <span class="co">// 错误：十六进制不允许 G</span></span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">010</span><span class="op">;</span>     <span class="co">// 八进制，等于十进制 8</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="bn">017</span><span class="op">;</span>     <span class="co">// 八进制，等于十进制 15</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c <span class="op">=</span> <span class="bn">0x1F</span><span class="op">;</span>    <span class="co">// 十六进制，等于十进制 31</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> d <span class="op">=</span> <span class="bn">0b1010</span><span class="op">;</span>  <span class="co">// C99/GCC 扩展：二进制，等于 10（标准 C 不保证支持）</span></span></code></pre></div>
+<blockquote>
+<p>⚠️ <strong>记忆点</strong>：<strong>“八进制以 0 开头、只含
+0~7；十六进制以 0x 开头、含 0~9 / a~f。”</strong> 看到 0
+开头的数字，先数有没有 8、9。</p>
+</blockquote>
+<h3 id="sizeof-陷阱重点大户">💡 5.3 <code>sizeof</code>
+陷阱（重点大户）</h3>
+<p><strong><code>sizeof</code>
+是运算符，不是函数</strong>；它在<strong>编译期</strong>求值，<strong>不会真正执行</strong>括号里的表达式（可变长数组除外）。</p>
+<h4 id="陷阱-acsizeof数组-与-sizeof指针-天差地别">⚠️ 陷阱
+AC：<code>sizeof(数组)</code> 与 <code>sizeof(指针)</code> 天差地别</h4>
+<div class="sourceCode" id="cb61"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：在函数里也能算数组长度</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> f<span class="op">(</span><span class="dt">int</span> arr<span class="op">[</span><span class="dv">10</span><span class="op">])</span> <span class="op">{</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>arr<span class="op">));</span>          <span class="co">// 输出 8（指针大小），不是 40！</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>f<span class="op">(</span>a<span class="op">);</span>   <span class="co">// 数组名传参后退化为指针</span></span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确做法：数组长度必须在&quot;数组未退化&quot;的作用域内计算</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> n <span class="op">=</span> <span class="kw">sizeof</span><span class="op">(</span>a<span class="op">)</span> <span class="op">/</span> <span class="kw">sizeof</span><span class="op">(</span>a<span class="op">[</span><span class="dv">0</span><span class="op">]);</span>       <span class="co">// 40/4 = 10，正确</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 跨函数时，必须把长度作为参数一起传进去</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> f<span class="op">(</span><span class="dt">int</span> arr<span class="op">[],</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span> <span class="co">/* 用 n，不要用 sizeof(arr) */</span> <span class="op">}</span></span></code></pre></div>
+<h4 id="陷阱-adsizeof-里的表达式不会被执行">⚠️ 陷阱
+AD：<code>sizeof</code> 里的表达式不会被执行</h4>
+<div class="sourceCode" id="cb63"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：以为 i++ 会执行</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> s <span class="op">=</span> <span class="kw">sizeof</span><span class="op">(</span>i<span class="op">++);</span>    <span class="co">// i++ 不被求值（无副作用）</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span>         <span class="co">// 输出 5，i 没变</span></span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确认知：sizeof 只求&quot;类型大小&quot;，副作用不发生</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="co">// 若确实需要自增，请另起一条语句：i++;</span></span></code></pre></div>
+<h4 id="陷阱-aesizeofa-在-c-里是-4不是-1">⚠️ 陷阱
+AE：<code>sizeof('a')</code> 在 C 里是 4，不是 1</h4>
+<div class="sourceCode" id="cb65"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误直觉：字符就是 1 字节</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="ch">&#39;a&#39;</span><span class="op">));</span>   <span class="co">// C 中字符常量的类型是 int，结果 = 4</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">));</span>  <span class="co">// 结果 = 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确认知：&#39;a&#39; 是 int 常量（值 97），char 变量才是 1 字节</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> ch <span class="op">=</span> <span class="ch">&#39;a&#39;</span><span class="op">;</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>ch<span class="op">));</span>    <span class="co">// 1</span></span></code></pre></div>
+<h4 id="陷阱-afsizeof-结果类型是无符号负数比较翻车">⚠️ 陷阱
+AF：<code>sizeof</code> 结果类型是无符号，负数比较翻车</h4>
+<div class="sourceCode" id="cb67"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ❌ 错误写法（同陷阱 K）</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">-</span> <span class="dv">5</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;真</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>   <span class="co">// 永远为真</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ✅ 正确写法</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">((</span><span class="dt">int</span><span class="op">)</span><span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">-</span> <span class="dv">5</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;真</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<blockquote>
+<p>📊 <strong><code>sizeof</code> 速查表</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">表达式</th>
+<th style="text-align: left;">典型结果（32/64 位常见平台）</th>
+<th style="text-align: left;">关键点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>sizeof(char)</code></td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">标准规定恒为 1</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof(int)</code></td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">最常见</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof('a')</code></td>
+<td style="text-align: left;"><strong>4（C）/ 1（C++）</strong></td>
+<td style="text-align: left;">字符常量是 int</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof(1.0)</code></td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">double</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof(1.0f)</code></td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">float</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof(1L)</code></td>
+<td style="text-align: left;">4（Windows）/ 8（Linux 64）</td>
+<td style="text-align: left;">平台相关</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof(int *)</code></td>
+<td style="text-align: left;">4 / 8</td>
+<td style="text-align: left;">指针大小随平台</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sizeof(a) / sizeof(a[0])</code></td>
+<td style="text-align: left;">数组元素个数</td>
+<td style="text-align: left;">仅在数组未退化时有效</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="终极对比总结表">📊 终极对比总结表</h2>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 23%" />
+<col style="width: 23%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th style="text-align: left;">陷阱场景</th>
+<th style="text-align: left;">❌ 错误写法 / 错误直觉</th>
+<th style="text-align: left;">✅ 正确写法 / 标准结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">有符号负数比无符号</td>
+<td style="text-align: left;"><code>-1 &lt; 1u</code> 为真</td>
+<td style="text-align: left;">为<strong>假</strong>，<code>-1</code> 变
+<code>4294967295</code>；应转同类型再比</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><code>strlen</code> 减法判空</td>
+<td style="text-align: left;"><code>strlen(s)-1 &gt;= 0</code>
+判非空</td>
+<td style="text-align: left;">恒真；应写
+<code>strlen(s) &gt; 0</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">无符号倒序循环</td>
+<td
+style="text-align: left;"><code>for(unsigned i=n;i&gt;=0;i--)</code></td>
+<td style="text-align: left;">死循环；用 <code>int</code> 或
+<code>do-while</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">浮点判等</td>
+<td style="text-align: left;"><code>0.1+0.2 == 0.3</code></td>
+<td style="text-align: left;">恒假；用
+<code>fabs(a-b) &lt; EPS</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">float 与 double 混比</td>
+<td style="text-align: left;"><code>0.1f == 0.1</code></td>
+<td style="text-align: left;">恒假；统一精度或 EPS 比较</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">整数除法</td>
+<td style="text-align: left;"><code>5/2</code> 求平均</td>
+<td style="text-align: left;">得 2；应写 <code>5/2.0</code> 或强转</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;">浮点转整型</td>
+<td style="text-align: left;"><code>(int)3.99</code> 得 4</td>
+<td style="text-align: left;">得
+3，<strong>向零截断</strong>；四舍五入用 <code>round</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">int 转 float</td>
+<td style="text-align: left;">以为无损</td>
+<td style="text-align: left;"><strong>超 2²⁴ 丢精度</strong>；大整数用
+<code>double</code> 或留整型</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;"><code>i++ + ++i</code></td>
+<td style="text-align: left;">以为有固定值</td>
+<td
+style="text-align: left;"><strong>未定义行为</strong>；拆成多条语句</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;"><code>a[i] = i++</code></td>
+<td style="text-align: left;">以为先算后赋</td>
+<td style="text-align: left;">UB；下标与自增分开写</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td style="text-align: left;"><code>i = i++ + 1</code></td>
+<td style="text-align: left;">以为就是加一</td>
+<td style="text-align: left;">UB；应写 <code>i = i + 1</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td style="text-align: left;">位移优先级</td>
+<td style="text-align: left;"><code>1 &lt;&lt; 2 + 3</code> 当
+<code>(1&lt;&lt;2)+3</code></td>
+<td style="text-align: left;">实际
+<code>1 &lt;&lt; 5 = 32</code>；加括号</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td style="text-align: left;">位与优先级</td>
+<td style="text-align: left;"><code>a &amp; b == 0</code> 当
+<code>(a&amp;b)==0</code></td>
+<td style="text-align: left;">实际
+<code>a &amp; (b==0)</code>；加括号</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td style="text-align: left;">短路副作用</td>
+<td style="text-align: left;"><code>i++&gt;0 &amp;&amp; j++&gt;0</code>
+以为都执行</td>
+<td style="text-align: left;">左假则 <code>j++</code>
+<strong>不执行</strong>；副作用会消失</td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td style="text-align: left;">判空顺序</td>
+<td
+style="text-align: left;"><code>*p&gt;0 &amp;&amp; p!=NULL</code></td>
+<td style="text-align: left;"><strong>空指针崩溃</strong>；应
+<code>p!=NULL &amp;&amp; *p&gt;0</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">16</td>
+<td style="text-align: left;"><code>&amp;</code> 当逻辑与</td>
+<td style="text-align: left;"><code>x!=0 &amp; 1/x&gt;0</code></td>
+<td style="text-align: left;"><strong>不短路</strong>，除零崩溃；应用
+<code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">17</td>
+<td style="text-align: left;"><code>==</code> 连等</td>
+<td style="text-align: left;"><code>a == b == c</code></td>
+<td style="text-align: left;">实为 <code>(a==b)==c</code>；应
+<code>a==b &amp;&amp; b==c</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">18</td>
+<td style="text-align: left;"><code>?:</code> 分支类型</td>
+<td style="text-align: left;"><code>cond ? 1 : 2.0</code> 当 int</td>
+<td style="text-align: left;">整体是 <strong>double</strong>；用
+<code>%d</code> 打印是 UB</td>
+</tr>
+<tr>
+<td style="text-align: center;">19</td>
+<td style="text-align: left;">求值顺序误解</td>
+<td style="text-align: left;">以为优先级高就先执行</td>
+<td
+style="text-align: left;">优先级≠求值顺序；二元运算符顺序<strong>未指定</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">20</td>
+<td style="text-align: left;">函数实参顺序</td>
+<td
+style="text-align: left;"><code>printf("%d %d", i++, i++)</code></td>
+<td style="text-align: left;"><strong>UB</strong>；先算好再打印</td>
+</tr>
+<tr>
+<td style="text-align: center;">21</td>
+<td style="text-align: left;">八进制常量</td>
+<td style="text-align: left;"><code>int a = 09;</code></td>
+<td style="text-align: left;"><strong>非法</strong>；八进制只能 0~7</td>
+</tr>
+<tr>
+<td style="text-align: center;">22</td>
+<td style="text-align: left;">浮点字面量类型</td>
+<td style="text-align: left;"><code>float f = 1.0;</code></td>
+<td style="text-align: left;"><code>1.0</code> 是 double；要 float 写
+<code>1.0f</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">23</td>
+<td style="text-align: left;"><code>sizeof('a')</code></td>
+<td style="text-align: left;">以为等于 1</td>
+<td style="text-align: left;">C 中等于
+<strong>4</strong>（<code>'a'</code> 是 int）</td>
+</tr>
+<tr>
+<td style="text-align: center;">24</td>
+<td style="text-align: left;"><code>sizeof</code> 算数组长度</td>
+<td style="text-align: left;">函数内
+<code>sizeof(arr)/sizeof(arr[0])</code></td>
+<td style="text-align: left;">退化为指针，得到错误值；须传长度参数</td>
+</tr>
+<tr>
+<td style="text-align: center;">25</td>
+<td style="text-align: left;"><code>sizeof(i++)</code></td>
+<td style="text-align: left;">以为 i 会自增</td>
+<td style="text-align: left;">表达式<strong>不执行</strong>，i 不变</td>
+</tr>
+<tr>
+<td style="text-align: center;">26</td>
+<td style="text-align: left;">printf 格式符</td>
+<td style="text-align: left;"><code>scanf("%f",&amp;d)</code>（d 是
+double）</td>
+<td style="text-align: left;">应 <code>%lf</code>；否则未定义行为</td>
+</tr>
+<tr>
+<td style="text-align: center;">27</td>
+<td style="text-align: left;">size_t 打印</td>
+<td style="text-align: left;"><code>printf("%d", sizeof(x))</code></td>
+<td style="text-align: left;">应用 <code>%zu</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="考场实战口诀">💡 考场实战口诀</h2>
+<blockquote>
+<p><strong>一、类型转换篇</strong></p>
+<p>提升无害截断险，窄赋宽转要看清；</p>
+<p>浮点转整向零截，四舍五入靠 <code>round</code>。</p>
+</blockquote>
+<blockquote>
+<p><strong>二、符号位篇</strong></p>
+<p>有符无符一相见，有符立刻变无符；</p>
+<p>负数一进无符号，四十二亿等着你。</p>
+</blockquote>
+<blockquote>
+<p><strong>三、浮点篇</strong></p>
+<p>浮点天生是近似，判等千万莫用 <code>==</code>；</p>
+<p>容差 EPS 来兜底，<code>1.0</code> 是双 <code>1.0f</code> 单。</p>
+</blockquote>
+<blockquote>
+<p><strong>四、自增与顺序点篇</strong></p>
+<p>一个顺序点之内，同个变量只改一次；</p>
+<p><code>i++ + ++i</code> 是雷区，看见就判未定义。</p>
+</blockquote>
+<blockquote>
+<p><strong>五、短路与求值篇</strong></p>
+<p><code>&amp;&amp;</code> <code>||</code> 才短路，<code>&amp;</code>
+<code>|</code> 两边都得算；</p>
+<p>先判空、后解引用，判空顺序不能反；</p>
+<p>优先级只管分组，谁先执行它不管。</p>
+</blockquote>
+<blockquote>
+<p><strong>六、常量与 <code>sizeof</code> 篇</strong></p>
+<p>零头八进制无八九，<code>0x</code> 十六放心写；</p>
+<p>后缀 <code>L</code> 长 <code>f</code> 单精，字面量类型要记清；</p>
+<p><code>sizeof</code> 是运算符，数组退化要当心，</p>
+<p>括号表达式不执行，<code>sizeof('a')</code> 却是四。</p>
+</blockquote>
+<blockquote>
+<p>🎯
+<strong>终极一句话</strong>：<strong>“转换看范围，比较看符号，判等给容差，求值看顺序，短路看左右，<code>sizeof</code>
+看类型。”</strong></p>
+</blockquote>
+<hr />
+<div data-align="center">
+<p><strong>📚 祝期中顺利，越考越稳！</strong></p>
+</div>
+</body>
+</html>

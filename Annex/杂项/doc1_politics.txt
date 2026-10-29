@@ -1,0 +1,13 @@
+[Normal] 政    治
+[Normal] 一、基础题
+[List Paragraph] 中国共产党党旗上的黄色标志是什么意思？
+[List Paragraph] 中国共产党的最高领导机关是什么？
+[List Paragraph] 中国中央领导集体的最高层是什么机构？
+[List Paragraph] 社会主义中国的根本政治制度是什么？
+[List Paragraph] 目前中国的政党制度是什么？
+[List Paragraph] 目前中国最高的行政机关叫什么？
+[List Paragraph] 中国现在的国家主席是谁？
+[Normal] 二、思考题：
+[List Paragraph] 谈到中国的政治，你会联想到哪些方面？请举例说明，并谈谈你这些现有的知识和观念从何而来。
+[List Paragraph] 为什么中央集权制度能够在中国延续2000多年？
+[List Paragraph] 举一两个实际的例子，谈谈当今中国政治制度对中国某一方面发展的影响（经济、文化、教育、体育、外交……），只需要针对一个方面就可以。

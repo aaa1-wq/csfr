@@ -1,0 +1,315 @@
+% !TEX program = xelatex
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=2cm,top=1.8cm,bottom=1.8cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+  pdftitle={Lay 5e 4.1 Exercises 32-34: Subspaces, Intersection and Sum},
+  pdfauthor={Math.skill workflow}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+\captionsetup{font=small,labelformat=empty,skip=4pt}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\0}{\mathbf{0}}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}Lay 5e \S4.1 习题 32--34：交、和与子空间判定}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Lay 5e \S4.1 习题 32--34 解答}\\[3pt]
+{\small 子空间的交、和，以及 $\Span$ 与和的对应}
+\end{center}
+
+\vspace{0.1cm}
+
+\begin{keybox}
+\textbf{子空间判据（本节反复使用）}\quad 设 $W\subseteq V$（$V$ 为向量空间）。$W$ 是 $V$ 的子空间，当且仅当
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{含零向量}：$\0\in W$；
+\item \textbf{对加法封闭}：$\mathbf u,\mathbf v\in W\Rightarrow\mathbf u+\mathbf v\in W$；
+\item \textbf{对数乘封闭}：$\mathbf u\in W,\ c\in\mathbb R\Rightarrow c\mathbf u\in W$。
+\end{enumerate}
+（其中 (i) 也可用"$W$ 非空"替代，因为二者由 (iii) 等价。）
+\end{keybox}
+
+\textbf{总体思路}\quad 三道题都不是"验证某个具体集合"，而是"证明某种构造保持子空间性质"。
+它们共用同一套骨架：\textbf{把定义翻译成元素层面的性质，再逐条对判据验证}。
+第 34 题在此基础上再补一个双向包含论证。
+
+%=====================================================================
+\section*{习题 32：$H\cap K$ 是子空间；两个子空间的并一般不是}
+
+\subsection*{（一）证明 $H\cap K$ 是 $V$ 的子空间}
+
+设 $H,K\le V$（$\le$ 表示"是……的子空间"）。按定义
+\[
+H\cap K=\{\mathbf v\in V:\ \mathbf v\in H\ \text{且}\ \mathbf v\in K\}.
+\]
+显然 $H\cap K\subseteq V$。逐条验证判据：
+
+\textbf{(i) 含零向量}\quad 因 $H$ 是子空间，$\0\in H$；因 $K$ 是子空间，$\0\in K$。
+故 $\0$ 同属两者，$\0\in H\cap K$。\hfill ✓
+
+\textbf{(ii) 对加法封闭}\quad 取 $\mathbf u,\mathbf v\in H\cap K$。
+由定义，$\mathbf u,\mathbf v\in H$，而 $H$ 是子空间，故
+\[
+\mathbf u+\mathbf v\in H .
+\]
+同理 $\mathbf u+\mathbf v\in K$。于是 $\mathbf u+\mathbf v$ 同时属于 $H$ 与 $K$，即
+\[
+\mathbf u+\mathbf v\in H\cap K . \hfill \checkmark
+\]
+
+\textbf{(iii) 对数乘封闭}\quad 取 $\mathbf u\in H\cap K$，$c\in\mathbb R$。
+由 $\mathbf u\in H$ 与 $H$ 的封闭性得 $c\mathbf u\in H$；由 $\mathbf u\in K$ 得 $c\mathbf u\in K$。故
+\[
+c\mathbf u\in H\cap K . \hfill \checkmark
+\]
+
+三条判据全部满足，故 $H\cap K$ 是 $V$ 的子空间。\hfill$\blacksquare$
+
+\begin{keybox}
+\textbf{这一步为何有效}\quad 关键在于"$H$ 与 $K$ 各自封闭"这一前提被\textbf{同时}使用了两次。
+任一条件缺失，结论就可能崩掉。例如若 $H$ 不是子空间，$H\cap K$ 未必是——
+这说明定理的假设不可省。
+\end{keybox}
+
+\subsection*{（二）反例：两个子空间的并一般不是子空间}
+
+在 $\R^2$ 中取两条过原点的直线：
+\[
+H=\left\{\begin{bmatrix}t\\0\end{bmatrix}:t\in\R\right\}
+\quad(x\text{ 轴}),\qquad
+K=\left\{\begin{bmatrix}0\\t\end{bmatrix}:t\in\R\right\}
+\quad(y\text{ 轴}).
+\]
+二者都是 $\R^2$ 的子空间（各自是一维子空间、过原点）。
+
+考察它们的并
+\[
+H\cup K=\left\{\mathbf v:\ \mathbf v\ \text{落在某一条坐标轴上}\right\}.
+\]
+取
+\[
+\mathbf u=\begin{bmatrix}1\\0\end{bmatrix}\in H\subseteq H\cup K,\qquad
+\mathbf v=\begin{bmatrix}0\\1\end{bmatrix}\in K\subseteq H\cup K ,
+\]
+则
+\[
+\mathbf u+\mathbf v=\begin{bmatrix}1\\1\end{bmatrix}.
+\]
+但 $\begin{bmatrix}1\\1\end{bmatrix}$ 既不在 $x$ 轴上（第二分量非零），也不在 $y$ 轴上（第一分量非零），
+故 $\mathbf u+\mathbf v\notin H\cup K$。
+
+\textbf{$H\cup K$ 对加法不封闭，因此不是子空间。}$\hfill\blacksquare$
+
+\smallskip
+\textbf{注}\quad $H\cup K$ 仍含零向量且对数乘封闭（沿轴伸缩仍在轴上），
+\textbf{唯独加法封闭性失效}——这说明三条判据彼此独立，缺一不可。
+一般地，只要 $H\nsubseteq K$ 且 $K\nsubseteq H$，$H\cup K$ 就必不是子空间
+（可分别取 $\mathbf u\in H\setminus K$、$\mathbf v\in K\setminus H$，则 $\mathbf u+\mathbf v\notin H\cup K$）。
+
+%=====================================================================
+\section*{习题 33：和集子 $H+K$ 是子空间，且包含 $H$ 与 $K$}
+
+\noindent 设 $H,K\le V$，定义
+\[
+H+K=\{\mathbf w\in V:\ \mathbf w=\mathbf u+\mathbf v,\ \text{其中}\ \mathbf u\in H,\ \mathbf v\in K\}.
+\]
+
+\subsection*{a. 证明 $H+K$ 是 $V$ 的子空间}
+
+由定义 $H+K\subseteq V$。逐条验证判据：
+
+\textbf{(i) 含零向量}\quad 因 $H,K$ 是子空间，$\0\in H$ 且 $\0\in K$，于是
+\[
+\0=\0+\0\in H+K . \hfill \checkmark
+\]
+
+\textbf{(ii) 对加法封闭}\quad 取 $\mathbf w_1,\mathbf w_2\in H+K$。按定义存在分解
+\[
+\mathbf w_1=\mathbf u_1+\mathbf v_1\ (\mathbf u_1\in H,\ \mathbf v_1\in K),\qquad
+\mathbf w_2=\mathbf u_2+\mathbf v_2\ (\mathbf u_2\in H,\ \mathbf v_2\in K).
+\]
+利用向量加法的交换律与结合律\textbf{重新配对}：
+\[
+\mathbf w_1+\mathbf w_2
+=(\mathbf u_1+\mathbf v_1)+(\mathbf u_2+\mathbf v_2)
+=\underbrace{(\mathbf u_1+\mathbf u_2)}_{\in H\ (\text{因 }H\text{ 封闭})}
++\underbrace{(\mathbf v_1+\mathbf v_2)}_{\in K\ (\text{因 }K\text{ 封闭})}.
+\]
+括号中第一个向量属于 $H$，第二个属于 $K$，故 $\mathbf w_1+\mathbf w_2$ 可写成"$H$ 中向量 $+$ $K$ 中向量"的形式，
+即 $\mathbf w_1+\mathbf w_2\in H+K$。\hfill $\checkmark$
+
+\textbf{(iii) 对数乘封闭}\quad 取 $\mathbf w=\mathbf u+\mathbf v\in H+K$，$c\in\mathbb R$。由数乘对加法的分配律
+\[
+c\mathbf w=c(\mathbf u+\mathbf v)=\underbrace{c\mathbf u}_{\in H}+\underbrace{c\mathbf v}_{\in K},
+\]
+故 $c\mathbf w\in H+K$。\hfill $\checkmark$
+
+三条判据满足，故 $H+K$ 是 $V$ 的子空间。\hfill$\blacksquare$
+
+\begin{warnbox}
+\textbf{证明的关键动作}\quad 是\textbf{重新配对}：把两对 $(\mathbf u_1,\mathbf v_1)$、$(\mathbf u_2,\mathbf v_2)$
+按"$H$ 归 $H$、$K$ 归 $K$"重组。若无交换律（如非交换群的情形），这一步就会失败。
+向量空间有交换律，故成立。
+\end{warnbox}
+
+\subsection*{b. 证明 $H\le H+K$ 且 $K\le H+K$}
+
+\textbf{先证 $H\subseteq H+K$}\quad 任取 $\mathbf u\in H$。因 $K$ 是子空间，$\0\in K$，故
+\[
+\mathbf u=\mathbf u+\0,\qquad \mathbf u\in H,\ \ \0\in K ,
+\]
+按 $H+K$ 的定义即 $\mathbf u\in H+K$。故 $H\subseteq H+K$。
+
+又因为 $H$ 本身是子空间、$H+K$ 已是子空间（由 a），故
+\[
+H\le H+K .
+\]
+
+\textbf{再证 $K\subseteq H+K$}\quad 任取 $\mathbf v\in K$。因 $H$ 是子空间，$\0\in H$，故
+\[
+\mathbf v=\0+\mathbf v,\qquad \0\in H,\ \ \mathbf v\in K ,
+\]
+按定义即 $\mathbf v\in H+K$。同理
+\[
+K\le H+K . \hfill \blacksquare
+\]
+
+\smallskip
+\textbf{补充}\quad 事实上 $H+K$ 是\textbf{包含} $H\cup K$ 的\textbf{最小}子空间，
+即
+\[
+H+K=\bigcap\{\,W:\ W\le V,\ H\subseteq W,\ K\subseteq W\,\}.
+\]
+这一点与第 34 题互为印证。
+
+%=====================================================================
+\section*{习题 34：$H+K=\Span\{\mathbf u_1,\dots,\mathbf u_p,\mathbf v_1,\dots,\mathbf v_q\}$}
+
+\noindent 设
+\[
+H=\Span\{\mathbf u_1,\dots,\mathbf u_p\},\qquad K=\Span\{\mathbf v_1,\dots,\mathbf v_q\}
+\]
+均为 $V$ 的子空间。记
+\[
+S=\{\mathbf u_1,\dots,\mathbf u_p,\mathbf v_1,\dots,\mathbf v_q\}
+\]
+为两组向量的并集（共 $p+q$ 个向量，允许有重复）。
+要证 $H+K=\Span S$，用\textbf{双向包含}。
+
+\subsection*{第一步：$H+K\subseteq\Span S$}
+
+任取 $\mathbf w\in H+K$，按定义存在 $\mathbf u\in H$、$\mathbf v\in K$ 使 $\mathbf w=\mathbf u+\mathbf v$。
+
+因 $\mathbf u\in H=\Span\{\mathbf u_1,\dots,\mathbf u_p\}$，存在系数 $c_1,\dots,c_p$ 使
+\[
+\mathbf u=c_1\mathbf u_1+\cdots+c_p\mathbf u_p .
+\]
+因 $\mathbf v\in K=\Span\{\mathbf v_1,\dots,\mathbf v_q\}$，存在系数 $d_1,\dots,d_q$ 使
+\[
+\mathbf v=d_1\mathbf v_1+\cdots+d_q\mathbf v_q .
+\]
+两式相加：
+\[
+\mathbf w=\mathbf u+\mathbf v
+=\sum_{i=1}^{p}c_i\mathbf u_i+\sum_{j=1}^{q}d_j\mathbf v_j ,
+\]
+这是 $S$ 中全部 $p+q$ 个向量的一个线性组合，故 $\mathbf w\in\Span S$。
+于是 $H+K\subseteq\Span S$。\hfill$\checkmark$
+
+\subsection*{第二步：$\Span S\subseteq H+K$}
+
+任取 $\mathbf z\in\Span S$。按定义存在系数 $c_1,\dots,c_p,d_1,\dots,d_q$ 使
+\[
+\mathbf z=\sum_{i=1}^{p}c_i\mathbf u_i+\sum_{j=1}^{q}d_j\mathbf v_j .
+\]
+\textbf{把同一目标拆成两块}：
+\[
+\underbrace{\sum_{i=1}^{p}c_i\mathbf u_i}_{\textstyle =:\mathbf u}
+\ +\ \underbrace{\sum_{j=1}^{q}d_j\mathbf v_j}_{\textstyle =:\mathbf v} .
+\]
+由 $H$ 的定义，$\mathbf u=c_1\mathbf u_1+\cdots+c_p\mathbf u_p\in H$；
+由 $K$ 的定义，$\mathbf v=d_1\mathbf v_1+\cdots+d_q\mathbf v_q\in K$。
+故 $\mathbf z=\mathbf u+\mathbf v$ 是"$H$ 中向量 $+$ $K$ 中向量"，即 $\mathbf z\in H+K$。
+
+于是 $\Span S\subseteq H+K$。\hfill$\checkmark$
+
+\subsection*{第三步：合题}
+
+两向包含即得
+\[
+\boxed{\ H+K=\Span\{\mathbf u_1,\dots,\mathbf u_p,\mathbf v_1,\dots,\mathbf v_q\}\ }
+\]
+\hfill$\blacksquare$
+
+\begin{keybox}
+\textbf{一句话记住}\quad "$H+K$ 的基池 = $H$ 的基池 $\cup$ $K$ 的基池"。
+两边的 $p+q$ 个生成向量是同一批，只是"分组求和"（$H+K$）与"整体线性组合"（$\Span S$）两种写法，
+而这两件事在定义上恰好等价。
+
+\smallskip
+\textbf{一个有用的推论}\quad 若 $\{\mathbf u_i\}$ 是 $H$ 的基、$\{\mathbf v_j\}$ 是 $K$ 的基，则
+\[
+\dim(H+K)\le\dim H+\dim K ,
+\]
+且等号成立当且仅当 $H\cap K=\{\0\}$（此时并集仍线性无关）。这正是维数公式
+$\dim(H+K)=\dim H+\dim K-\dim(H\cap K)$ 的来源。
+\end{keybox}
+
+%=====================================================================
+\section*{附：三题结构对照}
+
+\begin{center}\small
+\begin{tabular}{@{}p{1.6cm}p{3.4cm}p{5.6cm}@{}}
+\toprule
+题 & 结论 & 证明的关键动作\\
+\midrule
+32 & $H\cap K\le V$ & 对每个判据，把"属于交"拆成"同属两者"分别用 \\
+32 & $H\cup K$ 一般不是子空间 & 取 $\mathbf u\in H\setminus K$、$\mathbf v\in K\setminus H$，则 $\mathbf u+\mathbf v$ 落在两者之外 \\
+33a & $H+K\le V$ & 两对分解\textbf{重新配对}，$H$ 归 $H$、$K$ 归 $K$ \\
+33b & $H,K\le H+K$ & 借用 $\0$：$\mathbf u=\mathbf u+\0$，$\mathbf v=\0+\mathbf v$ \\
+34 & $H+K=\Span S$ & 双向包含：总和拆两块 / 组合拆两和 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{统一观察}\quad 三道题的成功都依赖同一个机制：\textbf{零向量充当"中性元"}，
+使
+\[
+\mathbf u=\mathbf u+\0,\qquad \0=\0+\0,\qquad \mathbf 0\in H\cap K .
+\]
+一旦把 $\mathbf 0$ 换成别的向量，所有"构造"都不再保持子空间性质——
+这也解释了为什么子空间定义中"含零向量"这一条不可省。
+
+\end{document}

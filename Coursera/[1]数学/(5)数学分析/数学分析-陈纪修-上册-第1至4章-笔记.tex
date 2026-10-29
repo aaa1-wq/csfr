@@ -1,0 +1,45 @@
+\documentclass[11pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx,booktabs,hyperref,geometry}
+\usepackage{tikz}
+\geometry{a4paper,margin=2.5cm}
+\hypersetup{hidelinks}
+
+\newenvironment{chaptersummary}
+  {\par\medskip\noindent\textbf{本章小结：}\begin{quote}}
+  {\end{quote}}
+
+\title{陈纪修《数学分析》（第三版，上册）\\第 1--4 章严格补充笔记}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+本稿依据用户提供的四个扫描分卷整理，按书页印刷页码覆盖第 1--139 页。分卷文件名中的页数为扫描分段标识，正文统一按书页印刷页码标注。原书印刷页 20、59、99、139 只见“补充习题”标题而未见题目正文，故不臆补题目。保留原书章节、节次与定理编号，并补充定义条件、证明细节及拓扑/度量层次说明。
+\end{abstract}
+\tableofcontents
+\newpage
+
+\input{_space_framework.tex}
+\input{_chapter1.tex}
+\begin{chaptersummary}
+集合运算和映射语言先于空间结构；实函数的有界、单调、奇偶与周期性质还依赖实数序或定义域结构。平均值不等式可从二元 AM--GM 归纳得到，不需要后续的微积分工具。
+\end{chaptersummary}
+
+\input{_chapter2.tex}
+\begin{chaptersummary}
+确界存在是实数完备性的核心；本稿明确把实数视为有序完备域，并将原书十进制构造作为直观说明。数列收敛以度量刻画，Cauchy 列收敛还需完备性；上确界、单调有界收敛和夹逼中的序关系不能直接推广到一般拓扑空间。
+\end{chaptersummary}
+
+\input{_chapter3.tex}
+\begin{chaptersummary}
+函数极限与连续性可用度量球表述，也可在一般拓扑空间用邻域或开集原像表述。序列判别推广到一般拓扑空间需第一可数等条件；闭区间上的有界、最值和一致连续结论依赖实数紧致性及度量结构，不能将“闭且有界即紧”照搬到任意空间。
+\end{chaptersummary}
+
+\input{_chapter4.tex}
+\begin{chaptersummary}
+微分和导数以实数上的差、商及线性近似为基础；链式法则、反函数求导和高阶微分都需逐项核对可导性与局部可逆条件。连续性属于拓扑层次，导数则需要线性/赋范结构；对一般 Banach 空间的 Fr\'echet 导数只作层次说明，不把一维公式无条件外推。
+\end{chaptersummary}
+
+\end{document}

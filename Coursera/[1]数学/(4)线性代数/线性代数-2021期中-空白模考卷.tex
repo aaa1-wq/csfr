@@ -1,0 +1,144 @@
+% !TEX program = xelatex
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=2.2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{enumitem,array,booktabs,lastpage,fancyhdr}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdftitle={线性代数期中模拟卷 2021}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+
+\xeCJKsetup{CJKmath=true}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[enumerate]{leftmargin=2em,itemsep=10pt,topsep=6pt}
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Nul}{\operatorname{Nul}}
+\newcommand{\TT}{^{\mathsf T}}
+\newcommand{\bv}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}复旦大学信息科学与工程学院 \quad《线性代数》期中考试}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[C]{\small 2021 年 11 月 \quad 闭卷 \quad 100 分钟}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries 复旦大学信息科学与工程学院}\\[4pt]
+{\Large\bfseries 《线性代数》期中考试试卷}\\[8pt]
+{\small 课程代码 COMP120004.08 \quad 闭卷 \quad 2021 年 11 月 \quad 满分 100 分 \quad 答题时间 100 分钟}
+\end{center}
+
+\vspace{0.2cm}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+题号 & 一 & 二 & 三 & 四 & 五 & 六 & 七 & 八 & 九 \\
+\hline
+分值 & 10 & 12 & 16 & 10 & 10 & 10 & 10 & 10 & 12 \\
+\hline
+得分 & \phantom{00} & \phantom{00} & \phantom{00} & \phantom{00} & \phantom{00} & \phantom{00} & \phantom{00} & \phantom{00} & \phantom{00} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+{\small 专业 \underline{\hspace{3cm}} \quad 学号 \underline{\hspace{3cm}} \quad 姓名 \underline{\hspace{3cm}} \quad 成绩 \underline{\hspace{2cm}}}
+
+\vspace{0.3cm}
+{\small\textbf{注意}：答案必须写在试卷上，做在草稿纸上无效。}
+
+\vspace{0.4cm}
+\hrule
+\vspace{0.4cm}
+
+\begin{enumerate}
+
+%-----------------------------------------
+\item （10 分）若 $\mathbf x=[1,-2,1,0]\TT$，$\mathbf y=[0,1,-2,1]\TT$，求 $\mathbf x\TT\mathbf y$、$\mathbf x\mathbf y\TT$ 与 $(\mathbf x\mathbf y\TT)^3$ 的结果，要求有计算过程。
+
+\vspace{7cm}
+
+%-----------------------------------------
+\item （12 分）讨论以下线性方程组当 $\lambda$ 取不同值时的解的情况（无解、唯一解、无穷多解），若有解请写出解集。
+\[
+\begin{cases}
+\lambda x_1+x_2+x_3=1\\
+x_1-\lambda x_2+x_3=\lambda\\
+x_1+x_2-\lambda x_3=\lambda^2
+\end{cases}
+\]
+
+\newpage
+
+%-----------------------------------------
+\item （16 分）已知在常规矩阵加法和数乘规则下，所有 $2\times2$ 的矩阵构成的集合 $M^{2\times2}$ 为线性空间。
+
+\begin{enumerate}[label=(\arabic*),leftmargin=2.2em,itemsep=8pt]
+\item 请证明所有 $2\times2$ 的对称矩阵（即转置不变的矩阵）构成的空间 $S^{2\times2}$ 为线性子空间；（4 分）
+\item 给出 $S^{2\times2}$ 的两组不同的基；（4 分）
+\item 计算这两组基之间的过渡矩阵；（4 分）
+\item 计算矩阵 $\bv{2&1\\1&2}$ 在这两组基下的展开系数。（4 分）
+\end{enumerate}
+
+\vspace{8cm}
+
+%-----------------------------------------
+\item （10 分）请计算三维空间中坐标为 $(1,-1,1)$ 的点 $\mathbf x$ 到矩阵
+$A=\bv{1&0&1\\0&1&2\\0&0&0}$ 的零空间 $\Nul(A)$ 的距离，要求有具体步骤。
+
+\newpage
+
+%-----------------------------------------
+\item （10 分）设 $A=\bv{1&0\\0&0}$，$B=\bv{0&1\\0&0}$，求两个零空间之和 $\Nul(A)+\Nul(B)$ 的基与维数。
+
+\vspace{6cm}
+
+%-----------------------------------------
+\item （10 分）设 $\mathbf v_1,\mathbf v_2,\mathbf v_3,\mathbf v_4\in\Rr^4$ 为四个线性无关向量，
+请证明 $\dim\operatorname{span}\{\mathbf v_1-\mathbf v_2,\ \mathbf v_2-\mathbf v_3,\ \mathbf v_3-\mathbf v_4,\ \mathbf v_4-\mathbf v_1\}=3$。
+
+\newpage
+
+%-----------------------------------------
+\item （10 分）对于矩阵 $A_{m\times n}$，$B_{n\times s}$，$C_{s\times t}$，请证明 Frobenius 不等式
+\[
+\rank(ABC)\ge\rank(AB)+\rank(BC)-\rank(B),
+\]
+并说明它与 Sylvester 不等式 $\rank(A)+\rank(B)-n\le\rank(AB)$ 的关系。
+
+\vspace{7cm}
+
+%-----------------------------------------
+\item （10 分）如果 $W$ 是线性空间 $V$ 的线性子空间，请证明：
+
+\begin{enumerate}[label=(\arabic*),leftmargin=2.2em,itemsep=8pt]
+\item $W$ 的零元即为 $V$ 中的零元；（2 分）
+\item 若 $\dim W=\dim V$，则 $W=V$。（8 分）
+\end{enumerate}
+
+\newpage
+
+%-----------------------------------------
+\item （12 分）$W$ 是线性空间 $V$ 的线性子空间，已知 $\dim V=n>\dim W=r$。
+若给定 $W$ 的一组基 $\{\mathbf w_1,\mathbf w_2,\dots,\mathbf w_r\}$，
+请证明：可以找到 $n-r$ 个线性无关向量 $\{\mathbf v_1,\mathbf v_2,\dots,\mathbf v_{n-r}\}$，
+使得它们与 $\{\mathbf w_1,\mathbf w_2,\dots,\mathbf w_r\}$ 共同构成 $V$ 的基。
+
+\vspace{10cm}
+
+\end{enumerate}
+
+\vfill
+\begin{center}
+{\small —— 试卷结束 ——}
+\end{center}
+
+\end{document}

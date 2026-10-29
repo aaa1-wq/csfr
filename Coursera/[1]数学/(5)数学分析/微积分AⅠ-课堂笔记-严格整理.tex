@@ -1,0 +1,326 @@
+\documentclass[11pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,geometry,hyperref}
+\geometry{margin=2.5cm}
+\hypersetup{hidelinks}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{定义}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{说明}
+\title{微积分 A I\\课堂笔记与严格证明\\（2026 年 9 月 9 日—10 月 16 日）}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+本笔记将课堂记录按数学主题重排，补足定义中的量词、空间结构和证明细节，并更正若干不成立的表述。课程通知与作业信息仅保留于相应日期小节。除特别说明外，集合论采用通常的选择公理背景；实数取其通常序与完备性，函数极限均在函数有定义的点上讨论。
+\end{abstract}
+\tableofcontents\newpage
+
+\section{集合、映射与函数}
+\subsection{集合运算与序}
+集合由确定的成员关系刻画。对集合 $A,B$，$A\subseteq B$ 指 $\forall x(x\in A\Rightarrow x\in B)$；由外延公理，$A=B$ 当且仅当 $A\subseteq B$ 且 $B\subseteq A$。包含关系自反、反对称、传递，故为偏序；一般不可比，例如 $\{1\}$ 与 $\{2\}$。实数的通常次序则是全序。
+
+给定指标集 $I$ 与集合族 $(A_i)_{i\in I}$，定义
+\[
+\bigcup_{i\in I}A_i=\{x:\exists i\in I,\ x\in A_i\},\qquad
+\bigcap_{i\in I}A_i=\{x:\forall i\in I,\ x\in A_i\}.
+\]
+若 $I=\emptyset$，相对于全集 $X$ 约定空并为 $\emptyset$、空交为 $X$。对补集有 De Morgan 律
+\[
+X\setminus\bigcup_i A_i=\bigcap_i(X\setminus A_i),\qquad
+X\setminus\bigcap_i A_i=\bigcup_i(X\setminus A_i).
+\]
+证明第一式：任意 $x\in X$，$x$ 属于左侧等价于 $x$ 不属于任何 $A_i$，等价于对每个 $i$ 都有 $x\in X\setminus A_i$；第二式同理。对称差 $A\triangle B=(A\setminus B)\cup(B\setminus A)=(A\cup B)\setminus(A\cap B)$。
+
+\subsection{映射与像、原像}
+\begin{definition}
+映射 $f:X\to Y$ 是一个关系，使每个 $x\in X$ 恰好对应一个 $y\in Y$。$X$ 为定义域，$Y$ 为陪域，$f(X)=\{f(x):x\in X\}$ 为值域。映射的图为 $\{(x,f(x)):x\in X\}$。
+\end{definition}
+单射指 $f(x)=f(x')\Rightarrow x=x'$；满射指 $f(X)=Y$；双射兼有两者。反函数 $f^{-1}:Y\to X$ 存在当且仅当 $f$ 双射；若只要求在值域上反演，则 $f$ 单射当且仅当存在 $f^{-1}:f(X)\to X$。一般关系可视为映射 $X\to\mathcal P(Y)$，把 $x$ 送到其所有相关对象组成的子集。
+
+对 $C\subseteq Y$，原像 $f^{-1}(C)=\{x\in X:f(x)\in C\}$，有
+\[
+f^{-1}(\bigcup_i C_i)=\bigcup_i f^{-1}(C_i),\quad f^{-1}(\bigcap_i C_i)=\bigcap_i f^{-1}(C_i).
+\]
+对 $A_i\subseteq X$，有 $f(\bigcup_i A_i)=\bigcup_i f(A_i)$，但通常只有
+\[
+f(\bigcap_i A_i)\subseteq\bigcap_i f(A_i).
+\]
+若 $f$ 单射则等号成立：若 $y$ 在右侧，则每个 $i$ 存在 $x_i\in A_i$ 使 $f(x_i)=y$；单射迫使所有 $x_i$ 相等，故该共同原像属于所有 $A_i$。例如常值映射 $f:\{1,2\}\to\{0\}$，取 $A_1=\{1\},A_2=\{2\}$，右侧为 $\{0\}$，左侧为空。
+
+复合 $g\circ f$ 有定义的充要条件是 $f(X)\subseteq\operatorname{dom}(g)$。函数四则运算须在共同定义域上进行，商还须排除分母为零的点。显式、隐式与参数表示均需另行验证唯一性：$F(x,y)=0$ 定义函数要求每个允许的 $x$ 恰有一个允许的 $y$；参数表示 $x=\phi(t),y=\psi(t)$ 若要给出 $y$ 为 $x$ 的函数，充分条件是 $\phi$ 单射，必要且充分条件则是 $\phi(t_1)=\phi(t_2)\Rightarrow\psi(t_1)=\psi(t_2)$。
+
+\subsection{基数、可列性与康托尔定理}
+称集合至多可列，若它有限或与 $\mathbb N$ 存在单射；称可列无限，若与 $\mathbb N$ 双射。可列个可列集的并至多可列：将各集枚举成 $a_{ij}$，用 $\mathbb N^2$ 的对角枚举覆盖所有项，再删除重复项。注意若称“可列无限”而并集实际有限，应使用“至多可列”。该结论在通常选择公理下成立；一般集合论中，可列多个非空集各自可列并不自动给出同时选择其枚举的方式。
+
+$\mathbb Z$ 可按 $0,1,-1,2,-2,\ldots$ 枚举。$\mathbb Q$ 可由整数分子、正整数分母的有序对像得到，故至多可列；又含有无限多个不同元素，故可列无限。
+
+\begin{theorem}[康托尔]
+对任意集合 $X$，不存在满射 $F:X\to\mathcal P(X)$，因而不存在双射；且单射 $x\mapsto\{x\}$ 给出 $|X|\le|\mathcal P(X)|$，故 $|X|<|\mathcal P(X)|$。
+\end{theorem}
+\begin{proof}
+若 $F$ 满射，令 $D=\{x\in X:x\notin F(x)\}$。由满射性存在 $d\in X$ 使 $F(d)=D$。于是 $d\in D\iff d\notin F(d)\iff d\notin D$，矛盾。
+\end{proof}
+\begin{theorem}[Cantor--Bernstein]
+若存在单射 $f:A\to B$ 与单射 $g:B\to A$，则存在双射 $A\to B$。
+\end{theorem}
+\begin{proof}
+令 $A_0=A\setminus g(B)$，$A_{n+1}=g(f(A_n))$，并令 $C=\bigcup_{n\ge0}A_n$。定义 $h:A\to B$：若 $a\in C$，令 $h(a)=f(a)$；若 $a\notin C$，则 $a\in g(B)$，且由 $g$ 单射存在唯一 $b$ 使 $g(b)=a$，令 $h(a)=b$。在 $C$ 上 $h=f$，在补集上 $h=g^{-1}$，各自均单射。两部分像不交：若 $f(c)=g^{-1}(a)$，则 $a=g(f(c))\in C$，与 $a\notin C$ 矛盾。故 $h$ 单射。对任意 $b\in B$，若 $b\in f(C)$，它已有原像；否则 $g(b)\notin C$，因为 $g(b)\in A_0$ 不可能，而若 $g(b)\in A_{n+1}$，则 $g(b)=g(f(c))$ 对某 $c\in A_n$，由 $g$ 单射得 $b=f(c)\in f(C)$，矛盾。因此 $h(g(b))=b$，$h$ 满射。\end{proof}
+
+无限集与其真子集等势的结论在通常选择公理下成立：从无限集递归选取互异序列 $a_1,a_2,\ldots$，把 $a_n\mapsto a_{n+1}$ 且其余元素固定，即得 $X\cong X\setminus\{a_1\}$。反向若有限集 $X$ 与其真子集等势，则有限集的抽屉原理（由有限基数归纳可证，$n$ 个元素不能单射到 $n-1$ 个元素）给出矛盾。此证明使用了可数选择；在某些不满足选择公理的集合论模型中，存在 Dedekind 有限的无限集合，因此该“充要条件”不能在不加选择假设时普遍断言。
+
+\begin{theorem}[实数不可列]
+实数集 $\mathbb R$ 不可列。
+\end{theorem}
+\begin{proof}
+反设 $\mathbb R=\{x_1,x_2,\ldots\}$。取一个不含 $x_1$ 的非退化闭区间 $I_1$。将 $I_1$ 三等分为三个闭子区间；单点最多落在其中两个，故可选一个不含 $x_2$ 的闭三分区间 $I_2\subset I_1$。递归地，选闭区间 $I_n$ 使 $I_n\subset I_{n-1}$、$x_n\notin I_n$，且 $|I_n|=|I_1|/3^{n-1}$。闭区间套定理给出 $\xi\in\bigcap_n I_n$。由于假设枚举了全部实数，存在 $m$ 使 $\xi=x_m$；但 $\xi\in I_m$ 而 $x_m\notin I_m$，矛盾。
+\end{proof}
+
+\subsection{函数性质与 AM--GM}
+单调性依赖定义域上的序。严格单调函数必单射，反向不成立。奇偶性要求定义域关于 $0$ 对称；令 $f_e(x)=(f(x)+f(-x))/2$、$f_o(x)=(f(x)-f(-x))/2$，则 $f=f_e+f_o$，前者偶、后者奇。唯一性由偶函数与奇函数的交只能是零函数推出。周期 $T>0$ 要求定义域 $D+T=D$ 且 $f(x+T)=f(x)$ 对所有 $x\in D$ 成立；周期不保证最小正周期存在，例如常值函数。若 $a$ 是周期，则整数倍平移在定义域稳定时也是周期。
+
+对非负 $a_1,\ldots,a_n$，算术—几何平均不等式为
+\[
+(\prod_{i=1}^n a_i)^{1/n}\le n^{-1}\sum_{i=1}^n a_i.
+\]
+先证 $n=2$：$(a_1-a_2)^2\ge0$ 等价于 $4a_1a_2\le(a_1+a_2)^2$，两边非负开平方即得。若结论对 $n$ 个数成立，则对 $2n$ 个数分成两组，令 $C=(\prod_{i=1}^n a_i)^{1/n}$、$D=(\prod_{i=n+1}^{2n}a_i)^{1/n}$。其 $2n$ 次几何平均为 $\sqrt{CD}\le(C+D)/2$；再用两组的归纳假设 $C\le n^{-1}\sum_{i=1}^n a_i$、$D\le n^{-1}\sum_{i=n+1}^{2n}a_i$，得到 $2n$ 项结论。因此 $n$ 为二的幂时成立。
+
+对任意 $n$，取二的幂 $N=2^m\ge n$，令 $A=(\prod_{i=1}^n a_i)^{1/n}$，并在 $a_1,\ldots,a_n$ 后补入 $N-n$ 个 $A$。若 $A=0$，结论已成立；若 $A>0$，补项后 $N$ 个数的几何平均仍为 $A$，故由二的幂情形
+\[
+A\le \frac{\sum_{i=1}^n a_i+(N-n)A}{N},
+\]
+移项得 $nA\le\sum_{i=1}^n a_i$。等号当且仅当所有 $a_i$ 相等：二的幂情形等号要求两组均各自等值且两组几何平均相等；补项情形等号遂要求原数与补入的 $A$ 均相同。对正数 $b_i$，对 $1/b_i$ 应用 AM--GM 再取倒数，得调和平均不大于几何平均。
+
+\section{实数完备性与戴德金分割}
+\subsection{有理数与实数的构造脉络}
+有理数可由 $\mathbb Z\times(\mathbb N\setminus\{0\})$ 上的等价关系 $(m,n)\sim(m',n')\iff mn'=m'n$ 的等价类构造。定义加法 $[(m,n)]+[(p,q)]=[(mq+pn,nq)]$ 与乘法 $[(m,n)][(p,q)]=[(mp,nq)]$ 前，必须验证代表元改变时结果等价；分母均正保证 $nq>0$。这类验证不能只称“类似”，而应使用交叉相乘和原等价关系逐项展开。
+
+戴德金割可定义为 $A\subsetneq\mathbb Q$，非空、向下封闭且无最大元。每个 $q\in\mathbb Q$ 嵌入为 $q^*=\{r\in\mathbb Q:r<q\}$。一般实数可以用所有戴德金割作模型，但要从头得到有序域，必须严谨定义加法、乘法、相反数、倒数并逐项证明良定性及域公理。原讲义中“补集取负并排除最小元”等口述只给出构造提示，尚不足以构成这些运算的严格证明；因此本笔记采用等价而简洁的公理化表述：$\mathbb R$ 是包含 $\mathbb Q$ 的完备有序域，戴德金割说明其一种集合论构造。
+
+\begin{definition}[上确界]
+非空 $S\subseteq\mathbb R$ 有上界时，若 $s\le u$ 对所有 $s\in S$ 成立，称 $u$ 为上界。最小上界称 $\sup S$。下确界类似。
+\end{definition}
+\begin{theorem}[确界原理]
+每个非空且有上界的实数子集存在唯一上确界。
+\end{theorem}
+唯一性由两个最小上界互相不大于对方得出。在戴德金割模型中，若 $\mathcal A$ 是非空的一族割且有上界割 $G$，取 $B=\bigcup_{A\in\mathcal A}A$；需验证 $B$ 非空、真包含于 $\mathbb Q$、向下封闭且无最大元，再由包含序可证其为最小上界。关键条件是所有 $A\subseteq G$，从而并集不等于 $\mathbb Q$。此证明说明切割模型中的确界构造，不应被误读成无需验证割公理的形式操作。
+
+\section{数列极限与完备性}
+\subsection{度量空间中的收敛与基本性质}
+以下 $(X,d_X)$ 表示度量空间，开球记为 $B_X(a,r)=\{x\in X:d_X(x,a)<r\}$（球心 $a$、半径 $r>0$）；因此第二个参数也可记为 $b>0$，写成 $B_X(a,b)$，空间明确时简写 $B(a,b)$。实数空间取标准度量 $d_{\mathbb R}(x,y)=|x-y|$，故 $B_{\mathbb R}(a,r)=(a-r,a+r)$。对数列 $(x_n)\subseteq X$ 与 $a\in X$，定义
+\[
+x_n\longrightarrow a\quad\Longleftrightarrow\quad
+\forall\varepsilon>0\ \exists N\in\mathbb N\ \forall n\ge N,\quad x_n\in B_X(a,\varepsilon).
+\]
+也即 $d_X(x_n,a)<\varepsilon$。采用 $n>N$ 只需调整整数阈值；严格小于换成小于等于仍等价。极限唯一：若 $x_n\to a,b$ 且 $a\ne b$，取 $\varepsilon=d_X(a,b)/3$，充分大 $n$ 同时满足 $d_X(x_n,a),d_X(x_n,b)<\varepsilon$，三角不等式矛盾。收敛列有界（落在某个有限半径球内）：尾项在 $B_X(a,1)$，有限多个前项与 $a$ 的距离有最大值，合并即可得到统一半径。
+
+以下代数运算与次序结论专对实数列 $a_n,b_n\in\mathbb R$ 而言，收敛按 $d_{\mathbb R}$（即绝对值距离）理解。若 $a_n\to a$ 且 $b_n\to b$，则线性组合、乘积收敛至对应运算结果；商在 $b\ne0$ 时成立。乘积证明使用
+\[
+|a_nb_n-ab|\le |a_n||b_n-b|+|b||a_n-a|
+\]
+并用收敛列有界性控制 $|a_n|$。商的证明先由 $b_n\to b\ne0$ 得充分大 $n$ 有 $|b_n|\ge |b|/2$，再估计倒数差。保序只给弱结论：若最终 $a_n\le b_n$ 且极限存在，则 $a\le b$；严格极限不等式 $a>b$ 才可推出最终 $a_n>b_n$。夹逼定理由同一 $\varepsilon$ 控制上下列直接推出。
+
+\subsection{常用极限与数列判别}
+当 $|q|<1$，$q^n\to0$；若 $q\ne0$，可令 $r=|q|<1$ 并用几何衰减，$q=0$ 显然。当 $a>1$，设 $b_n=a^{1/n}-1>0$，则 $a=(1+b_n)^n\ge1+nb_n$，所以 $0<b_n\le(a-1)/n\to0$。固定正整数 $k$ 时，令 $c_n=n^{k/n}-1>0$，则 $n^k=(1+c_n)^n$。当 $n\ge2(k+1)$，二项式展开中第 $k+1$ 次项给出
+\[
+n^k\ge\binom n{k+1}c_n^{k+1}\ge\frac{(n/2)^{k+1}}{(k+1)!}c_n^{k+1},
+\]
+故 $0\le c_n^{k+1}\le 2^{k+1}(k+1)!/n\to0$，于是 $n^{k/n}=1+c_n\to1$。
+
+比值判别的准确形式：若 $a_n\ge0$，且最终 $a_n>0$ 并有 $a_{n+1}/a_n\to p<1$（通常 $p\ge0$），则取 $p<r<1$，充分大后比值小于 $r$，故 $a_n\le C r^n\to0$。根值判别：若 $a_n\ge0$ 且 $\limsup a_n^{1/n}<1$，则取 $r<1$ 大于该上极限，充分大有 $a_n\le r^n\to0$。仅写“$k$次方根”而令 $k$ 固定不能得到一般根值判别。
+
+Stolz 定理的一种常用形式：若 $b_n$ 严格递增且 $b_n\to+\infty$，并且 $(a_n-a_{n-1})/(b_n-b_{n-1})\to L$（$L$ 为有限实数），则 $a_n/b_n\to L$；$L=\pm\infty$ 时亦有相应扩展形式，须按定理版本核对。反向一般不成立。取 $S_n=\sum_{k=1}^n a_k,b_n=n$，若 $a_n\to A$，则 Stolz 给出 $S_n/n\to A$。
+
+\subsection{单调有界、子列与柯西准则}
+若 $a_n$ 单调递增且有上界，令 $a=\sup\{a_n\}$。任意 $\varepsilon>0$ 时 $a-\varepsilon$ 非上界，故某 $N$ 有 $a_N>a-\varepsilon$；又 $a_N\le a$，故 $a_N\in B_{\mathbb R}(a,\varepsilon)$。对 $n\ge N$，$a_n\in[a_N,a]\subset B_{\mathbb R}(a,\varepsilon)$，即 $a_n\to a$。递减有下界的情形取下确界。
+
+区间套：若 $[a_{n+1},b_{n+1}]\subseteq[a_n,b_n]$ 且 $b_n-a_n\to0$，则 $a_n$ 递增有界、$b_n$ 递减有界，极限 $a,b$ 满足 $a\le b$ 且 $b-a=0$；共同极限 $\xi$ 属于每个闭区间，且唯一。若不要求长度趋于零，交集未必单点；开区间套即便长度趋零，交集也可能为空，例如 $(1,1+1/n)$。
+
+有界实数列有收敛子列：反复二分初始有界闭区间，每次选仍含无穷多个指标项的半区间，得到长度趋零的闭区间套。递归选递增指标 $n_k$ 使 $a_{n_k}$ 落入第 $k$ 个区间，则 $a_{n_k}\to\xi$。这里“无穷多项”指无穷多个指标，不要求值彼此不同。
+
+数列 $(x_n)$ 在度量空间 $X$ 中称柯西列，若
+\[
+\forall\varepsilon>0\ \exists N\in\mathbb N\ \forall m,n\ge N,\quad x_m\in B_X(x_n,\varepsilon),
+\]
+等价地 $d_X(x_m,x_n)<\varepsilon$。收敛列必为柯西列（三角不等式）。在 $\mathbb R$ 中反向成立：柯西列有界，故有收敛子列 $x_{n_k}\to\xi$；给定 $\varepsilon>0$，取尾项两两距离小于 $\varepsilon/2$，并取 $k$ 足够大使 $x_{n_k}\in B_{\mathbb R}(\xi,\varepsilon/2)$，则所有充分大的 $n$ 有 $x_n\in B_{\mathbb R}(\xi,\varepsilon)$。此处完备性是实数特有结构；$\mathbb Q$ 配备限制度量 $d_{\mathbb Q}(x,y)=|x-y|$ 时，柯西列可不收敛于有理数。
+
+\subsection{几项经典数列与级数结果}
+若相邻差满足 $|a_{n+1}-a_n|\le r|a_n-a_{n-1}|$，$0<r<1$，则差分几何衰减。对 $m>n$，
+\[
+|a_m-a_n|\le\sum_{j=n}^{m-1}|a_{j+1}-a_j|\le |a_2-a_1|\frac{r^{n-1}}{1-r},
+\]
+故为柯西列并收敛。
+
+递推列 $x_{n+1}=1+x_n/(1+x_n)$ 若 $x_1>0$，则 $1<x_{n+1}<2$。差分恒等式 $x_{n+1}-x_n=(x_n-x_{n-1})/((1+x_n)(1+x_{n-1}))$ 表明差分符号固定，故单调有界，极限满足 $L=1+L/(1+L)$，再由 $L\in[1,2]$ 选出正根 $(1+\sqrt5)/2$。
+
+若 $0<x_1<1$ 且 $x_{n+1}=x_n(1-x_n)$，则 $x_n$ 正且递减，极限方程给 $L=0$。进一步
+\[
+\frac1{x_{n+1}}-\frac1{x_n}=\frac1{1-x_n}\to1,
+\]
+对 $1/x_n$ 与 $n$ 用 Stolz 得 $1/(nx_n)\to1$，因此 $nx_n\to1$。
+
+调和级数按 $[2^{k-1}+1,2^k]$ 分组，每组和至少 $1/2$，故发散。$p>1$ 时同样分组，第 $k$ 组至多 $2^{k-1}/(2^{k-1})^p$，形成收敛几何级数，故 $\sum n^{-p}$ 收敛；$p\le1$ 时与调和级数比较发散。$H_n-\ln n$ 递减且正，因 $\ln(1+1/n)>1/(n+1)$，所以收敛，其极限定义为欧拉常数。交错调和级数偶部分 $H_{2n}-H_n\to\ln2$，奇部分与偶部分之差趋于零，故和为 $\ln2$。
+
+\section{度量、拓扑与函数极限}
+\subsection{度量空间中的点集概念}
+\begin{definition}
+度量是 $d_X:X\times X\to[0,\infty)$，满足 $d_X(x,y)=0\iff x=y$、对称性和三角不等式。$(X,d_X)$ 称度量空间；以 $a\in X$ 为球心、$r>0$ 为半径的开球定义为 $B_X(a,r)=\{y\in X:d_X(a,y)<r\}$。因此 $B_X(a,b)$ 表示球心 $a$、半径 $b>0$ 的球；空间和半径清楚时可简写为 $B(a,b)$ 或 $B(a,r)$。
+\end{definition}
+内点 $x\in A$ 若有球 $B(x,r)\subseteq A$；外点若有球包含于补集；边界点若每个球都同时交 $A$ 与 $X\setminus A$。边界点可在集合内，也可在集合外。开集是每一点均为内点的集合；闭集可定义为包含所有聚点的集合，也等价于补集开。
+
+聚点（导集点）的准确度量定义是：对每个 $r>0$，$B(x,r)\cap(A\setminus\{x\})\ne\emptyset$。度量空间中这等价于每个球含有 $A$ 中无穷多个不同点，因为若某球内除 $x$ 外只有有限个 $A$ 点，可缩小半径避开它们；反向显然。也等价于存在 $A\setminus\{x\}$ 中互异序列趋于 $x$：逐步选点并令新半径小于此前已选点到 $x$ 的距离的一半。仅要求 $B(x,r)\cap A\ne\emptyset$ 不够，若 $x$ 为 $A$ 的孤立点会错误成立。
+
+球是开集：若 $y\in B(x,r)$，取 $s=r-d(x,y)>0$；对 $z\in B(y,s)$，三角不等式给 $d(x,z)<r$。开集任意并、有限交为开集；有限交证明取各半径的最小值。无限交不必开，例如 $\bigcap_{n\ge1}(-1/n,1/n)=\{0\}$。闭集任意交、有限并闭；任意并未必闭。$\overline A=A\cup A'$（$A'$ 为聚点集）是最小闭集，$A^\circ$ 是最大包含于 $A$ 的开集。
+
+拓扑 $\tau\subseteq\mathcal P(X)$ 含 $\emptyset,X$，对任意并及有限交封闭。度量球生成拓扑；不同度量可诱导同一拓扑，例如 $d'(x,y)=\min(d(x,y),1)$。并非所有拓扑可度量化；每个度量空间均为 Hausdorff，而非 Hausdorff 拓扑不可能由度量诱导。拓扑空间中可定义开集、闭集、闭包、连续、紧致，但没有天然距离、Cauchy 列或有界性。一般拓扑空间的序列不足以检测全部拓扑性质；第一可数空间才有相应的序列刻画，普遍情形使用网或滤子。
+
+\paragraph{结构层次。} 赋范线性空间 $(V,\|\cdot\|)$ 以 $d(x,y)=\|x-y\|$ 诱导度量；内积空间以 $\|x\|=\sqrt{\langle x,x\rangle}$ 诱导范数；完备的内积空间称 Hilbert 空间。一般度量未必来自范数，一般范数未必来自内积，内积空间也未必完备。连续性可只依赖拓扑，Cauchy 性依赖度量，线性近似与导数还需要向量空间及范数结构。有限维欧氏空间的闭有界集紧致，不可将此结论无条件推广到一般度量空间。
+
+\subsection{函数极限及数列判别}
+设 $(X,d_X)$、$(Y,d_Y)$ 为度量空间，$A\subseteq X$，$f:A\to Y$。点 $x_0\in X$ 是 $A$ 的聚点，指对每个 $\delta>0$，都有 $A\cap(B_X(x_0,\delta)\setminus\{x_0\})\ne\emptyset$。在此前提下，$f(x)\to L\in Y$（$x\to x_0$）定义为
+\[
+\forall\varepsilon>0\ \exists\delta>0:\quad
+f\bigl(A\cap(B_X(x_0,\delta)\setminus\{x_0\})\bigr)\subseteq B_Y(L,\varepsilon).
+\]
+等价地，所有 $x\in A$ 满足 $0<d_X(x,x_0)<\delta$ 时，$d_Y(f(x),L)<\varepsilon$。要求 $x_0$ 为聚点是为避免定义空真；去心球说明 $f(x_0)$ 若有定义也不影响极限。
+
+函数极限的序列判别：$f(x)\to L$ 当且仅当对每个 $(x_n)\subseteq A\setminus\{x_0\}$，若 $x_n\to x_0$（按 $B_X$ 定义），则 $f(x_n)\to L$（按 $B_Y$ 定义）。必要性直接代入球条件。充分性反证：若失败，存在 $\varepsilon_0>0$，对每个 $n$ 都可取 $x_n\in A$ 使 $x_n\in B_X(x_0,1/n)\setminus\{x_0\}$ 且 $f(x_n)\notin B_Y(L,\varepsilon_0)$，得到反例序列。若只假设每个这样的函数值列各自收敛而不指定共同极限，也可推出函数极限存在：若两个序列极限不同，交错两序列构造一个趋于 $x_0$ 的序列，其函数值列不收敛，矛盾。
+
+函数极限在度量目标空间中唯一；且对某个固定半径（如 $1$），函数在定义域的某去心球内取值于 $B_Y(L,1)$。当目标为 $\mathbb R$ 时，此外还有实值函数的局部有界、保序与夹逼性质，证明沿用数列论证，并在定义域去心球内进行。$f$ 在 $x_0\in A$ 连续定义为：对每个 $\varepsilon>0$，存在 $\delta>0$ 使
+\[
+f\bigl(A\cap B_X(x_0,\delta)\bigr)\subseteq B_Y(f(x_0),\varepsilon).
+\]
+这里不去掉 $x_0$，因它属于 $A$ 且映到球心 $f(x_0)$。若 $x_0$ 是 $A$ 的孤立点，可取球与 $A$ 的交仅含 $x_0$，故连续条件自动成立。连续的拓扑刻画是相对于 $A$ 的子空间拓扑，开集原像为开集。
+
+\subsection{函数极限运算与复合}
+设 $X$ 为度量空间，$A\subseteq X$，$x_0$ 是 $A$ 的聚点，$f,g:A\to\mathbb R$，且 $\alpha,\beta\in\mathbb R$、$f(x)\to \alpha$、$g(x)\to\beta$（均按前述球定义）。则 $f+g\to\alpha+\beta$、$fg\to\alpha\beta$；若 $\beta\ne0$，则在某个去心球 $A\cap(B_X(x_0,\delta_0)\setminus\{x_0\})$ 上 $g(x)\ne0$，并且 $f/g\to\alpha/\beta$。证明选取两个极限定义所给半径的较小者，和的误差用 $\varepsilon/2$ 分配；乘积先将 $f$ 在小球内限制于 $B_{\mathbb R}(\alpha,1)$，再用乘积差估计；商则进一步缩小半径使 $g(x)\in B_{\mathbb R}(\beta,|\beta|/2)$，从而 $|g(x)|>|\beta|/2$，再估计倒数差。
+
+复合极限须谨慎。设 $(X,d_X)$、$(Y,d_Y)$、$(Z,d_Z)$ 为度量空间，$f:A\subseteq X\to Y$、$g:C\subseteq Y\to Z$，$x_0$ 是 $A$ 的聚点，$A_0$ 是 $C$ 的聚点，$B\in Z$。若 $f(x)\to A_0$（$x\to x_0$）、$g(u)\to B$（$u\to A_0$），且存在 $\delta_0>0$ 使 $x\in A\cap(B_X(x_0,\delta_0)\setminus\{x_0\})$ 时 $f(x)\in C\setminus\{A_0\}$，则 $g(f(x))\to B$。证明：给定 $\varepsilon>0$，由 $g$ 的极限取 $\eta>0$ 使 $u\in C\cap(B_Y(A_0,\eta)\setminus\{A_0\})$ 时 $g(u)\in B_Z(B,\varepsilon)$；再由 $f$ 的极限取 $0<\delta\le\delta_0$ 使 $f(A\cap(B_X(x_0,\delta)\setminus\{x_0\}))\subseteq B_Y(A_0,\eta)$。若外函数 $g$ 在 $A_0\in C$ 连续且复合有定义，则不需 $f(x)\ne A_0$，因为连续性控制完整球 $B_Y(A_0,\eta)$，从而 $g(f(x))\to g(A_0)$。若 $g$ 仅有去心极限而 $g(A_0)$ 取值不匹配，且 $f$ 恒等于 $A_0$，复合结论会失败。
+
+\subsection{无穷极限、单侧极限与重要极限}
+无穷远处的有限极限仍以目标空间的球表示。对 $A\subseteq\mathbb R$、$f:A\to Y$（$Y$ 为度量空间）及 $L\in Y$，若 $A$ 无上界，则 $f(x)\to L$（$x\to+\infty$）指：对每个 $\varepsilon>0$，存在 $M\in\mathbb R$，使 $x\in A$ 且 $x>M$ 时 $f(x)\in B_Y(L,\varepsilon)$；$x\to-\infty$ 的定义要求 $A$ 无下界，并将右尾条件换成 $x<M$。以下有向无穷函数值的定义限于实值函数 $f:A\to\mathbb R$：设 $x_0$ 是 $A$ 的聚点，对有限 $x_0$，$f(x)\to+\infty$ 指对每个 $K>0$，存在 $\delta>0$，使 $x\in A\cap(B_{\mathbb R}(x_0,\delta)\setminus\{x_0\})$ 时 $f(x)>K$；$f(x)\to-\infty$ 类似。无符号的 $|f(x)|\to\infty$ 不能与 $+\infty$ 混同。若变量本身趋于 $+\infty$，则用右尾 $x>M$；若趋于 $-\infty$，用左尾 $x<M$；若 $A$ 向两侧均无界，写 $|x|>M$ 表示两端同时趋于无穷的合并条件。
+
+对 $A\subseteq\mathbb R$、$f:A\to Y$（$Y$ 为度量空间）及 $L\in Y$，$x_0$ 的左侧聚点条件是每个 $\delta>0$ 均有 $A\cap B_{\mathbb R}(x_0,\delta)\cap(-\infty,x_0)\ne\emptyset$；左极限 $f(x)\to L$（$x\to x_0^-$）指对每个 $\varepsilon>0$ 存在 $\delta>0$ 使 $f(A\cap B_{\mathbb R}(x_0,\delta)\cap(-\infty,x_0))\subseteq B_Y(L,\varepsilon)$。右极限将 $(-\infty,x_0)$ 换为 $(x_0,+\infty)$，并要求相应右侧聚点条件。有限点双侧极限存在，当且仅当左右极限存在且相等；若定义域仅在一侧累积，应只谈该侧极限。广义极限下不定式 $\infty-\infty,0\cdot\infty,\infty/\infty,0/0$ 不能套用有限极限四则法则。
+
+单位圆扇形与内接、外切三角形面积比较，对 $0<x<\pi/2$ 得 $\cos x<\sin x/x<1$；偶对称性处理负 $x$。又 $0\le1-\cos x=2\sin^2(x/2)\le x^2/2$，故 $\cos x\to1$，夹逼得 $\sin x/x\to1$。
+
+\section{连续性、紧致性与一致连续}
+\subsection{连续函数及其运算}
+设 $X$ 为度量空间、$A\subseteq X$、$x_0\in A$。若实值函数 $f,g:A\to\mathbb R$ 在 $x_0$ 连续，则和与积在 $x_0$ 连续；若 $g(x_0)\ne0$，商 $f/g$ 在 $x_0$ 连续。更一般地，设 $(Y,d_Y)$、$(Z,d_Z)$ 为度量空间，$f:A\to Y$ 连续于 $x_0$，$g:C\subseteq Y\to Z$ 连续于 $f(x_0)$，且 $f(A)\subseteq C$，则 $g\circ f$ 在 $x_0$ 连续：给定 $\varepsilon>0$，先由 $g$ 的球条件取 $\eta>0$，再由 $f$ 的球条件取 $\delta>0$，即可得 $(g\circ f)(A\cap B_X(x_0,\delta))\subseteq B_Z(g(f(x_0)),\varepsilon)$。基本初等函数在其定义域连续，需先证所用基本函数与反函数连续，再用复合、四则运算；不能只由“反函数存在”推出反函数连续。
+
+连续性证明例：$f(x)=1/x$ 在 $(0,1)$ 连续。固定 $x_0\in(0,1)$，若 $x\in(0,1)\cap B_{\mathbb R}(x_0,x_0/2)$，则 $x>x_0/2$，从而
+\[
+d_{\mathbb R}(1/x,1/x_0)=|1/x-1/x_0|=|x-x_0|/(|x|x_0)\le2d_{\mathbb R}(x,x_0)/x_0^2.
+\]
+因此取 $\delta=\min(x_0/2,\varepsilon x_0^2/2)$，即可得 $f((0,1)\cap B_{\mathbb R}(x_0,\delta))\subset B_{\mathbb R}(1/x_0,\varepsilon)$。$g(x)=\sqrt{x(1-x)}$ 在 $[0,1]$ 连续：在端点 $0$，给定 $\varepsilon>0$ 取 $\delta=\varepsilon^2$，则 $x\in[0,1]\cap B_{\mathbb R}(0,\delta)$ 时 $|g(x)|\le\sqrt{x}<\varepsilon$；端点 $1$ 同理。在内点 $x_0\in(0,1)$，令 $r=\min(x_0/2,(1-x_0)/2)$；当 $x\in[0,1]\cap B_{\mathbb R}(x_0,r)$ 时，有理化得
+\[
+|g(x)-g(x_0)|=\frac{|x-x_0|\,|1-x-x_0|}{g(x)+g(x_0)}\le\frac{|x-x_0|}{g(x_0)}.
+\]
+故对给定 $\varepsilon>0$ 取 $\delta=\min(r,\varepsilon g(x_0))$，便有 $g([0,1]\cap B_{\mathbb R}(x_0,\delta))\subset B_{\mathbb R}(g(x_0),\varepsilon)$。由 $|\sin u-\sin v|\le|u-v|$ 与和差公式，正弦满足 $\sin(B_{\mathbb R}(x_0,\varepsilon))\subset B_{\mathbb R}(\sin x_0,\varepsilon)$，余弦同理。
+
+\subsection{单调函数、振幅与间断点}
+在区间上单调递增函数于内点 $c$ 的左极限为 $\sup\{f(x):x<c\}$，右极限为 $\inf\{f(x):x>c\}$，前提是这些集合非空且有界（实值单调函数在定义区间内点自动满足）。若 $f:[a,b]\to\mathbb R$ 单调递增，则 $f$ 连续当且仅当其值域为 $[f(a),f(b)]$；单调递减时相应值域为 $[f(b),f(a)]$。证明由介值缺口等价于某点存在跳跃。单调函数间断点为跳跃间断点，且至多可数：对每个 $n$，跳跃大于 $1/n$ 的点至多有限个，因为任取有限多个按序排列，其跳跃总和不超过端点函数值之差；递减情形对 $-f$ 应用即可。所有正跳跃点是这些有限集的可数并。无界区间可取可数个有界子区间覆盖。
+
+设 $A\subseteq\mathbb R$、$f:A\to\mathbb R$。点 $x_0\in A$ 处振幅定义为 $\omega(\delta)=\sup\{|f(x)-f(y)|:x,y\in A\cap B_{\mathbb R}(x_0,\delta)\}$，允许取 $+\infty$。当 $x_0$ 是 $A$ 的聚点时，$f$ 在 $x_0$ 连续当且仅当 $\omega(\delta)\to0$（$\delta\downarrow0$）；一侧孤立点仍须按定义域相对球处理。
+
+第一类间断点指有限左右极限都存在：左右极限相同而不等于函数值为可去间断；左右极限不等为跳跃间断。第二类间断点指至少一个单侧极限不存在或为无穷。黎曼函数 $R:\mathbb R\to\mathbb R$ 定义为 $R(p/q)=1/q$（最简分数、$q>0$），无理点取 $0$。在无理点 $x_0$ 连续：给定 $\varepsilon>0$，取整数 $N$ 使 $1/N<\varepsilon$。有界区间 $[x_0-1,x_0+1]$ 内分母不超过 $N$ 的有理数只有有限多个，记为 $F_N$；因 $x_0$ 无理，$d_0=\min_{q\in F_N}|x_0-q|>0$（若 $F_N=\emptyset$，任取 $d_0=1$）。取 $\delta=\min(1,d_0/2)$，则 $x\in\mathbb Q\cap B_{\mathbb R}(x_0,\delta)$ 必有约分分母大于 $N$，故 $R(x)<\varepsilon$；无理 $x$ 上 $R(x)=0$。于是 $R(B_{\mathbb R}(x_0,\delta))\subset B_{\mathbb R}(0,\varepsilon)$。在有理点 $x_0$，令 $\varepsilon=R(x_0)/2$；对任意 $\delta>0$，取整数 $n>\sqrt2/\delta$，则 $x=x_0+\sqrt2/n$ 是无理数且 $x\in B_{\mathbb R}(x_0,\delta)$，从而 $|R(x)-R(x_0)|=R(x_0)>\varepsilon$，故不连续。通常这不是可去间断，因为极限不存在。
+
+若 $f:[a,b]\to\mathbb R$ 连续且严格单调，则反函数在区间 $f([a,b])$ 上连续。若 $a=b$，结论显然。否则取任意 $(y_n)\subseteq f([a,b])$ 与 $y\in f([a,b])$，满足 $y_n\to y$（即对每个 $\eta>0$，最终 $y_n\in B_{\mathbb R}(y,\eta)$），令 $x_n=f^{-1}(y_n)$、$x_0=f^{-1}(y)$。给定 $\varepsilon>0$，在内点取 $0<r<\min(\varepsilon,x_0-a,b-x_0)$；由严格单调，$f(x_0-r)$ 与 $f(x_0+r)$ 在 $f(x_0)$ 的两侧且距离正，因此可取 $\eta>0$ 小于这两个距离。若 $y_n\in B_{\mathbb R}(y,\eta)$，则单调性迫使 $x_n\in B_{\mathbb R}(x_0,r)\subset B_{\mathbb R}(x_0,\varepsilon)$。端点用相应单侧邻域作同样论证。仅凭一般定义域上的连续单射不能不加条件断言严格单调。
+
+\subsection{紧致与闭区间定理}
+拓扑空间中的 $K$ 紧致，指其任一开覆盖均有有限子覆盖。紧集连续像紧；紧致 Hausdorff 空间中的紧子集闭。度量空间紧致当且仅当完备且全有界。Heine--Borel 定理断言 $\mathbb R^n$ 的子集紧致当且仅当闭且有界；不能推广到任意度量空间。
+
+在 $\mathbb R$ 中，紧集必有界：以原点为中心、半径 $n$ 的球覆盖全空间，有限子覆盖给统一半径。有界闭集紧致：先证闭区间紧致（开覆盖若无有限子覆盖，二分并反复选仍不能有限覆盖的半区间，得到长度趋零套；公共点落在某开覆盖元内，充分小区间遂被该元覆盖，矛盾），再用闭子集紧致以及有界闭集是闭区间的闭子集。紧集闭的论证使用 Hausdorff 性：对外点与紧集各点分离开邻域，紧性取有限子覆盖，交有限个外点邻域即可得与紧集不交的邻域。
+
+连续函数 $f:K\to\mathbb R$ 在紧集上有界并取最大、最小值。可由紧集连续像紧及 $\mathbb R$ 紧集闭有界推出；亦可用序列紧致性证明：若无界，选 $x_n$ 使 $|f(x_n)|>n$，取收敛子列并用连续性矛盾；取值上确界的逼近序列再取收敛子列，极限点实现上确界。闭区间上的介值定理由二分保持端点异号构造闭区间套，公共点处连续性迫使函数值既非负又非正，故为零；一般介值结论对 $f-C$ 应用。定义域仅紧而不连通时，值域可有空隙。
+
+\subsection{一致连续与等价无穷小}
+设 $(X,d_X)$、$(Y,d_Y)$ 为度量空间且 $f:A\subseteq X\to Y$。$f$ 一致连续指：任意 $\varepsilon>0$ 存在单一 $\delta>0$，使对所有 $x\in A$ 都有
+\[
+f(A\cap B_X(x,\delta))\subseteq B_Y(f(x),\varepsilon).
+\]
+等价地，对所有 $x,y\in A$，$d_X(x,y)<\delta$ 蕴含 $d_Y(f(x),f(y))<\varepsilon$。逐点连续的 $\delta$ 可依赖点，一致连续的 $\delta$ 不依赖点。一致连续的否定等价于存在 $\varepsilon_0>0$ 及 $x_n,y_n\in A$，使 $d_X(x_n,y_n)\to0$ 而 $d_Y(f(x_n),f(y_n))\ge\varepsilon_0$。$1/x$ 在 $(0,1)$ 非一致连续，取 $n\ge2$ 时 $x_n=1/n,y_n=1/(n+1)$；$x^2$ 在 $\mathbb R$ 非一致连续，取 $x_n=\sqrt{n+1},y_n=\sqrt n$。紧度量空间上的连续函数一致连续（Heine--Cantor）：若不然，取两列点距离趋零而像距离有正下界；紧致性取一列收敛子列，另一列也趋同一点，与连续性矛盾。
+
+设 $(X,d_X)$ 为度量空间，$A\subseteq X$，$x_0$ 是 $A$ 的聚点，且 $F,G:A\to\mathbb R$ 满足 $F(x)\to0$、$G(x)\to0$（$x\to x_0$，按前述球定义）。若存在 $\delta_0>0$ 使 $G(x)\ne0$ 对所有 $x\in A\cap(B_X(x_0,\delta_0)\setminus\{x_0\})$ 成立，则 $F=o(G)$ 指 $F/G\to0$，$F\sim G$ 指 $F/G\to1$。等价关系只适用于该去心邻域内分母有定义的情况。等价无穷小可在乘除因子中替换：写 $F/G\to1$ 并用极限四则律。加减中直接替换不保留误差，因为主项可能抵消；应写 $F=G+o(G)$，并确保余项阶数相对于最终分母足够高。
+
+以下各式均表示实变量 $x\to0$ 且 $x\ne0$，源空间取标准度量 $d_{\mathbb R}$，在相应去心球 $B_{\mathbb R}(0,\delta)\setminus\{0\}$ 内讨论；含 $\ln(1+x)$ 或 $(1+x)^\alpha$ 时另要求 $x>-1$。由 $\sin x/x\to1$ 得 $\sin x\sim x$。利用 $\ln(1+x)/x\to1$（可由 $\ln(1+x)=\int_0^x(1+t)^{-1}dt$ 夹逼，或先建立相应对数不等式）得 $\ln(1+x)\sim x$；令 $y=e^x-1$ 得 $e^x-1\sim x$；对固定实数 $\alpha$，$ (1+x)^\alpha-1\sim\alpha x$（$\alpha\ne0$，由 $e^{\alpha\ln(1+x)}-1\sim\alpha\ln(1+x)$）。$1-\cos x\sim x^2/2$ 由 $1-\cos x=2\sin^2(x/2)$。例如 $\tan x-\sin x=\tan x(1-\cos x)\sim x^3/2$；不能把相减两项各自只替换为 $x$。
+
+\section{跷跷板数列、常数 \texorpdfstring{$e$}{e} 与级数}
+\subsection{斐波那契比值}
+令 $F_1=F_2=1$，$F_{n+2}=F_{n+1}+F_n$，并设 $b_n=F_{n+1}/F_n$。则 $b_{n+1}=1+1/b_n$，其不整体单调。令 $\varphi=(1+\sqrt5)/2$，满足 $\varphi=1+1/\varphi$。递推函数 $T(x)=1+1/x$ 在正数上严格递减，且 $T(T(x))=(2x+1)/(x+1)$ 严格递增；固定点为 $\varphi$。由 $b_1=1<\varphi$ 得 $b_2>\varphi$。若 $b_{2n-1}<\varphi<b_{2n}$，则 $b_{2n+1}=T(b_{2n})<\varphi$、$b_{2n+2}=T(b_{2n+1})>\varphi$。又 $T^2(x)-x=-(x^2-x-1)/(x+1)$，故在 $0<x<\varphi$ 时 $T^2(x)>x$，在 $x>\varphi$ 时 $T^2(x)<x$。因此奇子列递增且以上界 $\varphi$ 控制，偶子列递减且以下界 $\varphi$ 控制。两子列极限均满足 $T^2(L)=L$，正数中唯一解为 $\varphi$，故 $b_n\to\varphi$。
+
+\subsection{自然常数 \texorpdfstring{$e$}{e}}
+定义 $u_n=(1+1/n)^n$、$v_n=(1+1/n)^{n+1}$。$u_n$ 递增可由 AM--GM 得出：对 $n+1$ 个数 $1+1/n$（取 $n$ 次）及 $1$，几何平均不大于算术平均，得到 $u_n<u_{n+1}$。又由二项式公式
+\[
+u_n=\sum_{k=0}^n\binom nk n^{-k}\le\sum_{k=0}^n\frac1{k!}\le3,
+\]
+其中 $\binom nk\le n^k/k!$，且 $k!\ge2^{k-1}$（$k\ge1$）给出 $\sum_{k=0}^{\infty}1/k!\le3$。因此 $u_n$ 递增有界，存在极限，定义该极限为 $e$。同时 $v_n=u_n(1+1/n)$，故 $v_n\to e$；且 $u_n<v_n$。这些事实本身不能推出每个 $n$ 都有 $v_n>e$，故不作此断言。由积分估计 $t/(1+t)\le\ln(1+t)\le t$ 取 $t=1/n$，可得 $1/(n+1)\le\ln(1+1/n)\le1/n$。
+
+实变量极限 $(1+1/x)^x\to e$（$x\to+\infty$）可从对数证明。对 $t>0$，积分估计
+\[
+\frac{t}{1+t}\le\ln(1+t)=\int_0^t\frac{ds}{1+s}\le t.
+\]
+取 $t=1/x$ 并乘以 $x$，得 $x/(x+1)\le x\ln(1+1/x)\le1$，故指数趋于 $1$，连续性给出原极限为 $e$。$x\to-\infty$ 时令 $y=-x\to+\infty$，则 $(1+1/x)^x=(1+1/(y-1))^{y-1}(1+1/(y-1))\to e$，定义域需取 $y>1$。
+
+\subsection{正多边形逼近圆周率}
+对单位圆内接正 $n$ 边形，边长为 $2\sin(\pi/n)$，周长为 $L_n=2n\sin(\pi/n)$。在弧度制下 $\pi$ 已作为半周角定义，故不能再把该式单独用作 $\pi$ 的定义。由已证的重要极限 $\sin t/t\to1$，令 $t=\pi/n$，得到
+\[
+n\sin(\pi/n)=\pi\,\frac{\sin(\pi/n)}{\pi/n}\longrightarrow\pi.
+\]
+因此周长 $L_n\to2\pi$。若课程意在从几何独立构造圆周率，则须先说明圆周长或弧度测度的定义，再证明相应逼近定理，避免以含有 $\pi$ 的三角函数表达式反过来定义 $\pi$。
+
+\subsection{Abel 变换与加权平均}
+令 $S_k=\sum_{j=1}^k a_j$，则有限求和恒等式
+\[
+\sum_{k=1}^n p_k a_k=p_nS_n+\sum_{k=1}^{n-1}(p_k-p_{k+1})S_k
+\]
+由 $a_k=S_k-S_{k-1}$ 展开并移项得到，称 Abel 变换。若 $p_n$ 递增、$p_n\to+\infty$ 且 $S_n\to A$，令 $R_n=\sum_{k=1}^{n-1}(p_k-p_{k+1})S_k$。对 Stolz 定理，$R_{n+1}-R_n=(p_n-p_{n+1})S_n$，所以
+\[
+\frac{R_{n+1}-R_n}{p_{n+1}-p_n}=-S_n\to-A,
+\]
+从而 $R_n/p_n\to-A$。由 Abel 变换，$\sum_{k=1}^n p_ka_k/p_n=S_n+R_n/p_n\to0$。分子下标与分母均从同一正无穷尾部计算；有限初项不影响极限。
+
+\subsection{根值和极限、欧拉常数}
+若 $(a_n)$ 是有界非负数列，设 $S=\sup_n a_n$，则
+\[
+\lim_{n\to\infty}\left(\sum_{k=1}^n a_k^n\right)^{1/n}=S.
+\]
+上界为 $n^{1/n}S\to S$。若 $S=0$ 结论显然；若 $S>0$，给定 $\varepsilon>0$，取 $0<\eta<\min(S,\varepsilon)$，按上确界定义选固定 $k_0$ 使 $a_{k_0}>S-\eta$。当 $n\ge k_0$ 时，下界至少为 $a_{k_0}>S-\varepsilon$；又因 $n^{1/n}S\to S$，充分大的 $n$ 满足上界 $n^{1/n}S<S+\varepsilon$。故充分大的 $n$ 有 $\left(\sum_{k=1}^n a_k^n\right)^{1/n}\in B_{\mathbb R}(S,\varepsilon)$。这里 $a_{k_0}$ 的指标固定，故当 $n$ 增大后它确实出现在前 $n$ 项中。
+
+欧拉常数可定义为 $\gamma=\lim(H_n-\ln n)$。数列正性由 $H_n>\ln(n+1)$ 得出；差分
+\[
+(H_{n+1}-\ln(n+1))-(H_n-\ln n)=\frac1{n+1}-\ln(1+1/n)<0,
+\]
+结合 $H_n-\ln n>0$，由单调有界定理收敛。偶数部分 $\sum_{k=1}^{2n}(-1)^{k+1}/k=H_{2n}-H_n=(H_{2n}-\ln(2n))-(H_n-\ln n)+\ln2\to\ln2$；相邻奇数部分之差 $1/(2n+1)\to0$，故交错调和级数也收敛到 $\ln2$。
+
+\section{原记录中的重点勘误}
+\begin{enumerate}
+\item 将“任意 $x$ 趋近 $x_0$”换成定义域中的点，并明确 $x_0$ 是聚点；数列判别还需序列项不同于 $x_0$。
+\item 可列并的矩阵对角线枚举是满射式遍历；集合重叠时应删去重复项，若并集有限则称至多可列。无限集与真子集等势的构造通常依赖可数选择。
+\item 固定个数的根值极限不是根值判别；根值判别采用 $\limsup a_n^{1/n}<1$。指数极限证明要保证所用二项式项的指标不超过 $n$。
+\item 区间套长度趋零才推出唯一公共点；对于开区间套，端点是否包含决定交集，不能以“长度趋零”独自判断交为空或非空。
+\item 度量空间聚点的条件须排除点本身：每球与 $A\setminus\{x\}$ 相交。聚点等价于存在互异序列趋于该点，不是“存在任意可重复序列”。
+\item 开覆盖证明紧集闭时，距离球的补集构造应明确是开集并确实覆盖 $K$；一般拓扑空间还需要 Hausdorff 条件。Heine--Borel 只适用于欧氏有限维空间。
+\item 复合极限的条件是复合有定义，且内函数在相对去心球内取值于外函数定义域的去心邻域；若外函数在目标点连续，则改用完整球连续条件，无须排除等于该点的函数值。变量代换还须确认新变量确实趋于目标且在定义域内。
+\item 对 $x\to+\infty$ 使用 $n=\lfloor x\rfloor$ 夹逼 $(1+1/x)^x$ 时，须证明关于实指数的单调性或另给严谨界；仅由 $n\le x<n+1$ 不能直接比较两个底数和指数同时变化的幂。可替代证明：令 $t=1/x\to0^+$，取 $m=\lfloor x\rfloor$ 并用对数恒等式 $x\ln(1+1/x)$，再以 $u\ln(1+1/u)\to1$（实变量由积分夹逼）得极限 $e$。
+\item Stolz 定理的标准 $+\infty$ 分母版本要求分母严格递增并趋于 $+\infty$；$-\infty$ 或有限极限形式需使用相应准确版本，不能混写成同一假设。
+\item 函数在一点连续应统一写成 $f(A\cap B_X(x_0,\delta))\subseteq B_Y(f(x_0),\varepsilon)$，其中 $x_0\in A$；孤立点处条件自动成立。单调函数值域无空隙的判别需限定定义域为区间。
+\item 黎曼函数在无理点连续、有理点不连续；有理点一般并非可去间断。紧集上的介值性质还需定义域连通，实轴上即区间。
+\end{enumerate}
+
+\section{课程事务记录}
+以下事项按原记录转录，均为课程行政信息，不作为数学命题：
+\begin{itemize}
+\item 2026-09-09：成绩构成为期中 20、期末 70、平时 10；记录称按相对排名浮动。按时交作业计平时分，最后一次课为截止时间。
+\item 2026-09-11：康托尔定理书面作业；随后每两周一次作业、每三周一次习题课。
+\item 2026-09-16：教材习题第 1 题 1、5、7；第 2 题 3、5、6。
+\item 2026-09-18：教材第 58 页第 5 题；第 8 题 (2)(4)；第 9 题 (5)(7)(9)(8)；第 10、11、13 题。第 10、11 题提示用相邻项比值判定无穷小。\item 2026-09-23：教材第 58 页第 1 题 (1)(3)(5)，第 2 题 (4)(6)，第 3 题 (1)(3)；第 3 题 (2) 可用比值判别法。
+\item 2026-09-30：教材第 58 页第 6、8、10、12 题，第 13 题第 (2) 小题，以及第 15 题；第 8 题可由单调数列有收敛子列推出全列收敛，第 12 题需说明开区间套端点不取极值的条件。
+\item 2026-10-09：第一大题第 3、4 小题，第二题第 1、3、5 小题。
+\item 2026-10-10：极限章节第二题第 9、10 题，第三题第 1 题，第四题第 2 题，第五题第 2、4 题，第六题第 3、5 题。
+\item 2026-10-14：教材第 83 页第二题第 3、5 小题，第七题，以及第八题第 10 小题。
+\item 2026-10-16：等价无穷小第一题 8、10，第二题，第三题 8、12；闭区间连续函数性质第一题、第二题、第七题（按原记录）。
+\end{itemize}
+\end{document}

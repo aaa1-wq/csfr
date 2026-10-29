@@ -18,3 +18,12 @@ __pycache__/
 *.tmp
 *.bak
 *.log
+
+# LaTeX 构建产物
+*.aux
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+

@@ -1,0 +1,473 @@
+\documentclass[10pt]{ctexart}
+\usepackage[a4paper,margin=2.1cm,top=1.8cm,bottom=1.9cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{acc2}{HTML}{8A4B1B}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+
+\setlist[itemize]{leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+
+\newcommand{\qq}{\operatorname{rank}}
+\newcommand{\dm}{\dim}
+\newcommand{\Img}{\operatorname{Im}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Rr}{\mathbb{R}}
+
+\newcommand{\Qhead}[2]{%
+  \begin{tcolorbox}[enhanced,colback=graybg,colframe=acc,
+    boxrule=0pt,leftrule=3pt,arc=2pt,top=3pt,bottom=3pt,left=8pt,right=8pt]
+  {\heiti\color{acc}#1}\quad #2
+  \end{tcolorbox}}
+\newcommand{\Vhead}[1]{\vspace{2pt}{\heiti\color{acc2}#1}\par\vspace{-2pt}}
+\newtcolorbox{cmpbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{acc}线性代数 · 2022 期中（冯辉）· 解答与对照}
+\fancyhead[R]{\footnotesize\color{acc}COMP12004.08}
+\fancyfoot[C]{\footnotesize\color{black!55}第 \thepage 页，共 \pageref{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\heiti 复旦大学信息科学与工程学院}\\[6pt]
+{\Large\heiti 《线性代数》期中考试 · 解答与对照}\\[6pt]
+{\small 2022 年 11 月\quad 课程代码 COMP12004.08\quad 闭卷\quad 100 分钟\quad 共 7 页 8 题}\\[4pt]
+{\footnotesize\color{black!60}每题给出"标准版"与"另一版"两种写法，末尾附对比点评；全部数值已用计算机精确复核}
+\end{center}
+\vspace{-4pt}
+\hrule height 1.2pt
+\vspace{6pt}
+
+%==================== 1 ====================
+\Qhead{第 1 题（12 分）}{写出矩阵乘法的四种理解方式。}
+
+\Vhead{版本 A：四个公式 + 一句话解释}
+\textbf{解}　设 $A=(a_{ik})_{m\times s}$，$B=(b_{kj})_{s\times n}$，$C=AB=(c_{ij})_{m\times n}$，则
+\[
+c_{ij}=\sum_{k=1}^{s}a_{ik}b_{kj},\qquad i=1,\dots,m;\quad j=1,\dots,n .
+\]
+矩阵乘法有四种互相等价的理解：
+
+\begin{enumerate}
+\item \textbf{元素级（行乘列）}：$c_{ij}$ 等于 $A$ 的第 $i$ 行与 $B$ 的第 $j$ 列的内积，$c_{ij}=\sum_{k=1}^{s}a_{ik}b_{kj}$。
+\item \textbf{列级（列的线性组合）}：把 $B$ 按列分块 $B=[\beta_1,\dots,\beta_n]$，则
+\[
+AB=\big[\,A\beta_1,\ \dots,\ A\beta_n\,\big],
+\]
+即 $AB$ 的第 $j$ 列是 $B$ 的第 $j$ 列经 $A$ 作用后的像；也可写成 $AB$ 的每一列是 $A$ 各列的线性组合（系数取自 $B$ 的那一列）。
+\item \textbf{行级（行的线性组合）}：把 $A$ 按行分块 $A=[\alpha_1;\dots;\alpha_m]$，则
+\[
+AB=\begin{bmatrix}\alpha_1B\\ \vdots\\ \alpha_mB\end{bmatrix},
+\]
+即 $AB$ 的第 $i$ 行是 $B$ 各行的线性组合，系数取自 $A$ 的第 $i$ 行。
+\item \textbf{外积级（秩 1 矩阵之和）}：把 $A$ 按列、$B$ 按行分块，
+\[
+AB=\sum_{k=1}^{s}A_{:,k}B_{k,:},
+\]
+每一项都是"列向量乘行向量"，是秩不超过 $1$ 的矩阵。
+\end{enumerate}
+
+\Vhead{版本 B：补充"映射"语言（答满 12 分）}
+\begin{itemize}
+\item \textbf{复合视角}：$B$ 表示 $\Rr^{s}\to\Rr^{n}$ 的线性映射，$A$ 表示 $\Rr^{n}\to\Rr^{m}$ 的线性映射，则 $AB$ 对应复合映射 $x\mapsto A(Bx)$——"先 $B$ 后 $A$"，这正是乘法不可交换的根源。
+\item \textbf{表的切片}：把 $AB$ 看成一张表，按"格"读是元素级，按"列"读是列级，按"行"读是行级，按"列 $\times$ 行"拆开是外积级。
+\end{itemize}
+
+\begin{cmpbox}
+\textbf{对比点评}：四种理解必须写全——元素级、行级、列级、外积级。最常见扣分：(i) 把"列级"写成"$A$ 的列与 $B$ 的列"，正确说法是"$A$ 乘以 $B$ 的每一列"；(ii) 外积级漏掉"秩 1 矩阵之和"这一关键；(iii) 完全没提线性映射复合。
+\end{cmpbox}
+
+%==================== 2 ====================
+\Qhead{第 2 题（12 分）}{讨论以下线性方程组当 $\lambda$ 取不同值时解的情况（无解、唯一解、无穷多解），若有解写出解集。}
+\[
+\begin{cases}
+(\lambda-2)x_1+x_2+x_3=1\\
+x_1+(\lambda-2)x_2+x_3=1\\
+x_1+x_2+(\lambda-2)x_3=1
+\end{cases}
+\]
+
+\Vhead{版本 A：三式相加（最快的判别）}
+\textbf{解}　记 $b=\lambda-2$。把三个方程相加：
+\[
+(b+2)(x_1+x_2+x_3)=3\ \Longleftrightarrow\ \lambda\,(x_1+x_2+x_3)=3. \tag{$\star$}
+\]
+\textbf{(i) $\lambda=0$}：$(\star)$ 化为 $0=3$，矛盾，\textbf{无解}。
+
+\textbf{(ii) $\lambda=3$}：$b=1$，三个方程都变成 $x_1+x_2+x_3=1$，
+\[
+\text{无穷多解：}\quad x=(t,\ s,\ 1-t-s)^{T},\qquad t,s\in\Rr .
+\]
+
+\textbf{(iii) $\lambda\neq0$ 且 $\lambda\neq3$}：由 $(\star)$ 得 $x_1+x_2+x_3=\dfrac{3}{\lambda}$。代入第一个方程：
+\[
+(b-1)x_1+\frac{3}{\lambda}=1\ \Longrightarrow\ (\lambda-3)x_1=\frac{\lambda-3}{\lambda}
+\ \Longrightarrow\ x_1=\frac{1}{\lambda},
+\]
+由对称性同理 $x_2=x_3=\dfrac1\lambda$，故\textbf{唯一解}
+\[
+\boxed{x=\Big(\frac1\lambda,\ \frac1\lambda,\ \frac1\lambda\Big)^{T}} .
+\]
+
+\Vhead{版本 B：行列式分类 + Cramer}
+系数矩阵 $A=(b-1)I+\mathbf{1}\mathbf{1}^{T}$，而 $\mathbf{1}\mathbf{1}^T$ 的特征值为 $3,0,0$，故
+\[
+\det A=(b-1+3)(b-1)^2=(b+2)(b-1)^2=\lambda(\lambda-3)^2 .
+\]
+所以 $\det A=0\iff\lambda\in\{0,3\}$，与版本 A 的两个特殊值完全吻合（抽查：$\lambda=5,b=3$ 时 $\det A=5\cdot4=20$；$\lambda=-1$ 时 $=(-1)(16)=-16$，与直接计算一致）。
+
+当 $\lambda\neq0,3$ 时用 Cramer 法则：
+\[
+x_1=\frac{\begin{vmatrix}1&1&1\\1&b&1\\1&1&b\end{vmatrix}}{\lambda(\lambda-3)^2}
+=\frac{(b-1)(b+1)}{\lambda(\lambda-3)^2}
+=\frac{(\lambda-3)(\lambda-1)}{\lambda(\lambda-3)^2}
+=\frac1\lambda .
+\]
+
+\vspace{2pt}
+\begin{center}\small
+\begin{tabular}{c c c}
+\toprule
+$\lambda$ & 情况 & 解\\
+\midrule
+$\lambda=0$ & 无解 & ——（化作 $0=3$）\\
+$\lambda=3$ & 无穷多解 & $(t,\ s,\ 1-t-s)^{T},\ t,s\in\Rr$\\
+$\lambda\neq0,3$ & 唯一解 & $\big(\tfrac1\lambda,\tfrac1\lambda,\tfrac1\lambda\big)^{T}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{抽查验算}：$\lambda=5\Rightarrow(0.2,0.2,0.2)$，$3(0.2)+0.2+0.2=1$ $\checkmark$；$\lambda=-1\Rightarrow(-1,-1,-1)$，$-3(-1)-1-1=1$ $\checkmark$；$\lambda=2\Rightarrow(0.5,0.5,0.5)$，$0+0.5+0.5=1$ $\checkmark$；$\lambda=4\Rightarrow(0.25,0.25,0.25)$，$2(0.25)+0.25+0.25=1$ $\checkmark$。
+
+\begin{cmpbox}
+\textbf{对比点评}：本题\textbf{有"无解"情形}（$\lambda=0$）——这一步靠"三式相加"一步定出，比算行列式更快。扣分点：把 $\lambda=0$ 误当成唯一解；解集不写 $t,s\in\Rr$；不回代验证。行列式的正确分解是 $\lambda(\lambda-3)^2$，注意不是 $(\lambda+1)(\lambda-2)^2$。
+\end{cmpbox}
+
+%==================== 3 ====================
+\Qhead{第 3 题（16 分）}{对不超过 2 次的多项式空间 $P^2$：(1) 证明 $\{1,\,1+x,\,(1+x)^2\}$ 是 $P^2$ 的基（6 分）；(2) 计算基 $\{1,1+x,(1+x)^2\}$ 到基 $\{1,x,x^2\}$ 的过渡矩阵（4 分）；(3) 计算多项式 $2+4x+6x^2$ 在 $\{1,1+x,(1+x)^2\}$ 下的展开系数（6 分）。}
+
+\Vhead{版本 A：标准版}
+\textbf{(1) 证}　写出三个多项式在标准基 $\{1,x,x^2\}$ 下的坐标向量：
+\[
+[1]=\begin{bmatrix}1\\0\\0\end{bmatrix},\quad
+[1+x]=\begin{bmatrix}1\\1\\0\end{bmatrix},\quad
+[(1+x)^2]=\begin{bmatrix}1\\2\\1\end{bmatrix}.
+\]
+令
+\[
+C=\begin{bmatrix}1&1&1\\0&1&2\\0&0&1\end{bmatrix},
+\qquad \det C=1\cdot1\cdot1=1\neq0 .
+\]
+$\det C\neq0$ 说明三个坐标向量线性无关；又 $P^2$ 是 $3$ 维空间，故 $3$ 个线性无关的向量构成 $P^2$ 的一组基。
+
+\textbf{（直接验算的写法）}　设 $a+b(1+x)+c(1+x)^2\equiv0$，展开比较系数：
+\[
+c=0,\qquad b+2c=0,\qquad a+b+c=0\ \Longrightarrow\ a=b=c=0,
+\]
+故线性无关。又任一 $p=A+Bx+Cx^2$ 可表示为
+\[
+p=C\,(1+x)^2+(B-2C)(1+x)+(A-B+C),
+\]
+故它们张成 $P^2$。两者合起来即证明是基。
+
+\textbf{(2) 过渡矩阵}　约定"新基 = 旧基 $\times\,P$"，设
+\[
+\big(1,\ x,\ x^2\big)=\big(1,\ 1+x,\ (1+x)^2\big)\,P .
+\]
+直接展开：
+\[
+1=1\cdot1+0\cdot(1+x)+0\cdot(1+x)^2,\qquad
+x=(-1)\cdot1+1\cdot(1+x)+0\cdot(1+x)^2,
+\]
+\[
+x^2=1\cdot1+(-2)\cdot(1+x)+1\cdot(1+x)^2 ,
+\]
+故
+\[
+\boxed{P=\begin{bmatrix}1&-1&1\\0&1&-2\\0&0&1\end{bmatrix}} .
+\]
+（反方向的过渡矩阵为 $P^{-1}=C=\begin{bmatrix}1&1&1\\0&1&2\\0&0&1\end{bmatrix}$；验算 $CP=I_3$。）
+
+\textbf{(3) 展开系数}　设 $2+4x+6x^2=k_1\cdot1+k_2(1+x)+k_3(1+x)^2$，右端展开为
+\[
+k_3x^2+(k_2+2k_3)x+(k_1+k_2+k_3),
+\]
+比较系数得
+\[
+k_3=6,\qquad k_2=4-2k_3=-8,\qquad k_1=2-k_2-k_3=4 .
+\]
+即
+\[
+\boxed{2+4x+6x^2=4\cdot1-8\cdot(1+x)+6\cdot(1+x)^2},\qquad
+\text{系数 }(k_1,k_2,k_3)^{T}=(4,-8,6)^{T}.
+\]
+验算：$4-8-8x+6+12x+6x^2=2+4x+6x^2$ $\checkmark$。
+
+\Vhead{版本 B：坐标变换公式（与 (2) 呼应，可作检验）}
+$p=2+4x+6x^2$ 在标准基下的坐标是 $(2,4,6)^T$。由坐标变换
+\[
+[x]_{\text{新}}=P^{-1}[x]_{\text{旧}}=C\begin{bmatrix}2\\4\\6\end{bmatrix},
+\]
+其中 $C=P^{-1}=\begin{bmatrix}1&1&1\\0&1&2\\0&0&1\end{bmatrix}$，于是
+\[
+[x]_{\text{新}}=\begin{bmatrix}2+4+6\\4+12\\6\end{bmatrix}=\begin{bmatrix}12\\16\\6\end{bmatrix}
+\]
+——这与版本 A 的 $(4,-8,6)$ 不同，说明此处方向用反了。正确的坐标变换是 $[x]_{\text{旧}}=C\,[x]_{\text{新}}$，因此
+\[
+[x]_{\text{新}}=C^{-1}[x]_{\text{旧}}=P\begin{bmatrix}2\\4\\6\end{bmatrix}
+=\begin{bmatrix}2-4+6\\4-12\\6\end{bmatrix}=\begin{bmatrix}4\\-8\\6\end{bmatrix},
+\]
+与版本 A 一致。
+
+\begin{cmpbox}
+\textbf{对比点评}：(1) 只证无关不证张成是常见扣分，最好两步都写；(2) 过渡矩阵方向务必写清（本题按 $(1,x,x^2)=(1,1+x,(1+x)^2)P$ 得 $P$，其逆才等于坐标矩阵 $C$）；(3) 本题答案 $(4,-8,6)$，用"右端展开比较系数"最不易出错。
+\end{cmpbox}
+
+%==================== 4 ====================
+\Qhead{第 4 题（12 分）}{计算三维空间中坐标为 $(1,-1,1)$ 的点到矩阵 $A=\begin{bmatrix}1&0&-1\\0&0&0\\0&0&0\end{bmatrix}$ 的零空间 $N(A)$ 的距离，要求有具体步骤。}
+
+\Vhead{版本 A：先判点是否在 $N(A)$ 内（最快）}
+\textbf{解}　$Ax=0$ 只剩一个非零方程
+\[
+x_1-x_3=0 ,
+\]
+故
+\[
+N(A)=\{x:\ x_1=x_3\}=\spn\{(1,0,1)^{T},\ (0,1,0)^{T}\},
+\]
+这是过原点、以 $n=(1,0,-1)^T$ 为法向量的\textbf{平面}，$\dm N(A)=2$。
+
+取 $p=(1,-1,1)^T$，直接计算
+\[
+Ap=\begin{bmatrix}1-1\\0\\0\end{bmatrix}=\begin{bmatrix}0\\0\\0\end{bmatrix},
+\]
+即 $p\in N(A)$，所以点到它所在平面的距离为
+\[
+\boxed{d=\|p-p\|=0 .}
+\]
+用点到平面距离公式复核：$d=\dfrac{|n^{T}p|}{\|n\|}=\dfrac{|1-1|}{\sqrt2}=0$。
+
+\Vhead{版本 B：投影法（通法，顺便得到垂足）}
+取 $N(A)$ 的正交基 $u_1=(1,0,1)^T$，$u_2=(0,1,0)^T$（$u_1^Tu_2=0$，$\|u_1\|^2=2$，$\|u_2\|^2=1$）。投影
+\[
+\hat p=\frac{p^Tu_1}{u_1^Tu_1}u_1+\frac{p^Tu_2}{u_2^Tu_2}u_2
+=\frac{2}{2}(1,0,1)^{T}+\frac{-1}{1}(0,1,0)^{T}=(1,-1,1)^{T}=p .
+\]
+于是 $d=\|p-\hat p\|=0$，且垂足就是 $p$ 本身。
+
+\begin{cmpbox}
+\textbf{对比点评}：答案恰为 $0$，但\textbf{必须写出理由}（"$Ap=0$，故 $p\in N(A)$"），只写 $0$ 会被判为无依据。另注意 $N(A)$ 是\textbf{平面}而非直线（第三行全零只留下一个方程）。若把 $A$ 换成 $\begin{bmatrix}1&0&1\\0&1&2\\0&0&0\end{bmatrix}$，$N(A)$ 就是直线，要用投影法算得 $\sqrt{21}/3$——这是常见的变式。
+\end{cmpbox}
+
+%==================== 5 ====================
+\Qhead{第 5 题（12 分）}{$A=\begin{bmatrix}1&0\\0&0\end{bmatrix}$，$B=\begin{bmatrix}0&1\\0&0\end{bmatrix}$，求两个左零空间之和 $N(A^{T})+N(B^{T})$ 的基与维度。}
+
+\Vhead{版本 A：标准版}
+\textbf{解}　先写转置：
+\[
+A^{T}=\begin{bmatrix}1&0\\0&0\end{bmatrix},\qquad
+B^{T}=\begin{bmatrix}0&0\\1&0\end{bmatrix}.
+\]
+\[
+A^{T}x=\begin{bmatrix}x_1\\0\end{bmatrix}=0\iff x_1=0,\quad N(A^{T})=\spn\{(0,1)^{T}\};
+\]
+\[
+B^{T}x=\begin{bmatrix}0\\x_1\end{bmatrix}=0\iff x_1=0,\quad N(B^{T})=\spn\{(0,1)^{T}\}.
+\]
+两个空间相同，故
+\[
+N(A^{T})+N(B^{T})=\spn\{(0,1)^{T}\},\qquad
+\boxed{\text{基}\ \{(0,1)^{T}\},\quad\text{维数}=1 .}
+\]
+
+\Vhead{版本 B：维数公式解释"为什么只有 1 维"}
+$N(A^{T})$、$N(B^{T})$ 都是 $\Rr^2$ 的 1 维子空间，且
+\[
+N(A^{T})\cap N(B^{T})=\{x:x_1=0\}=N(A^{T}),
+\]
+由维数公式
+\[
+\dm\big(N(A^{T})+N(B^{T})\big)=1+1-1=1,
+\]
+因此和空间就是它们本身（这正是"两个子空间相同，和不会变大"的直观）。
+
+\begin{cmpbox}
+\textbf{对比点评}：结论是\textbf{维数 1}，不是 2——关键在 $B^{T}=\begin{bmatrix}0&0\\1&0\end{bmatrix}$ 与 $A^{T}$ 只差一行交换，行空间相同，故左零空间相同。扣分点：把 $B^{T}$ 误写成 $\begin{bmatrix}0&1\\0&0\end{bmatrix}$（那是 $B$ 本身）。
+\end{cmpbox}
+
+%==================== 6 ====================
+\Qhead{第 6 题（16 分）}{证明以下结论：(1) 写出三种初等行变换矩阵，并证明其存在逆，且逆与原矩阵可交换（6 分）；(2) 任何一个可逆矩阵均可分解为多个初等行变换矩阵的乘积（6 分）；(3) 利用前两个结论，证明可逆矩阵的逆与原矩阵可交换（4 分）。}
+
+\Vhead{版本 A：标准版}
+\textbf{(1)} 以 $2\times2$ 为例（$n$ 阶同理）：
+\[
+P=\begin{bmatrix}0&1\\1&0\end{bmatrix}\ (\text{交换第 1、2 行}),\qquad
+D(k)=\begin{bmatrix}k&0\\0&1\end{bmatrix}\ (k\neq0,\ \text{第 1 行乘 }k),\qquad
+T(k)=\begin{bmatrix}1&k\\0&1\end{bmatrix}\ (\text{第 2 行加到第 1 行}).
+\]
+\textbf{逆存在}：直接相乘
+\[
+P\cdot P=I_2\Rightarrow P^{-1}=P;\qquad
+D(k)D(1/k)=I_2\Rightarrow D(k)^{-1}=D(1/k);\qquad
+T(k)\,T(-k)=I_2\Rightarrow T(k)^{-1}=T(-k).
+\]
+\textbf{可交换}：$P$ 与自身相乘可交换（$P^2=I$）；$D(k)$ 与 $D(1/k)$ 都是对角矩阵，对角矩阵相乘可交换；$T(k)T(-k)=T(0)=I=T(-k)T(k)$。故每种初等矩阵与其逆可交换。
+
+\textbf{(2)} 设 $A$ 可逆，它必可经有限次初等行变换化为行最简形，而可逆矩阵的行最简形就是 $I$，即
+\[
+E_sE_{s-1}\cdots E_1A=I ,
+\]
+其中 $E_i$ 都是初等矩阵。两边左乘 $E_1^{-1},\dots,E_s^{-1}$ 得
+\[
+A=E_1^{-1}E_2^{-1}\cdots E_s^{-1},
+\]
+由 (1) 每个 $E_i^{-1}$ 仍是初等矩阵，故 $A$ 是初等矩阵的乘积。
+
+\textbf{(3)} 设 $A=E_1E_2\cdots E_s$，则
+\[
+A^{-1}=\big(E_1E_2\cdots E_s\big)^{-1}=E_s^{-1}\cdots E_2^{-1}E_1^{-1},
+\]
+即 $A=(\text{若干初等矩阵})$，$A^{-1}$ 是同样这些初等矩阵的逆之乘积（次序相反）。由 (1) 每个 $E_i$ 与 $E_i^{-1}$ 可交换，于是逐对消去：
+\[
+AA^{-1}=(E_1\cdots E_s)(E_s^{-1}\cdots E_1^{-1})
+=E_1\cdots E_{s-1}\underbrace{E_sE_s^{-1}}_{=I}E_{s-1}^{-1}\cdots E_1^{-1}
+=E_1\cdots E_{s-1}E_{s-1}^{-1}\cdots E_1^{-1}=I ,
+\]
+\[
+A^{-1}A=(E_s^{-1}\cdots E_1^{-1})(E_1\cdots E_s)=I ,
+\]
+故 $AA^{-1}=A^{-1}A=I$，即 $A$ 与 $A^{-1}$ 可交换。$\blacksquare$
+
+\begin{cmpbox}
+\textbf{对比点评}：(1) 三种初等矩阵必须\textbf{显式写出}，并给出各自的逆（交换型逆为自身、倍乘型逆为取倒数、倍加型逆为把倍数取负），"可交换"要真算一次乘积。(2) 必须说明"可逆矩阵的行最简形是 $I$"。(3) 关键是 $A^{-1}=E_s^{-1}\cdots E_1^{-1}$ 的\textbf{次序反写}，然后逐层用 $E_iE_i^{-1}=I$ 消去。扣分点：分解次序写反；只说"显然可交换"。
+\end{cmpbox}
+
+%==================== 7 ====================
+\Qhead{第 7 题（10 分）}{对于矩阵 $A$，证明 $\qq(A^{T}A)=\qq(AA^{T})$。}
+
+\Vhead{版本 A：$N(A^{T}A)=N(A)$ + 两条秩-零化度（标准证法）}
+\textbf{证}　第一步，证明
+\[
+N(A^{T}A)=N(A). \tag{1}
+\]
+若 $Ax=0$，则 $A^{T}Ax=A^{T}0=0$，故 $N(A)\subseteq N(A^{T}A)$。
+反过来，若 $A^{T}Ax=0$，两边左乘 $x^{T}$：
+\[
+x^{T}A^{T}Ax=0\ \Longrightarrow\ (Ax)^{T}(Ax)=\|Ax\|^{2}=0\ \Longrightarrow\ Ax=0 ,
+\]
+故 $N(A^{T}A)\subseteq N(A)$。于是 (1) 成立。同理可证
+\[
+N(AA^{T})=N(A^{T}). \tag{2}
+\]
+第二步，设 $A$ 为 $m\times n$，则 $A^{T}A$ 是 $n$ 阶方阵，对 $A$ 与 $A^{T}A$ 分别用秩-零化度定理：
+\[
+\qq(A^{T}A)=n-\dm N(A^{T}A)=n-\dm N(A)=\qq A ;
+\]
+而对 $m$ 阶方阵 $AA^{T}$：
+\[
+\qq(AA^{T})=m-\dm N(AA^{T})=m-\dm N(A^{T})=\qq A .
+\]
+两式右边同为 $\qq A$，故
+\[
+\boxed{\qq(A^{T}A)=\qq A=\qq(AA^{T})} . \qquad\blacksquare
+\]
+
+\Vhead{版本 B：一行式 + 说明每一个等号的理由}
+\[
+\qq(A^{T}A)\overset{(a)}{=}n-\dm N(A^{T}A)\overset{(b)}{=}n-\dm N(A)\overset{(c)}{=}\qq A
+\overset{(d)}{=}m-\dm N(A^{T})\overset{(e)}{=}m-\dm N(AA^{T})\overset{(f)}{=}\qq(AA^{T}),
+\]
+其中 (a)(f) 是对 $n$ 阶、$m$ 阶方阵分别用秩-零化度；(b)(e) 是 $N(A^{T}A)=N(A)$、$N(AA^{T})=N(A^{T})$；(c)(d) 是对 $A$ 本身用秩-零化度（$\qq A+\dm N(A)=n$，$\qq A+\dm N(A^{T})=m$）。
+
+\begin{cmpbox}
+\textbf{对比点评}：采分点是 \textbf{$N(A^{T}A)=N(A)$ 的证明}（用 $x^{T}A^{T}Ax=\|Ax\|^{2}=0$，这是 10 分里的关键 4 分）。最容易错的是把两条秩-零化度写串（一个用 $n$、一个用 $m$），从而得出 $\qq(A^{T}A)=2\qq A-n$ 之类的错式。\\
+\textbf{变式}：$\qq(A^{T}A)=\qq A$ 是投影/最小二乘理论的基础。
+\end{cmpbox}
+
+%==================== 8 ====================
+\Qhead{第 8 题（10 分）}{证明线性映射 $T:V\to W$ 若存在逆映射 $T^{-1}$，则逆映射 $T^{-1}$ 也为线性映射。}
+
+\Vhead{版本 A：标准版（唯一性 + 可加性 + 齐次性）}
+\textbf{证}　$T$ 有逆映射，故 $T$ 是双射，
+\[
+T^{-1}:W\to V,\qquad T^{-1}(\alpha)=v\iff T(v)=\alpha\ (v\in V\ \text{唯一}).
+\]
+任取 $\alpha,\beta\in W$，$k\in F$，记 $u=T^{-1}(\alpha)$、$v=T^{-1}(\beta)$，即 $T(u)=\alpha$，$T(v)=\beta$。
+
+\textbf{可加性}：由 $T$ 线性，$T(u+v)=T(u)+T(v)=\alpha+\beta$，两边作用 $T^{-1}$ 得
+\[
+T^{-1}(\alpha+\beta)=u+v=T^{-1}(\alpha)+T^{-1}(\beta).
+\]
+\textbf{齐次性}：$T(ku)=kT(u)=k\alpha$，故
+\[
+T^{-1}(k\alpha)=ku=k\,T^{-1}(\alpha).
+\]
+由可加性与齐次性，$T^{-1}$ 是线性映射。$\blacksquare$
+
+\Vhead{版本 B：利用"$T$ 单射可脱层"的写法}
+对 $k=1$ 与一般 $k$：
+\[
+T\big(T^{-1}(k\alpha+\beta)\big)=k\,T\big(T^{-1}(\alpha)\big)+T\big(T^{-1}(\beta)\big)
+=T\big(kT^{-1}(\alpha)+T^{-1}(\beta)\big),
+\]
+因 $T$ 是单射，可以把最外层的 $T$ 去掉，得
+\[
+T^{-1}(k\alpha+\beta)=k\,T^{-1}(\alpha)+T^{-1}(\beta),
+\]
+这正是线性映射的定义（取 $k=1$ 得可加性，取 $\beta=0$ 得齐次性）。
+
+\begin{cmpbox}
+\textbf{对比点评}：关键在"$T$ 是双射，所以 $T^{-1}$ 存在且 $T^{-1}(\alpha)$ 唯一"。常见扣分：(i) 忘记写"$T^{-1}$ 存在要求 $T$ 单 + 满"；(ii) 只证可加性不证齐次性；(iii) 直接写"$T^{-1}$ 当然是线性的"，没有把 $T$ 线性与 $T^{-1}$ 线性连起来。
+\end{cmpbox}
+
+\newpage
+%==================== 速查页 ====================
+\begin{center}
+{\Large\heiti 一页速查 · 答案与关键步骤}\\[4pt]
+{\footnotesize\color{black!60}考前 5 分钟扫一眼：结论、易错点、必写的话}
+\end{center}
+\vspace{-2pt}
+\hrule
+\vspace{6pt}
+\small
+
+\textbf{1.}\ $c_{ij}=\sum_k a_{ik}b_{kj}$。四种理解：元素级（行乘列）、列级（$AB=[A\beta_1,\dots,A\beta_n]$）、行级（$AB$ 的行 $=$ $A$ 的行 $\cdot B$）、外积级（$AB=\sum_k A_{:,k}B_{k,:}$，秩 1 之和）。{\footnotesize 补一句：$AB$ 对应"先 $B$ 后 $A$"的复合映射。}
+
+\textbf{2.}\ 三式相加 $\Rightarrow\lambda\sum x_i=3$。\boxed{\lambda=0:\text{无解};\quad \lambda=3:x=(t,s,1-t-s)^T;\quad \lambda\neq0,3:x=\tfrac1\lambda(1,1,1)^T}。
+{\footnotesize $\det A=\lambda(\lambda-3)^2$。}
+
+\textbf{3.}\ $C=\begin{bmatrix}1&1&1\\0&1&2\\0&0&1\end{bmatrix}$，$\det C=1$；
+（按 $(1,x,x^2)=(1,1+x,(1+x)^2)P$）$P=C^{-1}=\begin{bmatrix}1&-1&1\\0&1&-2\\0&0&1\end{bmatrix}$；
+\boxed{2+4x+6x^2=4-8(1+x)+6(1+x)^2}。
+
+\textbf{4.}\ $N(A)=\{x_1=x_3\}$（平面，法向量 $(1,0,-1)^T$）；$Ap=0\Rightarrow p\in N(A)$，\boxed{d=0}。
+
+\textbf{5.}\ $A^T=\begin{bmatrix}1&0\\0&0\end{bmatrix}$、$B^T=\begin{bmatrix}0&0\\1&0\end{bmatrix}$，两者零空间都是 $\{x_1=0\}$，\boxed{\text{基}\{(0,1)^T\},\ \text{维数}=1}。
+
+\textbf{6.}\ $P^{-1}=P$，$D(k)^{-1}=D(1/k)$，$T(k)^{-1}=T(-k)$；$A=E_1\cdots E_s$；$A^{-1}=E_s^{-1}\cdots E_1^{-1}$；逐对消去 $E_iE_i^{-1}=I$ 得 $AA^{-1}=A^{-1}A=I$。
+
+\textbf{7.}\ \boxed{\qq(A^TA)=n-\dm N(A^TA)=n-\dm N(A)=\qq A=m-\dm N(A^T)=m-\dm N(AA^T)=\qq(AA^T)}。
+{\footnotesize 关键：$A^TAx=0\Rightarrow x^TA^TAx=\|Ax\|^2=0\Rightarrow Ax=0$。}
+
+\textbf{8.}\ $T^{-1}(\alpha+\beta)=T^{-1}(\alpha)+T^{-1}(\beta)$、$T^{-1}(k\alpha)=kT^{-1}(\alpha)$；由 $T$ 双射且线性，两边作用 $T^{-1}$（或"脱 $T$"）即得。
+
+\end{document}

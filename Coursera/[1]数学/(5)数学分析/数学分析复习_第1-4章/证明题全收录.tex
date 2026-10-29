@@ -1,0 +1,275 @@
+\documentclass[11pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,mathtools,geometry,hyperref,enumitem,xcolor,longtable}
+\geometry{margin=2cm}
+\hypersetup{hidelinks}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.2}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\N}{\mathbb N}
+\newcommand{\p}[2]{\par\smallskip\noindent\textbf{#1}\ \textcolor{blue!55!black}{[#2]}\par\nopagebreak}
+\title{四章证明题全收录\\[4pt]\large 逐题覆盖，尽量不漏}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\tableofcontents\newpage
+
+\section*{使用说明}
+本文按原书小节，把四章中属于证明的题目逐条列出，每题给出“要证什么 + 核心思路 / 关键步骤”。带 \textbf{[重点]} 的是同类里的典型，务必会默写全过程；其余给到“思路骨架”，细节可按套路补全。
+
+\section{第 1 章 集合与映射}
+
+\subsection*{§1 集合}
+\p{题 1.1（证 $n$ 元集有 $2^n$ 个子集）}{构造计数}
+按含 $k$ 个元素分类，子集数 $C_n^k$，求和 $\sum_{k=0}^n C_n^k=(1+1)^n=2^n$。\textbf{[重点]}
+
+\p{题 1.2（证无限集含可列子集；两可列集之并可列）}{逐个抽取 / 交错排列}
+(1) 由无限性可依次取 $a_1,a_2,\dots$ 互异，得可列子集。(2) 写成 $\{a_1,b_1,a_2,b_2,\dots\}$，重叠时去重。
+
+\p{题 1.5（证分配律与 De Morgan 律）}{双向包含 + 逻辑等价}
+任取 $x$，把“属于交/并”翻译成“且/或”，两个方向各证一次。\textbf{[重点]}（集合等式题的标准写法）
+
+\p{题 1.6（举例说明消去律不成立）}{构造反例}
+$A=\{a,b,c\},B=\{b,c,d\},C=\{c,d\}$：$A\cup B=A\cup C$ 但 $B\ne C$。
+
+\subsection*{§2 映射与函数}
+\p{题 2.2（构造区间一一对应）}{写出解析式 + 验证双射}
+$[a,b]\to[0,1]$：$x\mapsto\frac{x-a}{b-a}$（单射：严格单调；满射：反解 $x=a+(b-a)y$）。
+
+\p{题 2.9（证任何函数 = 偶部 + 奇部）}{直接构造}
+$f=\frac{f(x)+f(-x)}2+\frac{f(x)-f(-x)}2$，验证前者偶、后者奇。\textbf{[重点]}
+
+\p{题 2.13（构造非单调的一一对应）}{对合构造}
+$f(x)=x$（有理）、$1-x$（无理），$f(f(x))=x$ 故为双射，但每段同时含增、减。
+
+\section{第 2 章 数列极限}
+
+\subsection*{§1 实数系的连续性}
+\p{题 1.1（证 $\sqrt6$ 无理、$\sqrt3+\sqrt2$ 无理）}{反证 + 既约分数}
+设 $\sqrt6=\frac mn$ 既约，$m^2=6n^2$ 推 $m,n$ 皆偶，矛盾。(2) 若和有理，平方解出 $\sqrt6$ 有理，与(1)矛盾。\textbf{[重点]}
+
+\p{题 1.3（证有界集的并、和集有界）}{取最大值界}
+(1) $|z|\le\max\{M_1,M_2\}$；(2) $|x+y|\le M_1+M_2$。
+
+\p{题 1.4（证 $\inf T=-\sup S$，$T=\{-x:x\in S\}$）}{确界两条性质}
+$x\in T\Rightarrow x\ge-\sup S$；又 $\forall\eps>0$ 存在 $-y>-\sup S-\eps$，故 $-\sup S$ 是最小者。
+
+\p{题 1.5（证确界唯一）}{反证 + $\eps=\frac{B-A}2$}
+设两上确界 $A<B$，取 $\eps=\frac{B-A}2$ 得存在 $x>B-\eps>A$，矛盾于 $A$ 是上界。\textbf{[重点]}
+
+\p{题 1.7（证非空有下界集必有下确界）}{对 $-S$ 用确界原理}
+$-S$ 非空有上界，$\sup(-S)$ 存在，则 $-\sup(-S)$ 即下确界。
+
+\p{题 1.8（证 $S=\{x\in\mathbb Q:x^2<3\}$ 无最大最小数、在 $\mathbb Q$ 内无确界）}{扰动 + 两分情形}
+(1) 对 $\frac qp\in S$ 取充分小 $r$ 使 $(\frac qp\pm r)^2$ 仍在同侧，故无端点。(2) 反设上确界 $\frac nm$：若 $(\frac nm)^2<3$ 可加 $r$ 入 $S$；若 $>3$ 可减 $r$ 仍是上界——两向矛盾。\textbf{[重点]}（$\mathbb Q$ 不完备的招牌例）
+
+\subsection*{§2 数列极限}
+\p{题 4（证 $\lim x_n=a\iff\lim x_{n+k}=a$）}{双向 + 平移 $N$}
+正向直接代入；反向取 $N=N'+k$。
+
+\p{题 5（奇偶子列同极限 $\Rightarrow$ 全列同极限）}{取 $\max$ 的 $N$}
+$N=\max\{2N_1,2N_2+1\}$，$n>N$ 时奇偶都 $<\eps$。\textbf{[重点]}
+
+\p{题 6（$x_n\ge0,x_n\to a\Rightarrow\sqrt{x_n}\to\sqrt a$）}{有理化放大}
+$|\sqrt{x_n}-\sqrt a|\le\sqrt{|x_n-a|}$，令 $|x_n-a|<\eps^2$。
+
+\p{题 7（无穷小 $\times$ 有界 = 无穷小）}{有界控住}
+$|y_n|\le M$，取 $|x_n|<\frac\eps M$。
+
+\p{题 10（$\frac{a_n}{a_{n+1}}\to l>1\Rightarrow a_n\to0$）}{取 $1<r<l$ 后几何衰减}
+大 $n$ 后 $a_{n+1}<\frac1r a_n$，故 $a_n\le C r^{-n}\to0$。
+
+\p{题 11（$\lim x_n=a\Rightarrow$ 算术平均也 $\to a$）}{拆头尾}
+$|x_n-a|\le M$，尾部 $<\eps$，头部 $\le\frac{NM}n\to0$。\textbf{[重点]}（“平均化”典型）
+
+\p{题 12（$\lim x_n=a>0\Rightarrow$ 几何平均也 $\to a$）}{取对数转题 11}
+$\frac1n\sum\ln x_k\to\ln a$，再取指数。
+
+\p{题 13（$\frac{nx_1+(n-1)x_2+\cdots+x_n}{n^2}\to\frac a2$）}{Stolz}
+差分比值 $\to\frac a2$。
+
+\subsection*{§3 无穷大量}
+\p{题 2（$\lim a_n=+\infty\Rightarrow$ 算术平均 $+\infty$；$a_n>0,a_n\to0\Rightarrow$ 几何平均 $\to0$）}{尾巴占主导 + 取对数}
+(1) 尾项 $>3G$、头部 $<\frac G2$，平均 $>G$。(2) 转成(1)：$\ln a_n\to-\infty$。\textbf{[重点]}
+
+\p{题 3（无穷大乘非零因子、除以非零极限仍是无穷大）}{用极限保号控住}
+$|y_n|$ 夹在 $\frac{|b|}2$ 与 $2|b|$ 之间。
+
+\p{题 5（Stolz 证 $\frac{\log_a n}{n}\to0$、$\frac{n^k}{a^n}\to0$）}{Stolz 反复用}
+(2) 连用 $k$ 次 Stolz，分母含 $a^{n-k}\to\infty$。\textbf{[重点]}
+
+\p{题 7（$\sum\lambda^{n-k}a_k\to\frac a{1-\lambda}$）}{Stolz（对分母 $k^n$）}
+记 $k=\lambda^{-1}$，化为 $\frac{k^na_n+k^{n-1}a_{n-1}+\cdots}{k^n}$，Stolz 得 $\frac a{1-\lambda}$。
+
+\p{题 8（$A_n$ 收敛、$p_n\uparrow+\infty$ 证加权平均 $\to0$）}{Abel 变换 + Stolz}
+$p_1a_1+\cdots+p_na_n=A_n-\frac{\sum A_{i}(p_{i+1}-p_i)}{p_n}$，后项 Stolz $\to A$，相减为 0。\textbf{[重点]}
+
+\subsection*{§4 收敛准则}
+\p{题 8（单调数列 $\lim x_n=a\iff$ 有子列 $\to a$）}{单调性夹逼全列}
+取子列尾项 $x_{n_k}$ 卡住任意 $x_n$。
+
+\p{题 9（有界不收敛 $\Rightarrow$ 两子列不同极限）}{非柯西构造 + B–W}
+由非柯西取 $|x_{m_k}-x_{n_k}|\ge\eps_0$，各自抽收敛子列。\textbf{[重点]}
+
+\p{题 10（无界非无穷大 $\Rightarrow$ 一子列无穷大、一子列收敛）}{两类点各抽一列}
+非无穷大有界子列→收敛子列；无界取 $|x_{n_k}|>k$。
+
+\p{题 11（$\sup S=a\notin S\Rightarrow$ 存在严格增列 $\to a$）}{递归构造}
+取 $\eps_n=\min\{\frac1n,a-x_{n-1}\}$，选 $a-\eps_n<x_n<a$。\textbf{[重点]}
+
+\p{题 12（区间套证唯一公共点）}{两个单调有界极限相等}
+$a_n\uparrow,b_n\downarrow$ 收敛，$b_n-a_n\to0$ 故同极限 $\xi$；唯一由夹逼。
+
+\p{题 13（Cauchy 原理证收敛：几何型、交错级数）}{差分/部分和有界}
+(1) 尾部 $<\frac{M}{1-|q|}|q|^{n+1}$；(2) 交错部分和 $<\frac1{n+1}$。\textbf{[重点]}
+
+\p{题 14（$|x_{n+1}-x_n|<\frac1{2^n}\Rightarrow$ 基本列）}{几何控制}
+$|x_m-x_n|<\sum\frac1{2^k}<(\frac12)^{n-1}$。
+
+\p{题 15（$\operatorname{diam}A_k\to0\iff$ 收敛）}{Cauchy 等价}
+充分性 $\operatorname{diam}A_k<\eps$ 即任意两项 $<\eps$；必要性反向。
+
+\p{题 16（Cauchy 原理证单调有界收敛）}{反证造无界子列}
+若不然 $x_{m_k}-x_{n_1}>k\eps_0\to+\infty$，与有界矛盾。\textbf{[重点]}
+
+\section{第 3 章 函数极限与连续}
+
+\subsection*{§1 函数极限}
+\p{题 1（按 $\eps$-$\delta$ 证各种极限）}{放缩 + 解 $\delta$；远的用 $X$、无穷大用 $G$}
+如 $x^3\to8$：限 $|x-2|<1$ 得 $|x^3-8|<19|x-2|$，$\delta=\min\{1,\eps/19\}$。\textbf{[重点]}
+
+\p{题 4（夹逼证 $\frac{x^k}{a^x}\to0$、$\frac{\ln^k x}{x}\to0$）}{夹到数列极限}
+用 $[x]$ 夹，化为 $\frac{(n+1)^k}{a^n}\to0$；对数题令 $t=\ln x$。
+
+\p{题 8（$\lim_{x\to\sqrt a}f(x)=A\Rightarrow\lim_{x\to a}f(x^2)=A$）}{复合限距}
+取 $\delta=\min\{1,\delta'/(1+2\sqrt a)\}$，使 $|x^2-a|<\delta'$。
+
+\p{题 9（(1) $f(x^3)\to A\Rightarrow f(x)\to A$；(2) $f(x^2)\to A$ 是否推 $f(x)\to A$）}{复合 / 反例}
+(1) 取 $\delta=(\delta')^3$；(2) 不成立，$f=$ 符号函数。\textbf{[重点]}
+
+\p{题 11（$\lim_{x\to x_0^+}f=+\infty\iff$ 任意右方收敛列 $f(x_n)\to+\infty$）}{必要性直取 / 充分性反证}
+反证取 $\delta_k=1/k$ 造反例列。\textbf{[重点]}（Heine 型等价）
+
+\p{题 12（同类：$x\to+\infty$ 时 $-\infty$）}{同上}
+取 $X_k=k$ 造反例。
+
+\p{题 13（$\lim_{x\to+\infty}f$ 存在有限 $\iff$ 任意正无穷大列 $f(x_n)$ 收敛）}{交错两列证同极限 + 反证}
+先证两子列同极限（交错矛盾），再反证全极限。
+
+\p{题 14（写出并证明三种 Cauchy 收敛原理）}{基本列 + Heine}
+$\forall\eps\exists\delta$ 使邻域内任意两点函数值差 $<\eps$；充分性由基本列收敛 + Heine。\textbf{[重点]}
+
+\p{题 15（$f(2x)=f(x)$ 且 $\lim_{x\to+\infty}f=A\Rightarrow f\equiv A$）}{迭代抬到无穷}
+$f(x_0)=f(2^nx_0)\to A$，$x_0$ 任意。
+
+\subsection*{§2 连续函数}
+\p{题 1（按定义证连续：$\sqrt x$、$\sin\frac1x$、$\frac{\sin x}x$）}{$\eps$-$\delta$ + 放大}
+$\sqrt x$：$|\sqrt x-\sqrt{x_0}|\le\sqrt{|x-x_0|}$；$\sin\frac1x$：$\delta\propto|x_0|^2\eps$。\textbf{[重点]}
+
+\p{题 3（$f$ 连续 $\Rightarrow f^2,|f|$ 连续；反之不成立）}{代数恒等 + 反例}
+$|f^2-f_0^2|=(|f|+|f_0|)|f-f_0|$；反例 $f=\pm1$ 型。
+
+\p{题 4（连续×不连续是否必不连续；都连续呢）}{举反例否决}
+$f\equiv0$ 连续、$g$ 不连续，$fg\equiv0$ 连续——不能断言。
+
+\p{题 5（$f,g$ 连续 $\Rightarrow\max,\min$ 连续）}{恒等式}
+$\max=\frac12(f+g+|f-g|)$，$\min=\frac12(f+g-|f-g|)$。\textbf{[重点]}
+
+\p{题 9（$f(x^2)=f(x)$ 且连续 $\Rightarrow f$ 常数）}{迭代到 1}
+$f(x)=f(x^{1/2^n})\to f(1)$。\textbf{[重点]}
+
+\subsection*{§4 闭区间上的连续函数}
+\p{题 1（$[a,+\infty)$ 连续且 $\lim_{x\to+\infty}f=A\Rightarrow$ 有界）}{尾部 + 闭区间有界}
+$x>X$ 时 $|f-A|<1$；$[a,X]$ 连续有界；取并。\textbf{[重点]}
+
+\p{题 2（$(a,b)$ 连续、端侧极限存在 $\Rightarrow$ 取遍中间值）}{延拓 + 介值}
+把 $f(a+),f(b-)$ 补上得闭区间连续，用介值定理。
+
+\p{题 3（单调 + 取遍 $f(a),f(b)$ 间一切值 $\Rightarrow$ 连续）}{反证：不连续则漏值}
+不连续点处跳跃，必漏掉某区间值。
+
+\p{题 4（用 B–W 证有界性定理）}{反证 + 收敛子列}
+无界取 $|f(x_n)|>n$，抽收敛子列 $x_{n_k}\to\xi$，$f(x_{n_k})\to f(\xi)$ 与 $\to\infty$ 矛盾。\textbf{[重点]}
+
+\p{题 5（用区间套证零点定理）}{二分构造套}
+保持 $f(a_k)<0<f(b_k)$，公共点 $\xi$ 处 $f(\xi)=0$。\textbf{[重点]}
+
+\p{题 6（证 $x=a\sin x+b$ 有正根）}{零点定理}
+$f(0)=-b<0$，$f(A)>0$（$A>a+b$）。
+
+\p{题 7（证 $x^3+px+q=0\ (p>0)$ 唯一实根）}{严格增 + 零点}
+$f'>0$ 严格增；两端异号，零点定理 + 单调给唯一。
+
+\p{题 8（判定一致连续：$\sin\frac1x$、$\sin x^2$、$\sqrt x$、$\ln x$、$\cos\sqrt x$）}{统一不等式 / 两列反例}
+“是”：找不依赖点的 $\delta$（如 $\sqrt{x_1}-\sqrt{x_2}\le\sqrt{|x_1-x_2|}$）；“否”：造 $x_n,y_n$ 距离 $\to0$ 值差 $\ge\eps_0$。\textbf{[重点]}
+
+\p{题 9（椭圆内任一点存在以它为中点的弦）}{连续函数介值}
+$f(\theta)=l_1-l_2$ 连续，$f(0)=-f(\pi)$，介值得零点。
+
+\p{题 10（$f(0)=f(2)\Rightarrow\exists y-x=1,f(x)=f(y)$）}{构造 $g(x)=f(x+1)-f(x)$}
+$g(0)=-g(1)$，介值得 $g=0$。\textbf{[重点]}
+
+\p{题 11（$(a,b)$ 一致连续 $\Rightarrow$ 有界）}{端点极限存在 + 延拓}
+一致连续 $\Rightarrow f(a+),f(b-)$ 有限，延拓后闭区间有界。
+
+\p{题 12（两一致连续之和一致；之积不一定）}{$\eps/2$ 分配；反例}
+和：各 $\frac\eps2$；积反例 $f=g=x$ 在 $[0,+\infty)$，$x^2$ 不一致连续。\textbf{[重点]}
+
+\p{题 13（$f$ 连续且 $f\ne0\Rightarrow$ 恒正或恒负）}{反证 + 介值}
+若变号则介值出零点，矛盾。
+
+\p{题 14（存在 $\xi$ 使 $f(\xi)=\frac1n\sum f(x_i)$）}{最值夹 + 介值}
+平均值介于 $\min f,\max f$ 之间。
+
+\p{题 15（$[a,+\infty)$ 连续且极限有限 $\Rightarrow$ 一致连续）}{尾部 + Cantor 拼接}
+尾部由极限控制、$[a,X+1]$ 用 Cantor，取小 $\delta$ 拼接。
+
+\section{第 4 章 微分}
+
+\subsection*{§2 导数的意义和性质}
+\p{题 2（证 $\sqrt[3]{x^2}$ 除 0 外可微）}{有理化}
+$\Delta y=\dfrac{\Delta x}{\sqrt[3]{(x+\Delta x)^2}+\sqrt[3]{x(x+\Delta x)}+\sqrt[3]{x^2}}=\dfrac{2}{3\sqrt[3]x}\Delta x+o(\Delta x)$；$x=0$ 时不可微。\textbf{[重点]}
+
+\p{题 9（$f$ 连续、$f(a)=f(b)=0$、$f'_+(a)f'_-(b)>0\Rightarrow(a,b)$ 内有零点）}{两侧异号 + 介值}
+两导数同为正，则 $a$ 右增、$b$ 左减，取点使 $f>0$ 与 $f<0$，介值。
+
+\p{题 11（$f(0)=0$，证 $f$ 在 0 可导 $\iff f=xg(x)$，$g$ 连续，$f'(0)=g(0)$）}{构造 $g=f(x)/x$}
+充分性 $\lim\frac{f(x)}x=g(0)$；必要性取 $g(x)=f(x)/x\ (x\ne0)$ 补 $g(0)=f'(0)$。\textbf{[重点]}
+
+\subsection*{§3 四则运算和反函数求导}
+\p{题 1（定义证 $(\cos x)'=-\sin x$）}{和差化积}
+$\cos(x+\Delta x)-\cos x=-2\sin(x+\frac{\Delta x}2)\sin\frac{\Delta x}2$，用 $\frac{\sin t}{t}\to1$。\textbf{[重点]}
+
+\p{题 2（证反三角/双曲函数的求导公式）}{反函数求导法}
+$(f^{-1})'(y)=\frac1{f'(x)}$，如 $(\arcsin x)'=\frac1{\cos y}=\frac1{\sqrt{1-x^2}}$。
+
+\p{题 6（$y=x^n$ 切线交点 $x_n=\frac{n-1}n$，证 $\lim y(x_n)=\frac1e$）}{取极限 $e$}
+$\lim(\frac{n-1}n)^n=\frac1e$。
+
+\subsection*{§4 复合函数求导}
+\p{题 6（奇函数导数为偶、偶函数导数为奇、周期函数导数为周期）}{定义推 $f'(-x)$}
+分别用 $f(-x)=-f(x)$、$f(-x)=f(x)$、$f(x+T)=f(x)$ 两边求导。\textbf{[重点]}
+
+\p{题 12（复合可导反例：内/外都不可导但复合可导）}{举三组}
+$g=x^2,f=|u|$；$g=|x|,f=u^2$；$g=\max\{0,x\},f=\min\{0,u\}$，都使 $f(g)$ 可导。
+
+\subsection*{§5 高阶导数}
+\p{题 3（分段 $f(x)=x^2/-x^2$，证 $f''$ 在 0 不存在，$n>2$ 时 $f^{(n)}$ 在 0 不存在）}{左右导数}
+$f'(x)=2|x|$，在 0 左右导数不等。
+
+\p{题 5（Leibniz 证 $\arctan x,\arcsin x$ 的 $y^{(n)}(0)$ 递推）}{$(1+x^2)y'=1$ 两边求 $n$ 阶导}
+得 $y^{(n+1)}(0)=-n(n-1)y^{(n-1)}(0)$（$\arctan$）；$\arcsin$ 用 $\arcsin'=\frac1{\sqrt{1-x^2}}$ 递推。\textbf{[重点]}
+
+\section{最后：证明题自查清单}
+\begin{enumerate}[leftmargin=1.4em]
+\item 定义题：$\eps$–$N$/$\eps$–$\delta$/一致连续的否定式能否默写？
+\item 反证题：能否想到“取 $\eps=\frac{B-A}2$”“造矛盾点列”？
+\item 构造题：零点定理的辅助函数会不会凑？区间套/严格增列会不会造？
+\item 夹逼/Stolz：能否找到同极限的上下界或差分比？
+\item 中值定理：能否把要证式子整理成 $\frac{f(b)-f(a)}{b-a}$？
+\item 边界：$a=b$、除零、端点、负根、$n=1$ 是否都查过？
+\end{enumerate}
+
+\end{document}

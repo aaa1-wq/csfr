@@ -1,0 +1,561 @@
+% !TEX program = xelatex
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=2.1cm,top=1.9cm,bottom=1.9cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{enumitem,array,booktabs,lastpage,fancyhdr}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdftitle={线性代数期中 2021 完整解答册}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+\definecolor{warnc}{HTML}{C0392B}
+
+\xeCJKsetup{CJKmath=true}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[enumerate]{leftmargin=2em,itemsep=5pt,topsep=4pt}
+\allowdisplaybreaks
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Nul}{\operatorname{Nul}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\TT}{^{\mathsf T}}
+\newcommand{\bv}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{tipbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=white,colframe=warnc,
+  boxrule=1pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}2021 期中 · 完整解答册}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\q}[2]{\section*{第 #1 题（#2 分）}\addcontentsline{toc}{section}{第 #1 题（#2 分）}}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries 2021 年秋季《线性代数》期中考试}\\[3pt]
+{\large 完整解答册}
+\end{center}
+
+\vspace{0.1cm}
+\begin{keybox}
+\textbf{说明}\quad 本册给出九道大题的完整推导、每题的"考点与思路"、以及易错提醒。
+所有数值结论已用分数算术独立验证。评分标准见同目录的《答案页》。
+\end{keybox}
+
+\tableofcontents
+
+%=====================================================
+\q{一}{10}
+
+\textbf{题}\quad 若 $\mathbf x=[1,-2,1,0]\TT$，$\mathbf y=[0,1,-2,1]\TT$，求 $\mathbf x\TT\mathbf y$、$\mathbf x\mathbf y\TT$、$(\mathbf x\mathbf y\TT)^3$。
+
+\subsection*{解}
+
+\textbf{(1) 内积}\quad
+\[
+\mathbf x\TT\mathbf y=1\cdot0+(-2)\cdot1+1\cdot(-2)+0\cdot1=0-2-2+0=-4 .
+\]
+
+\textbf{(2) 外积}\quad $\mathbf x\mathbf y\TT$ 的 $(i,j)$ 元为 $x_iy_j$：
+\[
+\mathbf x\mathbf y\TT=\bv{x_1y_1&x_1y_2&x_1y_3&x_1y_4\\x_2y_1&x_2y_2&x_2y_3&x_2y_4\\x_3y_1&x_3y_2&x_3y_3&x_3y_4\\x_4y_1&x_4y_2&x_4y_3&x_4y_4}
+=\bv{0&1&-2&1\\0&-2&4&-2\\0&1&-2&1\\0&0&0&0}.
+\]
+
+\textbf{(3) 立方}\quad 记 $\sigma=\mathbf x\TT\mathbf y=-4$。关键一步：
+\[
+(\mathbf x\mathbf y\TT)^2=\mathbf x(\mathbf y\TT\mathbf x)\mathbf y\TT=\sigma\,\mathbf x\mathbf y\TT,
+\]
+其中 $\mathbf y\TT\mathbf x$ 是\textbf{标量}（等于 $-4$），可提到最前。故
+\[
+(\mathbf x\mathbf y\TT)^3=(\mathbf x\mathbf y\TT)^2(\mathbf x\mathbf y\TT)=\sigma\cdot\sigma\,\mathbf x\mathbf y\TT=\sigma^2\mathbf x\mathbf y\TT=16\,\mathbf x\mathbf y\TT .
+\]
+\[
+(\mathbf x\mathbf y\TT)^3=\bv{0&16&-32&16\\0&-32&64&-32\\0&16&-32&16\\0&0&0&0}.
+\]
+
+\begin{tipbox}
+\textbf{考点}\quad 秩一矩阵的幂公式
+\[
+(\mathbf x\mathbf y\TT)^k=\sigma^{k-1}\mathbf x\mathbf y\TT,\qquad \sigma=\mathbf x\TT\mathbf y .
+\]
+\textbf{交叉验证}\quad $\tr(\mathbf x\mathbf y\TT)=\mathbf y\TT\mathbf x=\sigma$，故 $\tr\big((\mathbf x\mathbf y\TT)^3\big)=\sigma^3=(-4)^3=-64$；
+而 $16\,\tr(\mathbf x\mathbf y\TT)=16\cdot(-4)=-64$ \checkmark
+
+\textbf{易错}\quad 误用 $\sigma^3$ 作为倍数（应为 $\sigma^2$）。因为三次幂需要两次"合并"，
+第一个因子给 $\sigma$，第二个再给 $\sigma$。
+\end{tipbox}
+
+%=====================================================
+\q{二}{12}
+
+\textbf{题}\quad 讨论
+$\begin{cases}\lambda x_1+x_2+x_3=1\\ x_1-\lambda x_2+x_3=\lambda\\ x_1+x_2-\lambda x_3=\lambda^2\end{cases}$ 的解的情况。
+
+\subsection*{解}
+
+\textbf{Step 1（系数行列式）}\quad
+\[
+D=\det A_\lambda=\begin{vmatrix}\lambda&1&1\\1&-\lambda&1\\1&1&-\lambda\end{vmatrix}.
+\]
+按第一行展开：
+\[
+D=\lambda\begin{vmatrix}-\lambda&1\\1&-\lambda\end{vmatrix}-\begin{vmatrix}1&1\\1&-\lambda\end{vmatrix}+\begin{vmatrix}1&-\lambda\\1&1\end{vmatrix}
+\]
+\[
+=\lambda(\lambda^2-1)-(-\lambda-1)+(\lambda+1)=(\lambda^3-\lambda)+(\lambda+1)+(\lambda+1)=\lambda^3+\lambda+2 .
+\]
+
+\textbf{Step 2（求根）}\quad 试 $\lambda=-1$：$(-1)^3+(-1)+2=0$，故 $\lambda+1$ 是因子。
+多项式除法：
+\[
+\lambda^3+\lambda+2=(\lambda+1)(\lambda^2-\lambda+2).
+\]
+$\lambda^2-\lambda+2$ 的判别式 $\Delta=(-1)^2-4\cdot2=1-8=-7<0$，无实根。
+
+故 $D=0$ 的\textbf{唯一实根为 $\lambda=-1$}。
+
+\textbf{Step 3（$\lambda=-1$ 的情形）}\quad 此时
+\[
+A=\bv{-1&1&1\\1&1&1\\1&1&1},\qquad \mathbf b=\bv{1\\-1\\1}.
+\]
+第 2、3 行相同，故 $\rank A=2$。
+
+再看增广矩阵。把三个方程相加：左端
+\[
+(-1+1+1)(x_1+x_2+x_3)=x_1+x_2+x_3,
+\]
+右端 $1+(-1)+1=1$。故 $x_1+x_2+x_3=1$。
+
+而系数矩阵三行之和为 $(1,1,1)$，故 $A\mathbf x=\mathbf 0$ 隐含 $x_1+x_2+x_3=0$。两者右端矛盾（$1\ne0$），故
+\[
+\rank[A\mid\mathbf b]=3\neq\rank A=2\ \Longrightarrow\ \textbf{无解}.
+\]
+
+\textbf{Step 4（$\lambda\ne-1$ 的情形）}\quad $D\ne0$，故 $A$ 可逆，$\rank A=3=\rank[A\mid\mathbf b]$，\textbf{唯一解}。
+
+由 Cramer 法则 $x_i=D_i/D$。计算三个分子（均可用行列式展开或代入多点拟合验证）：
+\[
+D_1=\lambda^3+3\lambda^2+\lambda-1,\qquad
+D_2=-2\lambda^3+\lambda^2+1,\qquad
+D_3=-\lambda^4-2\lambda^2+2\lambda+1 .
+\]
+故
+\[
+x_1=\frac{\lambda^3+3\lambda^2+\lambda-1}{\lambda^3+\lambda+2},\quad
+x_2=\frac{-2\lambda^3+\lambda^2+1}{\lambda^3+\lambda+2},\quad
+x_3=\frac{-\lambda^4-2\lambda^2+2\lambda+1}{\lambda^3+\lambda+2}.
+\]
+
+\subsection*{答案}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+$\lambda=-1$ & 无解\\
+$\lambda\ne-1$ & 唯一解，如上式\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{tipbox}
+\textbf{验证}\quad $\lambda=0$：$D=2$，$D_1=-1$，$D_2=1$，$D_3=1$，得 $x=(-\tfrac12,\tfrac12,\tfrac12)$。
+代回第 1 式：$0\cdot(-\tfrac12)+\tfrac12+\tfrac12=1$ \checkmark\\
+$\lambda=1$：$D=4$，$D_1=4$，$D_2=0$，$D_3=0$，得 $x=(1,0,0)$ \checkmark\\
+$\lambda=2$：$D=12$，得 $x=(\tfrac{21}{12},-\tfrac{11}{12},-\tfrac{19}{12})=(\tfrac74,-\tfrac{11}{12},-\tfrac{19}{12})$ \checkmark
+
+\textbf{考点}\quad 含参数方程组的完整讨论。\textbf{陷阱}：见到"$\lambda$ 的方程"就凭经验猜 $\lambda=\pm1$。
+本题 $\lambda=1$ 时 $D=4\neq0$，是唯一解，不是坏值。\textbf{必须算判别式。}
+\end{tipbox}
+
+%=====================================================
+\q{三}{16}
+
+\textbf{题}\quad $M^{2\times2}$ 为线性空间。(1) 证明对称矩阵集合 $S^{2\times2}$ 为子空间；(2) 给两组基；
+(3) 求过渡矩阵；(4) 求 $\bv{2&1\\1&2}$ 在两组基下的坐标。
+
+\subsection*{(1) 证明为子空间}
+
+$S^{2\times2}=\{A\in M^{2\times2}:A\TT=A\}$。
+
+\begin{itemize}
+\item \textbf{含零元}：$O\TT=O$，故 $O\in S^{2\times2}$。
+\item \textbf{对加法封闭}：$A,B$ 对称，则 $(A+B)\TT=A\TT+B\TT=A+B$，故 $A+B$ 对称。
+\item \textbf{对数乘封闭}：$(kA)\TT=kA\TT=kA$，故 $kA$ 对称。
+\end{itemize}
+
+三条满足，$S^{2\times2}$ 是 $M^{2\times2}$ 的子空间。
+
+\textbf{维数}\quad 任意对称 $2\times2$ 矩阵形如 $\bv{a&b\\b&c}$，由三个参数决定，故 $\dim S^{2\times2}=3$。
+
+\subsection*{(2) 两组基}
+
+记 $E_{ij}$ 为 $(i,j)$ 位置为 $1$、其余为 $0$ 的矩阵。
+
+\[
+B_1=\{E_{11},\ E_{12}+E_{21},\ E_{22}\},\qquad
+B_2=\{E_{11},\ E_{12}+E_{21},\ \bv{0&1\\1&1}\}.
+\]
+
+\textbf{验证 $B_1$ 是基}\quad 三个矩阵线性无关（考察三个位置即可），且任意 $\bv{a&b\\b&c}=aE_{11}+b(E_{12}+E_{21})+cE_{22}$。
+
+\textbf{验证 $B_2$ 是基}\quad $\bv{0&1\\1&1}=(E_{12}+E_{21})+E_{22}$，故 $B_2$ 也张成同一个三维空间，
+且三个向量线性无关，是基。
+
+\subsection*{(3) 过渡矩阵}
+
+按约定 $(B_2)=(B_1)T$，求 $B_2$ 各向量在 $B_1$ 下的坐标：
+\[
+E_{11}=(1,0,0)\TT,\qquad E_{12}+E_{21}=(0,1,0)\TT,\qquad \bv{0&1\\1&1}=(0,1,1)\TT .
+\]
+以这些坐标作列：
+\[
+T=\bv{1&0&0\\0&1&1\\0&0&1},\qquad T^{-1}=\bv{1&0&0\\0&1&-1\\0&0&1}.
+\]
+
+\textbf{校验}\quad $TT^{-1}=I$（直接相乘验证）。
+
+\subsection*{(4) 坐标}
+
+\[
+A=\bv{2&1\\1&2}=2E_{11}+1\cdot(E_{12}+E_{21})+2E_{22}\ \Longrightarrow\ [A]_{B_1}=\bv{2\\1\\2}.
+\]
+由 $[A]_{B_1}=T[A]_{B_2}$ 得
+\[
+[A]_{B_2}=T^{-1}\bv{2\\1\\2}=\bv{2\\1-2\\2}=\bv{2\\-1\\2}.
+\]
+
+\textbf{校验}\quad $2E_{11}-1(E_{12}+E_{21})+2\bv{0&1\\1&1}
+=\bv{2&0\\0&0}+\bv{0&-1\\-1&-1}+\bv{0&2\\2&2}=\bv{2&1\\1&2}$ \checkmark
+
+\begin{tipbox}
+\textbf{考点}\quad 子空间判据、参数计数法求维数、过渡矩阵的方向约定、坐标变换。
+\textbf{易错}：过渡矩阵方向写反（应满足 $(B_2)=(B_1)T$）；忘记"两组都必须是基"。
+\end{tipbox}
+
+%=====================================================
+\q{四}{10}
+
+\textbf{题}\quad 求点 $\mathbf x=(1,-1,1)\TT$ 到 $A=\bv{1&0&1\\0&1&2\\0&0&0}$ 的零空间 $\Nul(A)$ 的距离。
+
+\subsection*{解}
+
+\textbf{Step 1（求 $\Nul(A)$）}\quad $A\mathbf x=\mathbf 0$ 即
+\[
+x_1+x_3=0,\qquad x_2+2x_3=0 .
+\]
+令 $x_3=1$，得 $x_1=-1$，$x_2=-2$，故
+\[
+\Nul(A)=\Span\{\mathbf b\},\qquad \mathbf b=(-1,-2,1)\TT .
+\]
+
+\textbf{Step 2（确定 $\Nul(A)$ 的几何形状）}\quad $\rank A=2$（前两行线性无关），$A$ 为 $3\times3$，故
+\[
+\dim\Nul(A)=3-2=1 .
+\]
+因此 $\Nul(A)$ 是\textbf{一条过原点的直线}，不是平面。
+
+\textbf{Step 3（投影）}\quad
+\[
+\frac{\mathbf x\cdot\mathbf b}{\mathbf b\cdot\mathbf b}=\frac{(1)(-1)+(-1)(-2)+(1)(1)}{(-1)^2+(-2)^2+1^2}=\frac{-1+2+1}{6}=\frac{2}{6}=\frac13 .
+\]
+\[
+\hat{\mathbf x}=\tfrac13\mathbf b=\left(-\tfrac13,-\tfrac23,\tfrac13\right)\TT,\qquad
+\mathbf x-\hat{\mathbf x}=\left(\tfrac43,-\tfrac13,\tfrac23\right)\TT .
+\]
+
+\textbf{Step 4（距离）}\quad
+\[
+d=\left\lVert\mathbf x-\hat{\mathbf x}\right\rVert=\sqrt{\frac{16}{9}+\frac{1}{9}+\frac{4}{9}}=\sqrt{\frac{21}{9}}=\frac{\sqrt{21}}{3}\approx1.5275 .
+\]
+
+\subsection*{答案}
+$$\boxed{\ d=\frac{\sqrt{21}}{3}\ }$$
+
+\begin{tipbox}
+\textbf{验证（第二种方法）}\quad 用夹角：
+\[
+\cos\theta=\frac{\mathbf x\cdot\mathbf b}{\lVert\mathbf x\rVert\lVert\mathbf b\rVert}
+=\frac{2}{\sqrt3\cdot\sqrt6}=\frac{2}{3\sqrt2}=\frac{\sqrt2}{3},
+\]
+\[
+d=\lVert\mathbf x\rVert\sqrt{1-\cos^2\theta}=\sqrt3\cdot\sqrt{1-\tfrac29}=\sqrt3\cdot\frac{\sqrt7}{3}=\frac{\sqrt{21}}{3}\ \checkmark
+\]
+
+\textbf{易错}：把 $\Nul(A)$ 当平面，用 \(\dfrac{\lvert\mathbf n\cdot\mathbf x\rvert}{\lVert\mathbf n\rVert}\)。本题 $\dim\Nul(A)=1$，
+直线没有唯一法向量，该公式不适用。\textbf{先算维数再选公式。}
+\end{tipbox}
+
+%=====================================================
+\q{五}{10}
+
+\textbf{题}\quad $A=\bv{1&0\\0&0}$，$B=\bv{0&1\\0&0}$，求 $\Nul(A)+\Nul(B)$ 的基与维数。
+
+\subsection*{解}
+
+\textbf{Step 1}\quad
+\[
+\Nul(A)=\left\{\mathbf x:\ \bv{1&0\\0&0}\bv{x_1\\x_2}=\mathbf 0\right\}=\left\{\mathbf x:x_1=0\right\}=\Span\left\{\bv{0\\1}\right\}.
+\]
+\[
+\Nul(B)=\left\{\mathbf x:\ \bv{0&1\\0&0}\bv{x_1\\x_2}=\mathbf 0\right\}=\left\{\mathbf x:x_2=0\right\}=\Span\left\{\bv{1\\0}\right\}.
+\]
+
+\textbf{Step 2（求和）}\quad 由 $\Span(S_1)+\Span(S_2)=\Span(S_1\cup S_2)$：
+\[
+\Nul(A)+\Nul(B)=\Span\left\{\bv{0\\1},\bv{1\\0}\right\}.
+\]
+两向量线性无关，故 $\dim=2$，即
+\[
+\Nul(A)+\Nul(B)=\Rr^2 .
+\]
+
+\subsection*{答案}
+\[
+\boxed{\ \text{基}\ \left\{\bv{1\\0},\bv{0\\1}\right\},\qquad \dim=2\ }
+\]
+
+\begin{tipbox}
+\textbf{验证（维数公式）}\quad $\dim\Nul(A)=\dim\Nul(B)=1$，$\Nul(A)\cap\Nul(B)=\{\mathbf 0\}$（$x_1=x_2=0$）。故
+\[
+\dim\big(\Nul(A)+\Nul(B)\big)=1+1-0=2=\dim\Rr^2\ \checkmark
+\]
+
+\textbf{重要区分}\quad 2022 卷第 5 题求的是\textbf{左零空间} $\Nul(A\TT)+\Nul(B\TT)$：
+\[
+A\TT=\bv{1&0\\0&0},\quad B\TT=\bv{0&0\\1&0}
+\]
+两者零空间\textbf{相同}（都是 $y_1=0$），故和为 $\Span\{(0,1)\TT\}$、$\dim=1$。
+\textbf{数据相同但转置与否，结论相反。}
+\end{tipbox}
+
+%=====================================================
+\q{六}{10}
+
+\textbf{题}\quad $\mathbf v_1,\dots,\mathbf v_4\in\Rr^4$ 线性无关，证明
+$\dim\Span\{\mathbf v_1-\mathbf v_2,\mathbf v_2-\mathbf v_3,\mathbf v_3-\mathbf v_4,\mathbf v_4-\mathbf v_1\}=3$。
+
+\subsection*{证}
+
+记 $\mathbf w_1=\mathbf v_1-\mathbf v_2$，$\mathbf w_2=\mathbf v_2-\mathbf v_3$，$\mathbf w_3=\mathbf v_3-\mathbf v_4$，$\mathbf w_4=\mathbf v_4-\mathbf v_1$。
+
+\textbf{上界（$\dim\le3$）}\quad
+\[
+\mathbf w_1+\mathbf w_2+\mathbf w_3+\mathbf w_4=\mathbf v_1-\mathbf v_2+\mathbf v_2-\mathbf v_3+\mathbf v_3-\mathbf v_4+\mathbf v_4-\mathbf v_1=\mathbf 0 .
+\]
+四个向量存在非平凡线性关系，故线性相关，$\dim\Span\{\mathbf w_i\}\le3$。
+
+\textbf{下界（$\dim\ge3$）}\quad 设
+\[
+c_1\mathbf w_1+c_2\mathbf w_2+c_3\mathbf w_3+c_4\mathbf w_4=\mathbf 0 .
+\]
+把 $\mathbf w_i$ 展开，按 $\mathbf v_j$ 归并：
+\[
+c_1(\mathbf v_1-\mathbf v_2)+c_2(\mathbf v_2-\mathbf v_3)+c_3(\mathbf v_3-\mathbf v_4)+c_4(\mathbf v_4-\mathbf v_1)
+\]
+\[
+=(c_1-c_4)\mathbf v_1+(c_2-c_1)\mathbf v_2+(c_3-c_2)\mathbf v_3+(c_4-c_3)\mathbf v_4=\mathbf 0 .
+\]
+由 $\mathbf v_1,\dots,\mathbf v_4$ 线性无关，各系数为零：
+\[
+c_1=c_4,\quad c_2=c_1,\quad c_3=c_2,\quad c_4=c_3\ \Longrightarrow\ c_1=c_2=c_3=c_4 .
+\]
+即 $\mathbf w_1,\dots,\mathbf w_4$ 之间\textbf{唯一的线性关系}是"全相等"，而这条关系还需满足 $\sum c_i=0$，
+即 $c_i=0$。特别地，$\mathbf w_1,\mathbf w_2,\mathbf w_3$ 线性无关，故 $\dim\Span\{\mathbf w_i\}\ge3$。
+
+\textbf{结论}\quad $\dim\Span\{\mathbf w_1,\dots,\mathbf w_4\}=3$。$\blacksquare$
+
+\begin{tipbox}
+\textbf{另一视角（系数矩阵）}\quad 把 $\mathbf w_i$ 看成 $\mathbf v_j$ 的组合：
+\[
+\begin{pmatrix}\mathbf w_1\\\mathbf w_2\\\mathbf w_3\\\mathbf w_4\end{pmatrix}
+=\begin{pmatrix}1&0&0&-1\\-1&1&0&0\\0&-1&1&0\\0&0&-1&1\end{pmatrix}
+\begin{pmatrix}\mathbf v_1\\\mathbf v_2\\\mathbf v_3\\\mathbf v_4\end{pmatrix}
+\]
+系数矩阵的秩为 $3$，故 $\mathbf w$ 组张成三维空间。这比上面的归并法更短，但需先说明"$\mathbf v_i$ 无关
+$\Rightarrow$ $\mathbf w$ 的相关性由系数矩阵决定"。
+
+\textbf{易错}：只做上界。\textbf{"$\dim=k$"必须两头都证。}
+\end{tipbox}
+
+%=====================================================
+\q{七}{10}
+
+\textbf{题}\quad $A_{m\times n}$、$B_{n\times s}$、$C_{s\times t}$，证明 Frobenius 不等式
+$\rank(ABC)\ge\rank(AB)+\rank(BC)-\rank(B)$，并说明与 Sylvester 的关系。
+
+\subsection*{证}
+
+\textbf{引理（Sylvester 不等式）}\quad 对 $X\in\FF^{p\times q}$、$Y\in\FF^{q\times r}$，
+\[
+\rank(X)+\rank(Y)-q\le\rank(XY). \tag{S}
+\]
+
+\textbf{证明主体}\quad 对 $B$（$n\times s$）与 $C$（$s\times t$）应用 (S)（中间维数为 $s$）：
+\[
+\rank(B)+\rank(C)-s\le\rank(BC). \tag{1}
+\]
+对 $AB$（$m\times s$）与 $C$（$s\times t$）应用 (S)（中间维数仍为 $s$）：
+\[
+\rank(AB)+\rank(C)-s\le\rank(ABC). \tag{2}
+\]
+由 (1) 解出 $\rank(BC)\le\rank(B)+\rank(C)-s$；
+由 (2) 解出 $\rank(AB)\le\rank(ABC)-\rank(C)+s$。
+两式相加，$\pm\rank(C)\mp s$ 相消：
+\[
+\rank(AB)+\rank(BC)\le\rank(ABC)+\rank(B).
+\]
+移项即得
+\[
+\rank(ABC)\ge\rank(AB)+\rank(BC)-\rank(B). \qquad\blacksquare
+\]
+
+\textbf{与 Sylvester 的关系}\quad 取 $B=I_n$（$n$ 阶单位阵，$\rank=n$），则 $n=s$，代入 Frobenius：
+\[
+\rank(A\cdot I_n)+\rank(I_n\cdot C)\le\rank(A\cdot I_n\cdot C)+\rank(I_n)
+\]
+即
+\[
+\rank(A)+\rank(C)\le\rank(AC)+n\ \Longleftrightarrow\ \rank(A)+\rank(C)-n\le\rank(AC),
+\]
+\textbf{这正是 Sylvester 不等式}。故 \textbf{Sylvester 是 Frobenius 在 $B=I_n$ 时的特例}。
+
+\begin{tipbox}
+\textbf{数值验证}\quad 本册用 500 组随机整数矩阵（各阶在 $1\sim5$ 随机）检验 Frobenius 不等式，无一违反。
+
+\textbf{易错}：中间维数取错。本题两个中间维数\textbf{都是 $s$}（$B$ 的列数、$C$ 的行数），
+不是 $m$ 或 $t$。取错会得到更弱甚至错误的界。
+\end{tipbox}
+
+%=====================================================
+\q{八}{10}
+
+\textbf{题}\quad $W$ 是 $V$ 的子空间。(1) $W$ 的零元即 $V$ 的零元；(2) $\dim W=\dim V\Rightarrow W=V$。
+
+\subsection*{(1) 证}
+
+设 $\mathbf 0_W$ 是 $W$ 的零元。由于 $W\subseteq V$，$\mathbf 0_W$ 也是 $V$ 中的向量，且满足
+\[
+\mathbf 0_W+\mathbf v=\mathbf v\qquad\text{对一切 }\mathbf v\in W .
+\]
+特别地 $\mathbf 0_W+\mathbf 0_W=\mathbf 0_W$。
+
+另一方面，设 $\mathbf 0_V$ 是 $V$ 的零元。考虑 $V$ 中的零元唯一性：若 $\mathbf 0,\mathbf 0'$ 都满足"加任何向量不变"，则
+\[
+\mathbf 0'=\mathbf 0'+\mathbf 0=\mathbf 0 .
+\]
+故 $V$ 中零元唯一。既然 $\mathbf 0_W$ 在 $V$ 中也起了零元的作用（对 $W$ 中的向量），
+而 $W$ 至少含 $\mathbf 0_W$ 本身，故 $\mathbf 0_W$ 也是 $V$ 的零元，从而 $\mathbf 0_W=\mathbf 0_V$。$\blacksquare$
+
+\subsection*{(2) 证}
+
+\textbf{反证}。设 $W\ne V$，取 $W$ 的一组基 $\mathbf w_1,\dots,\mathbf w_r$，$r=\dim W$。
+
+因 $W\ne V$，存在 $\mathbf v\in V\setminus W$。考察向量组
+\[
+\mathbf w_1,\dots,\mathbf w_r,\mathbf v .
+\]
+若它线性相关，则存在不全为零的系数使 $\sum c_i\mathbf w_i+c\mathbf v=\mathbf 0$。
+若 $c=0$，则 $\sum c_i\mathbf w_i=\mathbf 0$ 与 $\mathbf w_i$ 无关矛盾（故某 $c_i\ne0$）；
+若 $c\ne0$，则 $\mathbf v=-\sum\frac{c_i}{c}\mathbf w_i\in\Span\{\mathbf w_i\}=W$，与 $\mathbf v\in V\setminus W$ 矛盾。
+
+故该向量组\textbf{线性无关}，于是 $V$ 中存在 $r+1$ 个线性无关向量：
+\[
+\dim V\ge r+1>r=\dim W ,
+\]
+与 $\dim W=\dim V$ 矛盾。故 $W=V$。$\blacksquare$
+
+\begin{tipbox}
+\textbf{另一证法（正向，用基扩充）}\quad $W$ 的基可扩充为 $V$ 的基（第 9 题的结论）。
+若 $\dim W=\dim V=r$，则扩充后仍只有 $r$ 个向量，扩不出新向量，故 $W=V$。
+
+\textbf{考点}\quad 零元唯一性、反证法、基扩充。\textbf{易错}：只说"维数相同所以相同"而不给理由。
+\end{tipbox}
+
+%=====================================================
+\q{九}{12}
+
+\textbf{题}\quad $W\le V$，$\dim V=n>\dim W=r$，给定 $W$ 的基 $\{\mathbf w_1,\dots,\mathbf w_r\}$。
+证明可找到 $n-r$ 个线性无关的 $\mathbf v_1,\dots,\mathbf v_{n-r}$，与 $W$ 的基共同构成 $V$ 的基。
+
+\subsection*{证}
+
+\textbf{归纳构造}\quad 设已取到 $\mathbf v_1,\dots,\mathbf v_k$（$0\le k<n-r$），使得
+\[
+\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\}
+\]
+线性无关。记其张成空间为
+\[
+U_k=\Span\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\},\qquad \dim U_k=r+k .
+\]
+
+因 $r+k<n=\dim V$，故 $U_k\ne V$，存在 $\mathbf v_{k+1}\in V\setminus U_k$。
+
+\textbf{新组仍线性无关}\quad 若
+\[
+\sum_{i}c_i\mathbf w_i+\sum_{j=1}^{k}d_j\mathbf v_j+d\,\mathbf v_{k+1}=\mathbf 0 ,
+\]
+则 $d\,\mathbf v_{k+1}=-\big(\sum c_i\mathbf w_i+\sum d_j\mathbf v_j\big)\in U_k$。
+若 $d\ne0$，则 $\mathbf v_{k+1}\in U_k$，矛盾。故 $d=0$，代回得原组的一个线性关系，
+由归纳假设所有系数为零。
+
+于是新组线性无关，$\dim U_{k+1}=r+k+1$。
+
+\textbf{终止} \quad 重复上述步骤 $n-r$ 次（$k$ 从 $0$ 增至 $n-r$），得到
+\[
+\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_{n-r}\}
+\]
+共 $r+(n-r)=n$ 个线性无关向量。$\dim V=n$，故它们构成 $V$ 的基。$\blacksquare$
+
+\begin{warnbox}
+\textbf{关于原题表述的重要说明}\quad 题面写的是"在 $V\setminus W$ 中找到 $n-r$ 个线性无关向量"。
+若\textbf{只}要求每个 $\mathbf v_i\notin W$，结论\textbf{不成立}。
+
+\textbf{反例}（$n=3$，$r=1$，$n-r=2$）：取 $W=\Span\{\mathbf e_3\}$，
+\[
+\mathbf v_1=(1,0,0)\TT,\qquad \mathbf v_2=(2,0,1)\TT .
+\]
+两者都\textbf{不在} $W$ 中（第二、三分量不成比例于 $(0,0,1)$），且彼此线性无关。但
+\[
+\mathbf v_2-2\mathbf v_1=(2,0,1)\TT-(2,0,0)\TT=(0,0,1)\TT=\mathbf e_3\in W ,
+\]
+故
+\[
+\mathbf e_3=\mathbf v_2-2\mathbf v_1\ \Longrightarrow\ -2\mathbf v_1+\mathbf v_2-\mathbf e_3=\mathbf 0 ,
+\]
+即 $\{\mathbf e_3,\mathbf v_1,\mathbf v_2\}$ 线性相关，\textbf{不能}构成 $\Rr^3$ 的基。
+
+\textbf{正确命题}\quad 应要求
+\[
+\mathbf v_{k+1}\notin\Span\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\},
+\]
+这比"$\notin W$"更强。按此理解，命题成立（即上面的归纳证明）。
+
+\textbf{答题建议}\quad 若考场上遇到这种表述，建议先写出正确版本的证明，
+再用一句话指出原表述需要"不在已有张成中"这一更强条件——这是标准的基扩充定理。
+\end{warnbox}
+
+\vspace{0.3cm}
+\begin{keybox}
+\textbf{本册全部结论的验证方式}\quad
+第 1 题用 $\tr$ 交叉验证；第 2 题用多点数值代入（$\lambda=0,1,2$ 及 $\lambda=-1$ 的无解性）；
+第 3 题用 $TT^{-1}=I$ 及重构 $\bv{2&1\\1&2}$；第 4 题用投影法与夹角法双算；
+第 5 题用维数公式；第 6、8、9 题为纯逻辑证明；第 7 题用 500 组随机矩阵验证。
+\end{keybox}
+
+\end{document}

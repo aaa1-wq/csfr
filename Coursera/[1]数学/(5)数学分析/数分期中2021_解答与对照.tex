@@ -1,0 +1,514 @@
+\documentclass[10pt]{ctexart}
+\usepackage[a4paper,margin=2.1cm,top=1.8cm,bottom=1.9cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{acc2}{HTML}{8A4B1B}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+
+\setlist[itemize]{leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.9em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\Nn}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\limn}{\lim_{n\to\infty}}
+\newcommand{\limx}{\lim_{x\to x_0}}
+
+\newcommand{\Qhead}[2]{%
+  \begin{tcolorbox}[enhanced,colback=graybg,colframe=acc,
+    boxrule=0pt,leftrule=3pt,arc=2pt,top=3pt,bottom=3pt,left=8pt,right=8pt]
+  {\heiti\color{acc}#1}\quad #2
+  \end{tcolorbox}}
+\newcommand{\Vhead}[1]{\vspace{2pt}{\heiti\color{acc2}#1}\par\vspace{-2pt}}
+\newtcolorbox{cmpbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{acc}数学分析 · 2021 期中 · 解答与对照}
+\fancyhead[R]{\footnotesize\color{acc}9 页 4 大题}
+\fancyfoot[C]{\footnotesize\color{black!55}\thepage\,/\,\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+\begin{document}
+
+\begin{center}
+{\LARGE\heiti 数学分析 期中考试 · 解答与对照}\\[6pt]
+{\small 2021 年 11 月\quad 共 9 页\quad 4 大题：概念叙述、是非判断（每题给证明或反例）、计算题、证明题}\\[4pt]
+{\footnotesize\color{black!60}每题给出"标准版"与"另一版"两种写法，末尾附对比点评；所有数值已用高精度 Decimal 与差分/隐函数算法交叉复核}
+\end{center}
+\vspace{-4pt}
+\hrule height 1.2pt
+\vspace{6pt}
+
+%==================== 1 ====================
+\Qhead{第 1 题（概念叙述）}{叙述下列概念：(1) 函数 $f(x)$ 在区间 $I$ 上不一致连续；(2) 函数 $f(x)$ 在 $x_0$ 可微；(3) 函数 $f$ 下凸。}
+
+\Vhead{版本 A：标准版（逐条书面定义）}
+\textbf{(1) $f$ 在 $I$ 上\emph{不}一致连续}　存在 $\eps_0>0$，使得对任意 $\delta>0$，都存在 $x',x''\in I$ 满足
+\[
+|x'-x''|<\delta\quad\text{但}\quad |f(x')-f(x'')|\ge\eps_0 .
+\]
+（等价写法：$\exists\eps_0>0,\ \forall\delta>0,\ \exists x',x''\in I$，$|x'-x''|<\delta$ 且 $|f(x')-f(x'')|\ge\eps_0$。）
+
+\textbf{(2) $f$ 在 $x_0$ 可微}　设 $f$ 在 $x_0$ 的某邻域内有定义。若极限
+\[
+\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}
+\qquad\Big(\text{或等价地 }\lim_{h\to0}\frac{f(x_0+h)-f(x_0)}{h}\Big)
+\]
+存在且有限，记为 $f'(x_0)$，则称 $f$ 在 $x_0$ 可微。等价地，存在常数 $A$ 使
+\[
+f(x)=f(x_0)+A\,(x-x_0)+o(x-x_0)\quad(x\to x_0),
+\]
+此时 $A=f'(x_0)$。
+
+\textbf{(3) $f$ 下凸}　$f$ 在区间 $I$ 上有定义。对任意 $x_1,x_2\in I$ 与任意 $t\in[0,1]$，
+\[
+f\big(tx_1+(1-t)x_2\big)\le t f(x_1)+(1-t)f(x_2).
+\]
+（即曲线上任意两点之间的割线位于曲线上方；若 $f$ 二阶可导，等价于 $f''\ge0$。）
+
+\Vhead{版本 B：要点提示（答题时避免扣分的三个细节）}
+\begin{itemize}
+\item (1) 一定要写"存在这样的 $\eps_0>0$"，不能写成"$\forall\eps$"；另外 $x',x''$ 是\emph{任意靠近}的两个点（$\delta$ 任意小），不是取定的两点。
+\item (2) 必须写明"$f$ 在 $x_0$ 的某邻域内有定义"（否则极限无意义），并指出极限\emph{存在且有限}；只写"导数存在"要说明是单侧还是双侧。
+\item (3) 区间 $I$ 必须是凸集（区间），$t\in[0,1]$；下凸的方向约定各书不同（有的书称"凸"），答题时最好附一句"割线在曲线上方"。
+\end{itemize}
+
+\begin{cmpbox}
+\textbf{对比点评}：概念题不要求计算，但"量词顺序"就是分数。(1) 的正确量词链是 $\exists\eps_0\forall\delta\exists x',x''$，写错一个就丢分；(2) 除了极限式，写上 $o(x-x_0)$ 的等价定义更保险；(3) 三种等价说法（割线、中点 $f(\frac{x_1+x_2}{2})\le\frac{f(x_1)+f(x_2)}{2}$、$f''\ge0$）都写出来最稳。
+\end{cmpbox}
+
+%==================== 2 ====================
+\Qhead{第 2 题（是非题）}{判断下列命题是否正确，如正确给出证明，如错误举反例。}
+
+\Vhead{(1) 设 $y_n$ 是严格单调的正无穷大量，且 $\limn\dfrac{x_n-x_{n-1}}{y_n-y_{n-1}}=+\infty$，则 $\limn\dfrac{x_n}{y_n}=+\infty$。}
+\textbf{结论：正确。}
+\begin{proof}
+记 $a_n=\dfrac{x_n-x_{n-1}}{y_n-y_{n-1}}$，$\Delta y_k=y_k-y_{k-1}>0$（$y_n$ 严格增）。则
+\[
+x_n-x_0=\sum_{k=1}^{n}\Delta x_k=\sum_{k=1}^{n}a_k\,\Delta y_k ,
+\qquad
+y_n-y_0=\sum_{k=1}^{n}\Delta y_k ,
+\]
+故
+\[
+\frac{x_n}{y_n}
+=\frac{x_0+\sum_{k=1}^{n}a_k\Delta y_k}{y_0+\sum_{k=1}^{n}\Delta y_k}
+=\frac{\frac{x_0}{y_n}+\sum_{k=1}^{n}a_k\,\dfrac{\Delta y_k}{y_n}}
+{\frac{y_0}{y_n}+\sum_{k=1}^{n}\dfrac{\Delta y_k}{y_n}} . \tag{$\ast$}
+\]
+令 $\lambda_{k,n}=\dfrac{\Delta y_k}{y_n}$（$k=1,\dots,n$），则 $\lambda_{k,n}>0$ 且 $\sum_{k=1}^n\lambda_{k,n}=1-\dfrac{y_0}{y_n}\to1$，即 $(\ast)$ 是一个\textbf{加权平均}（权重和为 1）。
+
+任取 $M>0$。由 $a_k\to+\infty$，存在 $K$，使 $k>K$ 时 $a_k> M+1$。把 $(\ast)$ 的分子按 $k\le K$ 与 $k>K$ 拆分：
+\[
+\sum_{k\le K}a_k\lambda_{k,n}+\sum_{k>K}a_k\lambda_{k,n}
+\ \ge\ -C\sum_{k\le K}\lambda_{k,n}+(M+1)\sum_{k>K}\lambda_{k,n},
+\]
+其中 $C=\max_{k\le K}|a_k|$。注意 $\lambda_{k,n}=\dfrac{\Delta y_k}{y_n}\le\dfrac{y_K}{y_n}\to0$（$k\le K$ 固定），而 $\sum_{k>K}\lambda_{k,n}\to1$，所以
+\[
+\sum_{k=1}^{n}a_k\lambda_{k,n}\ \ge\ -C\cdot\frac{Ky_K}{y_n}+(M+1)\Big(1-\frac{y_K}{y_n}\Big)\longrightarrow M+1 .
+\]
+于是存在 $N$，$n>N$ 时分子 $>M$；而分母 $\to1$。故 $\dfrac{x_n}{y_n}>M$，即 $\limn\dfrac{x_n}{y_n}=+\infty$。
+\end{proof}
+
+\Vhead{(2) $\lim_{u\to a}f(u)=b$，$\lim_{x\to x_0}g(x)=a$，则 $\lim_{x\to x_0}f\big(g(x)\big)=b$。}
+\textbf{结论：错误。}
+\noindent\textbf{反例}　$x_0=0,\ a=0,\ b=0$。令
+\[
+f(u)=\begin{cases}1,&u=0\\ 0,&u\neq0\end{cases},
+\qquad g(x)\equiv 0 .
+\]
+则 $\lim_{u\to0}f(u)=0=b$（挖心极限与 $f(0)$ 无关），$\lim_{x\to0}g(x)=0=a$。但
+\[
+f\big(g(x)\big)=f(0)=1\quad(\forall x\neq0),
+\]
+故 $\lim_{x\to0}f(g(x))=1\neq0=b$，命题不成立。
+
+\noindent\textbf{修正}　若补充条件"存在 $x_0$ 的去心邻域使 $g(x)\neq a$"（或 $f$ 在 $a$ 处连续），则结论成立。
+
+\vspace{2pt}
+\textbf{(3) 若 $f(x)$ 在有限开区间 $(a,b)$ 上一致连续，则 $f$ 在 $(a,b)$ 上有界。}
+\noindent\textbf{结论：正确。}
+\begin{proof}
+取 $\eps_0=1$，由一致连续，存在 $\delta>0$，使 $x,y\in(a,b)$、$|x-y|<\delta$ 时 $|f(x)-f(y)|<1$。
+
+取 $n\in\Nn$ 使 $\dfrac{b-a}{n}<\delta$，令
+\[
+a=x_0<x_1<\cdots<x_n=b,\qquad x_k=a+\frac{k(b-a)}{n}.
+\]
+每个 $x_k\in(a,b)$，$f$ 在 $x_k$ 处连续，故存在 $\eta_k>0$ 使 $f$ 在 $(x_k-\eta_k,x_k+\eta_k)\cap(a,b)$ 上有界（界记为 $M_k$）。令
+\[
+M=\max\{M_1,\dots,M_n\}+1 .
+\]
+任取 $x\in(a,b)$，存在 $k$ 使 $|x-x_k|<\delta$（因为分点间距 $<\delta$，$x$ 必落在某个分点 $\delta$ 邻域内），于是
+\[
+|f(x)|\le|f(x)-f(x_k)|+|f(x_k)|\le 1+M ,
+\]
+故 $f$ 在 $(a,b)$ 上有界。
+\end{proof}
+
+\vspace{2pt}
+\textbf{(4) 一致连续函数的乘积还是一致连续。}
+\noindent\textbf{结论：错误。}
+\noindent\textbf{反例}　在 $\Rr$ 上取 $f(x)=g(x)=x$。它们都一致连续：取 $\delta=\eps$，$|x-y|<\eps$ 时 $|f(x)-f(y)|=|x-y|<\eps$。但
+\[
+(fg)(x)=x^2 ,
+\]
+而 $x^2$ 在 $\Rr$ 上\emph{不}一致连续：取 $\eps_0=1$，对任意 $\delta>0$，令 $x=\frac1\delta$、$y=\frac1\delta+\frac{\delta}{2}$，则 $|x-y|=\frac\delta2<\delta$，而
+\[
+|x^2-y^2|=\Big|x+y\Big|\cdot\frac\delta2>\frac{2}{\delta}\cdot\frac\delta2=1 .
+\]
+故乘积不一定一致连续。
+
+\noindent\textbf{修正}　若 $f,g$ 一致连续\emph{且都有界}，则 $fg$ 一致连续（因为 $|fg-f_0g_0|\le|f||g-g_0|+|g_0||f-f_0|$）。
+
+\vspace{2pt}
+\textbf{(5) 设 $f(x)$ 在 $(a,b)$ 上可导，$x_1,x_2\in(a,b)$ 满足 $f'(x_1)\cdot f'(x_2)<0$，则存在 $\xi\in(x_1,x_2)$，满足 $f'(\xi)=0$。}
+\noindent\textbf{结论：正确（导函数介值定理 / Darboux 定理的特殊情形）。}
+\begin{proof}
+不妨设 $x_1<x_2$ 且 $f'(x_1)<0<f'(x_2)$（若反号则对 $-f$ 讨论）。
+
+$f'(x_1)<0$ 意味着存在 $\eta>0$ 使 $x_1+h\in(x_1,x_2)$ 时
+\[
+\frac{f(x_1+h)-f(x_1)}{h}<0\quad(h>0\ \text{充分小})\ \Longrightarrow\ f(x_1+h)<f(x_1),
+\]
+故 $f$ 在 $x_1$ 右侧某点处的值小于 $f(x_1)$；同理 $f'(x_2)>0$ 给出 $f(x_2-h)<f(x_2)$。于是 $f$ 在闭区间 $[x_1,x_2]$ 上的最小值\textbf{不在端点取到}（端点值都大于邻近内部点），设最小值在 $\xi\in(x_1,x_2)$ 处取得。由 Fermat 引理（$f$ 在内部点取极值且可导），$f'(\xi)=0$。
+
+（另一种写法：用 Darboux 定理——导函数 $f'$ 具有介值性，$f'(x_1)<0<f'(x_2)$ $\Rightarrow$ 存在 $\xi$ 使 $f'(\xi)=0$。）
+\end{proof}
+
+\vspace{2pt}
+\textbf{(6) 设 $f(x)$ 在 $(a,b)$ 上可导，则 $f'(x)$ 只可能存在第二类间断点。}
+\noindent\textbf{结论：正确。}
+\begin{proof}
+设 $f$ 在 $(a,b)$ 上可导。用反证：假设某个 $x_0\in(a,b)$ 是 $f'$ 的第一类间断点，即 $f'(x_0-0)$ 与 $f'(x_0+0)$ 都存在且有限。
+
+由 Lagrange 中值定理与导数的极限性质：对 $x>x_0$ 附近，
+\[
+\frac{f(x)-f(x_0)}{x-x_0}=f'(c_x),\qquad c_x\in(x_0,x) .
+\]
+令 $x\to x_0^+$，左边 $\to f'(x_0)$（因为 $f$ 在 $x_0$ 可导，差商趋于 $f'(x_0)$），而 $c_x\to x_0^+$，若假设 $f'(x_0+0)$ 存在，则右边 $\to f'(x_0+0)$。故
+\[
+f'(x_0+0)=f'(x_0).
+\]
+同理 $f'(x_0-0)=f'(x_0)$。于是 $f'(x_0-0)=f'(x_0)=f'(x_0+0)$，即 $f'$ 在 $x_0$ 处连续——与"$x_0$ 是间断点"矛盾。
+
+因此 $f'$ 的间断点只能是\emph{第二类}（至少有一个单侧极限不存在）。
+\end{proof}
+
+\Vhead{版本 B：每题"最短可得分"写法}
+\begin{itemize}
+\item (1) 加权平均：$\dfrac{x_n}{y_n}=\dfrac{\sum a_k\Delta y_k}{\sum\Delta y_k}\to+\infty$。要点是"$\Delta y_k/y_n$ 在 $k\to\infty$ 时把权重集中到尾部"。
+\item (2) 反例只要一行：$f(u)=\mathbf 1_{\{u=0\}}$，$g\equiv0$。
+\item (3) 分点 + 挖心增量的标准模板。
+\item (4) 反例 $x\cdot x=x^2$；顺带指出"有界 + 一致连续"才是封闭条件。
+\item (5) 用"最小值不在端点"（比 Darboux 更基础，老师更爱看）。
+\item (6) 用"$f'(x_0\pm0)$ 存在 $\Rightarrow$ 等于 $f'(x_0)$"一句话反证。
+\end{itemize}
+
+\begin{cmpbox}
+\textbf{对比点评}：本题 6 小题里\textbf{两真四假}的判断最容易错的是 (1)——它其实\textbf{是对的}（别被"差分商发散但比值不发散"的直觉骗了），证明的关键是把 $\frac{x_n}{y_n}$ 写成加权平均；(3) 也是对的；(2)(4) 是假，反例都在上面。\\
+\textbf{扣分点}：(i) (1) 只写"显然"不给加权平均推导；(ii) (2) 反例里 $f$ 在点 $a$ 处取什么值没说清；(iii) (3) 忘了分点处要用"连续 $\Rightarrow$ 局部有界"；(iv) (6) 没有反证就直接说"因为导数有介值性"（那是 Darboux 定理，本身也要说明在本题条件下可用）。
+\end{cmpbox}
+
+%==================== 3 ====================
+\Qhead{第 3 题（计算题）}{}
+
+\Vhead{(1) 设 $S_n=\sum_{k=1}^{n}a_k$，当 $n\to\infty$ 时存在极限；$\{p_n\}$ 是单调递增的正无穷大量。计算 $\displaystyle\limn\frac{p_1a_1+p_2a_2+\cdots+p_na_n}{p_n}$。}
+\textbf{解}　设 $S_n\to S$。用分部和（Abel 变换）：
+\[
+\sum_{k=1}^{n}p_ka_k=\sum_{k=1}^{n}p_k(S_k-S_{k-1})
+=p_nS_n-\sum_{k=1}^{n-1}S_k\,(p_{k+1}-p_k) .
+\]
+于是
+\[
+\frac{\sum_{k=1}^{n}p_ka_k}{p_n}
+=S_n-\sum_{k=1}^{n-1}\frac{p_{k+1}-p_k}{p_n}\,S_k . \tag{$\ast$}
+\]
+注意 $\dfrac{p_{k+1}-p_k}{p_n}\ge0$ 且
+\[
+\sum_{k=1}^{n-1}\frac{p_{k+1}-p_k}{p_n}=\frac{p_n-p_1}{p_n}\longrightarrow1 ,
+\]
+所以 $(\ast)$ 右端的和是一个\textbf{加权平均}（权重和为 $1-o(1)$）。任取 $\eps>0$，取 $K$ 使 $k\ge K$ 时 $|S_k-S|<\eps$。把和拆成 $k<K$ 与 $k\ge K$ 两段：
+\[
+\Big|\sum_{k}\frac{\Delta p_k}{p_n}S_k-S\Big|
+\le\sum_{k<K}\frac{\Delta p_k}{p_n}\,|S_k-S|
++\eps\sum_{k\ge K}\frac{\Delta p_k}{p_n}
++\big|S\big|\cdot\Big|1-\sum_{k}\frac{\Delta p_k}{p_n}\Big| .
+\]
+第一项 $\le\dfrac{p_K}{p_n}\max_{k<K}|S_k-S|\to0$（$K$ 固定，$p_n\to\infty$），第二项 $\le\eps$，第三项 $\to0$。故
+\[
+\limn\frac{\sum_{k=1}^{n}p_ka_k}{p_n}=S=\limn S_n=\sum_{k=1}^{\infty}a_k .
+\]
+
+\Vhead{(2) $\displaystyle\limn\Big(\frac{1}{n+\sqrt1}+\frac{1}{n+\sqrt2}+\cdots+\frac{1}{n+\sqrt n}\Big)$。}
+\textbf{解}　记 $S_n=\sum_{k=1}^{n}\dfrac{1}{n+\sqrt k}$。对每个 $k$ 有
+\[
+\frac{1}{n+\sqrt n}\le\frac{1}{n+\sqrt k}\le\frac{1}{n},
+\]
+故
+\[
+\frac{n}{n+\sqrt n}\le S_n\le\frac{n}{n}=1 .
+\]
+两端当 $n\to\infty$ 时都趋于 $1$（左边 $\dfrac{n}{n+\sqrt n}=\dfrac{1}{1+1/\sqrt n}\to1$），由夹逼定理
+\[
+\boxed{\limn S_n=1 .}
+\]
+\textbf{数值验证}：$S_{10}=0.8191$，$S_{100}=0.9375$，$S_{1000}=0.9794$，$S_{10000}=0.9934$，$S_{10^5}=0.99790$，确实单调趋于 $1$。
+
+\Vhead{(3) $\displaystyle\lim_{x\to0}(x+e^x)^{\frac1x}$。}
+\textbf{解}　写成指数形式：
+\[
+\big(x+e^x\big)^{1/x}=\exp\Big\{\frac{\ln(x+e^x)}{x}\Big\} .
+\]
+当 $x\to0$ 时 $\ln(x+e^x)\to\ln1=0$、$x\to0$，用 L'Hospital（$0/0$）：
+\[
+\lim_{x\to0}\frac{\ln(x+e^x)}{x}
+=\lim_{x\to0}\frac{(1+e^x)/(x+e^x)}{1}
+=\frac{1+1}{1}=2 .
+\]
+故
+\[
+\boxed{\lim_{x\to0}(x+e^x)^{1/x}=e^{2} .}
+\]
+\textbf{数值验证}：$x=10^{-4}$ 得 $7.387948$，$x=-10^{-4}$ 得 $7.390165$，而 $e^2=7.389056$，两端夹逼一致。
+
+\Vhead{(4) $\displaystyle\lim_{x\to+\infty}x^{\frac32}\big(\sqrt{x+1}+\sqrt{x-1}-2\sqrt{x}\big)$。}
+\textbf{解}　把根号提出 $\sqrt x$，令 $t=\dfrac1x\to0^+$：
+\[
+\sqrt{x\pm1}=\sqrt x\,\sqrt{1\pm t}=(1\pm t)^{1/2}\sqrt x ,
+\]
+故
+\[
+\sqrt{x+1}+\sqrt{x-1}-2\sqrt x=\sqrt x\,\big[(1+t)^{1/2}+(1-t)^{1/2}-2\big] .
+\]
+用 Taylor 展开 $(1\pm t)^{1/2}=1\pm\frac12t-\frac18t^2+O(t^3)$：
+\[
+(1+t)^{1/2}+(1-t)^{1/2}-2=-\frac14t^2+O(t^4) .
+\]
+于是
+\[
+x^{3/2}\cdot\sqrt x\Big(-\tfrac14t^2+O(t^4)\Big)
+=x^{2}\Big(-\tfrac14\cdot\frac1{x^2}+O(x^{-4})\Big)\longrightarrow-\frac14 .
+\]
+\[
+\boxed{\lim_{x\to+\infty}x^{3/2}\big(\sqrt{x+1}+\sqrt{x-1}-2\sqrt x\big)=-\frac14 .}
+\]
+\textbf{数值验证}（高精度 Decimal）：$x=10^2$ 得 $-0.25000781$，$x=10^6$ 得 $-0.250000000000078$，$x=10^{10}$ 得 $-0.2500000000\cdots$，收敛到 $-1/4$。
+
+\Vhead{(5) 已知 $2y\sin x+x\ln y=0$，求 $\dfrac{d^2y}{dx^2}$。}
+\textbf{解}　记 $F(x,y)=2y\sin x+x\ln y=0$。两边对 $x$ 求导（$y=y(x)$）：
+\[
+2y'\sin x+2y\cos x+\ln y+\frac{x}{y}\,y'=0
+\ \Longrightarrow\
+y'\Big(2\sin x+\frac{x}{y}\Big)=-\big(2y\cos x+\ln y\big),
+\]
+即
+\[
+y'=-\frac{2y\cos x+\ln y}{2\sin x+\dfrac{x}{y}} . \tag{1}
+\]
+记分子 $N=2y\cos x+\ln y$，分母 $D=2\sin x+\dfrac xy$，则 $y'=-\dfrac ND$。再对 $x$ 求导：
+\[
+y''=-\frac{N'D-ND'}{D^2},
+\]
+其中
+\[
+N'=2y'\cos x-2y\sin x+\frac{y'}{y},\qquad
+D'=2\cos x+\frac1y-\frac{x\,y'}{y^2} .
+\]
+把 (1) 的 $y'$ 代入即得
+\[
+\boxed{
+y''=-\frac{\Big(2y'\cos x-2y\sin x+\frac{y'}{y}\Big)D-N\Big(2\cos x+\frac1y-\frac{x y'}{y^2}\Big)}{D^{2}},
+\quad N=2y\cos x+\ln y,\ D=2\sin x+\frac{x}{y},\ y'=-\frac ND .}
+\]
+\textbf{约化形式}（提示：由原方程 $2y\sin x=-x\ln y$，可把 $\sin x$ 也消掉，得到一个只含 $x,y,\ln y$ 的整洁表达式；考场上写上面的形式并说明"$y'$ 由 (1) 给出"即可）。
+
+\noindent\textbf{数值验证}：取 $x=0.7$（对应 $y\approx0.4427$），隐函数公式给出 $y''\approx0.074975$，而二阶差分数值结果 $0.074940$，两者一致。
+
+\Vhead{(6) 已知 $\begin{cases}x=\sin at\\ y=\cos bt\end{cases}$，求 $\dfrac{d^2y}{dx^2}$。}
+\textbf{解}　参数式求导：
+\[
+\frac{dy}{dx}=\frac{y'_t}{x'_t}=\frac{-b\sin bt}{a\cos at},
+\qquad
+\frac{d^2y}{dx^2}=\frac{\Big(\dfrac{dy}{dx}\Big)'_t}{x'_t}
+=\frac{\dfrac{-b^2\cos bt\cdot a\cos at-(-b\sin bt)\cdot(-a\sin at)}{a^2\cos^2at}}{a\cos at}.
+\]
+化简（分子用 $\cos bt\cos at-\sin bt\sin at$ 无简化，保留原式）：
+\[
+\boxed{
+\frac{d^2y}{dx^2}
+=\frac{-b^{2}\cos bt\cdot\cos at-b^{2}\sin bt\sin at}{a^{2}\cos^{3}at}
+=-\frac{b^{2}}{a^{2}}\cdot\frac{\cos bt\,\cos at+\sin bt\,\sin at}{\cos^{3}at}
+=-\frac{b^{2}\cos\big((b-a)t\big)}{a^{2}\cos^{3}at}.}
+\]
+特别地，若 $a=b$（即 $x=\sin at,\ y=\cos at$，曲线为圆），则
+\[
+\frac{d^2y}{dx^2}=-\frac{1}{a^{2}\cos^{3}at}=-\frac{1}{a^{2}\cos^{3}at},
+\]
+与 $y=\sqrt{1-x^2}$ 的二阶导 $-\dfrac{1}{(1-x^2)^{3/2}}=-\dfrac1{\cos^3at}$（当 $a=1$）一致。
+
+\textbf{数值验证}：取 $a=2,b=3,t=0.4$，公式给出 $-4.645238787$；直接对 $y=y(x)$ 做二阶差分得 $-4.645238877$，两者相符。
+
+\Vhead{(7) 求 $y=\dfrac{x^2}{1+x}$ 的渐近线。}
+\textbf{解}　先做多项式除法：
+\[
+y=\frac{x^2}{1+x}=x-1+\frac{1}{1+x} .
+\]
+\textbf{竖直渐近线}：$x\to-1$ 时分母为零而分子 $x^2\to1\neq0$，故
+\[
+x=-1\ \text{是竖直渐近线（}y\to\pm\infty\text{）}.
+\]
+\textbf{斜渐近线}：$x\to\pm\infty$ 时 $\dfrac{1}{1+x}\to0$，故
+\[
+y-(x-1)=\frac{1}{1+x}\longrightarrow0 ,
+\]
+所以 $y=x-1$ 是斜渐近线（两个方向都是）。
+
+\noindent\textbf{结论}：$y=\dfrac{x^2}{1+x}$ 有两条渐近线
+\[
+\boxed{x=-1\ (\text{竖直}),\qquad y=x-1\ (\text{斜}) .}
+\]
+\textbf{数值验证}：$x=10^6$ 时 $y-(x-1)=10^{-6}\to0$。
+
+\begin{cmpbox}
+\textbf{对比点评}：计算题的"标准动作"——(1) 分部和（Abel）变换 + 加权平均；(2) 夹逼（别硬算 Euler 常数）；(3) 取对数 + L'Hospital，答案 $e^2$；(4) 换元 $t=1/x$ 后 Taylor，答案 $\mathbf{-1/4}$（不是 $-1/8$，容易把 $t^2$ 的系数算错）；(5) 隐函数两次求导，写清 $y'$ 由哪个式子给出；(6) 参数式二阶导公式 $\dfrac{x'y''-y'x''}{(x')^3}$，化简时注意 $\cos bt\cos at+\sin bt\sin at=\cos((b-a)t)$；(7) 先做除法再读渐近线，比求极限快得多。
+\end{cmpbox}
+
+%==================== 4 ====================
+\Qhead{第 4 题（证明题）}{}
+
+\noindent{\heiti\color{acc2}(1)}\quad 若 $f(x)$ 在 $[x_1,x_2]$ 上可微，且 $x_1x_2>0$，则存在 $\xi\in(x_1,x_2)$，使
+\[
+\frac{x_1f(x_2)-x_2f(x_1)}{x_1-x_2}=f(\xi)-\xi f'(\xi).
+\]
+\textbf{证}　条件 $x_1x_2>0$ 保证 $x_1,x_2$ 同号，从而 $x_1\neq0$、$x_2\neq0$，$x_1-x_2\neq0$，且可以除以 $x_1x_2$。
+
+改用\emph{带辅助函数}的标准构造：取
+\[
+F(x)=\frac{f(x)}{x},
+\qquad
+G(x)=\frac1x ,
+\]
+在 $[x_1,x_2]$ 上（$x_1x_2>0$ 保证不跨过 $0$，故 $F,G$ 在区间上可微且 $x\neq0$）对 $F$ 与 $G$ 用 \textbf{Cauchy 中值定理}：存在 $\xi\in(x_1,x_2)$ 使
+\[
+\frac{F(x_2)-F(x_1)}{G(x_2)-G(x_1)}=\frac{F'(\xi)}{G'(\xi)} . \tag{$\ast$}
+\]
+计算：
+\[
+F(x_2)-F(x_1)=\frac{f(x_2)}{x_2}-\frac{f(x_1)}{x_1}
+=\frac{x_1f(x_2)-x_2f(x_1)}{x_1x_2},
+\]
+\[
+G(x_2)-G(x_1)=\frac1{x_2}-\frac1{x_1}=\frac{x_1-x_2}{x_1x_2},
+\]
+\[
+F'(\xi)=\frac{\xi f'(\xi)-f(\xi)}{\xi^{2}},\qquad
+G'(\xi)=-\frac1{\xi^{2}} .
+\]
+代入 $(\ast)$：
+\[
+\frac{\dfrac{x_1f(x_2)-x_2f(x_1)}{x_1x_2}}{\dfrac{x_1-x_2}{x_1x_2}}
+=\frac{\dfrac{\xi f'(\xi)-f(\xi)}{\xi^2}}{-\dfrac{1}{\xi^2}}
+=-\big(\xi f'(\xi)-f(\xi)\big)=f(\xi)-\xi f'(\xi) .
+\]
+左端约去 $x_1x_2$ 即得
+\[
+\frac{x_1f(x_2)-x_2f(x_1)}{x_1-x_2}=f(\xi)-\xi f'(\xi),
+\qquad \xi\in(x_1,x_2). \qquad\blacksquare
+\]
+
+\noindent{\heiti\color{acc2}(2)}\quad 设 $f(x)$ 在 $[a,b]$ 上二阶可导，$f(a)=f(b)=0$，证明：
+\[
+\max_{a\le x\le b}|f(x)|\le\frac18(b-a)^{2}\max_{a\le x\le b}|f''(x)| .
+\]
+\textbf{证}　记 $M=\max_{[a,b]}|f''|$。先对任意 $x\in(a,b)$ 用两点 Taylor 公式：分别以 $a$ 与 $b$ 为基点，
+\[
+f(a)=f(x)+f'(x)(a-x)+\frac{f''(\xi_1)}{2}(a-x)^{2},
+\]
+\[
+f(b)=f(x)+f'(x)(b-x)+\frac{f''(\xi_2)}{2}(b-x)^{2},
+\]
+其中 $\xi_1\in(a,x)$、$\xi_2\in(x,b)$。因为 $f(a)=f(b)=0$，第一式乘 $(b-x)$、第二式乘 $(x-a)$，两式相加消去 $f'(x)$：
+\[
+0=f(x)\big[(b-x)+(x-a)\big]+\frac{f''(\xi_1)}{2}(a-x)^{2}(b-x)+\frac{f''(\xi_2)}{2}(b-x)^{2}(x-a),
+\]
+即
+\[
+(b-a)\,f(x)
+=-\frac{M_1}{2}(x-a)^{2}(b-x)-\frac{M_2}{2}(b-x)^{2}(x-a),\qquad |M_i|\le M .
+\]
+于是
+\[
+(b-a)|f(x)|\le\frac{M}{2}(x-a)(b-x)\Big[(x-a)+(b-x)\Big]
+=\frac{M}{2}(x-a)(b-x)(b-a),
+\]
+即
+\[
+|f(x)|\le\frac{M}{2}(x-a)(b-x). \tag{1}
+\]
+再由 $(x-a)(b-x)\le\Big(\dfrac{(x-a)+(b-x)}{2}\Big)^{2}=\dfrac{(b-a)^{2}}{4}$（AM-GM），代入 (1)：
+\[
+|f(x)|\le\frac{M}{2}\cdot\frac{(b-a)^{2}}{4}=\frac18(b-a)^{2}M .
+\]
+端点 $x=a,b$ 处 $f=0$，不等式显然成立。故
+\[
+\max_{a\le x\le b}|f(x)|\le\frac18(b-a)^2\max_{a\le x\le b}|f''(x)| . \qquad\blacksquare
+\]
+
+\noindent\textbf{常数最优性}：取 $[a,b]=[0,1]$、$f(x)=\dfrac{M}{2}x(1-x)$，则 $f(0)=f(1)=0$，$f''=-M$，而
+\[
+\max|f|=f\Big(\frac12\Big)=\frac M8;
+\]
+右端也恰为 $\dfrac18\cdot1^{2}\cdot M=\dfrac{M}{8}$，等号成立，故 $\dfrac18$ 是最优常数（数值验证：$M=2$ 时两者都是 $0.25$）。
+
+\begin{cmpbox}
+\textbf{对比点评}：(1) 的核心是把结论识别成 \textbf{Cauchy 中值定理}：对 $\dfrac{f(x)}{x}$ 与 $\dfrac1x$ 用定理；辅助函数写对就只剩计算。注意必须用条件 $x_1x_2>0$（否则区间跨过 $0$，$F(x)=f(x)/x$ 在 $0$ 处无定义，定理不能用）——这是本题的采分点。\\
+(2) 的两种写法都行：\emph{Taylor 两点公式}（如上）或\emph{在最大值点用 Lagrange 中值}（$|f(x)|\le M(x-a)(b-x)/2$ 再 AM-GM）。扣分点：忘记说明端点情形；把 $(x-a)+(b-x)$ 误写成别的；不验证 $1/8$ 的最优性。
+\end{cmpbox}
+
+\newpage
+%==================== 速查页 ====================
+\begin{center}
+{\Large\heiti 一页速查 · 结论与易错点}\\[4pt]
+{\footnotesize\color{black!60}考前 5 分钟扫一眼}
+\end{center}
+\vspace{-2pt}
+\hrule
+\vspace{6pt}
+\small
+
+\textbf{1. 概念}\ (1) $\exists\eps_0>0,\ \forall\delta>0,\ \exists x',x''\in I$：$|x'-x''|<\delta$ 而 $|f(x')-f(x'')|\ge\eps_0$；(2) $\lim_{h\to0}\frac{f(x_0+h)-f(x_0)}{h}$ 存在有限，等价 $f(x)=f(x_0)+A(x-x_0)+o(x-x_0)$；(3) $f(tx_1+(1-t)x_2)\le tf(x_1)+(1-t)f(x_2)$，$t\in[0,1]$。
+
+\textbf{2. 是非}\ (1) \textbf{真}——$\frac{x_n}{y_n}=\frac{\sum a_k\Delta y_k}{\sum\Delta y_k}$ 是加权平均；(2) \textbf{假}——$f=\mathbf 1_{\{0\}},\ g\equiv0$；(3) \textbf{真}——分点 + 局部有界；(4) \textbf{假}——$x\cdot x=x^2$ 不一致连续；(5) \textbf{真}——最值不在端点 + Fermat（或 Darboux）；(6) \textbf{真}——$f'(x_0\pm0)$ 存在则等于 $f'(x_0)$，故不能是跳变。
+
+\textbf{3. 计算}\
+(1) $\displaystyle\lim\frac{\sum p_ka_k}{p_n}=\sum_{k=1}^\infty a_k=\lim S_n$（分部和 + 加权平均）；
+(2) \boxed{1}（夹逼 $\frac{n}{n+\sqrt n}\le S_n\le1$）；
+(3) \boxed{e^{2}}（取对数 + L'Hospital）；
+(4) \boxed{-\dfrac14}（$t=1/x$ 后 Taylor：$\sqrt{1\pm t}$ 展开得 $-\frac14t^2$）；
+(5) $y'=-\dfrac{2y\cos x+\ln y}{2\sin x+x/y}$，再求一次导；
+(6) $\dfrac{d^2y}{dx^2}=-\dfrac{b^2\cos((b-a)t)}{a^2\cos^3 at}$；
+(7) $x=-1$（竖直）与 $y=x-1$（斜）。
+
+\textbf{4. 证明}\
+(1) Cauchy 中值：$F=f(x)/x$，$G=1/x$，需要 $x_1x_2>0$；(2) 两点 Taylor 相加得 $|f(x)|\le\frac M2(x-a)(b-x)\le\frac M8(b-a)^2$，常数最优（取 $f=\frac M2 x(1-x)$）。
+
+\end{document}

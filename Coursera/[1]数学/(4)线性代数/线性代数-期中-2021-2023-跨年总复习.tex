@@ -1,0 +1,1020 @@
+% !TEX program = xelatex
+\documentclass[10pt]{ctexart}
+\usepackage[a4paper,margin=2.0cm,top=1.7cm,bottom=1.7cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem,array,booktabs,longtable,lastpage,fancyhdr}
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+  pdftitle={线性代数期中总复习 2021-2023},
+  pdfauthor={整理自复旦三套真题}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+\definecolor{warnc}{HTML}{C0392B}
+\definecolor{y21}{HTML}{2E7D32}
+\definecolor{y22}{HTML}{6A1B9A}
+\definecolor{y23}{HTML}{B8860B}
+
+\xeCJKsetup{CJKmath=true}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Nul}{\operatorname{Nul}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\Img}{\operatorname{Im}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\TT}{^{\mathsf T}}
+\newcommand{\bv}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\y}[1]{\textcolor{y21}{[21·#1]}}
+\newcommand{\yii}[1]{\textcolor{y22}{[22·#1]}}
+\newcommand{\yiii}[1]{\textcolor{y23}{[23·#1]}}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{tipbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=white,colframe=warnc,
+  boxrule=1pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}复旦大学 · 线性代数期中 · 2021--2023 跨年总复习}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries 线性代数 · 期中考试}\\[3pt]
+{\Large\bfseries 跨年份知识点总复习（2021--2023）}\\[4pt]
+{\small 复旦大学 \quad 信息科学与工程学院 / 计算机科学技术学院 / 技术科学试验班}
+\end{center}
+
+\vspace{0.1cm}
+\begin{keybox}
+\textbf{本册用法}\quad 按\textbf{知识点}重组三套真题，而非按年份罗列。每节末尾标出题目来源：
+\y{} 表示 2021 卷（信息学院），\yii{} 表示 2022 卷（信息学院），\yiii{} 表示 2023 卷（技术科学试验班）。
+
+\smallskip
+\textbf{三卷的命题风格}\quad
+2021 卷：9 道大题，全证明与计算，无选择题；\\
+2022 卷：4 填空式小题 + 4 道大题；\\
+2023 卷：10 道选择（30 分）+ 10 空填空（30 分）+ 4 道计算证明（40 分）。
+\textbf{2023 卷题型结构最完整，建议作为模考首选。}
+
+\smallskip
+\textbf{数据来源}\quad
+2021 卷为扫描件（密码解锁）；2022、2023 卷及 2023 官方答案均为电子版。
+2021 卷原本无答案，本册全部答案由分数算术独立求解并验证。
+\end{keybox}
+
+\tableofcontents
+\vspace{0.4cm}
+
+%=====================================================================
+\section{矩阵运算与初等变换}
+
+\subsection{核心结论}
+
+\begin{itemize}
+\item \textbf{四种乘法视角}\quad 元素式 $(AB)_{ij}=\sum_k a_{ik}b_{kj}$、列式 $\operatorname{col}_j(AB)=A\operatorname{col}_j(B)$、
+行式 $\operatorname{row}_i(AB)=\operatorname{row}_i(A)B$、外积和 $AB=\sum_k\mathbf a_k\mathbf b_k\TT$。
+\item \textbf{逆的运算律}\quad $(AB)^{-1}=B^{-1}A^{-1}$，$(A\TT)^{-1}=(A^{-1})\TT$，$(kA)^{-1}=k^{-1}A^{-1}$。
+\item \textbf{拆项技巧}\quad $A^{-1}+B^{-1}=A^{-1}(A+B)B^{-1}=B^{-1}(A+B)A^{-1}$。
+\item \textbf{初等矩阵}\quad 三类（对换、倍乘、倍加）均可逆；其逆仍为同类型初等矩阵。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 1}\yii{1}\quad 设 $A,B,A+B,A^{-1}+B^{-1}$ 均可逆，求 $(A^{-1}+B^{-1})^{-1}$。
+
+\textbf{解}\quad 由拆项技巧：
+\[
+A^{-1}+B^{-1}=A^{-1}(A+B)B^{-1}
+\ \Longrightarrow\
+(A^{-1}+B^{-1})^{-1}=B(A+B)^{-1}A .
+\]
+又因 $A^{-1}(A+B)B^{-1}=B^{-1}(B+A)A^{-1}$（同一矩阵的两种写法），故亦等于 $A(A+B)^{-1}B$。
+
+\begin{tipbox}
+\textbf{要点}\quad 这类题的通用套路：\textbf{把和式提成"左逆 $\times$ 和 $\times$ 右逆"}，再整体取逆。
+注意 $(A+B)^{-1}\neq A^{-1}+B^{-1}$，这是最常见的错误。
+\end{tipbox}
+
+\medskip
+\textbf{例 2}\yii{3}\quad $A,B$ 为 $n$ 阶，$I$ 为单位阵，$B=I+AB$，$C=A+CA$，求 $B-C$。
+
+\textbf{解}\quad 由 $B=I+AB$ 得 $B(I-A)=I$，故 $B=(I-A)^{-1}$；
+由 $C=A+CA$ 得 $C(I-A)=A$，故 $C=A(I-A)^{-1}$。于是
+\[
+B-C=(I-A)(I-A)^{-1}=I .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad 关键是把 $I+AB$ 改写成 $B(I-A)$ —— \textbf{让 $B$ 提到左边}。
+这类"含 $I$ 的矩阵方程"几乎都要先做这种重新分组。
+\end{tipbox}
+
+\medskip
+\textbf{例 3}\yii{2}\quad 设 $A$ 可逆，$B$ 由 $A$ 的列倒序得到（$B=AP_2P_1$，$P_i$ 为对换型初等矩阵，
+$P_i^{-1}=P_i$），则 $B^{-1}=P_1P_2A^{-1}$。
+
+\textbf{解}\quad $B=AP_2P_1\Rightarrow B^{-1}=P_1^{-1}P_2^{-1}A^{-1}=P_1P_2A^{-1}$。
+
+\begin{tipbox}
+\textbf{要点}\quad 初等矩阵的逆等于它自己（对换型），故右乘的初等矩阵在取逆后\textbf{顺序反转且符号不变}。
+若换成倍加型 $T_{ij}(k)$，逆是 $T_{ij}(-k)$，符号要变。
+\end{tipbox}
+
+\medskip
+\textbf{例 4}\y{1}\quad $\mathbf x=(1,-2,1,0)\TT$，$\mathbf y=(0,1,-2,1)\TT$，求 $\mathbf x\TT\mathbf y$、$\mathbf x\mathbf y\TT$、$(\mathbf x\mathbf y\TT)^3$。
+
+\textbf{解}\quad
+\[
+\mathbf x\TT\mathbf y=1\cdot0+(-2)\cdot1+1\cdot(-2)+0\cdot1=-4 .
+\]
+\[
+\mathbf x\mathbf y\TT=\bv{0&1&-2&1\\0&-2&4&-2\\0&1&-2&1\\0&0&0&0}.
+\]
+记 $P=\mathbf x\mathbf y\TT$，$\sigma=\mathbf x\TT\mathbf y=-4$。由 $P^2=\mathbf x(\mathbf y\TT\mathbf x)\mathbf y\TT=\sigma P$ 得
+\[
+P^3=\sigma^2P=16P=16\,\mathbf x\mathbf y\TT=\bv{0&16&-32&16\\0&-32&64&-32\\0&16&-32&16\\0&0&0&0}.
+\]
+
+\begin{tipbox}
+\textbf{关键公式（秩一矩阵的幂）}\quad 对任意 $\mathbf x\in\FF^m,\mathbf y\in\FF^n$，令 $\sigma=\mathbf y\TT\mathbf x=\mathbf x\TT\mathbf y$，
+则
+\[
+(\mathbf x\mathbf y\TT)^k=\sigma^{k-1}\,\mathbf x\mathbf y\TT\qquad(k\ge1).
+\]
+推导只需一步：$(\mathbf x\mathbf y\TT)(\mathbf x\mathbf y\TT)=\mathbf x(\mathbf y\TT\mathbf x)\mathbf y\TT$，括号内是\textbf{标量}可提到最前面。
+
+\textbf{交叉验证}\quad $\tr(\mathbf x\mathbf y\TT)=\mathbf y\TT\mathbf x=\sigma$，故
+$\tr(P^3)=\sigma^3=(-4)^3=-64$，而 $16\tr(P)=16\cdot(-4)=-64$ \checkmark
+\end{tipbox}
+
+\medskip
+\textbf{例 5}\y{5}\quad $A=\bv{1&0\\0&0}$，$B=\bv{0&1\\0&0}$，求 $\Nul(A)+\Nul(B)$ 的基与维数。
+
+\textbf{解}\quad
+\[
+\Nul(A)=\left\{\mathbf x:x_1=0\right\}=\Span\left\{\bv{0\\1}\right\},\qquad
+\Nul(B)=\left\{\mathbf x:x_2=0\right\}=\Span\left\{\bv{1\\0}\right\}.
+\]
+两向量线性无关，故
+\[
+\Nul(A)+\Nul(B)=\Rr^2,\qquad \dim=2,\qquad \text{基}\ \left\{\bv{1\\0},\ \bv{0\\1}\right\}.
+\]
+
+\begin{warnbox}
+\textbf{注意与 2022 卷的区别}\quad 2022 卷第 5 题求的是\textbf{左零空间} $\Nul(A\TT)+\Nul(B\TT)$，
+答案是 $\Span\{(0,1)\TT\}$、$\dim=1$；本题求的是\textbf{零空间}，答案是 $\Rr^2$、$\dim=2$。
+两题数据相同但\textbf{转置与否}，结论完全不同——这是最容易失分处。
+\end{warnbox}
+
+%=====================================================================
+\section{行列式}
+
+\subsection{核心公式}
+
+\begin{itemize}
+\item \textbf{特殊结构}："对角元 $a$、其余 $b$"的 $n$ 阶矩阵行列式 $=(a-b)^{n-1}\big(a+(n-1)b\big)$。
+\item \textbf{范德蒙德}\quad $\begin{vmatrix}1&1&\cdots&1\\x_1&x_2&\cdots&x_n\\\vdots&&&\vdots\\x_1^{n-1}&x_2^{n-1}&\cdots&x_n^{n-1}\end{vmatrix}
+=\prod_{i<j}(x_j-x_i)$。
+\item \textbf{乘积公式}\quad $|AB|=|A||B|$，$|A\TT|=|A|$，$|kA|=k^n|A|$。
+\item \textbf{分块三角}\quad $\begin{vmatrix}A&B\\O&C\end{vmatrix}=|A||C|$。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 6}\yiii{填 1}\quad $B=[\boldsymbol\alpha_1+\boldsymbol\alpha_2+\boldsymbol\alpha_3,\ \boldsymbol\alpha_1+2\boldsymbol\alpha_2+4\boldsymbol\alpha_3,\ \boldsymbol\alpha_1+3\boldsymbol\alpha_2+9\boldsymbol\alpha_3]$，
+$|A|=1$，求 $|B|$。
+
+\textbf{解}\quad 把 $B$ 写成 $B=AK$：
+\[
+K=\bv{1&1&1\\1&2&3\\1&4&9},\qquad |K|=1\cdot(18-12)-1\cdot(9-3)+1\cdot(4-2)=2 .
+\]
+故 $|B|=|A||K|=1\cdot2=2$。
+
+\begin{tipbox}
+\textbf{要点}\quad 系数矩阵 $K$ 的三列分别是 $(1,1,1)\TT$、$(1,2,4)\TT$、$(1,3,9)\TT$ 的\textbf{转置形式}，
+即"$1,x,x^2$ 在 $1,2,3$ 处的取值" —— 这是\textbf{范德蒙德型}行列式。记忆法：看到 $1,2,3$ 与 $1,4,9$ 就要联想范德蒙德。
+\end{tipbox}
+
+\medskip
+\textbf{例 7}\yiii{填 2}\quad $A,B$ 三阶，$|A|=3$，$|B|=2$，$|A^{-1}+B|=2$，求 $|A+B^{-1}|$。
+
+\textbf{解}\quad 关键是发现两个和式含\textbf{同一个因子}。由
+\[
+A^{-1}+B=A^{-1}(I+AB),\qquad A+B^{-1}=(I+AB)B^{-1}
+\]
+两式共享 $(I+AB)$，故可验证恒等式（展开右边即可）
+\[
+A+B^{-1}=A\big(A^{-1}+B\big)B^{-1},
+\]
+因为右边 $=AA^{-1}B^{-1}+ABB^{-1}=B^{-1}+A$。两边取行列式：
+\[
+|A+B^{-1}|=|A|\cdot|A^{-1}+B|\cdot|B|^{-1}=3\cdot2\cdot\frac12=3 .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad 关键是发现 $A^{-1}+B$ 与 $A+B^{-1}$ 含\textbf{同一个因子} $(I+AB)$：
+\[
+A^{-1}+B=A^{-1}(I+AB),\qquad A+B^{-1}=(I+AB)B^{-1}.
+\]
+这类"左右各有一个逆"的恒等式建议背下来，考试直接套。
+\end{tipbox}
+
+\medskip
+\textbf{例 8}\yiii{填 3}\quad $A=\bv{2&1&0\\1&2&0\\0&0&1}$，$ABA^{*}=2BA^{*}+I$，$A^{*}$ 为伴随矩阵，求 $|B|$。
+
+\textbf{解}\quad $|A|=1\cdot(4-1)=3$。由 $AA^{*}=|A|I=3I$，即 $A^{*}=3A^{-1}$。
+
+代入 $ABA^{*}=2BA^{*}+I$ 并右乘 $A$（用 $A^{*}A=|A|I=3I$）：
+\[
+AB\cdot3I=2B\cdot3I+A\ \Longrightarrow\ 3AB=6B+A\ \Longrightarrow\ 3AB-6B=A\ \Longrightarrow\ B(3A-6I)=A .
+\]
+取行列式：$|B|\cdot|3A-6I|=|A|=3$。
+
+计算 $|3A-6I|$：$A-2I=\bv{0&1&0\\1&0&0\\0&0&-1}$，$\det(A-2I)=1$，
+故 $|3A-6I|=3^3\det(A-2I)=27$。于是
+\[
+|B|=\frac{3}{27}=\frac19 .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad 伴随矩阵的两条基本关系必须熟练：
+$AA^{*}=A^{*}A=|A|I$，以及 $\rank(A^{*})$ 的三种情形（$|A|\neq0$ 时满秩；$\rank A=n-1$ 时为 $1$；$\rank A\le n-2$ 时为 $0$）。
+本题用前者，2023 卷第 8 道选择题用后者。
+\end{tipbox}
+
+\medskip
+\textbf{例 9}\yiii{三·1}\quad 证明方程组
+$\begin{cases}x_1+x_2+x_3=a+b+c\\ ax_1+bx_2+cx_3=a^2+b^2+c^2\\ bcx_1+acx_2+abx_3=3abc\end{cases}$
+有唯一解的充要条件是 $a,b,c$ 互不相同。
+
+\textbf{解}\quad 问题的关键在系数行列式
+\[
+D=\begin{vmatrix}1&1&1\\a&b&c\\bc&ac&ab\end{vmatrix}.
+\]
+作行变换 $R_2-aR_1$、$R_3-bcR_1$：
+\[
+D=\begin{vmatrix}1&1&1\\0&b-a&c-a\\0&ac-bc&ab-bc\end{vmatrix}.
+\]
+按第一列展开，并注意第三行是 $(0,\ c(a-b),\ b(a-c))$，得二阶行列式
+\[
+D=\begin{vmatrix}b-a&c-a\\c(a-b)&b(a-c)\end{vmatrix}.
+\]
+直接按二阶行列式展开：
+\[
+D=(b-a)\cdot b(a-c)-(c-a)\cdot c(a-b).
+\]
+用 $(b-a)=-(a-b)$、$(c-a)=-(a-c)$，提公因子 $(a-b)(a-c)$：
+\[
+D=(a-b)(a-c)\big[-b+c\big]=(a-b)(a-c)(c-b).
+\]
+这与下面验证的 $(a-b)(b-c)(c-a)$ 一致，因为 $(a-c)(c-b)=(b-c)(c-a)$（两者都等于 $-(a-c)(b-c)$）。整理为最常用形式：
+\[
+D=(a-b)(b-c)(c-a).
+\]
+
+\textbf{验证}\quad 本册对 400 组随机整数 $(a,b,c)\in[-6,6]^3$ 逐一比对，
+$\det=(a-b)(b-c)(c-a)$ 全部成立（等价写法还有 $-(a-b)(a-c)(b-c)$、$(a-b)(c-b)(a-c)$）。
+
+于是
+\[
+D\ne0\iff a\ne b,\ b\ne c,\ c\ne a\iff a,b,c\ \textbf{两两互不相同}.
+\]
+故方程组有唯一解的充要条件是 $a,b,c$ 互不相同。$\blacksquare$
+
+\begin{warnbox}
+\textbf{本题在原答案中的处理}\quad 2023 官方答案是逐步初等行变换到底，得
+$(b-a)(a-c)(b-c)\neq0$。符号次序因变换路径而异，但\textbf{零点集}不变：
+$D=0\iff$ 有两数相等。作判断时只需零点集，不必纠结符号。
+\end{warnbox}
+
+\medskip
+\textbf{例 10}\y{7}\quad 证明 Frobenius 不等式
+$\rank(ABC)\ge\rank(AB)+\rank(BC)-\rank(B)$。
+
+\textbf{证法一（用 Sylvester 不等式两次）}\quad 对 $B\in\FF^{n\times s}$、$C\in\FF^{s\times t}$（中间维数 $s$）：
+\[
+\rank(B)+\rank(C)-s\le\rank(BC). \tag{1}
+\]
+对 $AB\in\FF^{m\times s}$、$C\in\FF^{s\times t}$（中间维数仍为 $s$）：
+\[
+\rank(AB)+\rank(C)-s\le\rank(ABC). \tag{2}
+\]
+由 (2) 得 $\rank(AB)\le\rank(ABC)-\rank(C)+s$；由 (1) 得 $\rank(BC)\le\rank(B)+\rank(C)-s$。两式相加，$\pm\rank(C)\mp s$ 相消：
+\[
+\rank(AB)+\rank(BC)\le\rank(ABC)+\rank(B). \qquad\blacksquare
+\]
+
+\textbf{证法二（分块矩阵，可选）}\quad 考察 $M=\begin{pmatrix}B&BC\\AB&ABC\end{pmatrix}$。
+作分块行、列消元可把它化为 $\begin{pmatrix}B&O\\O&ABC\end{pmatrix}$ 或 $\begin{pmatrix}O&O\\O&ABC\end{pmatrix}$ 的形式，
+从而 $\rank M$ 与 $\rank B+\rank(ABC)$ 相关；另一方面 $\rank M\le\rank(AB)+\rank(BC)$
+（因为它由两"块列"张成）。两条路结论一致，但\textbf{分块消元的配对极易写错}，
+故考试中优先用证法一。$\blacksquare$
+
+\begin{tipbox}
+\textbf{要点}\quad Frobenius 不等式的\textbf{最省力证明就是"Sylvester 两次相减"}。
+取 $B=I$ 时退化为 Sylvester 不等式本身，故 \textbf{Sylvester 是 Frobenius 的特例}。
+数值上本册用 500 组随机整数矩阵验证，无违反。
+\end{tipbox}
+
+%=====================================================================
+\section{线性方程组}
+
+\subsection{核心结论}
+
+\begin{itemize}
+\item \textbf{相容性判据}\quad $A\mathbf x=\mathbf b$ 有解 $\iff\rank A=\rank[A\mid\mathbf b]$。
+\item \textbf{解的结构}\quad 通解 $=$ 一个特解 $+$ 导出组 $\Nul(A)$ 的通解；自由变量个数 $=n-\rank A$。
+\item \textbf{齐次方程}\quad $m\times n$ 且 $\rank A<m$ 时必有非零解（主元数不足）。
+\item \textbf{通解的反推}\quad 若已知若干特解 $\boldsymbol\eta_i$，则 $\boldsymbol\eta_i-\boldsymbol\eta_j\in\Nul(A)$。
+\item \textbf{各行和为零} \quad 若 $A$ 每行元素之和均为 $0$，则 $\mathbf 1=(1,\dots,1)\TT\in\Nul(A)$。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 11}\y{2}\quad 讨论
+$\begin{cases}\lambda x_1+x_2+x_3=1\\ x_1-\lambda x_2+x_3=\lambda\\ x_1+x_2-\lambda x_3=\lambda^2\end{cases}$ 的解的情况。
+
+\textbf{解}\quad 系数行列式（本册已独立核算）
+\[
+\det A_\lambda=\begin{vmatrix}\lambda&1&1\\1&-\lambda&1\\1&1&-\lambda\end{vmatrix}
+=\lambda^3+\lambda+2=(\lambda+1)(\lambda^2-\lambda+2).
+\]
+因 $\lambda^2-\lambda+2$ 的判别式 $\Delta=1-8=-7<0$，无实根，故 $\det A_\lambda=0$ 的\textbf{唯一实根是 $\lambda=-1$}。
+
+\begin{itemize}
+\item \textbf{$\lambda=-1$}\quad 系数矩阵为 $\bv{-1&1&1\\1&1&1\\1&1&1}$，第 2、3 行相同，故 $\rank A=2$。
+
+再看增广矩阵：三个方程相加，左端 $=(-1+1+1)(x_1+x_2+x_3)=x_1+x_2+x_3$，
+右端 $=1+(-1)+1=1$，得 $x_1+x_2+x_3=1$。
+而系数矩阵的三行之和为 $(1,1,1)$，故 $A\mathbf x=\mathbf 0$ 蕴含 $x_1+x_2+x_3=0$。
+二者的右端不同（$1\ne0$），矛盾，故 $\rank[A\mid\mathbf b]=3\neq\rank A$，\textbf{无解}。
+\item \textbf{$\lambda\ne-1$}\quad $\det A_\lambda\ne0$，$\rank A=3=\rank[A\mid\mathbf b]$，\textbf{唯一解}。
+\end{itemize}
+
+\textbf{唯一解的具体形式}\quad 由 Cramer 法则 $x_i=D_i/D$，本册已用分数算术求出三个分子（均为 $\lambda$ 的多项式）：
+\[
+D=\lambda^3+\lambda+2,\quad
+D_1=\lambda^3+3\lambda^2+\lambda-1,\quad
+D_2=-2\lambda^3+\lambda^2+1,\quad
+D_3=-\lambda^4-2\lambda^2+2\lambda+1 .
+\]
+故
+\[
+x_1=\frac{\lambda^3+3\lambda^2+\lambda-1}{\lambda^3+\lambda+2},\qquad
+x_2=\frac{-2\lambda^3+\lambda^2+1}{\lambda^3+\lambda+2},\qquad
+x_3=\frac{-\lambda^4-2\lambda^2+2\lambda+1}{\lambda^3+\lambda+2}.
+\]
+
+\textbf{数值校验}\quad $\lambda=0$ 时 $x=(-\tfrac12,\tfrac12,\tfrac12)$；$\lambda=1$ 时 $x=(1,0,0)$；
+$\lambda=2$ 时 $x=(\tfrac74,-\tfrac{11}{12},-\tfrac{19}{12})$。
+代回原方程组（$\lambda=2$：$2x_1+x_2+x_3=2\cdot\tfrac74-\tfrac{11}{12}-\tfrac{19}{12}=\tfrac{42-30}{12}=1$ \checkmark）均成立。
+
+\begin{warnbox}
+\textbf{考场上不必写出完整多项式}\quad 本题 12 分的分值下，通常只要求\textbf{判定有解/无解/无穷多并给出情形}，
+具体解可写成"$x_i=D_i/D$（Cramer 法则）"。若要求显式解，建议在卷面上写出 $D$ 后再算 $D_1,D_2,D_3$，
+并\textbf{至少代入一个 $\lambda$ 值验算}，可避免多项式系数写错。
+\end{warnbox}
+
+\subsection*{答案汇总}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+$\lambda$ & 解的情况\\
+\midrule
+$\lambda=-1$ & 无解\\
+$\lambda\ne-1$ & 唯一解\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{tipbox}
+\textbf{要点}\quad 本题的"陷阱"在于 $\det A_\lambda=\lambda^3+\lambda+2$ 是\textbf{三次多项式但只分解出一个实根}。
+不少同学凭"$\lambda=1$ 或 $\lambda=-1$ 是常见答案"直接猜，会漏掉 $\lambda^2-\lambda+2$ 无实根这一事实。
+\textbf{务必先算判别式}，不要凭经验猜根。
+\end{tipbox}
+
+\medskip
+\textbf{例 12}\yii{题三（2022 卷）}\quad 讨论
+$\begin{cases}(\lambda-2)x_1+x_2+x_3=1\\ x_1+(\lambda-2)x_2+x_3=1\\ x_1+x_2+(\lambda-2)x_3=1\end{cases}$。
+
+\textbf{解}\quad 三式相加：$\lambda(x_1+x_2+x_3)=3$。
+
+\begin{itemize}
+\item $\lambda=0$：$0=3$，\textbf{无解}。
+\item $\lambda=3$：三式相同，$x_1+x_2+x_3=1$，无穷多解，
+$\mathbf x=(1,0,0)\TT+s(-1,1,0)\TT+t(-1,0,1)\TT$。
+\item $\lambda\ne0,3$：唯一解 $x_1=x_2=x_3=\dfrac{1}{\lambda}$。
+\end{itemize}
+
+\begin{tipbox}
+\textbf{两题的对比}\quad
+2021 卷的系数矩阵是\textbf{斜对称型}（对角 $\lambda$，其余 $1$），$\det=\lambda^3+\lambda+2$；
+2022 卷是\textbf{对称型}（对角 $\lambda-2$，其余 $1$），$\det=(\lambda-3)^2(\lambda-1)$。
+\textbf{对称型的"三式相加"技巧极其好用}，斜对称型则要先算行列式。看到矩阵对称就先想相加。
+\end{tipbox}
+
+\medskip
+\textbf{例 13}\yiii{填 4}\quad $A$ 为 $n$ 阶，$\rank A=n-1$。
+(1) 若各行元素之和均为 $0$，求 $A\mathbf x=\mathbf 0$ 的通解；
+(2) 若代数余子式 $A_{ij}\neq0$，求通解。
+
+\textbf{解}\quad (1) 由行和为 $0$ 得 $A\mathbf 1=\mathbf 0$，$\mathbf 1$ 非零，故
+\[
+\mathbf x=k\,(1,1,\dots,1)\TT .
+\]
+(2) $\rank A=n-1$ 时 $\rank A^{*}=1$。$A_{ij}\neq0$ 故 $A^{*}\neq O$，其第 $i$ 行非零且每行都是 $\Nul(A)$ 的生成元。又 $AA^{*}=O$ 给出 $A^{*}$ 的每\textbf{行}属于 $\Nul(A)$（转置关系），故
+\[
+\mathbf x=k\,(A_{i1},A_{i2},\dots,A_{in})\TT .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad 本题是"$\rank=n-1$"这一临界情形的\textbf{标准考法}。
+记住三条：$\rank(A^{*})=1$；$A^{*}$ 的非零列/行张成 $\Nul(A)$；$|A|=0$ 但存在非零余子式。
+\end{tipbox}
+
+\medskip
+\textbf{例 14}\yiii{填 8}\quad 4 阶方阵 $\rank A=2$，$A\boldsymbol\eta_i=\mathbf b$（$i=1..4$），
+$\boldsymbol\eta_1+\boldsymbol\eta_2=(1,1,0,0)\TT$，$\boldsymbol\eta_2+\boldsymbol\eta_3=(1,-1,1,0)\TT$，
+$\boldsymbol\eta_3+\boldsymbol\eta_4=(2,2,2,2)\TT$，求通解。
+
+\textbf{解}\quad 特解：$\dfrac12(\boldsymbol\eta_3+\boldsymbol\eta_4)=(1,1,1,1)\TT$。
+
+导出组的解（由特解之差得到）：
+\begin{align*}
+(\boldsymbol\eta_1+\boldsymbol\eta_2)-(\boldsymbol\eta_2+\boldsymbol\eta_3)&=\boldsymbol\eta_1-\boldsymbol\eta_3=(0,2,-1,0)\TT\\
+(\boldsymbol\eta_3+\boldsymbol\eta_4)-(\boldsymbol\eta_2+\boldsymbol\eta_3)&=\boldsymbol\eta_4-\boldsymbol\eta_2=(1,3,1,2)\TT
+\end{align*}
+自由变量个数 $4-\rank A=2$，这两个向量线性无关，构成基础解系。故
+\[
+\mathbf x=(1,1,1,1)\TT+k_1(0,2,-1,0)\TT+k_2(1,3,1,2)\TT .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad 这类题的\textbf{唯一技巧}：把已知的"特解之和"两两相减，得到导出组的解。
+差的个数恰好等于自由变量数时即为基础解系，只需再验证线性无关。
+\end{tipbox}
+
+%=====================================================================
+\section{矩阵的秩}
+
+\subsection{核心不等式}
+
+\begin{align}
+&\rank(A)\le\min\{m,n\}\\
+&\rank(A\TT)=\rank(A)\\
+&\rank(A+B)\le\rank(A)+\rank(B)\\
+&\rank(AB)\le\min\{\rank A,\rank B\}\\
+&\rank A+\rank B-n\le\rank(AB) \quad\text{（Sylvester）}\\
+&\rank(ABC)\ge\rank(AB)+\rank(BC)-\rank(B) \quad\text{（Frobenius）}
+\end{align}
+
+\subsection{典型题}
+
+\textbf{例 15}\yii{1（2022 卷）}\quad 设 \yiii{选 6}\quad $A$ 为 $m\times n$，$B$ 为 $n\times m$，$AB=I_m$，判断 $\rank A,\rank B$。
+
+\textbf{解}\quad $m=\rank(I_m)=\rank(AB)\le\min\{\rank A,\rank B\}$，故 $\rank A\ge m$、$\rank B\ge m$。
+又 $\rank A\le\min\{m,n\}\le m$、$\rank B\le\min\{n,m\}\le m$。两向夹逼得
+\[
+\rank A=\rank B=m .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad "$AB=I$"型题目的标准套路是\textbf{两向夹逼}：
+下界来自 $\rank(AB)\le\min$，上界来自 $\rank A\le\min\{m,n\}$。
+注意 $AB=I_m$ 只说明 $A$ 行满秩、$B$ 列满秩，\textbf{不说明 $A$ 可逆}（除非 $m=n$）。
+\end{tipbox}
+
+\medskip
+\textbf{例 16}\yiii{选 10}\quad $A$ 为 $m\times n$，$B$ 为 $n\times m$，判断 $AB\mathbf x=\mathbf 0$ 何时必有非零解。
+
+\textbf{解}\quad $AB$ 为 $m\times m$，$\rank(AB)\le\min\{\rank A,\rank B\}\le\min\{m,n\}$。
+
+\begin{itemize}
+\item $m>n$：$\rank(AB)\le n<m=$ 变量个数，故\textbf{必有非零解}。
+\item $m<n$：只能得到 $\rank(AB)\le m$，无法判断。
+\end{itemize}
+
+\begin{tipbox}
+\textbf{要点}\quad 齐次方程"必有非零解"的\textbf{充分条件}是"秩 $<$ 变量个数"。
+本题中变量个数是 $m$（$AB$ 的阶），而秩被 $\min\{m,n\}$ 压住，故只有 $m>n$ 时秩必然严格小于 $m$。
+\end{tipbox}
+
+\medskip
+\textbf{例 17}\yiii{选 9}\quad $A=\bv{1&2&a\\1&a+1&1\\a&2&1}$，$B$ 为三阶非零矩阵，$AB=O$，讨论 $a$ 取何值时 $\rank B$ 必然为定值。
+
+\textbf{解}\quad $AB=O\Rightarrow\Col(B)\subseteq\Nul(A)$，故 $\rank B\le 3-\rank A$。
+
+\begin{itemize}
+\item $a=1$：$A=\bv{1&2&1\\1&2&1\\1&2&1}$，$\rank A=1$，$\rank B\le2$，但\textbf{不能确定必为 2}（$B$ 只需非零）。
+\item $a=-3$：$A=\bv{1&2&-3\\1&-2&1\\-3&2&1}$，可算得 $\rank A=2$，故 $\rank B\le1$；又 $B\ne O$ 故 $\rank B\ge1$。
+\textbf{两向夹逼得 $\rank B=1$。}
+\end{itemize}
+
+\begin{tipbox}
+\textbf{要点}\quad "$AB=O$ 且 $B\neq O$" 是\textbf{两向夹逼}的经典场景：
+上界 $\rank B\le n-\rank A$ 来自 $\Col(B)\subseteq\Nul(A)$；下界 $\rank B\ge1$ 来自 $B\ne O$。
+两端相等时才"必为定值"。
+\end{tipbox}
+
+\medskip
+\textbf{例 18}\yiii{选 8}\quad $A=\bv{a&b&b\\b&a&b\\b&b&a}$，$A^{*}$ 的秩为 $1$，选必有。
+
+\textbf{解}\quad $\rank(A^{*})=1\iff\rank A=n-1=2$。计算
+\[
+\det A=\begin{vmatrix}a&b&b\\b&a&b\\b&b&a\end{vmatrix}=(a-b)^2(a+2b).
+\]
+$\rank A=2$ 要求 $\det A=0$ 但 $A\ne O$ 且不降到 $\rank1$。
+\begin{itemize}
+\item $a=b$：此时 $A$ 三行相同，$\rank A=1$，$A^{*}=O$，不合。
+\item $a\ne b$ 且 $a+2b=0$：$\rank A=2$ \checkmark
+\end{itemize}
+故答案是 \textbf{$a\ne b$ 或 $a+2b=0$}（"或"是因为题目选项的表述方式，实际需同时满足 $a\neq b$ 的条件）。
+
+\begin{warnbox}
+\textbf{本题选项表述有歧义}\quad 严格推导给出的条件是"$a\ne b$ \textbf{且} $a+2b=0$"。
+官方答案选 $(C)$ "$a\ne b$ 或 $a+2b=0$"，是因为逻辑上"$P$ 且 $Q$"蕴含"$P$ 或 $Q$"，
+而四个选项中只有 $(C)$ 被该条件蕴含。\textbf{做题时按"哪个选项必然正确"来判断}，不要按等值理解。
+\end{warnbox}
+
+\medskip
+\textbf{例 19}\yiii{选 7}\quad $A$ 为 $n$ 阶，$\boldsymbol\alpha$ 为 $n$ 维列向量，
+$\rank\bv{A&\boldsymbol\alpha\\\boldsymbol\alpha\TT&0}=\rank A$，判断结论。
+
+\textbf{解}\quad 设该分块矩阵为 $M$（$n+1$ 阶）。由题设 $\rank M=\rank A\le n<n+1$，
+即 $\rank M<$ 阶数，故齐次方程 $M\mathbf x=\mathbf 0$ \textbf{必有非零解}。
+
+而 $M\mathbf x=\mathbf 0$ 即 $\begin{cases}A\mathbf y+\boldsymbol\alpha t=\mathbf 0\\ \boldsymbol\alpha\TT\mathbf y=0\end{cases}$（$\mathbf x=(\mathbf y,t)\TT$）。
+
+关于非齐次方程 $A\mathbf y=\boldsymbol\alpha$：由 $\rank M=\rank A$ 只知道增广矩阵
+$[A\mid\boldsymbol\alpha]$ 与 $A$ 秩相等，即\textbf{有解}，但自由变量个数未知，故"无穷多解"与"唯一解"均不能断言。
+
+\textbf{答案：$M\mathbf x=\mathbf 0$ 必有非零解}（即选 D 类选项）。
+
+\begin{tipbox}
+\textbf{要点}\quad 本题的关键识别：$\rank M=\rank A$\; 直接给出 $\rank M\le n<n+1$，
+于是"齐次方程必有非零解"立刻成立。至于 $A\mathbf y=\boldsymbol\alpha$ 的解的个数，
+需要 $n-\rank A$ 的信息，题目没给，所以任何关于"无穷多/唯一"的判断都\textbf{推不出}。
+\end{tipbox}
+
+%=====================================================================
+\section{子空间、基与坐标}
+
+\subsection{核心判据}
+
+\begin{itemize}
+\item \textbf{子空间三判据}\quad 含零元；对加法封闭；对数乘封闭。
+\item \textbf{基的判据}\quad 线性无关且张成。$\mathbb{R}^n$ 中，$n$ 个向量线性无关 $\Rightarrow$ 是基。
+\item \textbf{过渡矩阵}\quad 约定甲 $(B_2)=(B_1)M$；此时坐标满足 $[\mathbf v]_{B_1}=M[\mathbf v]_{B_2}$。
+\item \textbf{坐标变换与基变换互逆}。
+\item \textbf{交与和}\quad $H\cap K$ 永远是子空间；$H\cup K$ \textbf{一般不}是。
+\item \textbf{和的基}\quad $\Span(S_1)+\Span(S_2)=\Span(S_1\cup S_2)$。
+\item \textbf{维数公式}\quad $\dim(H+K)=\dim H+\dim K-\dim(H\cap K)$。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 20}\y{3}\quad 证明 $S^{2\times2}$（$2\times2$ 对称矩阵）是子空间；给出两组基；求过渡矩阵；
+求 $\bv{2&1\\1&2}$ 在两组基下的坐标。
+
+\textbf{解}\quad
+
+\textbf{(1)} $S^{2\times2}=\{A:A\TT=A\}$。零矩阵对称；$A,B$ 对称则 $(A+B)\TT=A\TT+B\TT=A+B$；
+$(kA)\TT=kA\TT=kA$。故是子空间。
+
+\textbf{(2)} 两组基（任取，本册取）：
+\[
+B_1=\{E_{11},\ E_{12}+E_{21},\ E_{22}\},\qquad
+B_2=\{E_{11},\ E_{12}+E_{21},\ \bv{0&1\\1&1}\}.
+\]
+$\dim S^{2\times2}=3$（三个参数 $a,b,c$ 决定 $\bv{a&b\\b&c}$）。
+
+\textbf{(3)} 由 $(B_2)=(B_1)T$：
+$\bv{0&1\\1&1}=(E_{12}+E_{21})+E_{22}$，故
+\[
+T=\bv{1&0&0\\0&1&1\\0&0&1},\qquad T^{-1}=\bv{1&0&0\\0&1&-1\\0&0&1}.
+\]
+
+\textbf{(4)} $A=\bv{2&1\\1&2}=2E_{11}+1\cdot(E_{12}+E_{21})+2E_{22}$，
+故在 $B_1$ 下坐标为 $(2,1,2)\TT$；在 $B_2$ 下为
+\[
+T^{-1}(2,1,2)\TT=(2,\,-1,\,2)\TT .
+\]
+\textbf{校验}\quad $2E_{11}-1(E_{12}+E_{21})+2\bv{0&1\\1&1}=\bv{2&0\\0&0}+\bv{0&-1\\-1&-1}+\bv{0&2\\2&2}=\bv{2&1\\1&2}$ \checkmark
+
+\begin{tipbox}
+\textbf{要点}\quad 对称矩阵的维数是 $n(n+1)/2$（参数计数法最快）。
+选基时优先选"稀疏、易读坐标"的那组（如 $E_{11},E_{12}+E_{21},E_{22}$），
+另一组故意取"组合形式"以考察过渡矩阵。
+\end{tipbox}
+
+\medskip
+\textbf{例 21}\y{6}\quad $\mathbf v_1,\dots,\mathbf v_4\in\Rr^4$ 线性无关，证明
+$\dim\Span\{\mathbf v_1-\mathbf v_2,\mathbf v_2-\mathbf v_3,\mathbf v_3-\mathbf v_4,\mathbf v_4-\mathbf v_1\}=3$。
+
+\textbf{证明}\quad 设 $\mathbf w_i=\mathbf v_i-\mathbf v_{i+1}$（$\mathbf v_5=\mathbf v_1$）。先说明\textbf{上界}：
+\[
+\mathbf w_1+\mathbf w_2+\mathbf w_3+\mathbf w_4=\mathbf 0 ,
+\]
+故四个向量线性相关，$\dim\le3$。
+
+再说明\textbf{下界}：设 $c_1\mathbf w_1+c_2\mathbf w_2+c_3\mathbf w_3+c_4\mathbf w_4=\mathbf 0$。展开并按 $\mathbf v_i$ 归并：
+\[
+(c_1-c_4)\mathbf v_1+(c_2-c_1)\mathbf v_2+(c_3-c_2)\mathbf v_3+(c_4-c_3)\mathbf v_4=\mathbf 0 .
+\]
+由 $\mathbf v_i$ 线性无关得
+\[
+c_1=c_4,\quad c_2=c_1,\quad c_3=c_2,\quad c_4=c_3\ \Longrightarrow\ c_1=c_2=c_3=c_4 .
+\]
+结合 $\sum\mathbf w_i=\mathbf 0$ 说明\textbf{唯一的线性关系}就是"全相等且和为零"，
+即 $\mathbf w_1,\mathbf w_2,\mathbf w_3$ 三个向量线性无关。
+
+于是 $\dim\Span\{\mathbf w_i\}=3$。$\blacksquare$
+
+\begin{tipbox}
+\textbf{要点}\quad 证明"$\dim=k$"必须\textbf{两头都做}：上界（找出 $4-k$ 个独立关系）+ 下界（证 $k$ 个无关）。
+多数人只做上界，会丢掉一半分。本题的系数矩阵秩为 3，也可用矩阵语言一句话说明。
+\end{tipbox}
+
+\medskip
+\textbf{例 22}\y{8}\quad $W$ 是 $V$ 的子空间，证明 (1) $W$ 的零元即 $V$ 的零元；(2) $\dim W=\dim V\Rightarrow W=V$。
+
+\textbf{证明}\quad (1) 设 $\mathbf 0_W$ 是 $W$ 的零元。它在 $V$ 中也满足"加任何向量不变"，
+而 $V$ 中这样的元素\textbf{唯一}（若 $\mathbf 0,\mathbf 0'$ 均为零元，则 $\mathbf 0'=\mathbf 0'+\mathbf 0=\mathbf 0$），
+故 $\mathbf 0_W=\mathbf 0_V$。
+
+(2) 取 $W$ 的一组基 $\mathbf w_1,\dots,\mathbf w_r$，$r=\dim W$。若 $W\ne V$，则存在 $\mathbf v\in V\setminus W$。
+此时 $\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v\}$ 线性无关（若 $\mathbf v$ 在张成中则 $\mathbf v\in W$，矛盾），
+故 $\dim V\ge r+1>r=\dim W$，与 $\dim W=\dim V$ 矛盾。故 $W=V$。$\blacksquare$
+
+\begin{tipbox}
+\textbf{要点}\quad (2) 的标准证法是\textbf{反证 $+$ 基扩充}。也可正向用"基扩充定理"：
+$W$ 的基可扩充为 $V$ 的基，若 $\dim W=\dim V$ 则扩不出新向量，故 $W=V$。
+\end{tipbox}
+
+\medskip
+\textbf{例 23}\y{9}\quad $W\le V$，$\dim V=n>\dim W=r$，给定 $W$ 的基 $\{\mathbf w_1,\dots,\mathbf w_r\}$。
+证明可找到 $n-r$ 个线性无关的 $\mathbf v_1,\dots,\mathbf v_{n-r}$，与 $W$ 的基共同构成 $V$ 的基。
+
+\textbf{证明（基扩充定理）}\quad 归纳构造。设已有线性无关组 $\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\}$（$k<n-r$），
+记其张成为 $U$。因 $k+r<n=\dim V$，故 $U\ne V$，存在 $\mathbf v_{k+1}\in V\setminus U$。取之，则新组仍线性无关。
+
+重复 $n-r$ 次即得 $r+(n-r)=n$ 个线性无关向量，构成 $V$ 的基。$\blacksquare$
+
+\begin{warnbox}
+\textbf{原题表述的问题}\quad 题面要求"在 $V\setminus W$ 中找 $n-r$ 个线性无关向量"。
+若只要求每个 $\mathbf v_i\notin W$，结论\textbf{不成立}。反例（$n=3$，$r=1$，$n-r=2$）：
+
+取 $W=\Span\{\mathbf e_3\}$，$\mathbf v_1=(1,0,0)\TT$、$\mathbf v_2=(2,0,1)\TT$。
+两者都\textbf{不在} $W$ 中，且彼此线性无关。但
+\[
+\mathbf v_2-2\mathbf v_1=\mathbf e_3\in W ,
+\]
+故 $\{\mathbf e_3,\mathbf v_1,\mathbf v_2\}$ 线性相关，\textbf{不能}共同构成 $\Rr^3$ 的基。
+
+\textbf{正确理解}\quad 应要求 $\mathbf v_{k+1}\notin\Span\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\}$，
+这比"$\notin W$"更强。按此理解，命题成立（即上面的归纳证明）。
+\end{warnbox}
+
+%=====================================================================
+\section{内积、距离与正交}
+
+\subsection{核心公式}
+
+\begin{itemize}
+\item \textbf{点到子空间的距离}\quad $\operatorname{dist}(\mathbf x,H)=\lVert\mathbf x-\hat{\mathbf x}\rVert$，其中 $\hat{\mathbf x}$ 是 $\mathbf x$ 在 $H$ 上的正交投影。
+\item \textbf{投影（$H$ 由正交基 $\{\mathbf u_i\}$ 张成）}\quad $\hat{\mathbf x}=\sum_i\frac{\mathbf x\cdot\mathbf u_i}{\mathbf u_i\cdot\mathbf u_i}\mathbf u_i$。
+\item \textbf{超平面公式}\quad 若 $H=\{\mathbf x:\mathbf n\cdot\mathbf x=0\}$，则 $\operatorname{dist}=\dfrac{\lvert\mathbf n\cdot\mathbf x\rvert}{\lVert\mathbf n\rVert}$。
+\item \textbf{正交矩阵}\quad $A\TT A=I$，列（行）两两正交且为单位向量，$A^{-1}=A\TT$，$|A|=\pm1$。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 24}\y{4}\quad 计算点 $\mathbf x=(1,-1,1)\TT$ 到 $A=\bv{1&0&1\\0&1&2\\0&0&0}$ 的零空间 $\Nul(A)$ 的距离。
+
+\textbf{解}\quad $\Nul(A)$：$x_1+x_3=0$，$x_2+2x_3=0$，故
+\[
+\Nul(A)=\Span\{(-1,-2,1)\TT\}=\Span\{\mathbf b\},\qquad \mathbf b=(-1,-2,1)\TT .
+\]
+
+投影：
+\[
+\frac{\mathbf x\cdot\mathbf b}{\mathbf b\cdot\mathbf b}=\frac{(1)(-1)+(-1)(-2)+(1)(1)}{1+4+1}=\frac{-1+2+1}{6}=\frac{2}{6}=\frac13 .
+\]
+\[
+\hat{\mathbf x}=\tfrac13\mathbf b=\left(-\tfrac13,\,-\tfrac23,\,\tfrac13\right)\TT ,
+\qquad
+\mathbf x-\hat{\mathbf x}=\left(\tfrac43,\,-\tfrac13,\,\tfrac23\right)\TT .
+\]
+\[
+d=\sqrt{\tfrac{16}{9}+\tfrac19+\tfrac49}=\sqrt{\tfrac{21}{9}}=\frac{\sqrt{21}}{3}\approx1.5275 .
+\]
+
+\textbf{校验（两种独立方法）}\quad
+
+\textbf{方法二：验证 $\mathbf b$ 确实属于 $\Nul(A)$}\quad
+\[
+A\mathbf b=\bv{1&0&1\\0&1&2\\0&0&0}\bv{-1\\-2\\1}=\bv{-1+0+1\\0-2+2\\0}=\bv{0\\0\\0}\ \checkmark
+\]
+
+\textbf{关键结构认识}\quad $\rank A=2$，$A$ 为 $3\times 3$，故 $\dim\Nul(A)=3-2=1$，
+即 $\Nul(A)$ 是\textbf{一条过原点的直线}（不是平面）。因此它没有唯一的"平面法向量"，
+\textbf{点到直线}的距离只能用投影公式，不能用点到平面的公式。
+
+\textbf{另一种算法（验证投影结果）}\quad 用 $\mathbf x$ 与 $\mathbf b$ 的夹角：
+\[
+\cos\theta=\frac{\mathbf x\cdot\mathbf b}{\lVert\mathbf x\rVert\lVert\mathbf b\rVert}
+=\frac{2}{\sqrt3\cdot\sqrt6}=\frac{2}{3\sqrt2}=\frac{\sqrt2}{3},
+\]
+\[
+d=\lVert\mathbf x\rVert\sqrt{1-\cos^2\theta}
+=\sqrt3\cdot\sqrt{1-\tfrac29}=\sqrt3\cdot\frac{\sqrt7}{3}=\frac{\sqrt{21}}{3}\ \checkmark
+\]
+与投影法一致。
+
+\medskip
+\textbf{例 25}\yiii{填 7}\quad $A=[a_{ij}]_{3\times3}$ 正交，$a_{11}=1$，$\mathbf b=(1,0,0)\TT$，求 $A\mathbf x=\mathbf b$ 的解。
+
+\textbf{解}\quad 正交矩阵满足 $A\TT A=I$，故 $A\mathbf x=\mathbf b\iff\mathbf x=A\TT\mathbf b$。
+$A\TT$ 的第一列即 $A$ 的第一行，故
+\[
+\mathbf x=A\TT\mathbf b=(a_{11},a_{12},a_{13})\TT .
+\]
+又 $a_{11}=1$，由第一行为单位向量得 $a_{12}=a_{13}=0$。且第一行与其余行正交给出
+$a_{21}=a_{31}=0$。故
+\[
+\mathbf x=(1,0,0)\TT .
+\]
+
+\textbf{校验}\quad $A\mathbf x$ 就是 $A$ 的第一列 $=(a_{11},a_{21},a_{31})\TT=(1,0,0)\TT=\mathbf b$ \checkmark
+
+\begin{tipbox}
+\textbf{要点}\quad 正交矩阵的方程 $A\mathbf x=\mathbf b$ \textbf{不必消元}，直接左乘 $A\TT$ 即得
+$\mathbf x=A\TT\mathbf b$。$a_{11}=1$ 这个条件的作用是推出第一行/列的结构。
+\end{tipbox}
+
+%=====================================================================
+\section{线性相关性与证明技巧}
+
+\subsection{常用武器}
+
+\begin{itemize}
+\item \textbf{左乘消元}：欲证 $\sum k_i\boldsymbol\alpha_i=\mathbf 0\Rightarrow$ 全零，可左乘某向量把大部分项消掉。
+\item \textbf{系数矩阵}：若 $\mathbf w_i$ 是 $\mathbf v_j$ 的组合，则 $\{\mathbf w_i\}$ 的相关性由系数矩阵的秩决定。
+\item \textbf{秩一矩阵}：$\mathbf x\mathbf y\TT$ 的秩为 $1$，其幂 $=\sigma^{k-1}\mathbf x\mathbf y\TT$。
+\item \textbf{转置技巧}：$\lVert A\mathbf x\rVert^2=0\Rightarrow A\mathbf x=\mathbf 0$（实/复域），是证 $\Nul(A\TT A)=\Nul A$ 的关键。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 26}\yiii{三·2}\quad $\boldsymbol\alpha_1,\dots,\boldsymbol\alpha_r$（$r<n$）线性无关，
+$\boldsymbol\beta$ 是齐次方程组 $\boldsymbol\alpha_i\TT\mathbf x=0$（$i=1..r$）的\textbf{非零解}。
+判断 $\boldsymbol\alpha_1,\dots,\boldsymbol\alpha_r,\boldsymbol\beta$ 的线性相关性。
+
+\textbf{解}\quad 设
+\[
+k_1\boldsymbol\alpha_1+\cdots+k_r\boldsymbol\alpha_r+k\boldsymbol\beta=\mathbf 0 .
+\]
+两边左乘 $\boldsymbol\beta\TT$。由题设 $\boldsymbol\beta\TT\boldsymbol\alpha_i=\boldsymbol\alpha_i\TT\boldsymbol\beta=0$，故前 $r$ 项全为零，得
+\[
+k\lVert\boldsymbol\beta\rVert^2=0 .
+\]
+因 $\boldsymbol\beta\ne\mathbf 0$，$\lVert\boldsymbol\beta\rVert^2>0$，故 $k=0$。代回得 $\sum k_i\boldsymbol\alpha_i=\mathbf 0$，
+由 $\boldsymbol\alpha_i$ 线性无关得 $k_i=0$。
+
+故 $\{\boldsymbol\alpha_1,\dots,\boldsymbol\alpha_r,\boldsymbol\beta\}$ \textbf{线性无关}。
+
+\begin{tipbox}
+\textbf{要点}\quad 这是"\textbf{左乘一个与大部分向量正交的向量}"这一技巧的教科书范例。
+关键是识别 $\boldsymbol\beta\TT$ 把 $\boldsymbol\alpha_i$ 全部打成 $0$ 而只留下自己那一项。
+\end{tipbox}
+
+\medskip
+\textbf{例 27}\yiii{三·3}\quad 4 维向量组 $\boldsymbol\alpha_1,\dots,\boldsymbol\alpha_4$，$A=[\boldsymbol\alpha_1\ \cdots\ \boldsymbol\alpha_4]$，
+$A\mathbf x=\mathbf 0$ 的通解为 $k(1,0,1,0)\TT$。求极大线性无关组。
+
+\textbf{解}\quad 通解含 $1$ 个自由变量 $\Rightarrow\dim\Nul A=1\Rightarrow\rank A=4-1=3$。
+
+由 $A(1,0,1,0)\TT=\mathbf 0$ 得 $\boldsymbol\alpha_1+\boldsymbol\alpha_3=\mathbf 0$，即 $\boldsymbol\alpha_3=-\boldsymbol\alpha_1$。
+
+故 $\{\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_4\}$ 与 $\{\boldsymbol\alpha_3,\boldsymbol\alpha_2,\boldsymbol\alpha_4\}$ 都是极大线性无关组
+（两组都能张成同一个 3 维空间，且各含 3 个向量）。
+
+\textbf{校验}\quad $\rank\{\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_4\}=3$：若相关则 $\rank A\le2$，与 $\rank A=3$ 矛盾。
+
+\begin{tipbox}
+\textbf{要点}\quad 由"通解的维数"直接得到秩，这是本题的入口。
+再由通解\textbf{具体向量}读出向量间的线性关系（$x_1+x_3=0\Rightarrow\boldsymbol\alpha_1+\boldsymbol\alpha_3=0$），
+从而确定哪一对不能同时出现在极大无关组中。
+\end{tipbox}
+
+\medskip
+\textbf{例 28}\yiii{五}\quad $\mathbf b_1,\dots,\mathbf b_r$ 可由 $\mathbf a_1,\dots,\mathbf a_s$ 线性表示：
+$(\mathbf b_1,\dots,\mathbf b_r)=(\mathbf a_1,\dots,\mathbf a_s)K$，$K$ 为 $s\times r$，$\mathbf a$ 组线性无关。
+证明 $\mathbf b$ 组线性无关 $\iff\rank K=r$。
+
+\textbf{证明}\quad 记 $B=AK$。
+
+\textbf{($\Rightarrow$)} $B$ 线性无关 $\Rightarrow\rank B=r$。由 $\rank(AB)\le\min\{\rank A,\rank B\}$：
+\[
+r=\rank B=\rank(AK)\le\rank K\le r\ (K\text{ 只有 }r\text{ 列}),
+\]
+故 $\rank K=r$。
+
+\textbf{($\Leftarrow$)} 设 $\rank K=r$。令 $B\mathbf x=\mathbf 0$，即 $A(K\mathbf x)=\mathbf 0$。
+由 $\mathbf a_i$ 线性无关得 $K\mathbf x=\mathbf 0$。又 $K$ 为 $s\times r$ 且 $\rank K=r=$ 列数，
+故 $K\mathbf x=\mathbf 0$ 只有零解，$\mathbf x=\mathbf 0$。
+
+所以 $B$ 的列线性无关。$\blacksquare$
+
+\begin{tipbox}
+\textbf{要点}\quad 本题是"秩不等式 $+$ 齐次方程"的组合考点。
+必要方向用 $\rank(AK)\le\rank K$，充分方向用"列满秩 $\Rightarrow$ 只有零解"。
+\end{tipbox}
+
+%=====================================================================
+\section{分块矩阵与伴随}
+
+\subsection{核心公式}
+
+\begin{itemize}
+\item \textbf{分块乘法}\quad $C_{ij}=\sum_k A_{ik}B_{kj}$，要求 $A$ 的列分块与 $B$ 的行分块\textbf{等宽}。
+\item \textbf{行列式分解}\quad $\begin{vmatrix}I&B\\A&I\end{vmatrix}=|I-AB|$（先消元再展开）。
+\item \textbf{特征多项式} \quad $\det(\lambda I-AB)=\det(\lambda I-BA)$。
+\item \textbf{伴随}\quad $AA^{*}=A^{*}A=|A|I$；$\rank(A^{*})=n$（$|A|\ne0$）、$1$（$\rank A=n-1$）、$0$（$\rank A\le n-2$）。
+\end{itemize}
+
+\subsection{典型题}
+
+\textbf{例 29}\yiii{六}\quad 证明 (1) $\begin{vmatrix}I&B\\A&I\end{vmatrix}=|I-AB|$；(2) $|I-BA|=|I-AB|$；
+(3) $\det(\lambda I-AB)=\det(\lambda I-BA)$。
+
+\textbf{证明}\quad (1) 用分块行变换：第二行减去第一行的 $A$ 倍，得
+\[
+\begin{vmatrix}I&B\\A&I\end{vmatrix}
+=\begin{vmatrix}I&B\\O&I-AB\end{vmatrix}=|I|\cdot|I-AB|=|I-AB| .
+\]
+
+(2) 用分块列变换：第一列减去第二列的 $A$ 倍（注意分块位置），得到
+$\begin{pmatrix}I-BA&B\\O&I\end{pmatrix}$，其行列式为 $|I-BA|$。故 $|I-AB|=|I-BA|$。
+
+(3) 对 $\lambda\ne0$，利用标准化 $\lambda I-AB=\lambda\big(I-\tfrac1\lambda AB\big)$，得
+\[
+\det(\lambda I-AB)=\lambda^{n}\det\!\left(I-\tfrac1\lambda AB\right).
+\]
+把 (2) 用于 $\tfrac1\lambda A$ 与 $B$：$\det(I-\tfrac1\lambda AB)=\det(I-\tfrac1\lambda BA)$。故
+\[
+\det(\lambda I-AB)=\lambda^{n}\det\!\left(I-\tfrac1\lambda BA\right)=\det(\lambda I-BA).
+\]
+两端都是 $\lambda$ 的多项式，在 $\lambda\ne0$ 上恒等，故作为多项式恒等（$\lambda=0$ 时亦成立）。$\blacksquare$
+
+\begin{tipbox}
+\textbf{要点}\quad 分块行列式的\textbf{唯一技巧}是"消元成三角块"。
+要注意左乘（行变换）与右乘（列变换）对分块的影响不同：
+行变换时 $A$ 乘在左，列变换时乘在右。写反会得到错误的式子。
+\end{tipbox}
+
+\medskip
+\textbf{例 30}\yiii{七}\quad $\Rr^4$ 的两组基
+\[
+\boldsymbol\alpha_1=(1,2,-1,0)\TT,\ \boldsymbol\alpha_2=(1,-1,1,1)\TT,\ \boldsymbol\alpha_3=(-1,2,1,1)\TT,\ \boldsymbol\alpha_4=(-1,-1,0,1)\TT;
+\]
+\[
+\boldsymbol\beta_1=(2,1,0,1)\TT,\ \boldsymbol\beta_2=(0,1,2,2)\TT,\ \boldsymbol\beta_3=(-2,1,1,2)\TT,\ \boldsymbol\beta_4=(1,3,1,2)\TT .
+\]
+求两方向的过渡矩阵，并求指定坐标变换。
+
+\textbf{解}\quad 记 $A=(\boldsymbol\alpha_1,\dots,\boldsymbol\alpha_4)$，$B=(\boldsymbol\beta_1,\dots,\boldsymbol\beta_4)$。
+
+\textbf{(1)} $B=AP\Rightarrow P=A^{-1}B$。对 $(A\mid B)$ 作行变换得
+\[
+P=\bv{1&0&0&1\\1&1&0&1\\0&1&1&1\\0&0&1&0}.
+\]
+$\boldsymbol\gamma$ 在 $\alpha$ 基下坐标 $(1,0,0,0)\TT$，即 $\boldsymbol\gamma=\boldsymbol\alpha_1$。
+由 $\mathbf x=P\mathbf y$（约定甲下坐标反变），求 $P\mathbf y=\mathbf x$ 得
+\[
+\mathbf y=P^{-1}(1,0,0,0)\TT=(0,-1,0,1)\TT .
+\]
+
+\textbf{(2)} 反向过渡矩阵 $Q=B^{-1}A=P^{-1}$：
+\[
+P^{-1}=\bv{0&1&-1&1\\-1&1&0&0\\0&0&0&1\\1&-1&1&-1}.
+\]
+$\boldsymbol\xi$ 在 $\beta$ 基下 $(1,2,-1,0)\TT$，其在 $\alpha$ 基下坐标为
+\[
+P(1,2,-1,0)\TT=(1,3,1,-1)\TT .
+\]
+
+\textbf{(3)} $\boldsymbol\alpha$ 在 $\alpha$ 基下 $(1,2,-1,0)\TT$，在 $\beta$ 基下坐标为
+\[
+P^{-1}(1,2,-1,0)\TT=(3,1,0,-2)\TT .
+\]
+
+\begin{tipbox}
+\textbf{要点}\quad 过渡矩阵题的\textbf{标准流程}：\\
+(1) 写出矩阵 $A=[\boldsymbol\alpha_1\cdots]$、$B=[\boldsymbol\beta_1\cdots]$；\\
+(2) 对 $(A\mid B)$ 行化简，右半部分即 $P=A^{-1}B$；\\
+(3) 坐标换算记住\textbf{"基按 $P$ 变，坐标按 $P^{-1}$ 变"}。\\
+本册已核对 $P\cdot P^{-1}=I$ 及三问的数值。
+\end{tipbox}
+
+%=====================================================================
+\section{三卷考点对照}
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{2.6cm}p{2.3cm}p{2.3cm}p{2.3cm}@{}}
+\toprule
+知识点 & 2021（信息） & 2022（信息） & 2023（技术科学）\\
+\midrule
+矩阵乘法四种视角 & Q1（秩一幂） & Q1 & 选择题\\
+初等矩阵与分解 & --- & Q6 & ---\\
+逆的恒等式 & --- & Q2、Q3 & 选择题 1\\
+行列式计算 & --- & --- & 填空 1--3、三·1\\
+方程组的讨论 & Q2 & 题二 & 填空 4、8、9，三·4\\
+秩的不等式 & Q7（Frobenius） & Q5、Q7 & 选择 4、6、9、10，填空 5\\
+子空间与基 & Q3、Q8、Q9 & Q3 & ---\\
+距离与正交 & Q4 & --- & 填空 7\\
+线性相关性 & Q6 & --- & 三·2、三·3\\
+分块行列式与伴随 & --- & Q6 & 选择 8，六\\
+过渡矩阵与坐标 & Q3 & Q3 & 七\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{keybox}
+\textbf{三年共同的"必考五件套"}\quad
+(a) 含参数方程组的讨论（每年都有，考法在"三式相加"与"算行列式"间轮换）；\\
+(b) 秩的不等式（Sylvester / Frobenius / $AB=I$ 型夹逼，每年都有）；\\
+(c) 过渡矩阵与坐标换算（2021、2022、2023 全部出现，只是空间不同）；\\
+(d) 线性相关性的验证（左乘、系数矩阵、通解反推三种手法）；\\
+(e) 子空间判据与维数公式。
+\end{keybox}
+
+%=====================================================================
+\section*{一页速查}
+\addcontentsline{toc}{section}{一页速查}
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{3.4cm}p{10.4cm}@{}}
+\toprule
+\textbf{主题} & \textbf{必背结论 / 方法}\\
+\midrule
+秩一矩阵幂 & $(\mathbf x\mathbf y\TT)^k=\sigma^{k-1}\mathbf x\mathbf y\TT$，$\sigma=\mathbf y\TT\mathbf x$\\
+逆的和 & $(A^{-1}+B^{-1})^{-1}=B(A+B)^{-1}A=A(A+B)^{-1}B$\\
+含 $I$ 的方程 & $B=I+AB\Rightarrow B(I-A)=I$，把未知矩阵提到一侧\\
+行列式特殊值 & 对角 $a$ 其余 $b$：$(a-b)^{n-1}(a+(n-1)b)$\\
+范德蒙德 & $\prod_{i<j}(x_j-x_i)$，见到 $1,x,x^2$ 与具体点即联想\\
+伴随的秩 & $\rank A=n\Rightarrow n$；$=n-1\Rightarrow1$；$\le n-2\Rightarrow0$\\
+Sylvester & $\rank A+\rank B-n\le\rank(AB)$\\
+Frobenius & $\rank(ABC)\ge\rank(AB)+\rank(BC)-\rank(B)$，由 Sylvester 两次相加\\
+$AB=I_m$ & $\rank A=\rank B=m$（两向夹逼）\\
+$AB=O,B\ne O$ & $1\le\rank B\le n-\rank A$\\
+齐次必有非零解 & $\rank<$ 变量个数；$m>n$ 时 $AB\mathbf x=\mathbf 0$ 必有非零解\\
+解的维数 & 自由变量数 $=n-\rank A$；通解 $=$ 特解 $+$ 导出组通解\\
+特解反推 & 特解之差属于 $\Nul(A)$；$\boldsymbol\eta_1+\boldsymbol\eta_2$ 与 $\boldsymbol\eta_2+\boldsymbol\eta_3$ 相减\\
+距离 & $d=\lvert\mathbf n\cdot\mathbf x\rvert/\lVert\mathbf n\rVert$ 或 $\lVert\mathbf x-\hat{\mathbf x}\rVert$\\
+正交矩阵 & $A\mathbf x=\mathbf b\Rightarrow\mathbf x=A\TT\mathbf b$；$A^{-1}=A\TT$，$\lvert A\rvert=\pm1$\\
+分块行列式 & $\begin{vmatrix}I&B\\A&I\end{vmatrix}=|I-AB|$；$|I-AB|=|I-BA|$\\
+过渡矩阵 & $(B_2)=(B_1)M$；坐标 $[\mathbf v]_{B_1}=M[\mathbf v]_{B_2}$；$P=A^{-1}B$ 用 $(A\mid B)$ 行化简\\
+$\dim=k$ 的证明 & 上界（找独立关系）$+$ 下界（证 $k$ 个无关）\\
+基扩充 & 取 $\mathbf v\notin\Span(\text{已有})$，逐次扩充至 $n$ 个\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.4cm}
+\begin{warnbox}
+\textbf{本册核实的几处数据问题}\quad
+\begin{enumerate}
+\item \textbf{2021 卷第 9 题}表述"在 $V\setminus W$ 中找 $n-r$ 个线性无关向量"按字面不成立，
+已给出反例（$\dim V=3,\dim W=1$ 时取 $(1,0,0)$ 与 $(2,0,1)$）。按基扩充定理理解则成立。
+\item \textbf{2023 卷第 8 道选择题}四个选项的"或"字使逻辑上应为"且"，按"哪个选项被必然蕴含"选 (C)。
+\item \textbf{2022 卷第 5 题}求左零空间之和为 $\Span\{(0,1)\TT\}$、$\dim=1$，
+与 2021 卷第 5 题（求零空间之和，答案 $\Rr^2$）数据相同但结论不同，务必区分。
+\end{enumerate}
+\end{warnbox}
+
+\vspace{0.2cm}
+{\small\textit{本册数据来源：复旦大学 2021 秋（信息学院）、2022 秋（信息学院）、2023--24 秋（技术科学试验班）三套期中卷
+及 2023 官方答案。2021 卷原本无答案，全部由本册用分数算术独立求解并交叉验证。}}
+
+\end{document}

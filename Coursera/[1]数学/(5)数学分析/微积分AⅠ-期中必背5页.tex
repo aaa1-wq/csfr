@@ -1,0 +1,338 @@
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,mathtools,geometry,hyperref,enumitem,multicol}
+\geometry{margin=2.4cm,top=2.2cm,bottom=2.2cm}
+\hypersetup{hidelinks}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.35}
+\pagestyle{plain}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newenvironment{kp}[1]{\par\smallskip\noindent\textbf{【#1】}\par\nobreak\smallskip}{\par\smallskip}
+\begin{document}
+\begin{center}
+{\Large\bfseries 微积分 A I 期中必背（10 页）}\\[2pt]
+{\small 范围：极限与连续（含数列、函数极限、连续、一致连续）＋一元微分学要点\quad 下周期中}
+\end{center}
+\vspace{-4pt}
+\hrule
+\vspace{4pt}
+
+\section*{一、实数完备性与数列极限}
+
+\begin{kp}{上确界与确界原理}
+非空 $S\subseteq\R$ 的上界 $u$：$\forall s\in S,\ s\le u$。最小上界记 $\sup S$（下确界 $\inf S$ 对偶）。
+\textbf{确界原理：}非空且有上界的 $S\subseteq\R$ 必有唯一上确界。
+唯一性：两最小上界互相 $\le$。用法：任意 $\eps>0$，$\sup S-\eps$ 不再是上界，故存在 $s\in S$ 使 $s>\sup S-\eps$。
+\end{kp}
+
+\begin{kp}{$\eps$–$N$ 语言（定义原文，必背）}
+$(X,d_X)$ 度量空间，开球 $B_X(a,r)=\{x:d_X(x,a)<r\}$，实数取 $d_{\R}(x,y)=|x-y|$，$B_\R(a,r)=(a-r,a+r)$。
+\[
+x_n\to a\iff \forall\eps>0\ \exists N\in\mathbb N\ \forall n\ge N:\ d_X(x_n,a)<\eps\ (x_n\in B_X(a,\eps)).
+\]
+量词顺序：$\forall\eps\,\exists N\,\forall n$；$N$ 可依赖 $\eps$，不可依赖 $n$。
+\textbf{唯一性：}若 $x_n\to a,b$ 且 $a\ne b$，取 $\eps=d_X(a,b)/3$，大 $n$ 时 $d_X(x_n,a),d_X(x_n,b)<\eps$，三角不等式矛盾。
+\textbf{有界性：}尾项在 $B_X(a,1)$，前有限项取最大距离，合得统一半径。
+\textbf{四则运算（实数列）：}$a_n\to a,\ b_n\to b\Rightarrow$ 线性组合、乘积收敛；$b\ne0$ 时商收敛。乘积用
+$|a_nb_n-ab|\le|a_n||b_n-b|+|b||a_n-a|$，并用有界性控制 $|a_n|$；商先证大 $n$ 有 $|b_n|\ge|b|/2$。
+\end{kp}
+
+\begin{kp}{夹逼定理 与 单调有界定理}
+\textbf{夹逼：}若大 $n$ 时 $a_n\le c_n\le b_n$ 且 $a_n\to b_n\to L$，则 $c_n\to L$——同一 $\eps$ 控制上下界。
+\textbf{单调有界：}递增有上界 $\Rightarrow$ 收敛，且 $a_n\to\sup\{a_n\}$（递减有下界取 $\inf$）。
+证明：令 $a=\sup\{a_n\}$，取 $N$ 使 $a_N>a-\eps$，则 $n\ge N$ 时 $a_n\in[a_N,a]\subset B_\R(a,\eps)$。
+\end{kp}
+
+\begin{kp}{闭区间套定理}
+若 $[a_{n+1},b_{n+1}]\subseteq[a_n,b_n]$ 且 $b_n-a_n\to0$，则存在唯一 $\xi\in\bigcap_n[a_n,b_n]$，且 $a_n\uparrow\xi,\ b_n\downarrow\xi$。
+（$a_n$ 递增有界，$b_n$ 递减有界，$b-a=\lim(b_n-a_n)=0$。）\textbf{反例：}开区间套 $(1,1+1/n)$ 长度趋零但交集为空——端点必须取闭。
+\end{kp}
+
+\begin{kp}{Bolzano–Weierstrass 定理}
+有界实数列必有收敛子列。证：反复二分含无穷多项的闭区间得长度趋零区间套，递归选 $n_k$ 递增使 $a_{n_k}$ 落入第 $k$ 区间，则 $a_{n_k}\to\xi$（“无穷多项”指无穷多\textbf{指标}）。
+\end{kp}
+
+\begin{kp}{Cauchy 收敛原理}
+$(x_n)$ 为柯西列：$\forall\eps>0\ \exists N\ \forall m,n\ge N:\ d_X(x_m,x_n)<\eps$。
+\textbf{收敛 $\Rightarrow$ 柯西}（三角不等式）。\textbf{$\R$ 中柯西 $\Rightarrow$ 收敛}：柯西列有界 $\to$ 有收敛子列 $x_{n_k}\to\xi$；取尾项两两 $<\eps/2$、$x_{n_k}\in B_\R(\xi,\eps/2)$，则大 $n$ 时 $x_n\in B_\R(\xi,\eps)$。
+\textbf{完备性是 $\R$ 特有：}$\mathbb Q$ 用 $d_\mathbb Q(x,y)=|x-y|$ 时柯西列可不收敛于有理数。
+\end{kp}
+
+\section*{二、常用数列判别与三大模板}
+
+\begin{kp}{Stolz 定理}
+若 $b_n$ 严格递增且 $b_n\to+\infty$，且 $\dfrac{a_n-a_{n-1}}{b_n-b_{n-1}}\to L$（有限），则 $\dfrac{a_n}{b_n}\to L$。
+用法：令 $S_n=\sum_{k\le n}a_k$，若 $a_n\to A$ 则 $S_n/n\to A$。$L=\pm\infty$ 有扩展版，须核对版本，反向一般不成立。
+\end{kp}
+
+\begin{kp}{比值判别 与 根值判别}
+\textbf{比值：}若 $a_n\ge0$ 且最终 $a_n>0$，$\dfrac{a_{n+1}}{a_n}\to p<1$，取 $p<r<1$，大 $n$ 后 $a_n\le Cr^n\to0$。
+\textbf{根值：}若 $a_n\ge0$ 且 $\limsup a_n^{1/n}<1$，取该上极限 $<r<1$，大 $n$ 后 $a_n\le r^n\to0$。
+\textbf{易错：}固定 $k$ 的“$k$ 次方根”不是根值判别；必须用 $\limsup a_n^{1/n}$。
+\end{kp}
+
+\begin{kp}{常用极限}
+$|q|<1\Rightarrow q^n\to0$。$a>1$：设 $b_n=a^{1/n}-1>0$，$a=(1+b_n)^n\ge1+nb_n\Rightarrow 0<b_n\le(a-1)/n\to0$，故 $a^{1/n}\to1$。
+$n^{1/n}\to1$：$n^k=(1+c_n)^n\ge\binom n{k+1}c_n^{k+1}\ge\dfrac{(n/2)^{k+1}}{(k+1)!}c_n^{k+1}$。
+\end{kp}
+
+\begin{kp}{三个必背证明模板}
+\textbf{(1)  单调有界（递推）：}证有界 $\to$ 证差分符号固定（单调）$\to$ 设极限 $L$ 代入递推得方程 $\to$ 在值域内取根。
+例 $x_{n+1}=1+\frac{x_n}{1+x_n}$，$x_1>0\Rightarrow1<x_{n+1}<2$，$L=1+\frac{L}{1+L}\Rightarrow L=\frac{1+\sqrt5}{2}$。
+\textbf{(2)  压缩（柯西）：}若 $|a_{n+1}-a_n|\le r|a_n-a_{n-1}|$，$0<r<1$，则
+\(|a_m-a_n|\le\sum_{j=n}^{m-1}|a_{j+1}-a_j|\le|a_2-a_1|\dfrac{r^{n-1}}{1-r}\)，故柯西、收敛。
+\textbf{(3)  Stolz 求比：}由 $\frac1{x_{n+1}}-\frac1{x_n}\to1$（$x_{n+1}=x_n(1-x_n)$ 时）得 $\frac1{nx_n}\to1$，即 $nx_n\to1$。
+\end{kp}
+
+\begin{kp}{级数判敛要点}
+调和级数按 $[2^{k-1}+1,2^k]$ 分组，每组 $\ge1/2$，故发散。$p>1$ 同分组每组 $\le 2^{k-1}/(2^{k-1})^p$ 成几何级数，故 $\sum n^{-p}$ 收敛；$p\le1$ 比较发散。
+$H_n-\ln n$ 递减且正 $\Rightarrow$ 收敛（欧拉常数 $\gamma$）。交错调和级数 $\to\ln2$。
+\end{kp}
+
+\begin{kp}{典型例题：用单调有界求极限}
+设 $x_1=\sqrt2,\ x_{n+1}=\sqrt{2+x_n}$。\textbf{解：}先证有界 $0<x_n<2$（归纳：$x_1<2$，若 $x_n<2$ 则 $x_{n+1}=\sqrt{2+x_n}<\sqrt4=2$）。
+再证单调递增：$x_{n+1}^2-x_n^2=2+x_n-x_n^2=(2-x_n)(1+x_n)>0$，故 $x_{n+1}>x_n$。
+由单调有界定理存在 $L$；两边取极限 $L=\sqrt{2+L}\Rightarrow L^2-L-2=0\Rightarrow L=2$（舍负根）。
+\end{kp}
+
+\begin{kp}{典型例题：夹逼与 Stolz}
+求 $\lim_{n\to\infty}\dfrac{1^k+2^k+\cdots+n^k}{n^{k+1}}$（$k$ 固定正整数）。\textbf{解（Stolz）：}分母 $b_n=n^{k+1}$ 严格增趋于 $+\infty$，比值
+$\dfrac{n^k}{(n+1)^{k+1}-n^{k+1}}\to\dfrac{1}{k+1}$（分母 $\sim(k+1)n^k$），故原极限 $=\dfrac{1}{k+1}$。
+\end{kp}
+
+\begin{kp}{典型例题：幂指型极限}
+求 $\lim_{n\to\infty}\left(1+\dfrac1n\right)^{n^2}e^{-n}$ 的量级。\textbf{解：}取对数，
+\[
+n^2\ln(1+1/n)-n=n^2\left(\dfrac1n-\dfrac{1}{2n^2}+O(n^{-3})\right)-n=-\dfrac12+O(n^{-1}).
+\]
+故原式 $\to e^{-1/2}$。要点：幂指型先取对数，再用 $\ln(1+t)=t-\frac{t^2}{2}+O(t^3)$。
+\end{kp}
+
+\begin{kp}{典型例题：已知极限求参数}
+若 $\lim_{x\to0}\dfrac{\sin 3x+ax}{x^3}=b$（有限），求 $a,b$。\textbf{解：}展开 $\sin 3x=3x-\dfrac{(3x)^3}{6}+o(x^3)=3x-\dfrac{9}{2}x^3+o(x^3)$。
+分子 $=(3+a)x-\dfrac92x^3+o(x^3)$。为使极限有限，须 $3+a=0$ 即 $a=-3$，此时极限 $=-\dfrac92$，故 $b=-\dfrac92$。
+\end{kp}
+
+\section*{三、度量、拓扑与函数极限}
+
+\begin{kp}{点集概念（用球表述）}
+内点：$\exists B(x,r)\subseteq A$；外点：$\exists B(x,r)\subseteq X\setminus A$；边界点：每个 $B(x,r)$ 同时交 $A$ 与 $X\setminus A$。
+\textbf{聚点：}$\forall r>0,\ B(x,r)\cap(A\setminus\{x\})\ne\emptyset$（必须去心，否则孤立点误判）；等价于每球含 $A$ 中无穷多点，也等价于存在 $A\setminus\{x\}$ 中互异序列 $\to x$。
+开集：每点皆内点；闭集：含全部聚点 $\iff$ 补集开。
+\end{kp}
+
+\begin{kp}{基本拓扑事实}
+球是开集：$y\in B(x,r)$，取 $s=r-d(x,y)>0$，$z\in B(y,s)\Rightarrow d(x,z)\le d(x,y)+d(y,z)<r$。
+开集任意并、有限交开（有限交取最小半径）；无限交未必开：$\bigcap_n(-1/n,1/n)=\{0\}$。
+闭集任意交、有限并闭；任意并未必闭。$\overline A=A\cup A'$ 为最小闭集；$A^\circ$ 为最大含于 $A$ 的开集。
+每个度量空间 Hausdorff；不可度量化的拓扑存在；紧致、连续可只在拓扑层面谈；一般拓扑中序列不足以刻画全部性质（需第一可数）。
+\end{kp}
+
+\begin{kp}{函数极限 $\eps$–$\delta$（定义原文，必背）}
+设 $(X,d_X),(Y,d_Y)$ 度量空间，$f:A\subseteq X\to Y$，$x_0$ 为 $A$ 的\textbf{聚点}：
+\[
+f(x)\to L\ (x\to x_0)\iff \forall\eps>0\ \exists\delta>0:\ f\bigl(A\cap(B_X(x_0,\delta)\setminus\{x_0\})\bigr)\subseteq B_Y(L,\eps).
+\]
+即 $x\in A,\ 0<d_X(x,x_0)<\delta\Rightarrow d_Y(f(x),L)<\eps$。去心球说明 $f(x_0)$ 不影响极限；要求聚点避免空真。
+\end{kp}
+
+\begin{kp}{函数极限性质与序列判别}
+\textbf{唯一性}：目标空间度量下唯一。固定半径（如 1）时函数在去心球内取值于 $B_Y(L,1)$（局部有界）。
+\textbf{四则：}$f\to\alpha,\ g\to\beta$（实值）则和、积 $\to\alpha+\beta,\ \alpha\beta$；$\beta\ne0$ 时 $f/g\to\alpha/\beta$（大去心球内 $g\ne0$）。
+\textbf{夹逼/保序：}目标取自 $\R$ 时沿用数列论证，在去心球内进行。
+\textbf{序列判别：}$f(x)\to L\iff$ 对每个 $(x_n)\subseteq A\setminus\{x_0\},\ x_n\to x_0$ 有 $f(x_n)\to L$（反证：取 $x_n\in B_X(x_0,1/n)\setminus\{x_0\}$ 破坏）。
+\end{kp}
+
+\begin{kp}{复合极限}
+$f:A\to Y,\ g:C\subseteq Y\to Z$，$x_0$ 为 $A$ 聚点，$A_0$ 为 $C$ 聚点。若 $f\to A_0$、$g\to B$，且 $\exists\delta_0$ 使 $x\in A\cap(B_X(x_0,\delta_0)\setminus\{x_0\})$ 时 $f(x)\in C\setminus\{A_0\}$，则 $g(f(x))\to B$。
+\textbf{关键条件：}$f(x)\ne A_0$（内层落在\textbf{去心}邻域）——否则外函数只知去心极限时结论失效。
+\textbf{例外：}若 $g$ 在 $A_0$ 连续，则可控制完整球，不需 $f(x)\ne A_0$，且 $g(f(x))\to g(A_0)$。
+\end{kp}
+
+\begin{kp}{典型例题：用定义证函数极限}
+证明 $\lim_{x\to2}(3x-1)=5$。\textbf{证：}给定 $\eps>0$，取 $\delta=\eps/3$。当 $0<|x-2|<\delta$ 时，
+$|(3x-1)-5|=3|x-2|<3\delta=\eps$。故极限为 5。
+\end{kp}
+
+\section*{四、连续性、紧致与一致连续}
+
+\begin{kp}{连续（定义原文）}
+$f$ 在 $x_0\in A$ 连续：
+\[
+\forall\eps>0\ \exists\delta>0:\ f\bigl(A\cap B_X(x_0,\delta)\bigr)\subseteq B_Y(f(x_0),\eps).
+\]
+\textbf{不去心}（$x_0\in A$ 映到球心）。$x_0$ 为孤立点（球交 $A$ 只含 $x_0$）时连续自动成立。
+和、积连续；$g(x_0)\ne0$ 时商连续。复合：$f$ 在 $x_0$ 连续、$g$ 在 $f(x_0)$ 连续且 $f(A)\subseteq C\Rightarrow g\circ f$ 连续。
+\end{kp}
+
+\begin{kp}{间断点分类与振幅}
+第一类：左右极限都存在。左右相等而 $\ne f(x_0)$ 为\textbf{可去}；左右不等为\textbf{跳跃}。第二类：至少一侧极限不存在或为 $\pm\infty$。
+\textbf{振幅：}$\omega(\delta)=\sup\{|f(x)-f(y)|:x,y\in A\cap B_\R(x_0,\delta)\}$（可 $+\infty$）。$x_0$ 为聚点时：$f$ 在 $x_0$ 连续 $\iff \omega(\delta)\to0\ (\delta\downarrow0)$。
+\textbf{单调函数：}间断点全为跳跃点，且至多可数（每 $n$，跳跃 $>1/n$ 的点有限，总跳跃 $\le f(b)-f(a)$）。
+\end{kp}
+
+\begin{kp}{反函数连续性}
+$f:[a,b]\to\R$ 连续且严格单调 $\Rightarrow$ $f^{-1}$ 在 $f([a,b])$ 上连续。
+证（序列）：$y_n\to y$，$x_n=f^{-1}(y_n),\ x_0=f^{-1}(y)$。在内点取 $0<r<\min(\eps,x_0-a,b-x_0)$，由严格单调 $f(x_0\pm r)$ 分居 $f(x_0)$ 两侧，取 $\eta>0$ 小于两侧距离；$y_n\in B_\R(y,\eta)\Rightarrow x_n\in B_\R(x_0,r)\subset B_\R(x_0,\eps)$。端点用单侧邻域。
+\textbf{易错：}一般定义域连续单射不必严格单调，不能只由“反函数存在”推出连续。
+\end{kp}
+
+\begin{kp}{闭区间上连续函数性质}
+\textbf{有界、最值：}紧集上连续函数有界并取到最大最小值（序列证：无界则取 $x_n,\ |f(x_n)|>n$ 取收敛子列矛盾）。
+\textbf{介值定理：}二分保持端点异号构造闭区间套，公共点连续性迫使值为 0；对 $f-C$ 应用得一般形式。\textbf{须连通}（实轴上即区间），仅紧不连通时值域可空隙。
+\textbf{零点定理：}$f$ 连续、$f(a)f(b)<0\Rightarrow\exists\xi\in(a,b),\ f(\xi)=0$（介值特例）。
+\end{kp}
+
+\begin{kp}{Heine 定理与一致连续}
+\textbf{Heine：}紧集上连续 $\Rightarrow$ 一致连续。反证：$d_X(x_n,y_n)\to0$ 而 $d_Y(f(x_n),f(y_n))\ge\eps_0$，取收敛子列两列趋同一点矛盾。
+\textbf{一致连续定义：}$\forall\eps>0\ \exists\delta>0\ \forall x,y\in A:\ d_X(x,y)<\delta\Rightarrow d_Y(f(x),f(y))<\eps$（$\delta$ 不依赖点）。
+\textbf{否定：}$\exists\eps_0>0,\ \exists x_n,y_n\in A:\ d_X(x_n,y_n)\to0$ 而 $d_Y(f(x_n),f(y_n))\ge\eps_0$。
+\textbf{反例：}$1/x$ 在 $(0,1)$：取 $x_n=1/n,\ y_n=1/(n+1)\ (n\ge2)$；$x^2$ 在 $\R$：取 $x_n=\sqrt{n+1},\ y_n=\sqrt n$。
+\end{kp}
+
+\begin{kp}{典型例题：一致连续判定}
+证明 $\sqrt{x}$ 在 $[0,+\infty)$ 上一致连续。\textbf{证：}在 $[0,1]$ 上连续故一致连续（Heine）；在 $[1,\infty)$ 上 $|\sqrt x-\sqrt y|=\dfrac{|x-y|}{\sqrt x+\sqrt y}\le\dfrac{|x-y|}{2}$，取 $\delta=2\eps$ 即一致连续。用分段拼接（公共点 $[0,1]\cap[1,2]$ 处衔接）得整体一致连续。
+\end{kp}
+
+\begin{kp}{典型例题：介值定理证方程有根}
+证明方程 $x=2\sin x+1$ 在 $(0,\pi)$ 内至少有一个根。\textbf{证：}令 $g(x)=x-2\sin x-1$，$g(0)=-1<0$，$g(\pi)=\pi-1>0$。$g$ 在 $[0,\pi]$ 连续，由零点定理存在 $\xi\in(0,\pi)$ 使 $g(\xi)=0$，即 $\xi=2\sin\xi+1$。
+\end{kp}
+
+\section*{五、两重要极限、等价无穷小}
+
+\begin{kp}{两个重要极限}
+$\sin x/x\to1$：面积比较 $0<x<\pi/2$ 时 $\cos x<\sin x/x<1$；又 $0\le1-\cos x=2\sin^2(x/2)\le x^2/2\Rightarrow\cos x\to1$，夹逼。
+$(1+1/x)^x\to e\ (x\to+\infty)$：积分估计 $\dfrac{t}{1+t}\le\ln(1+t)\le t$，取 $t=1/x$ 乘 $x$ 得 $\dfrac{x}{x+1}\le x\ln(1+1/x)\le1$，指数 $\to1$。$(1+1/n)^n\uparrow$ 且有界 $\le3$，极限定义为 $e$。
+$x\to-\infty$：令 $y=-x\to+\infty$，$(1+1/x)^x=(1-1/y)^{-y}\to e$。
+\end{kp}
+
+\begin{kp}{等价无穷小（$x\to0$，去心球内）}
+$\sin x\sim x$，$\tan x\sim x$，$\ln(1+x)\sim x$，$e^x-1\sim x$，$(1+x)^\alpha-1\sim\alpha x$，$1-\cos x\sim x^2/2$，$\arcsin x\sim x$，$\arctan x\sim x$。
+\textbf{替换规则：}只可在\textbf{乘除因子}中替换；加减需写 $F=G+o(G)$，主项可能抵消。
+例：$\tan x-\sin x=\tan x(1-\cos x)\sim x^3/2$（不能各换成 $x$ 得 0）。
+$o(G)$：$F/G\to0$；$F\sim G$：$F/G\to1$（分母在去心邻域非零）。
+\end{kp}
+
+\section*{六、一元微分学要点}
+
+\begin{kp}{导数定义与基本求导公式}
+导数定义 $f'(x_0)=\lim_{h\to0}\dfrac{f(x_0+h)-f(x_0)}{h}$（等价 $\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}$，按 $d_\R$）。可导 $\Rightarrow$ 连续，反之不成立（$|x|$ 在 0）。
+$(x^\alpha)'=\alpha x^{\alpha-1}$，$(a^x)'=a^x\ln a$，$(\log_a x)'=\dfrac{1}{x\ln a}$，$(\sin x)'=\cos x$，$(\cos x)'=-\sin x$，$(\tan x)'=\sec^2x$，$(\arcsin x)'=\dfrac{1}{\sqrt{1-x^2}}$，$(\arctan x)'=\dfrac{1}{1+x^2}$。
+\end{kp}
+
+\begin{kp}{微分与求导法则}
+微分：$\Delta y=f'(x_0)\Delta x+o(\Delta x)$，即 $dy=f'(x)dx$；\textbf{一阶微分形式不变性}：无论 $x$ 为自变量或中间变量，$dy=f'(x)\,dx$ 形式统一。
+乘积 $(uv)'=u'v+uv'$；商 $\left(\dfrac uv\right)'=\dfrac{u'v-uv'}{v^2}$；链式 $\dfrac{d}{dx}f(g(x))=f'(g(x))g'(x)$。
+反函数求导：$(f^{-1})'(y)=1/f'(x)$（$f'(x)\ne0$）。隐函数：对方程两边求导后解 $y'$。参数方程 $x=x(t),y=y(t)$：$\dfrac{dy}{dx}=\dfrac{y'(t)}{x'(t)}$。对数求导法适用于幂指函数 $u(x)^{v(x)}$。
+\end{kp}
+
+\begin{kp}{微分中值定理与 L'Hospital}
+Fermat：内点极值处（可导）$f'=0$。Rolle：$f$ 在 $[a,b]$ 连续、$(a,b)$ 可导、$f(a)=f(b)\Rightarrow\exists\xi,\ f'(\xi)=0$。
+Lagrange：$f(b)-f(a)=f'(\xi)(b-a)$。Cauchy：$\dfrac{f(b)-f(a)}{g(b)-g(a)}=\dfrac{f'(\xi)}{g'(\xi)}$（$g'\ne0$）。
+\textbf{L'Hospital：}$0/0$ 或 $\infty/\infty$ 型，在满足条件时 $\lim\dfrac f g=\lim\dfrac{f'}{g'}$；\textbf{须先验形式}且右侧极限存在（或为 $\pm\infty$），非不定式不可用。
+\end{kp}
+
+\begin{kp}{Taylor 公式与函数性态}
+Taylor（带 Peano 余项）：$f(x)=\sum_{k=0}^n\dfrac{f^{(k)}(x_0)}{k!}(x-x_0)^k+o((x-x_0)^n)$；
+带 Lagrange 余项：余项 $=\dfrac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$。
+常用展开：$e^x=1+x+\frac{x^2}{2!}+\cdots$，$\sin x=x-\frac{x^3}{3!}+\cdots$，$\cos x=1-\frac{x^2}{2!}+\cdots$，$\ln(1+x)=x-\frac{x^2}{2}+\cdots$。
+\textbf{单调性：}$f'>0$（区间内）则严格增，$f'<0$ 严格减。\textbf{极值：}$f'(x_0)=0$ 且 $f'$ 变号（或二阶判别 $f''(x_0)$ 符号）判定。\textbf{凸性：}$f''>0$ 上凸（凹向上），$f''<0$ 反之；拐点处 $f''$ 变号且两侧异号。
+\textbf{作图步骤：}定义域、奇偶周期、驻点与单调区间、凸性拐点、渐近线、关键点。
+\end{kp}
+
+\begin{kp}{典型例题：L'Hospital 与 Taylor}
+求 $\lim_{x\to0}\dfrac{x-\sin x}{x^3}$。\textbf{解：}用 Taylor $\sin x=x-\dfrac{x^3}{6}+o(x^3)$，分子 $=\dfrac{x^3}{6}+o(x^3)$，故极限 $=\dfrac16$。
+（若用 L'Hospital 需连用三次：$\dfrac{1-\cos x}{3x^2}\to\dfrac{\sin x}{6x}\to\dfrac{\cos x}{6}=\dfrac16$，过程中每次均须是 $0/0$ 型。）
+\end{kp}
+
+\begin{kp}{典型例题：用单调性证不等式}
+证明 $x>0$ 时 $e^x>1+x+\dfrac{x^2}{2}$。\textbf{证：}令 $h(x)=e^x-1-x-\dfrac{x^2}{2}$，$h(0)=0$，$h'(x)=e^x-1-x$，$h'(0)=0$，$h''(x)=e^x-1>0\ (x>0)$。
+故 $h'$ 严格增 $\Rightarrow h'(x)>0\ (x>0)\Rightarrow h$ 严格增 $\Rightarrow h(x)>h(0)=0$，即得结论。
+\end{kp}
+
+\begin{kp}{典型例题：求极值与最值}
+求 $f(x)=x^3-3x+1$ 在 $[-2,2]$ 上的最大最小值。\textbf{解：}$f'(x)=3x^2-3=3(x-1)(x+1)$，驻点 $x=\pm1$。
+比较 $f(-2)=-1,\ f(-1)=3,\ f(1)=-1,\ f(2)=3$（含端点）。故最大值 $3$（$x=\pm1$ 中 $x=-1$ 与 $x=2$），最小值 $-1$（$x=-2$ 与 $x=1$）。
+\end{kp}
+
+\vfill
+\hrule
+\vspace{2pt}
+{\footnotesize \textbf{答题模板提醒：}(1) 写 $\eps$–$N$/$\eps$–$\delta$ 先写量词顺序再取阈值；(2) 求极限先判型，等价无穷小只换乘除因子；(3) 单调有界先证有界再证单调，极限方程在值域内取值；(4) ${f^{-1}}$ 与一致连续题务必点明定义域与单侧/端点条件。}
+
+\newpage
+\section*{附一：考前 30 分钟速览清单}
+
+\begin{kp}{必背定义原文（能默写）}
+(1) 数列极限 $\eps$–$N$；(2) 函数极限 $\eps$–$\delta$（含去心球与聚点条件）；(3) 连续（不去心球）；(4) 一致连续（$\delta$ 不依赖点）及其否定式。
+\end{kp}
+
+\begin{kp}{必背定理（能写条件+结论）}
+确界原理；夹逼定理；单调有界收敛定理；闭区间套定理；Bolzano--Weierstrass；Cauchy 收敛原理；Stolz；比值/根值判别；闭区间连续函数有界最值、介值与 Heine 定理；反函数连续性。
+\end{kp}
+
+\begin{kp}{一元微分学必背公式}
+$(\arcsin x)'=1/\sqrt{1-x^2}$，$(\arctan x)'=1/(1+x^2)$，$\tan'x=\sec^2x$，$\ln'x=1/x$，$(a^x)'=a^x\ln a$；反函数 $(f^{-1})'=1/f'$；参数方程 $dy/dx=y_t'/x_t'$；一阶微分形式不变性 $dy=f'(x)dx$。Rolle/Lagrange/Cauchy 中值定理；Taylor 两种余项；L'Hospital 两种型。
+\end{kp}
+
+\begin{kp}{高频陷阱}
+去心 vs 不去心；聚点条件避免空真；等价替换只限乘除；L'Hospital 先判型且右侧极限存在；一般连续单射不必严格单调；开区间套长度趋零仍可能空心；通常拓扑不能靠序列刻画全部性质；可导必连续但连续未必可导。
+\end{kp}
+
+\begin{kp}{答题顺序套路}
+极限题：判型 → 选工具（等价/泰勒/夹逼/Stolz）。证明题：写量词 → 取阈值 → 验证球条件。极值题：驻点+端点+不可导点全比较。凸性题：$f''$ 符号与拐点变号。
+\end{kp}
+
+\newpage
+\section*{附二：自测题（先做后看答案）}
+
+\begin{kp}{自测 1（数列极限）}
+设 $x_1=1,\ x_{n+1}=\dfrac{1}{2}\left(x_n+\dfrac{2}{x_n}\right)$。证明 $(x_n)$ 收敛并求极限。
+\par\medskip
+\textbf{答案：}由 AM--GM，$x_{n+1}\ge\sqrt2$；对 $n\ge2$，$x_{n+1}-x_n=\dfrac{2-x_n^2}{2x_n}\le0$，故递减有下界，收敛。极限 $L=\dfrac12(L+2/L)\Rightarrow L=\sqrt2$。
+\end{kp}
+
+\begin{kp}{自测 2（$\eps$–$\delta$）}
+证明 $f(x)=x^2$ 在 $x_0=3$ 连续。
+\par\medskip
+\textbf{答案：}取 $\delta=\min(1,\eps/7)$。$|x-3|<\delta\le1\Rightarrow|x+3|\le|x-3|+6<7$，故 $|x^2-9|=|x-3||x+3|<7\delta\le\eps$。
+\end{kp}
+
+\begin{kp}{自测 3（一致连续）}
+$f(x)=x^2$ 在 $\R$ 上是否一致连续？
+\par\medskip
+\textbf{答案：}否。取 $x_n=n+1/n,\ y_n=n$，则 $|x_n-y_n|=1/n\to0$，但 $|x_n^2-y_n^2|=2+1/n^2\ge2$，不趋于 0。
+\end{kp}
+
+\begin{kp}{自测 4（间断点）}
+讨论 $f(x)=\dfrac{\sin x}{x}$（$x\ne0$）在 $x=0$ 的间断类型（可补充定义 $f(0)=1$ 后连续）。
+\par\medskip
+\textbf{答案：}$\lim_{x\to0}\dfrac{\sin x}{x}=1$ 有限存在，故 $x=0$ 为可去间断点；令 $f(0)=1$ 即可连续延拓。
+\end{kp}
+
+\begin{kp}{自测 5（中值定理与单调）}
+证明 $x>0$ 时 $\ln(1+x)<x$。
+\par\medskip
+\textbf{答案：}令 $g(x)=x-\ln(1+x)$，$g(0)=0$，$g'(x)=1-\dfrac{1}{1+x}=\dfrac{x}{1+x}>0\ (x>0)$，故 $g$ 严格增，$g(x)>g(0)=0$，即 $\ln(1+x)<x$。
+\end{kp}
+
+\begin{kp}{自测 6（L'Hospital）}
+求 $\lim_{x\to0^+}x\ln x$。
+\par\medskip
+\textbf{答案：}化为 $\dfrac{\ln x}{1/x}$（$\infty/\infty$ 型），L'Hospital 得 $\dfrac{1/x}{-1/x^2}=-x\to0$，故原极限 $=0$。
+\end{kp}
+
+\begin{kp}{自测 7（单调有界）}
+设 $a_1=1,\ a_{n+1}=\sqrt{6+a_n}$。求 $\lim a_n$。
+\par\medskip
+\textbf{答案：}$0<a_n<3$ 且递增（$a_{n+1}^2-a_n^2=6+a_n-a_n^2=(3-a_n)(2+a_n)>0$），极限 $L=\sqrt{6+L}\Rightarrow L=3$。
+\end{kp}
+
+\begin{kp}{自测 8（Taylor）}
+求 $\lim_{x\to0}\dfrac{e^x-1-x}{x^2}$。
+\par\medskip
+\textbf{答案：}$e^x=1+x+\dfrac{x^2}{2}+o(x^2)$，分子 $=\dfrac{x^2}{2}+o(x^2)$，极限 $=\dfrac12$。
+\end{kp}
+
+\end{document}

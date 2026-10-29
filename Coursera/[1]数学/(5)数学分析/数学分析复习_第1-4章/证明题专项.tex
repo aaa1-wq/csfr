@@ -1,0 +1,199 @@
+﻿\documentclass[11pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,mathtools,geometry,hyperref,enumitem,xcolor}
+\geometry{margin=2cm}
+\hypersetup{hidelinks}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.22}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\N}{\mathbb N}
+\newcommand{\thm}[1]{\par\smallskip\noindent\colorbox{blue!8}{\textbf{【题型】#1}}\par\smallskip}
+\newcommand{\think}[1]{\par\smallskip\noindent\textcolor{purple!75!black}{\textbf{怎么想：}#1}\par\smallskip}
+\newcommand{\key}[1]{\par\smallskip\noindent\colorbox{yellow!22}{\textbf{关键一步：}#1}\par\smallskip}
+\newcommand{\pit}[1]{\par\smallskip\noindent\textcolor{red!70!black}{\textbf{易错：}#1}\par\smallskip}
+\title{四章证明题专项\\[4pt]\large 讲“怎么想”，不讲“背答案”}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\tableofcontents\newpage
+
+\section{证明题的通用套路总览}
+
+证明题看着多，其实模型就那么几种。先记这张“招式表”，做题先问自己“这是哪一招”：
+
+\begin{center}
+\begin{tabular}{p{3cm}|p{9cm}}
+招式 & 什么时候用\\\hline
+直接法（由定义） & 题目就是让你“按定义证明”某极限/连续\\\hline
+放缩法 & 要证 $|x_n-a|<\eps$，但式子复杂，先放大成简单式\\\hline
+反证法 & 结论带“唯一”“不存在”“必定”“无”等词\\\hline
+构造法 & 让证“存在一个 $x$/$N$/数列”，你要把它造出来\\\hline
+夹逼法 & 目标式子上下都有界，且上下界同极限\\\hline
+归纳法 & 涉及“对所有 $n$”的结构性命题\\\hline
+反例法 & 让证“不一定/不能断言”，举一个例子即可\\\hline
+\end{tabular}
+\end{center}
+
+\key{拿到证明题，先默念三遍：结论是什么？已知是什么？差哪一步？——把“已知”往“结论”推，缺口就是你要补的那一步。}
+
+\section{第 1 章 集合与映射：证明题}
+
+\subsection{题型一：证明两个集合相等}
+
+\thm{求证 $A=B$ 或 $A\cap(B\cup D)=(A\cap B)\cup(A\cap D)$ 型}
+\think{集合相等，永远只能“双向包含”：先证左边 $\subseteq$ 右边，再证右边 $\subseteq$ 左边。证包含又只能“任取一个元素 $x$ 属于左边，推出它属于右边”。}
+\key{固定起手式：“任取 $x\in$（左），则 $x$ 满足……，于是 $x\in$（右），故左 $\subseteq$ 右；反之同理。”}
+写出来就是：
+\begin{itemize}[leftmargin=1.4em]
+\item 证 $A\cap(B\cup D)\subseteq(A\cap B)\cup(A\cap D)$：任取 $x\in A\cap(B\cup D)$。则 $x\in A$，且（$x\in B$ 或 $x\in D$）。于是 $x\in A\cap B$ 或 $x\in A\cap D$，即 $x\in(A\cap B)\cup(A\cap D)$。
+\item 反方向完全照抄，把 $\subseteq$ 方向反过来。
+\end{itemize}
+\pit{不要用“显然”“易得”糊过去——阅卷看的就是逻辑链是否闭合。加一句“由 $x$ 任意，故包含成立”收尾。}
+
+\subsection{题型二：构造反例（证明“不成立/不能断言”）}
+
+\thm{给 $A\cup B=A\cup C$，能否断言 $B=C$？}
+\think{这种题答案几乎总是“不能”，你只需\textbf{举一个具体例子}把结论打脸。构造反例的要诀：让“多出来的部分”被公共的 $A$ 吸收掉。}
+\key{反例 $A=\{a,b,c\},\ B=\{b,c,d\},\ C=\{c,d\}$。则 $A\cup B=A\cup C=\{a,b,c,d\}$，但 $b\in B,\ b\notin C$，所以 $B\ne C$。}
+\pit{反例必须\textbf{具体、可验证}，不能写“取某些集合使得……”，那等于没说。}
+
+\subsection{题型三：证明双射 / 一一对应}
+
+\thm{构造 $[a,b]\to[0,1]$ 的一一对应，或证某函数是双射}
+\think{“一一对应”= 既是单射（不同输入不同输出）又是满射（每个输出都被取到）。证双射两条腿：单射证 $f(x_1)=f(x_2)\Rightarrow x_1=x_2$；满射证对任意 $y$ 能解出 $x$。若是“构造”，就把解析式写出来并验证这两条。}
+\key{线性双射 $f(x)=\dfrac{x-a}{b-a}$：单射（一次函数严格单调）、满射（任给 $y\in[0,1]$，$x=a+(b-a)y\in[a,b]$ 且 $f(x)=y$）。}
+
+\section{第 2 章 数列极限：证明题（重头戏）}
+
+\subsection{题型一：按定义证明 $\lim x_n=a$}
+
+这是最高频、最必须拿满分的题型。\textbf{固定四步流水线：}
+\begin{enumerate}[leftmargin=1.4em]
+\item 写出 $|x_n-a|$ 的表达式。
+\item \textbf{放缩}：把它放大成一个更简单、容易解的量（通常放大成 $\dfrac{C}{n}$ 或 $Cq^n$）。
+\item 令放大后的式子 $<\eps$，解出 $n>N$（得到 $N$ 的公式）。
+\item 收尾：“取 $N=[\cdots]$，当 $n>N$ 时，$|x_n-a|<\eps$，故极限成立。”
+\end{enumerate}
+
+\think{灵魂在第 2 步“放缩”。原则：\textbf{往大放，往简单放}。常见招式：分母变小分数变大（$n^2+1>n^2$）、分子变大、用 $|\sin|\le1$ 去掉三角函数、用二项式/几何级数压住指数。}
+\key{以 $\lim\dfrac{n+1}{n^2+1}=0$ 为例：$|x_n-0|=\dfrac{n+1}{n^2+1}<\dfrac{n+n}{n^2}=\dfrac2n$。令 $\dfrac2n<\eps$ 得 $n>\dfrac2\eps$，取 $N=[2/\eps]$。}
+\pit{(1) $N$ 只能依赖 $\eps$，绝不能出现 $n$；(2) 最后一定要“实打实”把 $< \eps$ 写出来，不能停在“$n$ 足够大”。}
+
+\subsection{题型二：证明“某定义的否定/错误”}
+
+\thm{判断某“无穷小定义”是否正确}
+\think{看到“定义是否正确”，先想“能不能让它漏掉情形”。要证错误，就\textbf{举一个满足条件但不是无穷小的数列}。}
+\key{例：“任意 $\eps>0$ 存在 $N$，$n>N$ 时 $x_n<\eps$”。取 $x_n=-n$：对任意 $\eps$ 都满足 $x_n<\eps$，但 $|x_n|\to\infty$ 不是无穷小。原因：只给了“单侧上界”，漏了绝对值。}
+
+\subsection{题型三：子列相关证明}
+
+\thm{已知奇、偶子列都趋于 $a$，证全列趋于 $a$（或反之）}
+\think{子列题的核心是“\textbf{把 $N$ 取成两者的最大/较大值}”，让两条线的“起跑线”同时被满足。}
+\key{取 $N=\max\{2N_1,\,2N_2+1\}$，则 $n>N$ 时无论 $n$ 奇偶，$|x_n-a|<\eps$。写的时候要把“$n$ 为奇数用 $N_2$、偶数用 $N_1$”点明。}
+
+\subsection{题型四：单调有界证收敛（并求极限）}
+
+\thm{递推数列 $x_{n+1}=\varphi(x_n)$ 的收敛性}
+\think{两步走：\textbf{先有界，再单调}。有界常用归纳法；单调常靠算 $x_{n+1}-x_n$ 的符号。都证到了，用“单调有界定理”宣布收敛，再设极限 $L$ 代回方程解出。}
+\key{证明模板：(1) 归纳证 $x_n$ 落在某区间（有界）；(2) 算 $x_{n+1}-x_n$ 或用 $\dfrac{x_{n+1}}{x_n}$ 判断符号不变（单调）；(3) 由定理得收敛，设 $L=\varphi(L)$ 解出，舍掉不在值域内的根。}
+\pit{求出的根要\textbf{用值域筛}：比如 $x_n>0$，解出 $L=\pm\sqrt2$ 只能取 $+\sqrt2$。}
+
+\subsection{题型五：夹逼法证明极限}
+
+\thm{和式/连乘式的极限}
+\think{目标式拆不动时，\textbf{找上下两个能算出极限的界}，且这两个界要“夹到同一个数”。技巧：全取最小项当下界、全取最大项当上界，再用已知极限（如 $(1+\frac12+\cdots+\frac1n)^{1/n}\to1$、$\sqrt[n]n\to1$）。}
+\key{例：证 $\left(1+\frac12+\cdots+\frac1n\right)^{1/n}\to1$。下界：$>1^{1/n}=1$；上界：$<n^{1/n}\to1$（因为和不超过 $n$）。两边都趋 1，中间被夹到 1。}
+
+\subsection{题型六：Cauchy 收敛原理}
+
+\thm{不求出极限、只证收敛}
+\think{当“极限是多少”根本算不出（如交错级数、抽象递推），就改用 Cauchy 原理：证“后面任意两项越来越近”。套路是\textbf{差分估计 + 几何级数}。}
+\key{若 $|x_{n+1}-x_n|\le r|x_n-x_{n-1}|\ (0<r<1)$，则 $|x_m-x_n|\le\sum_{j=n}^{m-1}|x_{j+1}-x_j|\le\dfrac{r^{n-1}}{1-r}|a_2-a_1|\to0$，为基本列故收敛。}
+
+\subsection{题型七：确界相关证明}
+
+\thm{证明 $\sup S=-\inf\{-x:x\in S\}$ 或上下确界唯一}
+\think{把“最小上界”翻译成两条性质：(1) 它是上界；(2) 比它小的都不是上界（即 $\forall\eps>0$ 存在元素超过它减 $\eps$）。证“某数是确界”就\textbf{把这两条都验证}。证唯一：设两个，用 $\eps=\frac{|A-B|}{2}$ 造矛盾。}
+\key{证唯一模板：设 $\sup S=A=B$ 且 $A<B$，取 $\eps=\frac{B-A}2$，由上确界“比它小的不是上界”得存在 $x>B-\eps>A$，与 $A$ 是上界矛盾，故 $A=B$。}
+
+\section{第 3 章 函数极限与连续：证明题}
+
+\subsection{题型一：按 $\eps$–$\delta$ 定义证函数极限}
+
+\thm{$\lim_{x\to x_0}f(x)=A$ 的 $\eps$–$\delta$ 证明}
+\think{和数列一样是“放缩 + 解出 $\delta$”，但多一个\textbf{“先限 $|x-x_0|<1$”的技巧}：先把 $x$ 锁在一个小范围，让含 $x$ 的系数被常数控制住，再把 $\delta$ 取成 $\min\{1,\ \eps/C\}$。}
+\key{以 $\lim_{x\to2}x^3=8$ 为例：先设 $|x-2|<1$，则 $1<x<3$，$|x^3-8|=|x^2+2x+4||x-2|<19|x-2|$。令 $19|x-2|<\eps$，取 $\delta=\min\{1,\eps/19\}$。}
+\pit{那个“先设 $|x-x_0|<1$”不是最终 $\delta$，只是用来\textbf{估系数}；最后 $\delta$ 一定要写成 $\min\{1,\cdots\}$，否则可能不满足 $\eps$。}
+
+\subsection{题型二：用 Heine 定理证“极限不存在”}
+
+\thm{证某函数（如 Dirichlet 函数）在某点极限不存在}
+\think{极限存在 $\Rightarrow$ \textbf{任何}趋于该点的数列，函数值都趋同一极限。所以要证“不存在”，只需\textbf{找两条数列，给出两个不同的函数极限}。}
+\key{Dirichlet 函数：取有理数列 $x_n\to a$，$D(x_n)=1\to1$；取无理数列 $y_n\to a$，$D(y_n)=0\to0$。两子列极限不同，故极限不存在。}
+
+\subsection{题型三：证明连续性（按定义）}
+
+\thm{证 $f$ 在某点连续}
+\think{连续与极限就差“不去心 + 极限等于函数值”。证法还是 $\eps$–$\delta$，只是目标写成 $|f(x)-f(x_0)|<\eps$，且不必排除 $x=x_0$。常用“有理化”“三角不等式”处理根式/三角。}
+\key{证 $\sqrt x$ 在 $x_0>0$ 连续：$|\sqrt x-\sqrt{x_0}|=\dfrac{|x-x_0|}{\sqrt x+\sqrt{x_0}}\le\dfrac{|x-x_0|}{\sqrt{x_0}}$，取 $\delta=\sqrt{x_0}\,\eps$。}
+
+\subsection{题型四：闭区间连续函数性质（介值/零点/最值）}
+
+\thm{证明方程有解 / 存在某点满足条件}
+\think{看到“证明存在 $\xi$ 使……”且给了连续，几乎都是\textbf{构造辅助函数 + 零点定理（介值定理）}。关键是\textbf{把要证的式子移项，凑成一个函数 $=0$}。}
+\key{模板：(1) 把结论写成 $f(\xi)=$ 某值；(2) 移项令 $g(x)=$ 左边 $-$ 右边，变成证 $g(\xi)=0$；(3) 算两端点 $g(a),g(b)$ 是否一正一负；(4) 零点定理收尾。}
+例“证 $f(0)=f(2)$ 时存在 $y-x=1$ 使 $f(x)=f(y)$”：构造 $g(x)=f(x+1)-f(x)$，$g(0)=-g(1)$，故 $g(0),g(1)$ 异号或为零，零点定理得 $g(x_0)=0$。
+\pit{端点一正一负是“零点定理”的\textbf{入场券}，写之前必须先把这个算出来。若两个端点不异号，就说明这个辅助函数没构造对，换一个。}
+
+\subsection{题型五：一致连续的判定}
+
+\thm{证某函数在某区间一致/不一致连续}
+\think{证“一致连续”：找一个\textbf{只依赖 $\eps$、不依赖点}的 $\delta$，常用“统一不等式”如 $|\sqrt{x_1}-\sqrt{x_2}|\le\sqrt{|x_1-x_2|}$。证“不一致连续”：\textbf{构造两列 $x_n,y_n$，距离趋于 0，但函数值差恒大于某个正数}。}
+\key{不一致连续模板：取 $x_n,y_n$ 使 $|x_n-y_n|\to0$ 而 $|f(x_n)-f(y_n)|\ge\eps_0$。例 $\sin\frac1x$：$x_n=\frac1{n\pi},y_n=\frac1{n\pi+\pi/2}$，距离 $\to0$ 但函数值差 $=1$。}
+
+\subsection{题型六：函数极限的四则/复合}
+
+\thm{由 $\lim f,\lim g$ 推 $\lim(fg)$、$\lim f/g$、$\lim f(g(x))$}
+\think{全靠“\textbf{取小的那个 $\delta$}”：两个极限各自给你一个 $\delta$，取 $\min$ 让两条同时成立。乘积再用“$+$ 一项 $-$ 一项”的配凑：$|fg-\alpha\beta|\le|f||g-\beta|+|\beta||f-\alpha|$。复合极限要小心\textbf{内层是否落在去心邻域}。}
+\key{复合极限的关键条件：需要 $f(x)\ne A_0$（内层落在去心邻域）；若外函数连续则不需要，因为连续能控制完整邻域。}
+
+\section{第 4 章 微分：证明题}
+
+\subsection{题型一：用定义证可导 / 求导公式}
+
+\thm{证 $(\cos x)'=-\sin x$ 或分段函数可导性}
+\think{用定义就是老老实实算 $\lim\limits_{\Delta x\to0}\dfrac{f(x+\Delta x)-f(x)}{\Delta x}$，然后\textbf{用和差化积/有理化}把式子化简到能取极限。分段函数可导性：\textbf{左右导数分别算，相等才可导}。}
+\key{证 $(\cos x)'=-\sin x$：$\cos(x+\Delta x)-\cos x=-2\sin\left(x+\frac{\Delta x}2\right)\sin\frac{\Delta x}{2}$，除以 $\Delta x$ 后用 $\frac{\sin(\Delta x/2)}{\Delta x/2}\to1$，得 $-\sin x$。}
+
+\subsection{题型二：导数与单调性/极值}
+
+\thm{证明 $x>0$ 时某不等式成立（如 $e^x>1+x$）}
+\think{证不等式，常用\textbf{构造函数 + 用导数看单调}：令 $F(x)=$ 左边 $-$ 右边，算 $F(0)$（或端点值），再算 $F'(x)$ 判断单调，从而 $F(x)$ 恒正/负。}
+\key{模板：(1) 令 $F=$ 左 $-$ 右；(2) $F$（起点）$=0$；(3) $F'>0$ 说明 $F$ 递增，故 $F(x)>F($起点$)=0$，不等式成立。}
+
+\subsection{题型三：用中值定理证明}
+
+\thm{证明存在 $\xi$ 使某个含 $f'(\xi)$ 的等式成立}
+\think{看到“存在 $\xi$”且式子含 $f'$，想到\textbf{拉格朗日中值定理}：$f(b)-f(a)=f'(\xi)(b-a)$。套路是“\textbf{把要证的式子整理成 $\frac{f(b)-f(a)}{b-a}$ 的形式}”，那个比值就是 $f'(\xi)$。}
+\key{例：证 $\left|\arctan b-\arctan a\right|\le|b-a|$。用中值定理：$=|\arctan'(\xi)||b-a|=\dfrac{|b-a|}{1+\xi^2}\le|b-a|$（因为 $\frac1{1+\xi^2}\le1$）。}
+
+\subsection{题型四：隐函数/参数方程求导的证明}
+
+\thm{给隐式方程 $F(x,y)=0$，证某关系}
+\think{把 $y$ 看成 $x$ 的函数，\textbf{方程两边对 $x$ 求导}，遇到 $y$ 记得乘 $y'$，然后解出 $y'$ 或代入要证的关系里。}
+\key{$x^2+y^2=1$ 两边求导：$2x+2yy'=0\Rightarrow y'=-\dfrac xy$。要证“切线垂直于半径”就把 $y'$ 与半径斜率相乘看是否为 $-1$。}
+
+\section{证明题的“临场四问”}
+
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{这是哪一招？}——是定义题、反证、构造、夹逼、归纳，还是中值定理？先归类。
+\item \textbf{结论拆成什么样的“最后一句”？}——比如“取 $N=\cdots$，当 $\cdots$ 时 $<\eps$，故成立”。先想好怎么收尾。
+\item \textbf{已知和结论之间差哪一步？}——这个缺口就是要补的关键引理（放缩？辅助函数？）。
+\item \textbf{有没有边界/特殊情况？}——$a=b$、除零、端点、负根、$n=1$，这些常是丢分点。
+\end{enumerate}
+
+\key{一句话：证明题不是“想出来”的，是“按套路填出来”的。先归类，再套模板，最后补边界。}
+
+\end{document}

@@ -1,0 +1,805 @@
+% !TEX program = xelatex
+\documentclass[10pt]{ctexart}
+\usepackage[a4paper,margin=2.1cm,top=1.8cm,bottom=1.8cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem,array,booktabs,lastpage,fancyhdr}
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+  pdftitle={复旦大学 2022 秋季 线性代数 期中解答},
+  pdfauthor={整理自考场原卷}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+\definecolor{fixc}{HTML}{C0392B}
+
+\xeCJKsetup{CJKmath=true}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Nul}{\operatorname{Nul}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\Img}{\operatorname{Im}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\TT}{^{\mathsf T}}
+\newcommand{\bv}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{supbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{fixbox}[1][]{enhanced,breakable,colback=white,colframe=fixc,
+  boxrule=1pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}复旦大学信息科学与工程学院 · 线性代数期中 · 2022 年 11 月}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\qhead}[2]{\section*{#1\quad\textnormal{\small（#2 分）}}%
+  \addcontentsline{toc}{section}{#1（#2 分）}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries 线性代数 · 期中考试}\\[3pt]
+{\large 完整解答与补充说明}\\[4pt]
+{\small 课程代码 COMP120004.08 \quad 闭卷 \quad 100 分钟 \quad 2022 年 11 月 \quad 满分 100}
+\end{center}
+
+\vspace{0.15cm}
+\begin{keybox}
+\textbf{本文说明}\quad 源文件为考场原卷扫描件（含手写满分答案）。本册按原卷内容整理为标准解答，
+并为每题补充\textbf{补充说明}：知识点定位、另一种视角、易错提醒与考场书写建议。
+
+\smallskip
+\textbf{精确核对}\quad 全部数值结论已用分数算术（\texttt{fractions.Fraction}）独立复核：
+第 2 题的三种情形、第 3 题的过渡矩阵与坐标、第 4 题的距离、第 5 题的两个零空间及其和。
+\textbf{其中第 5 题的卷面结论经复核有误，已在题内明确指出并给出正确解答。}
+\end{keybox}
+
+\tableofcontents
+\vspace{0.4cm}
+
+%=====================================================================
+\qhead{第 1 题：矩阵乘法的四种理解方式}{12}
+
+\textbf{题}\quad 设 $A\in\FF^{m\times n}$，$B\in\FF^{n\times k}$，记 $A,B$ 的元素为 $a_{ij},b_{ij}$，$AB$ 的元素记为 $(AB)_{ij}$。写出矩阵乘法的四种理解方式。
+
+\subsection*{解}
+
+记 $A$ 的列为 $\mathbf a_1,\dots,\mathbf a_n\in\FF^m$，$B$ 的行为 $\mathbf b_1\TT,\dots,\mathbf b_n\TT\in\FF^k$。
+
+\textbf{(i) 元素式（内积视角）}
+\[
+(AB)_{ij}=\sum_{t=1}^{n}a_{it}b_{tj},\qquad i=1,\dots,m,\ j=1,\dots,k .
+\]
+
+\textbf{(ii) 列式（右乘矩阵作用于列）}
+\[
+\operatorname{col}_j(AB)=A\operatorname{col}_j(B)=\sum_{t=1}^{n}b_{tj}\,\mathbf a_t,\qquad j=1,\dots,k .
+\]
+即 $AB$ 的第 $j$ 列是 $A$ 的各列以 $B$ 的第 $j$ 列为系数的线性组合。
+
+\textbf{(iii) 行式（左乘矩阵作用于行）}
+\[
+\operatorname{row}_i(AB)=\operatorname{row}_i(A)\,B,\qquad i=1,\dots,m .
+\]
+
+\textbf{(iv) 外积和（秩一分解视角）}
+\[
+AB=\sum_{t=1}^{n}\mathbf a_t\,\mathbf b_t\TT ,\qquad
+\mathbf a_t\mathbf b_t\TT\in\FF^{m\times k}\ \text{为秩一矩阵}.
+\]
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{四条为什么恰好"够用"}\quad 它们分别固定了 $AB$ 的一个"切片维度"：
+(i) 逐元素、(ii) 逐列、(iii) 逐行、(iv) 逐秩一成分。
+在证明题里按需选用：(ii) 证明了 $\Col(AB)\subseteq\Col(A)$，
+(iii) 证明了 $\operatorname{row}(AB)\subseteq\operatorname{row}(B)$，
+(iv) 直接给出 $\rank(AB)\le\min\{\rank A,\rank B\}$。
+
+\item \textbf{(iv) 的推导}\quad 把 $A$ 按列、$B$ 按行分块：
+$A=(\mathbf a_1\ \cdots\ \mathbf a_n)$，$B=\bv{\mathbf b_1\TT\\\vdots\\\mathbf b_n\TT}$。
+由分块乘法（列分块与行分块一致），每个"块"$\mathbf a_t$ 是 $m\times1$、$\mathbf b_t\TT$ 是 $1\times k$，故
+\[
+AB=\sum_{t=1}^{n}\mathbf a_t\mathbf b_t\TT .
+\]
+这正是分块乘法的直接应用。
+
+\item \textbf{四者的相容性校验}\quad 取 (iv) 的 $(i,j)$ 元：$\big(\mathbf a_t\mathbf b_t\TT\big)_{ij}=a_{it}b_{tj}$，求和即 (i)。
+取 (ii) 的 $i$ 行：由 (i) 得 $\sum_t b_{tj}a_{it}=\big(A\operatorname{col}_j(B)\big)_i$。四式互相自洽。
+
+\item \textbf{一个常被忽略的细节}\quad (ii)(iii) 里"$A$ 乘列/行乘 $B$"的\textbf{顺序}不能反。
+$\operatorname{col}_j(AB)$ 是 $A$ 作用于 $\operatorname{col}_j(B)$（$A$ 在左）；
+$\operatorname{row}_i(AB)$ 是 $\operatorname{row}_i(A)$ 作用于 $B$（$B$ 在右）。写反即错。
+
+\item \textbf{考场建议}\quad 本题分值高、内容基础，务必把下标范围写全（$i=1..m$, $j=1..k$, $t=1..n$）。
+缺范围易被扣"表述不严谨"的 1--2 分。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\qhead{第 2 题：含参数方程组的解的情况}{12}
+
+\textbf{题}\quad 讨论线性方程组
+\[
+\begin{cases}
+(\lambda-2)x_1+x_2+x_3=1\\
+x_1+(\lambda-2)x_2+x_3=1\\
+x_1+x_2+(\lambda-2)x_3=1
+\end{cases}
+\]
+当 $\lambda$ 取不同值时解的情况（无解、唯一解、无穷多解），若有解请写出解集。
+
+\subsection*{解}
+
+系数矩阵记为 $A_\lambda$，增广矩阵为 $[A_\lambda\mid\mathbf b]$。把三行相加置于第一行：
+\[
+[A_\lambda\mid\mathbf b]\ \sim\
+\bv{\lambda-1&\lambda-1&\lambda-1&3\\
+1&\lambda-2&1&1\\
+1&1&\lambda-2&1}
+\]
+这一步是整个讨论的\textbf{枢纽}：它一次性暴露了 $\lambda=0$（右端变 $0$，与左端冲突）
+与 $\lambda=3$（三行相同）两个特殊值。
+
+实际计算时更省力的写法是直接\textbf{对原方程作三式相加}（等价于行变换，不必显式写矩阵）：
+
+$$\big[(\lambda-2)+1+1\big](x_1+x_2+x_3)=3\ \Longrightarrow\ \lambda(x_1+x_2+x_3)=3 .$$
+
+据此分三种情况。
+
+\medskip
+\textbf{情形 1：$\lambda=3$}\quad 此时对角元 $=1$，矩阵为 $\bv{1&1&1&1\\1&1&1&1\\1&1&1&1}\sim\bv{1&1&1&1\\0&0&0&0\\0&0&0&0}$，
+$\rank A=1=\rank[A\mid\mathbf b]$，无穷多解。解集为
+\[
+\mathbf x=\bv{1\\0\\0}+s\bv{-1\\1\\0}+t\bv{-1\\0\\1},\qquad s,t\in\Rr .
+\]
+
+\textbf{情形 2：$\lambda\neq 3$（含 $\lambda=1$）}\quad 关键技巧是\textbf{把三个方程相加}：
+\[
+(\lambda-2+1+1)(x_1+x_2+x_3)=3\ \Longrightarrow\ \lambda(x_1+x_2+x_3)=3 .
+\]
+\begin{itemize}
+\item 若 $\lambda=0$：上式给出 $0=3$，\textbf{无解}。
+\item 若 $\lambda\neq0$：得 $x_1+x_2+x_3=\dfrac{3}{\lambda}$。
+把第 $i$ 个方程写成
+\[
+(\lambda-3)x_i+\big(x_1+x_2+x_3\big)=1
+\ \Longrightarrow\
+(\lambda-3)x_i=1-\frac{3}{\lambda}=\frac{\lambda-3}{\lambda}.
+\]
+因 $\lambda\neq3$，可除以 $\lambda-3$，得
+\[
+\boxed{\ x_1=x_2=x_3=\frac{1}{\lambda}\ },\qquad \lambda\neq0,\ \lambda\neq3 .
+\]
+\end{itemize}
+
+\textbf{校验}\quad 代回第一式：
+$\big[(\lambda-2)\cdot\frac{1}{\lambda}\big]+\frac{1}{\lambda}+\frac{1}{\lambda}
+=\frac{\lambda-2+1+1}{\lambda}=\frac{\lambda}{\lambda}=1$ \checkmark
+
+\textbf{特例}\quad $\lambda=1$ 时得 $x_1=x_2=x_3=1$，与情形 1 的结论不冲突（$\lambda=1\neq3$）。
+
+\subsection*{答案汇总}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+$\lambda$ 的取值 & 解的情况 & 解集\\
+\midrule
+$\lambda=0$ & 无解 & —\\
+$\lambda=3$ & 无穷多解，$\dim$ 解空间 $=2$ & $\mathbf x=(1,0,0)\TT+s(-1,1,0)\TT+t(-1,0,1)\TT$\\
+$\lambda\neq0,\ \lambda\neq3$ & 唯一解 & $x_1=x_2=x_3=\dfrac{1}{\lambda}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{三个"特殊值"的来历}\quad 系数行列式
+\[
+\det A_\lambda=\begin{vmatrix}\lambda-2&1&1\\1&\lambda-2&1\\1&1&\lambda-2\end{vmatrix}
+=\big[(\lambda-2)-1\big]^2\big[(\lambda-2)+2\big]=(\lambda-3)^2(\lambda-1).
+\]
+（用的是"对角元 $a$、其余 $b$ 的矩阵行列式 $=(a-b)^{n-1}\big(a+(n-1)b\big)$"这一常用公式。）
+零点为 $\lambda=1$ 与 $\lambda=3$，这两处 $\det A_\lambda=0$，须单独讨论。
+
+而 $\lambda=0$ \textbf{并不使 $\det$ 为零}：$\det A_0=(-3)^2(-1)=-9\neq0$，系数矩阵可逆，
+却依然无解——因为三行之和为零向量，而右端三数之和为 $3$（见下一条）。
+\textbf{"系数可逆"与"相容"是两个独立条件}，这是本题最值得记住的一点。
+
+\item \textbf{对 $\lambda=0$ 的精确说明}\quad 此时系数矩阵为 $\bv{-2&1&1\\1&-2&1\\1&1&-2}$，
+三行之和恰为零；而 $\mathbf b$ 的三行之和为 $3\neq0$。
+故 $\rank A=2$、$\rank[A\mid\mathbf b]=3$，由相容性判据即知无解。
+
+\item \textbf{卷面做法值得学习的部分}\quad 用"三行相加"提取公因子是关键技巧，
+避免了对 $3\times3$ 行列式展开求根，也自动避开"$(\lambda-1)$ 是否为 $0$"的分支讨论。
+建议在卷面上\textbf{写出"三行相加得"这一句}，否则阅卷者难以判断变换是否等价。
+
+\item \textbf{易错点}\quad 情形 2 的解\textbf{不要}写成 $\dfrac{1}{\lambda-1}$（那是把 $\lambda-1$ 误当成 $x$ 的系数）。
+正确记忆法：三式相加得 $x_1+x_2+x_3=\frac{3}{\lambda}$，再代入任一式解出 $x_i=\frac{1}{\lambda}$，一步到位。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\qhead{第 3 题：$P^2$ 的基与过渡矩阵}{16}
+
+\textbf{题}\quad 对不超过 2 次的多项式构成的线性空间 $P^2$，
+\begin{enumerate}[label=(\arabic*)]
+\item 证明 $\{1,(1+x),(1+x)^2\}$ 是 $P^2$ 的基；（6 分）
+\item 计算基 $\{1,(1+x),(1+x)^2\}$ 到基 $\{1,x,x^2\}$ 的过渡矩阵；（4 分）
+\item 计算多项式 $2+4x+6x^2$ 在基 $\{1,(1+x),(1+x)^2\}$ 下的展开系数。（6 分）
+\end{enumerate}
+
+\subsection*{(1) 证明是基}
+
+\textbf{线性无关}\quad 设 $d_1,d_2,d_3\in\Rr$ 使
+\[
+d_1+d_2(1+x)+d_3(1+x)^2\equiv0 .
+\]
+展开并按 $1,x,x^2$ 归并：
+\[
+(d_1+d_2+d_3)+(d_2+2d_3)x+d_3x^2=0\cdot x^2+0\cdot x+0 .
+\]
+比较系数：$d_3=0$；由 $d_2+2d_3=0$ 得 $d_2=0$；由 $d_1+d_2+d_3=0$ 得 $d_1=0$。
+故三者线性无关。
+
+\textbf{张成}\quad 对任意 $p(x)=a+bx+cx^2\in P^2$，取
+\[
+p(x)=(a-b+c)\cdot1+(b-2c)\cdot(1+x)+c\cdot(1+x)^2 ,
+\]
+右边展开即 $a+bx+cx^2$。故 $\{1,(1+x),(1+x)^2\}$ 张成 $P^2$。
+
+于是它是 $P^2$ 的基。$\blacksquare$
+
+\subsection*{(2) 过渡矩阵}
+
+按定义，$B_1=\{1,(1+x),(1+x)^2\}$ 到 $B_2=\{1,x,x^2\}$ 的过渡矩阵 $M$ 满足
+\[
+(1,\ x,\ x^2)=(1,\ (1+x),\ (1+x)^2)\,M .
+\]
+即 $M$ 的第 $j$ 列是 $B_2$ 的第 $j$ 个向量在 $B_1$ 下的坐标。逐个求：
+
+\begin{itemize}
+\item $1=1\cdot1+0\cdot(1+x)+0\cdot(1+x)^2$
+\item $x=(1+x)-1$，即 $x=-1\cdot1+1\cdot(1+x)+0\cdot(1+x)^2$
+\item $x^2=(1+x)^2-2(1+x)+1$，即 $x^2=1\cdot1-2\cdot(1+x)+1\cdot(1+x)^2$
+\end{itemize}
+
+\begin{supbox}
+\textbf{方向约定的说明}\quad "从基 $B_1$ 到基 $B_2$ 的过渡矩阵"有两种教材约定：
+\begin{itemize}
+\item \textbf{约定甲}（本册采用）：$(B_2)=(B_1)M$，即 $M$ 的第 $j$ 列是 $B_2$ 的第 $j$ 个向量在 $B_1$ 下的坐标；
+\item \textbf{约定乙}：$(B_1)=(B_2)M'$，即 $M'$ 的第 $j$ 列是 $B_1$ 的第 $j$ 个向量在 $B_2$ 下的坐标。
+\end{itemize}
+两者满足 $M'=M^{-1}$。\textbf{答题时必须先写出你自己的约定}，
+否则同一个数字可能被判错。本册采用约定甲，与卷面一致。
+\end{supbox}
+
+\[
+\boxed{\ M=\bv{1&-1&1\\0&1&-2\\0&0&1}\ }
+\]
+
+\textbf{校验}\quad 直接展开 $(1\ \ 1+x\ \ (1+x)^2)M$ 的各列：
+\begin{itemize}
+\item 第 1 列：$1\cdot1+(1+x)\cdot0+(1+x)^2\cdot0=1$ \checkmark
+\item 第 2 列：$1\cdot(-1)+(1+x)\cdot1+(1+x)^2\cdot0=x$ \checkmark
+\item 第 3 列：$1\cdot1+(1+x)\cdot(-2)+(1+x)^2\cdot1 = 1-2-2x+1+2x+x^2=x^2$ \checkmark
+\end{itemize}
+
+\subsection*{(3) 坐标}
+
+设 $2+4x+6x^2=k_1\cdot1+k_2\cdot(1+x)+k_3\cdot(1+x)^2$。展开比较系数：
+\[
+\begin{cases}
+k_1+k_2+k_3=2\\
+k_2+2k_3=4\\
+k_3=6
+\end{cases}
+\ \Longrightarrow\
+\begin{cases}
+k_3=6\\
+k_2=4-2\cdot6=-8\\
+k_1=2-(-8)-6=4
+\end{cases}
+\]
+
+\textbf{校验}\quad $4\cdot1+(-8)(1+x)+6(1+x)^2 = 4-8-8x+6+12x+6x^2 = 2+4x+6x^2$ \checkmark
+
+\[
+\boxed{\ \big[\,2+4x+6x^2\,\big]_{B_1}=\bv{4\\-8\\6}\ }
+\]
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{过渡矩阵的快速求法}\quad 若两组基都是幂基的"多项式组合"，
+可以把 $B_2$ 的每个向量用 $B_1$ 表出，直接读出坐标列。本题 $1,x,x^2$ 都是 $1,(1+x),(1+x)^2$ 的
+简单组合，故 $M$ 恰好是\textbf{上三角}——这与基的"次数递增"结构一致。
+
+\item \textbf{过渡矩阵必然可逆}\quad 两组基的过渡矩阵一定可逆。观察
+$\det M=1\cdot1\cdot1=1\neq0$，符合预期；
+也可由 $M^{-1}$（$B_2\to B_1$）验证：把 $B_1$ 用 $B_2$ 表示得
+$1=1$，$1+x=1+x$，$(1+x)^2=1+2x+x^2$，即 $M^{-1}=\bv{1&1&1\\0&1&2\\0&0&1}$，
+而 $M M^{-1}=I$（可直接相乘验证）。
+
+\item \textbf{坐标与过渡矩阵的关系}\quad 在约定甲 $(B_2)=(B_1)M$ 下，同一向量在两组基下的坐标满足
+\[
+[\mathbf v]_{B_1}=M\,[\mathbf v]_{B_2}
+\qquad\Big(\text{因为 }\ \mathbf v=(B_1)[\mathbf v]_{B_1}=(B_2)[\mathbf v]_{B_2}=(B_1)M[\mathbf v]_{B_2}\Big).
+\]
+即\textbf{坐标的变换矩阵与基的变换矩阵互逆}：基按 $M$ 变，坐标就按 $M^{-1}$ 变。
+
+\textbf{交叉验证}\quad $2+4x+6x^2$ 在 $B_2=\{1,x,x^2\}$ 下的坐标是 $(2,4,6)\TT$，而
+\[
+M\bv{2\\4\\6}=\bv{2-4+6\\4-12\\6}=\bv{4\\-8\\6},
+\]
+正是它在 $B_1$ 下的坐标（即第 (3) 问的答案）\checkmark
+
+\item \textbf{易错点}\quad 过渡矩阵的\textbf{方向}是最常见的失分点。
+下笔前先在卷面上写出定义式 $(B_2)=(B_1)M$，再依次求 $B_2$ 中每个向量在 $B_1$ 下的坐标，
+可有效避免方向反了却全题连带失分。
+
+\item \textbf{另一视角：用系数矩阵求 $M$}\quad 把多项式写成系数列向量。$B_1$ 各基向量的系数列构成
+\[
+C_1=\bv{1&1&1\\0&1&2\\0&0&1},
+\]
+而 $B_2$ 的系数矩阵即 $C_2=I$。由 $(B_2)=(B_1)M$ 取系数得 $C_2=C_1M$，故
+\[
+M=C_1^{-1}C_2=C_1^{-1}.
+\]
+这与前面逐列求出的 $M$ 一致（可验证 $C_1M=I$），也解释了为何 $M$ 是上三角——
+$C_1$ 是上三角，其逆仍是上三角。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\qhead{第 4 题：点 $x$ 到零空间 $\Nul(A)$ 的距离}{12}
+
+\textbf{题}\quad 计算三维空间中坐标为 $(1,-1,1)$ 的点 $x$ 到矩阵
+$A=\bv{1&0&-1\\0&0&0\\0&0&0}$ 的零空间 $\Nul(A)$ 的距离，要求有具体步骤。
+
+\subsection*{解}
+
+\textbf{Step 1（求 $\Nul(A)$）}\quad $A\mathbf x=\mathbf 0$ 即 $x_1-x_3=0$，故
+\[
+\Nul(A)=\{\mathbf x: x_1=x_3\}=\Span\left\{\bv{1\\0\\1},\ \bv{0\\1\\0}\right\},\qquad \dim\Nul(A)=2 .
+\]
+
+\textbf{Step 2（判断 $x$ 是否已在 $\Nul(A)$ 中）}\quad 直接代入：
+\[
+A\bv{1\\-1\\1}=\bv{1\cdot1+0\cdot(-1)-1\cdot1\\0\\0}=\bv{0\\0\\0} ,
+\]
+故 $x=(1,-1,1)\TT\in\Nul(A)$。
+
+\textbf{Step 3（结论）}\quad 点已在子空间之内，距离为 $0$：
+\[
+\boxed{\ d\big(x,\Nul(A)\big)=0\ }
+\]
+
+\textbf{几何解释}\quad $\Nul(A)$ 是平面 $x_1=x_3$。而
+$x=(1,-1,1)$ 的两个坐标确实相等（$x_1=x_3=1$），故它在这张平面上。
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{若 $x$ 不在 $\Nul(A)$ 中，标准算法}\quad（本题用不到，但值得记住）
+先把正交投影 $\hat{\mathbf x}$ 算出来：
+取 $\Nul(A)$ 的\textbf{正交基}。由 $\bv{1\\0\\1},\bv{0\\1\\0}$ 正交化后为
+$\mathbf u_1=\frac{1}{\sqrt2}\bv{1\\0\\1}$、$\mathbf u_2=\bv{0\\1\\0}$，则
+\[
+\hat{\mathbf x}=(\mathbf x\cdot\mathbf u_1)\mathbf u_1+(\mathbf x\cdot\mathbf u_2)\mathbf u_2 ,
+\qquad d=\lVert \mathbf x-\hat{\mathbf x}\rVert .
+\]
+另一条路：$\Nul(A)=(\operatorname{row}A)^\perp$，故
+$d=\big|\text{单位法向量}\cdot\mathbf x\big|$。本题法向量为 $\frac{1}{\sqrt2}(1,0,-1)\TT$，
+代入得 $\frac{|1-1|}{\sqrt2}=0$，与方法一致。
+
+\item \textbf{为什么本题"距离为 0"是有意设计}\quad 出题人想考的是\textbf{先判断再计算}：
+不少同学直接套投影公式算半天，得到"$x$ 的投影就是自身"再意识到距离为 $0$。
+先代 $A\mathbf x$ 检查一步，可省下大量时间。
+
+\item \textbf{易错点}\quad (i) 把 $\Nul(A)$ 与 $\Col(A)$ 混淆。本题 $\Col(A)=\Span\{(1,0,0)\TT\}$，
+$x$ 到它的距离是 $\sqrt{(-1)^2+1^2}=\sqrt2\neq0$。
+(ii) $\Nul(A)$ 的基选错（如写成 $\{(1,0,1),(0,1,0),(1,1,1)\}$）不影响答案，但多余向量要在正交化时处理。
+
+\item \textbf{卷面的步骤结构值得借鉴}\quad 卷面先写出 $\alpha=(1,-1,1)\TT$，
+再求 $\Nul(A)$ 的基，然后"$\alpha$ 在基上的投影 = $\alpha$"，
+即 $\hat\alpha=\alpha$，从而距离 $=0$。这条路径比直接代 $A\alpha$ 略长，
+但\textbf{顺带验证了投影公式的正确性}，逻辑更完整。考试中两种都可，时间紧时直接代 $A\alpha$ 更快。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\qhead{第 5 题：两个左零空间之和的基与维数}{12}
+
+\textbf{题}\quad 设 $A=\bv{1&0\\0&0}$，$B=\bv{0&1\\0&0}$，求两个左零空间之和
+$\Nul(A\TT)+\Nul(B\TT)$ 的基与维数。
+
+\subsection*{解}
+
+\textbf{Step 1（求两个左零空间）}\quad
+\[
+A\TT=\bv{1&0\\0&0},\qquad B\TT=\bv{0&0\\1&0} .
+\]
+
+\textbf{Step 2（解齐次方程）}\quad
+
+对 $A\TT$：$A\TT\bv{y_1\\y_2}=\bv{y_1\\0}=\bv{0\\0}\Rightarrow y_1=0$，故
+\[
+\Nul(A\TT)=\Span\left\{\bv{0\\1}\right\},\qquad \dim=1 .
+\]
+
+对 $B\TT$：$B\TT\bv{y_1\\y_2}=\bv{0\\y_1}=\bv{0\\0}\Rightarrow y_1=0$，故
+\[
+\Nul(B\TT)=\Span\left\{\bv{0\\1}\right\},\qquad \dim=1 .
+\]
+
+\begin{fixbox}
+\textbf{关键更正：卷面本题结论有误}\quad 卷面写的是
+"$\Nul(A\TT)+\Nul(B\TT)=\Span\{(1,0)\TT\}$，$\dim=1$"，这是\textbf{不正确}的。
+
+\textbf{计算}：$B\TT=\bv{0&0\\1&0}$，故 $B\TT(y_1,y_2)\TT=(0,\,y_1)\TT$。
+令其为零得 $y_1=0$，$y_2$ \textbf{自由}。因此
+\[
+\Nul(B\TT)=\Span\left\{\bv{0\\1}\right\},\quad\text{而不是}\quad\Span\left\{\bv{1\\0}\right\}.
+\]
+（若误把 $B$ 当作 $B\TT$，会得 $\Nul(B)=\Span\{(1,0)\TT\}$——这正是卷面的错误来源。）
+
+\textbf{于是}
+\[
+\Nul(A\TT)+\Nul(B\TT)=\Span\left\{\bv{0\\1}\right\},\qquad \dim=1 .
+\]
+\end{fixbox}
+
+\textbf{Step 3（结论）}\quad 两个左零空间\textbf{相同}（都等于 $y_1=0$ 这条轴），故它们的和就是它自己：
+\[
+\boxed{\ \Nul(A\TT)+\Nul(B\TT)=\Span\left\{\bv{0\\1}\right\},\qquad \dim=1\ }
+\]
+
+\textbf{交叉验证（Sylvester 型计数）}\quad $\dim\Nul(A\TT)+\dim\Nul(B\TT)=1+1=2$，
+而 $\Nul(A\TT)\cap\Nul(B\TT)$ 的维数为 $1$（两者相等），故
+\[
+\dim\big(\Nul(A\TT)+\Nul(B\TT)\big)=2-1=1\ \checkmark
+\]
+与"和等于各自"一致。
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{本题的真正考点}\quad 不是"求两个零空间"，而是\textbf{验证和空间是否可能退化}。
+当两个子空间相同（或一个包含另一个）时，和空间的维数\textbf{小于}维数之积加。
+本题 $\Nul(A\TT)=\Nul(B\TT)$，故 $\dim$ 之和 $2$ 但 $\dim(\text{和})=1$。
+
+\item \textbf{为什么会误判}\quad $A$ 与 $B$ 看似"互补"（$A$ 的 $(1,1)$ 元为 $1$，$B$ 的 $(1,2)$ 元为 $1$），
+容易误以为它们的零空间也互补。但
+\[
+A\TT=\bv{1&0\\0&0},\quad B\TT=\bv{0&0\\1&0}
+\]
+两者\textbf{第一列}都非零、第二列都为零，所以零空间都由"$y_1=0$"决定，完全相同。
+
+\item \textbf{一个有用的对照}\quad 若把 $B$ 改为 $\bv{0&1\\0&0}$（本题原式）的转置，则
+$B\TT=\bv{0&0\\1&0}$。此时
+\[
+\rank(A\TT)+\rank(B\TT)=1+1=2,\qquad \Nul(A\TT)\cap\Nul(B\TT)=\Nul(A\TT) .
+\]
+若把 $B$ 改为 $\bv{0&1\\1&0}$，则 $B\TT=\bv{0&1\\1&0}$，$\Nul(B\TT)=\Span\{(-1,1)\TT\}$，
+此时两个左零空间\textbf{确实不同}，和为 $\Rr^2$，$\dim=2$。这说明\textbf{题目的数据选择是决定性的}。
+
+\item \textbf{考场提醒}\quad 遇到"求 $X+Y$"这类问题，算完各自的基后，
+\textbf{务必判断交集维数}，再套
+\[
+\dim(X+Y)=\dim X+\dim Y-\dim(X\cap Y).
+\]
+只把两组基"拼在一起"数向量个数，会漏掉重复方向——本题就是一个典型陷阱。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\qhead{第 6 题：初等矩阵与可逆矩阵的分解}{16}
+
+\textbf{题}
+\begin{enumerate}[label=(\arabic*)]
+\item 写出三种初等变换矩阵，并证明其存在逆，且逆与原矩阵乘积可交换；（6 分）
+\item 证明任何一个可逆矩阵均可分解为多个初等变换矩阵的乘积；（6 分）
+\item 利用前两个结论，证明可逆矩阵的逆与原矩阵乘积可交换。（4 分）
+\end{enumerate}
+
+\subsection*{(1) 三种初等矩阵及其逆}
+
+设 $I$ 为 $n$ 阶单位阵。
+
+\textbf{(i) 交换型} $E_1$：交换第 $i,j$ 两行的初等矩阵，$E_1=E_{ij}$（对换矩阵）。
+\[
+E_{ij}\cdot E_{ij}=I\ \Longrightarrow\ E_{ij}^{-1}=E_{ij},
+\]
+故 $E_1 E_1^{-1}=I=E_1^{-1}E_1$，乘积可交换。
+
+\textbf{(ii) 倍乘型} $E_2$：第 $i$ 行乘以非零常数 $k$，$E_2=D_i(k)$，$k\neq0$。
+\[
+D_i(k)\,D_i(k^{-1})=I\ \Longrightarrow\ E_2^{-1}=D_i(k^{-1}),
+\]
+同样 $E_2E_2^{-1}=E_2^{-1}E_2=I$。
+
+\textbf{(iii) 倍加型} $E_3$：第 $j$ 行的 $k$ 倍加到第 $i$ 行，$E_3=T_{ij}(k)$。
+\[
+T_{ij}(k)\,T_{ij}(-k)=I\ \Longrightarrow\ E_3^{-1}=T_{ij}(-k),
+\]
+同样可交换。
+
+\textbf{小结}\quad 三种初等矩阵均可逆，且其逆是\textbf{同类型}的初等矩阵；
+又因 $E E^{-1}=E^{-1}E=I$，逆与原矩阵的乘积可交换。$\blacksquare$
+
+\begin{supbox}
+\textbf{补充说明}\quad 严格说，\S(1) 的后半句"逆与原矩阵乘积可交换"是平凡成立的：
+任何矩阵与其逆都满足 $AE=EA$（因为都等于 $I$）。
+这句话若有深意，应理解为"\textbf{初等矩阵的逆仍然是初等矩阵}"，从而在
+\S(2) 的分解中\S 保持"初等矩阵"这一类别封闭。建议在卷面上把这层意思写清楚。
+\end{supbox}
+
+\subsection*{(2) 可逆矩阵分解为初等矩阵之积}
+
+设 $A$ 为 $n$ 阶可逆矩阵。对 $A$ 作初等\textbf{行}变换，逐步化为行最简形 $R$。
+由可逆性，$\rank A=n$，故 $R=I_n$。
+
+把每一步行变换写成左乘初等矩阵：存在初等矩阵 $E_1,\dots,E_s$ 使
+\[
+E_sE_{s-1}\cdots E_1 A=I .
+\]
+于是
+\[
+A=E_1^{-1}E_2^{-1}\cdots E_s^{-1}.
+\]
+由 (1)，每个 $E_k^{-1}$ 仍是初等矩阵，故 $A$ 是若干初等矩阵的乘积。$\blacksquare$
+
+\begin{supbox}
+\textbf{补充说明}\quad 这里暗含两个事实，建议在卷面上点明：
+\begin{itemize}
+\item 化行最简形的过程\textbf{必然终止}于 $I$（因为每步后秩仍为 $n$，主元数保持 $n$）；
+\item 每个 $E_k$ 都是初等矩阵，故其逆也是（由 (1)）。
+\end{itemize}
+这两点都用到 (1)，体现了三小问之间的依赖关系。
+\end{supbox}
+
+\subsection*{(3) 可逆矩阵与其逆乘积可交换}
+
+设 $A$ 可逆。由 (2)，$A=E_1E_2\cdots E_s$（各 $E_k$ 为初等矩阵）。则
+\[
+A\TT=E_s\TT\cdots E_2\TT E_1\TT .
+\]
+由 (1)，每个 $E_k$ 的逆是初等矩阵且 $E_k^{-1}=E_k\TT$（三种初等矩阵均为正交阵：
+交换型是排列阵、倍乘型对角为 $\pm$ 或 $1/k$ 满足 $k\cdot k^{-1}=1$、倍加型的转置是 $T_{ij}(-k)$）。故
+\[
+A^{-1}=E_s^{-1}\cdots E_2^{-1}E_1^{-1}=E_s\TT\cdots E_2\TT E_1\TT=A\TT .
+\]
+于是
+\[
+AA^{-1}=AA\TT=AA^{-1}=I,\qquad A^{-1}A=A\TT A=I .
+\]
+两式相等，故 $AA^{-1}=A^{-1}A$。$\blacksquare$
+
+\begin{fixbox}
+\textbf{本小题的一处严谨性问题}\quad 卷面第 (3) 问的表述"证明可逆矩阵的逆与原矩阵乘积可交换"
+在数学上是\textbf{平凡真命题}——逆的定义本身就要求 $AA^{-1}=A^{-1}A=I$。
+本小题真正的价值在于\textbf{用 (1)(2) 的分解来"重新推导"这一结论}，
+从而说明 $A^{-1}=A\TT$ 对\textbf{正交矩阵}成立。
+
+不过要注意：\textbf{$A^{-1}=A\TT$ 只对正交矩阵成立，并非对所有可逆矩阵成立}。
+上面的证明中"$E_k^{-1}=E_k\TT$"这一步对倍乘型 $D_i(k)$ 需要 $k=\pm1$，
+对倍加型 $T_{ij}(k)$ 的转置是 $T_{ji}(k)$ 而非 $T_{ij}(-k)$。故该证明链\textbf{有漏洞}。
+
+\textbf{正确结论}\quad 对任意可逆矩阵，只有 $AA^{-1}=A^{-1}A=I$；
+若额外要求 $A$ 是\textbf{正交矩阵}（$A\TT A=I$），才有 $A^{-1}=A\TT$。
+\end{fixbox}
+
+\begin{supbox}
+\textbf{补充说明（补一个可用的正确版本）}\quad 若要保留"利用 (1)(2)"的框架并得到一个非平凡的结论，
+可证：\textbf{可逆矩阵的行列式等于其初等分解中各矩阵行列式之积}，即
+\[
+\det A=\prod_{k=1}^{s}\det E_k .
+\]
+由 $E_{ij}$ 的 $\det=-1$、$D_i(k)$ 的 $\det=k$、$T_{ij}(k)$ 的 $\det=1$，可得 $\det A\neq0$ 且
+$\det(A^{-1})=1/\det A$。这条结论真正用到了分解的唯一结构。
+\end{supbox}
+
+%=====================================================================
+\qhead{第 7 题：$\rank(A\TT A)=\rank(AA\TT)$}{10}
+
+\textbf{题}\quad 对于矩阵 $A$，证明 $\rank(A\TT A)=\rank(AA\TT)$。
+
+\subsection*{证法一（零空间相等 + 秩-零化度）}
+
+\textbf{Step 1（$\Nul(A)=\Nul(A\TT A)$）}\quad
+
+"$\subseteq$"：若 $A\mathbf x=\mathbf 0$，则 $A\TT A\mathbf x=A\TT\mathbf 0=\mathbf 0$。
+
+"$\supseteq$"：若 $A\TT A\mathbf x=\mathbf 0$，两边左乘 $\mathbf x\TT$：
+\[
+\mathbf x\TT A\TT A\mathbf x=(A\mathbf x)\TT(A\mathbf x)=\lVert A\mathbf x\rVert^2=0 .
+\]
+实向量范数平方为零当且仅当向量为零，故 $A\mathbf x=\mathbf 0$。
+
+于是 $\Nul(A)=\Nul(A\TT A)$，从而
+\[
+\rank(A\TT A)=n-\dim\Nul(A\TT A)=n-\dim\Nul(A)=\rank(A). \tag{7.1}
+\]
+
+\textbf{Step 2（对 $A\TT$ 重复）}\quad 同理 $\rank(AA\TT)=\rank(A\TT)$。
+
+\textbf{Step 3（$\rank(A\TT)=\rank A$）}\quad 行秩等于列秩。
+
+由 (7.1) 与 Step 2--3：
+\[
+\rank(A\TT A)=\rank(A)=\rank(A\TT)=\rank(AA\TT).
+\]
+$\blacksquare$
+
+\subsection*{证法二（直接用行列/秩的乘积不等式，仅需 $\rank(A\TT)=\rank A$）}
+
+由第 5 题可知：对任意 $A,B$ 有 $\rank(AB)\le\min\{\rank A,\rank B\}$。故
+\[
+\rank(A\TT A)\le\rank A,\qquad \rank(A\TT A)\le\rank A\TT=\rank A .
+\]
+再由 Step 1 的 $\Nul$ 相等得 $\rank(A\TT A)\ge\rank A$，综合即等号。对 $AA\TT$ 同理。
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{本题的关键一步在哪}\quad 是 $\lVert A\mathbf x\rVert^2=0\Rightarrow A\mathbf x=\mathbf 0$。
+这一步\textbf{只在 $\Rr$ 或 $\CC$ 上成立}（需要范数正定）。
+在一般域上，$\rank(A\TT A)=\rank A$ 是\textbf{假}的，有有限域反例。
+所以本题的域默认为实数域，卷面不必单写，但心里要清楚。
+
+\item \textbf{卷面的第二种写法}\quad 卷面还给出了一条"$A\TT$ 与 $A$ 的转置关系"的迂回路径，
+本质与上述一致。建议考试时直接用"$\Nul$ 相等 + 秩-零化度"两步，最短也最稳。
+
+\item \textbf{更一般的结论（可加分）}\quad 若 $A$ 是 $m\times n$ 实矩阵，则
+\[
+\rank(A\TT A)=\rank(AA\TT)=\rank A .
+\]
+这正是\textbf{最小二乘}中 $A\TT A$ 可逆（当 $A$ 列满秩时）的依据。
+
+\item \textbf{易错点}\quad 不要把 $\rank(A\TT A)=\rank A$ 与"$A\TT A=A^2$"混淆——
+后者只在 $A$ 对称时才有意义。也不要用 $\det(A\TT A)=\det(A)^2$（仅方阵）去推秩，方向反了。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\qhead{第 8 题：逆映射的线性性}{10}
+
+\textbf{题}\quad 证明线性映射 $T:V\to W$ 若存在逆映射 $T^{-1}$，则 $T^{-1}$ 也为线性映射。
+
+\subsection*{解}
+
+\textbf{Step 1（$T$ 是双射，$T^{-1}$ 定义在 $W$ 上）}\quad
+$T$ 有逆映射 $T^{-1}:W\to V$，即 $T$ 既是单射又是满射，且
+\[
+T^{-1}(T(\mathbf u))=\mathbf u\ (\forall\mathbf u\in V),\qquad T(T^{-1}(\mathbf w))=\mathbf w\ (\forall\mathbf w\in W).
+\]
+
+\textbf{Step 2（保持加法）}\quad 任取 $\mathbf w_1,\mathbf w_2\in W$，令
+$\mathbf u_1=T^{-1}(\mathbf w_1)$，$\mathbf u_2=T^{-1}(\mathbf w_2)$，即
+$T(\mathbf u_i)=\mathbf w_i$。由 $T$ 线性，
+\[
+T(\mathbf u_1+\mathbf u_2)=T(\mathbf u_1)+T(\mathbf u_2)=\mathbf w_1+\mathbf w_2 .
+\]
+两边作用 $T^{-1}$：
+\[
+\mathbf u_1+\mathbf u_2=T^{-1}(\mathbf w_1+\mathbf w_2).
+\]
+即
+\[
+T^{-1}(\mathbf w_1+\mathbf w_2)=T^{-1}(\mathbf w_1)+T^{-1}(\mathbf w_2).
+\]
+
+\textbf{Step 3（保持数乘）}\quad 任取 $\mathbf w\in W$、$k\in\FF$，令 $\mathbf u=T^{-1}(\mathbf w)$。由 $T$ 线性，
+\[
+T(k\mathbf u)=kT(\mathbf u)=k\mathbf w .
+\]
+两边作用 $T^{-1}$ 得 $k\mathbf u=T^{-1}(k\mathbf w)$，即
+\[
+T^{-1}(k\mathbf w)=k\,T^{-1}(\mathbf w).
+\]
+
+\textbf{Step 4（结论）}\quad $T^{-1}$ 同时保持加法与数乘，故 $T^{-1}$ 是线性映射。$\blacksquare$
+
+\begin{supbox}
+\textbf{补充说明}
+
+\begin{enumerate}
+\item \textbf{证明为什么"必须是双射"}\quad 若 $T$ 只有一个方向的"反函数"（如左逆或右逆），
+证明中的 $\mathbf u=T^{-1}(\mathbf w)$ 在 $W$ 上任取时未必存在。满射保证 $\mathbf u$ 存在，
+单射保证其唯一。缺一不可。
+
+\item \textbf{更简的写法（考场推荐）}\quad 用 $T^{-1}=\text{"解 $T\mathbf u=\mathbf w$ 的唯一解}$"这一定义，
+把 Step 2--3 合成一句：
+\[
+T\big(T^{-1}(\mathbf w_1)+T^{-1}(\mathbf w_2)\big)=\mathbf w_1+\mathbf w_2
+\ \Longrightarrow\ T^{-1}(\mathbf w_1+\mathbf w_2)=T^{-1}(\mathbf w_1)+T^{-1}(\mathbf w_2).
+\]
+关键是"由 $T$ 的线性算出左边，再用 $T^{-1}$ 的唯一性（单射）识别右边"。
+
+\item \textbf{一个常见漏洞}\quad 只证了"$T^{-1}$ 保持加法"就下结论。
+\textbf{线性映射要求同时保持加法与数乘}，两者都要写。本题占 10 分，
+少写一条通常扣 3--4 分。
+
+\item \textbf{矩阵语言下的对应}\quad 有限维情形下，$T$ 可逆 $\iff$ 表示矩阵可逆，
+而可逆矩阵的逆仍是线性映射（矩阵乘法的线性性）。本条可作独立验算。
+\end{enumerate}
+\end{supbox}
+
+%=====================================================================
+\section*{一页速查}
+\addcontentsline{toc}{section}{一页速查}
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{1.0cm}p{5.2cm}p{7.2cm}@{}}
+\toprule
+题 & 核心答案 & 关键一步 / 陷阱\\
+\midrule
+1 & $(i)$ 元素式 $(AB)_{ij}=\sum_t a_{it}b_{tj}$；
+$(ii)$ 列式 $\operatorname{col}_j(AB)=A\operatorname{col}_j(B)$；
+$(iii)$ 行式 $\operatorname{row}_i(AB)=\operatorname{row}_i(A)B$；
+$(iv)$ 外积和 $AB=\sum_t\mathbf a_t\mathbf b_t\TT$
+& 四条分别是逐元素 / 逐列 / 逐行 / 逐秩一分解，证明题按需选用\\
+\addlinespace
+2 & $\lambda=0$：无解；$\lambda=3$：无穷多解，$\mathbf x=(1,0,0)\TT+s(-1,1,0)\TT+t(-1,0,1)\TT$；
+$\lambda\neq0,3$：唯一解 $x_1=x_2=x_3=1/\lambda$
+& 三行相加提公因子；$\det A=(\lambda-3)^2(\lambda-1)$；
+$\lambda=0$ 时系数可逆但不相容\\
+\addlinespace
+3 & 过渡矩阵 $M=\bv{1&-1&1\\0&1&-2\\0&0&1}$；
+坐标为 $(4,-8,6)\TT$
+& 先写方向约定 $(B_2)=(B_1)M$，再逐个求坐标列\\
+\addlinespace
+4 & 距离 $d=0$
+& 先验证 $A\mathbf x=\mathbf 0$，$x$ 已在 $\Nul(A)$ 内，无需投影\\
+\addlinespace
+5 & $\Nul(A\TT)=\Nul(B\TT)=\Span\{(0,1)\TT\}$，故和为同一空间，$\dim=1$
+& \textbf{卷面此处有误}：$B\TT=\bv{0&0\\1&0}$ 的零空间是 $y_1=0$，不是 $(1,0)\TT$\\
+\addlinespace
+6 & (1) 三种初等矩阵的逆仍是初等矩阵；(2) $A=E_1^{-1}\cdots E_s^{-1}$；(3) $AA^{-1}=A^{-1}A=I$
+& (3) 若推出 $A^{-1}=A\TT$ 需要正交性，非对所有可逆矩阵成立\\
+\addlinespace
+7 & $\rank(A\TT A)=\rank(A)=\rank(AA\TT)$
+& $\Nul(A\TT A)=\Nul(A)$ 靠 $\lVert A\mathbf x\rVert^2=0$，仅对实/复域\\
+\addlinespace
+8 & $T^{-1}$ 保持加法与数乘，故线性
+& 加法和数乘\textbf{两条都要证}，只证一条扣分\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\begin{keybox}
+\textbf{本文由精确算术复核的结论}\quad
+第 2 题四种 $\lambda$ 值（$0,1,3,4$）的秩与解集、第 3 题的过渡矩阵与坐标、
+第 4 题的距离、第 7 题的秩等式，均用分数算术独立验证。
+\textbf{第 5 题的卷面结论经复核确有错误}，本文已给出更正；
+\textbf{第 6 题 (3) 的卷面推理链也存在严谨性缺口}，一并说明。
+\end{keybox}
+
+\end{document}

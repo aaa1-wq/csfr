@@ -1,0 +1,552 @@
+% !TEX program = xelatex
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=1.9cm,top=1.7cm,bottom=1.7cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs,longtable,multirow}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+  pdftitle={Lay Linear Algebra 5e Section 4.3 Exercise Solutions},
+  pdfauthor={Math.skill workflow}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+\definecolor{tfc}{HTML}{C0392B}
+
+\xeCJKsetup{CJKmath=true}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+\captionsetup{font=small,labelformat=empty,skip=4pt}
+
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Nul}{\operatorname{Nul}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{^{\mathsf T}}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}Lay 5e · \S4.3 Linearly Independent Sets; Bases · 习题解答}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\ex}[1]{\subsection*{习题 #1}\addcontentsline{toc}{subsection}{习题 #1}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Lay《Linear Algebra and Its Applications》5e}\\[4pt]
+{\Large\bfseries \S4.3 Linearly Independent Sets; Bases —— 习题解答}\\[2pt]
+{\small 教材 pp.\ 215--216，习题 1--28}
+\end{center}
+
+\vspace{0.2cm}
+\begin{keybox}
+\textbf{约定}\quad 按「简单题只给答案、其余给步骤」的要求：套定义即可判定的题只给结论；
+需要行变换、需要讨论、需要证明的题给出完整过程。
+\end{keybox}
+
+\textbf{\color{acc}判据速查}\quad 设 $A=[\mathbf v_1\ \cdots\ \mathbf v_p]$。
+\[
+\begin{aligned}
+&V\ \text{线性无关}\iff\rank(A)=p; \qquad V\ \text{张成}\ \R^n\iff\rank(A)=n;\\
+&V\ \text{是}\ \R^n\ \text{的基}\iff\rank(A)=p=n;\\
+&\Nul A\ \text{的基}:\ \text{自由变量各取一次 }1;\qquad
+\Col A\ \text{的基}:\ \text{取 }A\ \textbf{本身}\ \text{的主元列}.
+\end{aligned}
+\]
+\begin{warnbox}
+\small $\Col A$ 的基必须取 $A$ 自己的主元列，\textbf{不是}阶梯形 $B$ 的主元列——行变换改变列空间。
+\end{warnbox}
+
+%=====================================================================
+\section*{习题 1--8：是否为 $\R^3$ 的基}
+\addcontentsline{toc}{section}{习题 1--8}
+
+\noindent\textbf{方法}\quad 三个向量时，$\rank=3\iff$ 是基。
+
+\ex{1}
+\[
+A=\begin{bmatrix}1&1&1\\0&1&1\\0&0&1\end{bmatrix}\ \text{已是上三角，对角元全非零}\Rightarrow\rank=3 .
+\]
+\textbf{答案：是基。}
+
+\ex{2}
+\textbf{答案：是基。}（即标准基 $\mathbf e_1,\mathbf e_2,\mathbf e_3$。）
+
+\ex{3}
+\[
+A=\begin{bmatrix}1&3&-3\\0&2&-5\\-2&-4&1\end{bmatrix}
+\xrightarrow{R_3+2R_1}\begin{bmatrix}1&3&-3\\0&2&-5\\0&2&-5\end{bmatrix}
+\xrightarrow{R_3-R_2}\begin{bmatrix}1&3&-3\\0&2&-5\\0&0&0\end{bmatrix},\quad \rank=2 .
+\]
+\textbf{答案：不是基。} 线性相关，且不张成 $\R^3$。相关关系：
+\[
+\mathbf v_3=\tfrac92\mathbf v_1-\tfrac52\mathbf v_2 .
+\]
+
+\ex{4}
+\[
+A=\begin{bmatrix}2&1&-7\\-2&-3&5\\1&2&4\end{bmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}\begin{bmatrix}1&2&4\\-2&-3&5\\2&1&-7\end{bmatrix}
+\xrightarrow[R_3-2R_1]{R_2+2R_1}\begin{bmatrix}1&2&4\\0&1&13\\0&-3&-15\end{bmatrix}
+\xrightarrow{R_3+3R_2}\begin{bmatrix}1&2&4\\0&1&13\\0&0&24\end{bmatrix}
+\]
+三个主元。\textbf{答案：是基。}
+
+\ex{5}
+4 个向量在 $\R^3$ 中，必线性相关。具体地 $\mathbf v_4=-\tfrac53\mathbf v_3$。
+\textbf{答案：不是基}（张成 $\R^3$，但线性相关）。
+
+\ex{6}
+\[
+A=\begin{bmatrix}1&2&-5\\2&-1&-3\\-5&-6&6\end{bmatrix}
+\xrightarrow[R_3+5R_1]{R_2-2R_1}\begin{bmatrix}1&2&-5\\0&-5&7\\0&4&-19\end{bmatrix}
+\xrightarrow{R_3+\frac45R_2}\begin{bmatrix}1&2&-5\\0&-5&7\\0&0&-\frac{67}{5}\end{bmatrix}
+\]
+三个主元。\textbf{答案：是基。}
+
+\ex{7}
+仅 2 个向量，不成比例，$\rank=2$。
+\textbf{答案：不是基}（线性无关，但不张成 $\R^3$）。
+
+\ex{8}
+\[
+A=\begin{bmatrix}1&0&3&0\\-4&3&-5&2\\3&-1&4&-2\end{bmatrix}
+\xrightarrow[R_3-3R_1]{R_2+4R_1}\begin{bmatrix}1&0&3&0\\0&3&7&2\\0&-1&-5&-2\end{bmatrix}
+\xrightarrow{R_3+\frac13R_2}\begin{bmatrix}1&0&3&0\\0&3&7&2\\0&0&-\frac83&-\frac43\end{bmatrix}
+\]
+前 3 列已有 3 个主元，$\rank=3$。由 $\operatorname{rref}$ 得 $\mathbf v_4=-\tfrac32\mathbf v_1-\tfrac12\mathbf v_2+\tfrac12\mathbf v_3$。
+\textbf{答案：不是基}（张成 $\R^3$，但线性相关）。
+
+\subsection*{1--8 汇总}
+\begin{center}\small
+\begin{tabular}{@{}cccl@{}}
+\toprule
+题 & 线性无关？ & 张成 $\R^3$？ & 相关关系\\
+\midrule
+1 & 是 & 是 & — \\
+2 & 是 & 是 & — \\
+3 & \textcolor{tfc}{否} & \textcolor{tfc}{否} & $\mathbf v_3=\tfrac92\mathbf v_1-\tfrac52\mathbf v_2$\\
+4 & 是 & 是 & — \\
+5 & \textcolor{tfc}{否} & 是 & $\mathbf v_4=-\tfrac53\mathbf v_3$\\
+6 & 是 & 是 & — \\
+7 & 是 & \textcolor{tfc}{否} & — \\
+8 & \textcolor{tfc}{否} & 是 & $\mathbf v_4=-\tfrac32\mathbf v_1-\tfrac12\mathbf v_2+\tfrac12\mathbf v_3$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\qquad 其中 $1,2,4,6$ 是基。
+
+%=====================================================================
+\section*{习题 9--10：零空间的基}
+\addcontentsline{toc}{section}{习题 9--10}
+
+\ex{9}
+\[
+A=\begin{bmatrix}1&0&-3&2\\0&1&-5&4\\3&-2&1&-2\end{bmatrix}
+\xrightarrow{R_3-3R_1}\begin{bmatrix}1&0&-3&2\\0&1&-5&4\\0&-2&10&-8\end{bmatrix}
+\xrightarrow{R_3+2R_2}\begin{bmatrix}1&0&-3&2\\0&1&-5&4\\0&0&0&0\end{bmatrix}
+\]
+主元列 1、2；$x_3,x_4$ 自由，$x_1=3x_3-2x_4$，$x_2=5x_3-4x_4$。
+\textbf{答案：}
+\[
+\Nul A=\Span\left\{\begin{bmatrix}3\\5\\1\\0\end{bmatrix},\begin{bmatrix}-2\\-4\\0\\1\end{bmatrix}\right\},\qquad \dim\Nul A=2 .
+\]
+
+\ex{10}
+\[
+A\xrightarrow{R_2+2R_1}\begin{bmatrix}1&0&-5&1&4\\0&1&-4&0&6\\0&2&-8&1&9\end{bmatrix}
+\xrightarrow{R_3-2R_2}\begin{bmatrix}1&0&-5&1&4\\0&1&-4&0&6\\0&0&0&1&-3\end{bmatrix}
+\]
+主元列 1、2、4；$x_3,x_5$ 自由。逐行读出：$x_1-5x_3+x_4+4x_5=0$，$x_2-4x_3+6x_5=0$，$x_4-3x_5=0$，故
+\[
+x_1=5x_3-7x_5,\quad x_2=4x_3-6x_5,\quad x_4=3x_5 .
+\]
+\textbf{答案：}
+\[
+\Nul A=\Span\left\{\begin{bmatrix}5\\4\\1\\0\\0\end{bmatrix},\begin{bmatrix}-7\\-6\\0\\3\\1\end{bmatrix}\right\},\qquad \dim\Nul A=2 .
+\]
+
+%=====================================================================
+\section*{习题 11--12}
+\addcontentsline{toc}{section}{习题 11--12}
+
+\ex{11}
+方程 $x+2y+z=0$ 即齐次系统 $[\,1\ \ 2\ \ 1\,]\mathbf x=\mathbf 0$，一主元两自由变量，$x=-2y-z$。
+
+\textbf{答案：}$\left\{\begin{bmatrix}-2\\1\\0\end{bmatrix},\begin{bmatrix}-1\\0\\1\end{bmatrix}\right\}$
+
+\ex{12}
+直线 $y=5x$ 即 $-5x+y=0$，通解 $\mathbf x=x\begin{bmatrix}1\\5\end{bmatrix}$。
+
+\textbf{答案：}$\left\{\begin{bmatrix}1\\5\end{bmatrix}\right\}$
+
+%=====================================================================
+\section*{习题 13--14：$\Nul A$ 与 $\Col A$ 的基}
+\addcontentsline{toc}{section}{习题 13--14}
+
+\noindent\textbf{\color{acc}关键原则}\quad 行变换\textbf{保持} $\Nul A$，但\textbf{改变} $\Col A$。故 $\Nul A$ 可由行最简形读出，而 $\Col A$ 的基必须取 $A$ 本身的主元列。
+
+\ex{13}
+\[
+A=\begin{bmatrix}-2&4&-2&-4\\-2&2&-6&-3\\-3&8&2&-3\end{bmatrix},\qquad
+B=\begin{bmatrix}1&0&6&5\\0&2&5&3\\0&0&0&0\end{bmatrix}
+\]
+
+\begin{warnbox}
+\textbf{题目数据核对}\quad $\rank(A)=3$（其 $3\times3$ 子式可逆），而 $\rank(B)=2$。
+行等价必同秩，故题给的 $B$ 与 $A$ \textbf{不等价}，可能与翻印/OCR 有关。以下按 $A$ 的实际数据计算。
+\end{warnbox}
+
+$$\operatorname{rref}A=\begin{bmatrix}1&0&0&-19\\0&1&0&-\tfrac{17}{2}\\0&0&1&4\end{bmatrix}$$
+
+三列全为主元列，$x_4$ 自由，$\mathbf x=x_4\left(19,\ \tfrac{17}{2},\ -4,\ 1\right)$。
+
+\textbf{$\Nul A$ 的基：}
+$$\left\{\begin{bmatrix}19\\17/2\\-4\\1\end{bmatrix}\right\}\qquad\left(\text{等价地}\ \begin{bmatrix}38\\17\\-8\\2\end{bmatrix}\right)$$
+
+\textbf{$\Col A$ 的基}（$A$ 的第 1、2、3 列）：
+$$\left\{\begin{bmatrix}-2\\-2\\-3\end{bmatrix},\begin{bmatrix}4\\2\\8\end{bmatrix},\begin{bmatrix}-2\\-6\\2\end{bmatrix}\right\}$$
+
+\ex{14}
+\[
+A=\begin{bmatrix}1&2&-5&11&-3\\2&4&-5&15&2\\1&2&0&4&5\\3&6&-5&19&-2\end{bmatrix},\qquad
+B=\begin{bmatrix}1&2&0&4&5\\0&0&5&-7&8\\0&0&0&0&-9\\0&0&0&0&0\end{bmatrix}
+\]
+
+$B$ 已是阶梯形，主元在第 1、3、5 列。化简 $A$：
+\[
+A\xrightarrow[R_3-R_1]{R_2-2R_1}\begin{bmatrix}1&2&-5&11&-3\\0&0&5&-7&8\\0&0&5&-7&8\\0&0&10&-14&7\end{bmatrix}
+\xrightarrow[R_4-2R_2]{R_3-R_2}\begin{bmatrix}1&2&-5&11&-3\\0&0&5&-7&8\\0&0&0&0&0\\0&0&0&0&-9\end{bmatrix}
+\]
+交换第 3、4 行即得 $B$，**行等价成立**。再化为
+\[
+\operatorname{rref}A=\begin{bmatrix}1&2&0&4&0\\0&0&1&-\tfrac75&0\\0&0&0&0&1\\0&0&0&0&0\end{bmatrix}
+\]
+$x_2,x_4$ 自由，$x_1=-2x_2-4x_4$，$x_3=\tfrac75x_4$，$x_5=0$。
+
+\textbf{$\Nul A$ 的基：}
+$$\left\{\begin{bmatrix}-2\\1\\0\\0\\0\end{bmatrix},\ \begin{bmatrix}-4\\0\\7/5\\1\\0\end{bmatrix}\right\},\qquad\dim\Nul A=2$$
+
+\textbf{$\Col A$ 的基}（$A$ 的第 1、3、5 列）：
+$$\left\{\begin{bmatrix}1\\2\\1\\3\end{bmatrix},\ \begin{bmatrix}-5\\-5\\0\\-5\end{bmatrix},\ \begin{bmatrix}-3\\2\\5\\-2\end{bmatrix}\right\}$$
+
+%=====================================================================
+\section*{习题 15--18：$\Span\{\mathbf v_1,\dots,\mathbf v_5\}$ 的基}
+\addcontentsline{toc}{section}{习题 15--18}
+
+\noindent\textbf{方法}\quad 作 $A=[\mathbf v_1\cdots\mathbf v_5]$，化行最简形，取\textbf{主元列对应的原向量}。
+
+\ex{15}
+\[
+\operatorname{rref}A=\begin{bmatrix}1&0&-3&0&0\\0&1&-4&0&0\\0&0&0&1&0\\0&0&0&0&1\end{bmatrix},\qquad \rank=4,\ \text{主元列 }1,2,4,5
+\]
+\textbf{答案：}$\{\mathbf v_1,\mathbf v_2,\mathbf v_4,\mathbf v_5\}$，$\dim=4$。（$\mathbf v_3=-3\mathbf v_1-4\mathbf v_2$）
+
+\ex{16}
+\[
+\operatorname{rref}A=\begin{bmatrix}1&0&0&0&\tfrac{193}{55}\\0&1&0&0&\tfrac{106}{55}\\0&0&1&0&\tfrac{26}{55}\\0&0&0&1&\tfrac{7}{11}\\0&0&0&0&0\end{bmatrix},\qquad \rank=4,\ \text{主元列 }1,2,3,4
+\]
+\textbf{答案：}$\{\mathbf v_1,\mathbf v_2,\mathbf v_3,\mathbf v_4\}$，$\dim=4$。
+（$\mathbf v_5$ 是前四者的组合，可直接省去；前四个已张成 $\R^4$。）
+
+\ex{17}
+\[
+\operatorname{rref}A=\begin{bmatrix}1&0&0&-\tfrac12&3\\0&1&0&\tfrac52&-7\\0&0&1&0&-3\\0&0&0&0&0\\0&0&0&0&0\end{bmatrix},\qquad \rank=3,\ \text{主元列 }1,2,3
+\]
+关系：$\mathbf v_4=-\tfrac12\mathbf v_1+\tfrac52\mathbf v_2$，$\mathbf v_5=3\mathbf v_1-7\mathbf v_2-3\mathbf v_3$。
+
+\textbf{答案：}$\{\mathbf v_1,\mathbf v_2,\mathbf v_3\}$，$\dim=3$。
+
+\ex{18}
+\[
+\operatorname{rref}A=\begin{bmatrix}1&0&\tfrac53&0&0\\0&1&\tfrac23&0&0\\0&0&0&1&0\\0&0&0&0&1\\0&0&0&0&0\end{bmatrix},\qquad \rank=4,\ \text{主元列 }1,2,4,5
+\]
+关系：$\mathbf v_3=\tfrac53\mathbf v_1+\tfrac23\mathbf v_2$。
+
+\textbf{答案：}$\{\mathbf v_1,\mathbf v_2,\mathbf v_4,\mathbf v_5\}$，$\dim=4$。
+
+\subsection*{15--18 汇总}
+\begin{center}\small
+\begin{tabular}{@{}cc l@{}}
+\toprule
+题 & $\dim$ & 基（原向量编号）\\
+\midrule
+15 & 4 & $\mathbf v_1,\mathbf v_2,\mathbf v_4,\mathbf v_5$\\
+16 & 4 & $\mathbf v_1,\mathbf v_2,\mathbf v_3,\mathbf v_4$\\
+17 & 3 & $\mathbf v_1,\mathbf v_2,\mathbf v_3$\\
+18 & 4 & $\mathbf v_1,\mathbf v_2,\mathbf v_4,\mathbf v_5$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%=====================================================================
+\section*{习题 19--20}
+\addcontentsline{toc}{section}{习题 19--20}
+
+\ex{19}
+$\mathbf v_1=(4,-3,7)\T,\ \mathbf v_2=(1,9,-2)\T,\ \mathbf v_3=(7,11,6)\T$，且 $4\mathbf v_1+5\mathbf v_2-3\mathbf v_3=\mathbf 0$。
+
+\textbf{Step 1（验证）}
+\[
+4\mathbf v_1+5\mathbf v_2-3\mathbf v_3=\begin{bmatrix}16+5-21\\-12+45-33\\28-10-18\end{bmatrix}=\begin{bmatrix}0\\0\\0\end{bmatrix}\ \checkmark
+\]
+
+\textbf{Step 2（维数）}\quad $\mathbf v_1,\mathbf v_2$ 不成比例，线性无关，$\rank=2$。故 $H$ 是过原点的平面，基需 2 个向量。
+
+\textbf{Step 3（消去一个）}\quad $\mathbf v_3$ 由 $\mathbf v_1,\mathbf v_2$ 表出，去之仍张成 $H$：
+\[
+H=\Span\{\mathbf v_1,\mathbf v_2\}
+\]
+
+\textbf{答案（不唯一）}：
+$$\left\{\mathbf v_1,\mathbf v_2\right\}\quad\text{或}\quad\left\{\mathbf v_1,\mathbf v_3\right\}\quad\text{或}\quad\left\{\mathbf v_2,\mathbf v_3\right\}$$
+
+\ex{20}
+$\mathbf v_1=(7,4,-9,-5)\T,\ \mathbf v_2=(4,-7,2,5)\T,\ \mathbf v_3=(1,-5,3,4)\T$，且 $\mathbf v_1-3\mathbf v_2+5\mathbf v_3=\mathbf 0$。
+
+\textbf{Step 1（验证）}
+\[
+\mathbf v_1-3\mathbf v_2+5\mathbf v_3=\begin{bmatrix}7-12+5\\4+21-25\\-9-6+15\\-5-15+20\end{bmatrix}=\begin{bmatrix}0\\0\\0\\0\end{bmatrix}\ \checkmark
+\]
+
+\textbf{Step 2}\quad 由关系式 $\mathbf v_1=3\mathbf v_2-5\mathbf v_3$，$\mathbf v_1$ 可去掉。
+
+\textbf{Step 3}\quad $\mathbf v_2,\mathbf v_3$ 不成比例，无关。
+
+\textbf{答案：}
+\[
+H=\Span\left\{\begin{bmatrix}4\\-7\\2\\5\end{bmatrix},\begin{bmatrix}1\\-5\\3\\4\end{bmatrix}\right\},\qquad\dim H=2 .
+\]
+
+%=====================================================================
+\section*{习题 21--22：真假判断}
+\addcontentsline{toc}{section}{习题 21--22}
+
+\subsection*{习题 21}
+\begin{enumerate}[label=\textbf{\alph*.}]
+\item \textbf{单个非零向量本身线性相关。}\ \textcolor{tfc}{\textbf{FALSE}}\quad
+$c\mathbf v=\mathbf 0\Rightarrow c=0$，故单个非零向量线性无关。
+
+\item \textbf{若 $H=\Span\{\mathbf b_1,\dots,\mathbf b_p\}$，则 $\{\mathbf b_1,\dots,\mathbf b_p\}$ 是 $H$ 的基。}\ \textcolor{tfc}{\textbf{FALSE}}\quad
+张成集未必无关。例：$H=\Span\{\mathbf e_1,\mathbf e_2\}$，取 $\mathbf e_1,\mathbf e_2,\mathbf e_1+\mathbf e_2$ 三者相关。
+
+\item \textbf{可逆 $n\times n$ 矩阵的各列构成 $\R^n$ 的基。}\ \textbf{\color{acc}TRUE}\quad
+$A$ 可逆 $\iff\rank A=n\iff$ 各列无关；$n$ 个无关向量在 $\R^n$ 中必张成。
+
+\item \textbf{基是"尽可能大"的张成集。}\ \textbf{\color{acc}TRUE}\quad
+基已张成 $V$，加入任何向量都可由基表出，新集合必相关，故基是极大张成集。
+
+\item \textbf{矩阵列之间的线性相关关系可能被某些初等行变换改变。}\ \textcolor{tfc}{\textbf{FALSE}}\quad
+行变换可逆，保持 $A\mathbf x=\mathbf 0$ 的解集，从而保持\textbf{一切}列间线性关系（系数完全相同）。
+\end{enumerate}
+
+\subsection*{习题 22}
+\begin{enumerate}[label=\textbf{\alph*.}]
+\item \textbf{子空间 $H$ 中一个线性无关集是 $H$ 的基。}\ \textcolor{tfc}{\textbf{FALSE}}\quad
+还须张成 $H$。例：$H=\R^2$，$\{(1,0)\}$ 无关但不张成。
+
+\item \textbf{若非零向量构成的有限集 $S$ 张成 $V$，则 $S$ 的某子集是 $V$ 的基。}\ \textbf{\color{acc}TRUE}\quad
+反复删去可由其余向量线性表示的向量，有限步后得无关张成集，即基。
+
+\item \textbf{基是"尽可能大"的线性无关集。}\ \textbf{\color{acc}TRUE}\quad
+极大无关集。
+
+\item \textbf{4.2 节中生成 $\Nul A$ 张成集的标准方法有时不能产生 $\Nul A$ 的基。}\ \textcolor{tfc}{\textbf{FALSE}}\quad
+该法对每个自由变量取一次 $1$、其余取 $0$，所得向量对应不同自由变量，必无关，且通解表明张成 $\Nul A$。
+
+\item \textbf{若 $B$ 是 $A$ 的阶梯形，则 $B$ 的主元列构成 $\Col A$ 的基。}\ \textcolor{tfc}{\textbf{FALSE}}\quad
+\textbf{本节最经典的陷阱}。行变换改变列空间，$B$ 的主元列一般不在 $\Col A$ 中。
+
+\smallskip
+\textbf{反例}：$A=\begin{bmatrix}1&2\\1&2\end{bmatrix}$，$B=\begin{bmatrix}1&2\\0&0\end{bmatrix}$。
+$B$ 的主元列是 $\begin{bmatrix}1\\0\end{bmatrix}$，而 $\Col A=\Span\left\{\begin{bmatrix}1\\1\end{bmatrix}\right\}$，不含它。
+正确说法是：\textbf{$A$ 的}主元列构成 $\Col A$ 的基，主元位置由 $B$ 读出。
+\end{enumerate}
+
+%=====================================================================
+\section*{习题 23--24：证明}
+\addcontentsline{toc}{section}{习题 23--24}
+
+\ex{23}
+\textbf{题}\quad 设 $\R^4=\Span\{\mathbf v_1,\dots,\mathbf v_4\}$，说明 $\{\mathbf v_1,\dots,\mathbf v_4\}$ 必是 $\R^4$ 的基。
+
+\textbf{证明}\quad 设 $A=[\mathbf v_1\ \mathbf v_2\ \mathbf v_3\ \mathbf v_4]$（$4\times4$）。
+\begin{enumerate}
+\item "张成 $\R^4$" 即 $\Col A=\R^4$，故 $\rank A=4$。
+\item 主元数 $=4$，$A$ 只有 4 列，故每列都是主元列。
+\item 无自由变量，$A\mathbf x=\mathbf 0$ 只有零解，故四向量线性无关。
+\item 既张成又无关，故是基。\hfill$\blacksquare$
+\end{enumerate}
+
+\ex{24}
+\textbf{题}\quad 设 $\mathcal B=\{\mathbf v_1,\dots,\mathbf v_n\}$ 是 $\R^n$ 中的线性无关集，说明必是 $\R^n$ 的基。
+
+\textbf{证明}\quad 设 $A=[\mathbf v_1\ \cdots\ \mathbf v_n]$（$n\times n$）。线性无关即 $A\mathbf x=\mathbf 0$ 只有零解。
+由可逆矩阵定理，$A$ 可逆，故 $\rank A=n$，各列张成 $\R^n$。于是 $\mathcal B$ 无关且张成，是基。\hfill$\blacksquare$
+
+\smallskip
+\textbf{要点}\quad 关键是"向量个数 $=n=$ 空间维数"。若只有 $n-1$ 个无关向量，则不张成。
+
+%=====================================================================
+\section*{习题 25}
+\addcontentsline{toc}{section}{习题 25}
+
+\textbf{题}\quad $\mathbf v_1=\begin{bmatrix}1\\0\\1\end{bmatrix},\ \mathbf v_2=\begin{bmatrix}0\\1\\1\end{bmatrix},\ \mathbf v_3=\begin{bmatrix}0\\1\\0\end{bmatrix}$；
+$H$ 为 $\R^3$ 中第二、三分量相等的向量所成子空间。已知 $H$ 中每个向量有展开
+\[
+\begin{bmatrix}s\\t\\t\end{bmatrix}=s\begin{bmatrix}1\\0\\1\end{bmatrix}+(t-s)\begin{bmatrix}0\\1\\1\end{bmatrix}+s\begin{bmatrix}0\\1\\0\end{bmatrix}
+\]
+问 $\{\mathbf v_1,\mathbf v_2,\mathbf v_3\}$ 是否为 $H$ 的基？
+
+\textbf{答案：不是。}
+
+\textbf{理由 1（决定性）}\quad $H$ 的定义是"第二分量 $=$ 第三分量"，而
+\[
+\mathbf v_1=(1,0,1)\T:\ 0\neq1\Rightarrow\mathbf v_1\notin H;\qquad
+\mathbf v_3=(0,1,0)\T:\ 1\neq0\Rightarrow\mathbf v_3\notin H .
+\]
+基必须是 $H$ 的\textbf{子集}，而 $\mathbf v_1,\mathbf v_3\notin H$，故不可能是 $H$ 的基。
+
+\textbf{理由 2（补充）}\quad 由 $\mathbf v_2=\mathbf v_1+\mathbf v_3$ 得 $\mathbf v_1-\mathbf v_2+\mathbf v_3=\mathbf 0$，三者相关，也不满足无关性要求。
+
+\begin{warnbox}
+\textbf{为何题中"唯一展开"有误导性}\quad 展开系数 $(s,\ t-s,\ s)$ \textbf{依赖} $s,t$，不是常数。
+它只说明 $H\subseteq\Span\{\mathbf v_1,\mathbf v_2,\mathbf v_3\}$，并未说明系数唯一；
+恰因三者相关，同一向量可用不同系数表示。
+\end{warnbox}
+
+\textbf{正确的基}\quad $H=\left\{\begin{bmatrix}s\\t\\t\end{bmatrix}\right\}$，取 $(s,t)=(1,0)$ 与 $(0,1)$：
+\[
+\left\{\begin{bmatrix}1\\0\\0\end{bmatrix},\begin{bmatrix}0\\1\\1\end{bmatrix}\right\},\qquad\dim H=2 .
+\]
+
+%=====================================================================
+\section*{习题 26--28}
+\addcontentsline{toc}{section}{习题 26--28}
+
+\ex{26}
+\textbf{题}\quad 在全体实值函数空间中，求 $\Span\{\sin t,\ \sin2t,\ \sin t\cos t\}$ 的基。
+
+\textbf{Step 1（找关系）}\quad 由倍角公式 $\sin2t=2\sin t\cos t$，故
+\[
+\sin t\cos t=\tfrac12\sin2t ,
+\]
+第三个函数是 $\sin2t$ 的倍数，可删去。
+
+\textbf{Step 2（剩余无关）}\quad 设 $c_1\sin t+c_2\sin2t\equiv0$。
+取 $t=\pi/2$ 得 $c_1=0$；再取 $t=\pi/4$ 得 $c_2=0$。故无关。
+
+\textbf{答案：}$\{\sin t,\ \sin2t\}$，$\dim=2$。
+
+\ex{27}
+\textbf{题}\quad $V$ 为弹簧-质量系统振动的函数空间，求 $V$ 的基。
+
+\textbf{Step 1}\quad 无阻尼振动方程 $my''+ky=0$，即
+\[
+y''+\omega^2y=0,\qquad \omega=\sqrt{k/m}>0 ,
+\]
+通解 $y=c_1\cos\omega t+c_2\sin\omega t$。
+
+\textbf{Step 2（无关性）}\quad 设 $c_1\cos\omega t+c_2\sin\omega t\equiv0$。
+取 $t=0$ 得 $c_1=0$；取 $t=\pi/(2\omega)$ 得 $c_2=0$。
+
+\textbf{答案：}
+\[
+\{\cos\omega t,\ \sin\omega t\},\qquad \omega=\sqrt{k/m}\ \text{（固有频率）},\quad \dim V=2 .
+\]
+（解空间为二阶线性方程的解空间，恰二维，通解已含两个任意常数。）
+
+\ex{28}
+\textbf{题}\quad 设 $b=R/(2L)$ 且 $b=1/\sqrt{LC}$。可证 $v$ 属于 $Lv''+Rv'+(1/C)v$ 的零空间 $H$，
+且 $H$ 由一切 $v(t)=e^{-bt}(c_1+c_2t)$ 构成。求 $H$ 的基。
+
+\textbf{Step 1（验证函数形式）}\quad 记 $v=e^{-bt}(c_1+c_2t)$，则
+\[
+v'=e^{-bt}\bigl[c_2-b(c_1+c_2t)\bigr],\qquad
+v''=e^{-bt}\bigl[b^2(c_1+c_2t)-2bc_2\bigr].
+\]
+代入并提取 $e^{-bt}$，按 $c_1,c_2$ 分组：
+\[
+\begin{aligned}
+c_1\ \text{系数}&:\ Lb^2-Rb+\tfrac1C
+\xrightarrow{\ R=2Lb\ }Lb^2-2Lb^2+\tfrac1C=\tfrac1C-Lb^2
+\xrightarrow{\ b^2=\frac{1}{LC}\ }0\ \checkmark\\[2pt]
+c_2\ \text{系数}&:\ \bigl(Lb^2-Rb+\tfrac1C\bigr)t-2Lb+R=t\cdot0-2Lb+2Lb=0\ \checkmark
+\end{aligned}
+\]
+故该形式确在零空间中。\textbf{注}：$b=1/\sqrt{LC}$ 是\textbf{临界阻尼}条件，特征方程有重根 $-b$，这正是 $t$ 因子的来源。
+
+\textbf{Step 2（取基）}\quad 一般元素
+\[
+v=(c_1+c_2t)e^{-bt}=c_1\,e^{-bt}+c_2\,t e^{-bt}
+\ \Longrightarrow\ H=\Span\{e^{-bt},\ te^{-bt}\}.
+\]
+
+\textbf{Step 3（无关性）}\quad 设 $c_1e^{-bt}+c_2te^{-bt}\equiv0$，乘 $e^{bt}>0$ 得 $c_1+c_2t\equiv0$，故 $c_1=c_2=0$。
+
+\textbf{答案：}
+\[
+\boxed{\ H=\Span\left\{e^{-bt},\ t\,e^{-bt}\right\},\qquad b=\frac{R}{2L}=\frac{1}{\sqrt{LC}},\qquad \dim H=2\ }
+\]
+
+%=====================================================================
+\section*{附：全部答案速查}
+\addcontentsline{toc}{section}{附：全部答案速查}
+
+\begin{center}\small
+\begin{tabular}{@{}cl@{}}
+\toprule
+题 & 答案摘要\\
+\midrule
+1, 2, 4, 6 & 是 $\R^3$ 的基\\
+3 & 否；相关且不张成（$\mathbf v_3=\tfrac92\mathbf v_1-\tfrac52\mathbf v_2$）\\
+5 & 否；相关（$\mathbf v_4=-\tfrac53\mathbf v_3$），但张成\\
+7 & 否；无关但不张成\\
+8 & 否；相关，但张成\\
+9 & $\dim\Nul A=2$，见正文\\
+10 & $\dim\Nul A=2$，见正文\\
+11 & $\{(-2,1,0)\T,\ (-1,0,1)\T\}$\\
+12 & $\{(1,5)\T\}$\\
+13 & $\Nul$：1 维；$\Col$：$A$ 的第 1,2,3 列\\
+14 & $\Nul$：2 维；$\Col$：$A$ 的第 1,3,5 列\\
+15 & $\mathbf v_1,\mathbf v_2,\mathbf v_4,\mathbf v_5$\\
+16 & $\mathbf v_1,\mathbf v_2,\mathbf v_3,\mathbf v_4$\\
+17 & $\mathbf v_1,\mathbf v_2,\mathbf v_3$\\
+18 & $\mathbf v_1,\mathbf v_2,\mathbf v_4,\mathbf v_5$\\
+19 & 任取两个，如 $\{\mathbf v_1,\mathbf v_2\}$\\
+20 & $\{\mathbf v_2,\mathbf v_3\}$，$\dim H=2$\\
+21 & a F · b F · c T · d T · e F\\
+22 & a F · b T · c T · d F · e F\\
+23 & 证明：$\rank=4$ 故全为主元列\\
+24 & 证明：无关 $+$ $n$ 列 $\Rightarrow$ 可逆 $\Rightarrow$ 张成\\
+25 & \textbf{不是}；$\mathbf v_1,\mathbf v_3\notin H$\\
+26 & $\{\sin t,\ \sin2t\}$\\
+27 & $\{\cos\omega t,\ \sin\omega t\}$\\
+28 & $\{e^{-bt},\ te^{-bt}\}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+{\small\textit{习题 1--18 的行最简形与秩由精确分数算术核对（非浮点近似）；习题 19--20 的相关关系已逐分量验算；
+习题 13 题给 $B$ 与 $A$ 不同秩，已在正文标注。}}
+
+\end{document}

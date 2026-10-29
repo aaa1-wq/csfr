@@ -1,0 +1,798 @@
+\documentclass[UTF8,zihao=-4,a4paper]{ctexart}
+
+% ================== 宏包 ==================
+\usepackage[margin=2.0cm,top=2.2cm,bottom=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{underscore}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+% ================== 颜色 ==================
+\definecolor{mainblue}{RGB}{20,70,140}
+\definecolor{deepred}{RGB}{170,30,30}
+\definecolor{softgray}{RGB}{245,246,248}
+\definecolor{codegreen}{RGB}{30,120,70}
+
+% ================== 超链接 ==================
+\hypersetup{colorlinks=true,linkcolor=mainblue,urlcolor=mainblue,citecolor=mainblue,
+  pdftitle={C语言程序设计 第1-5章 知识点与易错点精编},
+  pdfauthor={DSH 备考整理}}
+
+% ================== 页眉页脚 ==================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{mainblue}C 语言程序设计 · 第 1–5 章 知识点与易错点}
+\fancyhead[R]{\small\color{mainblue}备考精编}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ================== 标题样式 ==================
+\titleformat{\section}{\Large\bfseries\color{mainblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{mainblue!85!black}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{mainblue!70!black}}{\thesubsubsection}{0.4em}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{9pt}{4pt}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+% ================== 列表间距 ==================
+\setlist[itemize]{nosep,leftmargin=1.6em}
+\setlist[enumerate]{nosep,leftmargin=1.9em}
+\setlist[description]{nosep,leftmargin=4.6em,labelwidth=4.3em,labelsep=0.3em,itemsep=2pt}
+\setlength{\headheight}{14pt}
+
+% ================== 代码 ==================
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{mainblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{deepred},
+  frame=single, framerule=0.4pt, rulecolor=\color{gray!50},
+  backgroundcolor=\color{softgray},
+  breaklines=true, columns=fullflexible, keepspaces=true,
+  showstringspaces=false, tabsize=4, xleftmargin=4pt, xrightmargin=4pt,
+  aboveskip=5pt, belowskip=5pt
+}
+
+% ================== 信息框 ==================
+\newtcolorbox{keybox}[1][核心知识点]{
+  enhanced, breakable, colback=mainblue!3, colframe=mainblue!65!black,
+  boxrule=0.6pt, arc=2pt, left=7pt,right=7pt,top=4pt,bottom=4pt,
+  title={\bfseries #1}, fonttitle=\small\color{white}, coltitle=white,
+  colbacktitle=mainblue!75!black, attach boxed title to top left={xshift=6pt,yshift=-2pt}
+}
+\newtcolorbox{yicuodian}[1][易错点]{
+  enhanced, breakable, colback=deepred!3, colframe=deepred!60!black,
+  boxrule=0.6pt, arc=2pt, left=7pt,right=7pt,top=4pt,bottom=4pt,
+  title={\bfseries #1}, fonttitle=\small\color{white}, coltitle=white,
+  colbacktitle=deepred!75!black, attach boxed title to top left={xshift=6pt,yshift=-2pt}
+}
+\newtcolorbox{tipbox}[1][自测指路]{
+  enhanced, breakable, colback=codegreen!4, colframe=codegreen!55!black,
+  boxrule=0.6pt, arc=2pt, left=7pt,right=7pt,top=4pt,bottom=4pt,
+  title={\bfseries #1}, fonttitle=\small\color{white}, coltitle=white,
+  colbacktitle=codegreen!65!black, attach boxed title to top left={xshift=6pt,yshift=-2pt}
+}
+
+\newcommand{\cstar}{\textcolor{deepred}{$\bigstar$}}
+\newcommand{\cok}{\textcolor{codegreen}{$\checkmark$}}
+\newcommand{\cbad}{\textcolor{deepred}{$\times$}}
+
+\begin{document}
+
+% ================== 封面 ==================
+\begin{titlepage}
+\centering
+\vspace*{2.2cm}
+{\color{mainblue}\rule{\linewidth}{1.2pt}}\\[0.5cm]
+{\Huge\bfseries\color{mainblue} C 语言程序设计}\\[0.35cm]
+{\Huge\bfseries\color{mainblue} 第 1–5 章 知识点与易错点精编}\\[0.5cm]
+{\color{mainblue}\rule{\linewidth}{1.2pt}}\\[1.2cm]
+
+{\Large 备考复习 · 易错清单 · 自测指路}\\[2.0cm]
+
+\begin{tcolorbox}[colback=softgray,colframe=gray!55,width=0.86\linewidth,arc=3pt]
+\centering\small
+\textbf{整理依据}：\texttt{mind-city.com/question/}《程序设计 · 课程实验文档》备考题库\\
+第 1–5 章，共 \textbf{9 + 23 + 13 + 23 + 17 = 85} 道题\\
+\textbf{用途}：系统梳理五章高频知识点，提炼每题背后的易错点；\\
+配合在线题库逐题自测，先看提纲再做题，错题回查对应条目。
+\end{tcolorbox}
+
+\vfill
+{\small 生成日期：2026 年 10 月 29 日}\\[0.3cm]
+{\small 本讲义为学习整理资料，题目与解析版权归原课程文档所有}
+\end{titlepage}
+
+% ================== 目录 ==================
+\pagenumbering{Roman}
+\tableofcontents
+\newpage
+
+% ================== 使用说明 ==================
+\pagenumbering{arabic}
+\section*{使用说明}
+\addcontentsline{toc}{section}{使用说明}
+
+本讲义把备考题库第 1–5 章的 85 道题“反向工程”为知识框架：\\
+\textbf{每一章固定四块}——(1) 知识框架（一张图看清脉络）；(2) 核心知识点（规则、表格、结论）；(3) 易错点清单（把每道题踩过的坑逐条列出）；(4) 自测指路（易错点 — 原题号）。\\
+
+\textbf{建议用法}：
+\begin{enumerate}
+  \item 先通读“核心知识点”，遇到 \cstar 标记的是高频必背；
+  \item 做题时对照“易错点清单”，每踩一个坑就回查本章对应条目；
+  \item 用“自测指路”表到题库按题号刷题，错哪条补哪条；
+  \item 考前只看“易错点清单”和“附录 B 高频口诀”即可。
+\end{enumerate}
+
+\textbf{重要度标记}：\cstar\cstar\cstar\ 必考核心 \quad \cstar\cstar\ 常考 \quad \cstar\ 了解
+
+\vspace{4pt}
+\begin{center}
+\footnotesize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{4.4cm} p{1.1cm} X}
+\toprule
+章节 & 题量 & 命题重心\\
+\midrule
+第1章 程序设计基础 & 9 & 标识符合法性、常量与转义字符、变量定义正误\\
+第2章 基本数据类型及其运算 & 23 & 类型转换与整除、scanf/printf 格式匹配、自增自减与未定义行为、优先级与结合性\\
+第3章 结构化程序设计 & 13 & switch 穿透、悬挂 if、do-while、continue/break、死循环判定\\
+第4章 数组 & 23 & 数组名与 sizeof、二维数组、字符串与转义、原地逆序/删除\\
+第5章 函数 & 17 & 值传递与地址传递、递归执行顺序、存储类别与作用域、宏展开\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\newpage
+
+% =====================================================================================
+\section{程序设计基础}
+% =====================================================================================
+
+\subsection{知识框架}
+
+\begin{keybox}[本章脉络]
+\textbf{标识符}（命名规则）→ \textbf{常量}（整型 / 浮点 / 字符 / 字符串 / 转义）→ \textbf{变量}（定义正误）。\\
+本章全部是“词法层面”的判断，考的是\textbf{规则记忆 + 逐字符核对}，不涉及运行。
+\end{keybox}
+
+\subsection{核心知识点}
+
+\subsubsection*{1. 标识符（变量名、函数名）的四条规则\ \cstar\cstar\cstar}
+\begin{enumerate}
+  \item 只能由 \textbf{字母、数字、下划线 \texttt{\_} } 组成；合法连接符\textbf{只有下划线}，减号 \texttt{-}、空格、\texttt{\#}、\texttt{\$} 一律非法。
+  \item \textbf{不能以数字开头}（\texttt{2num}、\texttt{3data} 非法），但下划线开头可以（\texttt{\_0} 合法）。
+  \item \textbf{不能是关键字}（C 共 32 个，见下）。
+  \item \textbf{区分大小写}：\texttt{int} 非法，\texttt{Int}、\texttt{INT} 合法；\texttt{goto} 非法，\texttt{Goto} 合法。
+\end{enumerate}
+
+\begin{keybox}[C 的 32 个关键字（整体匹配才算关键字）]
+\texttt{auto\ break\ case\ char\ const\ continue\ default\ do\ double\ else\ enum\ extern\ float\ for\ goto\ if\ int\ long\ register\ return\ short\ signed\ sizeof\ static\ struct\ switch\ typedef\ unsigned\ union\ void\ volatile\ while}
+
+\vspace{3pt}
+\textbf{高频误区}：\texttt{main}、\texttt{define}、\texttt{include}、\texttt{String} 都\textbf{不是} C 关键字，是合法标识符（\texttt{string} 是 C++/Java 的概念）。\\
+\textbf{关键字加字符后仍合法}：\texttt{int\_value}、\texttt{int2}、\texttt{\_int}、\texttt{int\_} 都合法——关键字必须“整体”相同才非法。
+\end{keybox}
+
+\subsubsection*{2. 常量\ \cstar\cstar}
+\begin{itemize}
+  \item \textbf{整型常量}：十进制 \texttt{123}；八进制以 \texttt{0} 开头（\texttt{012}，注意八进制里不能出现 8、9）；十六进制 \texttt{0x1F}。后缀：\texttt{L}/\texttt{l}（long）、\texttt{U}/\texttt{u}（unsigned），可组合 \texttt{UL}。
+  \item \textbf{浮点常量}：必须含小数点或指数，且\textbf{小数点只能出现一次}；可省略整数部分（\texttt{.45}）或小数部分（\texttt{5.}）；\textbf{指数必须是整数}（\texttt{e-4} 合法，\texttt{e-4.3} 非法）；后缀 \texttt{f}/\texttt{F}（float）、\texttt{l}/\texttt{L}（long double）。
+  \item \textbf{字符常量}：单引号内一个字符，如 \texttt{'A'}、\texttt{'5'}；转义写法 \texttt{'\textbackslash n'}、\texttt{'\textbackslash x41'}、\texttt{'\textbackslash 010'}。
+  \item \textbf{多字符常量}：如 \texttt{'Class'}：语法能过，但值\textbf{实现定义}（gcc 会告警），正规代码不写，选择题常判“不正确”。
+  \item \textbf{字符串字面量}：双引号，末尾\textbf{自动补 \texttt{'\textbackslash 0'}}，占用字节数 = 可见字符数 + 1（\texttt{"A"} 占 2 字节）。
+\end{itemize}
+
+\subsubsection*{3. 转义序列（必背表）\ \cstar\cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\ttfamily}p{2.1cm} X >{\raggedright\arraybackslash}p{6.2cm}}
+\toprule
+写法 & 含义 & 易错提醒\\
+\midrule
+\textbackslash 0 & 空字符（数值 0） & 字符串结束标志；\texttt{str[0]} 与 \texttt{str['\textbackslash 0']} 是同一个元素\\
+\textbackslash ddd & 八进制转义，1–3 位 & \textbf{只认 0–7}；遇 8/9 立即截断，故 \texttt{'\textbackslash 08'} 是“\texttt{\textbackslash 0} + '8'”的多字符常量\\
+\textbackslash xhh & 十六进制转义 & \texttt{\textbackslash x} 后可接任意多位十六进制数字；\texttt{'\textbackslash x41'} 即 \texttt{'A'}\\
+\textbackslash\textbackslash\ \ \textbackslash'\ \ \textbackslash" & 反斜杠 / 单引号 / 双引号 & \texttt{\textbackslash\textbackslash} 只算 1 个字符\\
+\textbackslash n\ \textbackslash t\ \textbackslash r\ \textbackslash b & 换行 / 制表 / 回车 / 退格 & 各占 1 字节\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{易错点清单}
+\begin{yicuodian}[第 1 章易错点（对应题 1–9）]
+\begin{enumerate}
+  \item \textbf{把减号、空格当连接符}：\texttt{total-sum}、\texttt{var-name}、\texttt{var name} 全非法，合法连接符只有 \texttt{\_}。（题1、题6）
+  \item \textbf{误把 \texttt{String} 当关键字}：C 没有 \texttt{string} 关键字；\texttt{String} 合法。注意题目问“可以/不可以”别读反。（题1、题3）
+  \item \textbf{以为 \texttt{main}/\texttt{define}/\texttt{include} 是关键字}：它们都是合法普通标识符。（题2）
+  \item \textbf{以为 \texttt{int\_value}/\texttt{int2} 用了关键字}：关键字要整体匹配，这些合法。（题2、题5）
+  \item \textbf{忽略 \texttt{const} 是关键字}（从 C89 起就在关键字表中）。（题4）
+  \item \textbf{把 \texttt{'\textbackslash 08'} 当合法八进制转义}：八进制不含 8，实际是 \texttt{'\textbackslash 0'} 与 \texttt{'8'} 拼成的多字符常量，是本题唯一的错误项。（题7）
+  \item \textbf{把 \texttt{'Class'} 当合法常量}：多字符常量实现定义，不能算“正确的定义”。（题8）
+  \item \textbf{忽略浮点常量指数必须是整数}：\texttt{.45e-4.3L} 因指数含小数而非法；但 \texttt{.45} 省略整数部分是合法的。（题8）
+  \item \textbf{两个小数点}：\texttt{.05.3} 非法（小数点只能一个）。（题9）
+  \item \textbf{忘了 \texttt{L}/\texttt{UL}/\texttt{f} 后缀是合法的}：\texttt{5L}、\texttt{12345UL} 都正确。（题8、题9）
+  \item 区分 \texttt{"A"}（字符串，2 字节）与 \texttt{'A'}（字符，1 字节）。
+\end{enumerate}
+\end{yicuodian}
+
+\begin{tipbox}[自测指路 · 第 1 章]
+\begin{tabularx}{\linewidth}{p{4.6cm} X}
+\toprule
+知识点 & 对应题号\\
+\midrule
+标识符合法性 & 题 1、2、3、4、5、6\\
+常量 / 转义字符 & 题 7\\
+变量定义正误（后缀、多字符常量、浮点） & 题 8、9\\
+\bottomrule
+\end{tabularx}
+\end{tipbox}
+
+\needspace{15\baselineskip}
+
+% =====================================================================================
+\section{基本数据类型及其运算}
+% =====================================================================================
+
+\subsection{知识框架}
+
+\begin{keybox}[本章脉络]
+\textbf{基本类型} → \textbf{类型转换（整/浮点、截断）} → \textbf{格式输入输出（scanf/printf 匹配）} → \textbf{运算符与表达式（优先级、结合性、自增、短路、逗号、复合赋值）} → \textbf{未定义行为（序列点）}。\\
+本章是全课程分值最高、也是“坑”最集中的一章。
+\end{keybox}
+
+\subsection{核心知识点}
+
+\subsubsection*{1. 类型转换与整除\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item \textbf{运算结果的类型由参与运算的操作数决定，而不是由左边变量决定}。\texttt{3/2} 是两个 \texttt{int}，结果为 \texttt{1}；\texttt{3.0/2} 结果 \texttt{1.5}。
+  \item \textbf{赋值再转换}：\texttt{int i = 3.0/2.0;} → 先得 \texttt{1.5}，赋给 \texttt{int} 时\textbf{截断}为 \texttt{1}。
+  \item \textbf{强制转换向零截断，不四舍五入}：\texttt{(int)2.6 = 2}，\texttt{(int)-2.6 = -2}。
+  \item \texttt{\%} \textbf{只能用于整型}；浮点取模是编译错误，须先 \texttt{(int)f \% 3}。
+  \item 字符按 ASCII 参与运算：\texttt{'A' - 'a'} = 65 − 97 = \texttt{-32}；\texttt{'\textbackslash 010'} 是八进制 → 十进制 8。
+\end{itemize}
+
+\subsubsection*{2. 格式输入输出\ \cstar\cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.4cm} >{\ttfamily}p{2.6cm} X}
+\toprule
+数据类型 & 格式符 & 关键点\\
+\midrule
+int & \%d & scanf 需 \texttt{\&} 取地址\\
+float & \%f & scanf 用 \texttt{\%f}，参数须 \texttt{float*}\\
+double & \%lf & \textbf{scanf 里 double 必须 \texttt{\%lf}}；printf 里 \texttt{\%f}/\texttt{\%lf} 都行（默认实参提升）\\
+char & \%c & 读一个字符\\
+字符串 & \%s & 需要 \texttt{'\textbackslash 0'} 结束；数组要够长（含 \texttt{'\textbackslash 0'}）\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{itemize}
+  \item \textbf{scanf 的格式串必须与参数类型严格对应}：\texttt{double x; scanf("\%f", \&x);} 是类型不匹配（\texttt{\%f} 要 \texttt{float*}，\texttt{\&x} 是 \texttt{double*}），读入数据就是错的，结果“以上答案均不是”。
+  \item \textbf{scanf 必须取地址}：\texttt{scanf("\%f", c)}（漏 \texttt{\&}）、\texttt{scanf("\%d", NULL)}、往野指针写，都是崩溃/未定义。
+  \item \textbf{字符数组与结束符}：\texttt{char d[2]=\{ 'c','h' \}} 没有 \texttt{'\textbackslash 0'}，\texttt{\%s} 会越界；\texttt{char str[3]="abc"} 装不下 3 字符 + \texttt{'\textbackslash 0'} 共 4 字节。
+  \item \textbf{printf 的类型也要匹配}：拿 \texttt{\%f} 打一个 \texttt{char*}（如 \texttt{"123.45"}）是未定义行为；拿 \texttt{\%d} 打指针也只是“能跑”而非标准正确。
+  \item \textbf{宽度/精度}：\texttt{\%.2f}（两位小数）、\texttt{\%5d}（宽 5 右对齐）、\texttt{\%-5d}（左对齐）、\texttt{\%6s}（最小宽 6，右对齐）。
+\end{itemize}
+
+\subsubsection*{3. 运算符优先级与结合性\ \cstar\cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.1cm} X >{\raggedright\arraybackslash}p{3.0cm}}
+\toprule
+序 & 运算符（由高到低） & 结合性\\
+\midrule
+1 & \texttt{()} \texttt{[]} \texttt{->} \texttt{.} & 左\\
+2 & 单目：\texttt{++ -- ! \textasciitilde\ \& * + - (类型) sizeof} & \textbf{右}\\
+3 & \texttt{* / \%} & 左\\
+4 & \texttt{+ -} & 左\\
+5 & \texttt{<< >>} & 左\\
+6 & \texttt{< <= > >=} & 左\\
+7 & \texttt{== !=} & 左\\
+8 & \texttt{\&}（按位与） & 左\\
+9 & \texttt{\^{}}（异或） & 左\\
+10 & \texttt{|}（按位或） & 左\\
+11 & \texttt{\&\&} & 左\\
+12 & \texttt{||} & 左\\
+13 & \texttt{?:} & \textbf{右}\\
+14 & \texttt{= += -= *= /= \%=} 等 & \textbf{右}\\
+15 & \texttt{,}（逗号） & 左\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsubsection*{4. 自增自减、序列点与未定义行为\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item \texttt{++a}：先加 1，再取新值；\texttt{a++}：先取原值，再加 1。
+  \item \textbf{不同变量各自自增 → 结果确定}：\texttt{(a++) + (++b)}（a=5,b=3）→ 5 + 4 = 9，\textbf{不是}未定义。
+  \item \textbf{同一变量在两个序列点之间被修改两次或“又改又读” → 未定义行为（UB）}：\texttt{j=(++i)+(i++);}、\texttt{printf("\%d,\%d", i, i++);}、\texttt{a+=a-=a*a;} 结果都不确定。
+  \item \textbf{序列点}：\texttt{\&\&}、\texttt{||}、\texttt{?:}、逗号、完整表达式结束、函数调用（但实参求值顺序未指定）。
+\end{itemize}
+
+\subsubsection*{5. 短路求值、条件运算、逗号、复合赋值\ \cstar\cstar}
+\begin{itemize}
+  \item \textbf{短路}：\texttt{A \&\& B} 中 A 假则 B 不算；\texttt{A || B} 中 A 真则 B 不算。注意 \texttt{\&\&} 优先级高于 \texttt{||}：\texttt{++a || ++b \&\& ++c} 等价 \texttt{++a || ((++b) \&\& (++c))}。
+  \item \textbf{条件运算} \texttt{c ? x : y}：只求值所选分支，值为该分支的值；\texttt{++a} 为真选 \texttt{b++}，则 \texttt{b++} 的值是自增前的原值。
+  \item \textbf{逗号表达式} \texttt{(a,b,c)}：从左到右依次执行，\textbf{整个表达式的值 = 最后一个子表达式的值}；逗号优先级最低（低于赋值）。\\
+  \texttt{x=(a+1, b++, ++c)} → x 取 \texttt{++c} 的值；\texttt{x=a+1, b++, ++c} → x 只取 \texttt{a+1}。
+  \item \textbf{复合赋值} \texttt{a op= b} 等价 \texttt{a = a op (b)}，\textbf{表达式的值 = 赋值后 a 的新值}，且\textbf{右结合}。\\
+  \texttt{a += a -= a*a}（a=6）→ 从右算：\texttt{a-=36} 得 −30，再 \texttt{a += (−30)} 得 \texttt{−60}（不是 −24）。\\
+  \texttt{x -= j += i}（i=3,j=9,x=0）→ \texttt{j+=i}→12，\texttt{x-=12} → \texttt{−12}。
+\end{itemize}
+
+\subsubsection*{6. 关系运算左结合、德摩根、浮点比较\ \cstar\cstar}
+\begin{itemize}
+  \item \textbf{关系运算符左结合}：\texttt{10<a<15} 实为 \texttt{(10<a)<15}，恒为真（值 1）；要表达“a 在 10 到 15 之间”必须 \texttt{10<a \&\& a<15}。
+  \item \textbf{德摩根}：\texttt{!(A \&\& B) = !A || !B}，\texttt{!(A || B) = !A \&\& !B}；取反时比较符要同步翻转（\texttt{>} 变 \texttt{<=}）。
+  \item \textbf{绝对值区间}：\texttt{|x|<k} $\Longleftrightarrow$ \texttt{-k<x<k} $\Longleftrightarrow$ \texttt{x>-k \&\& x<k}；逻辑式写法 \texttt{!((x)>=k || (x)<=-k)}。
+  \item \textbf{浮点不能用 == 直接比较}：\texttt{3.0-2.1} 实际是 \texttt{0.8999...}，与 \texttt{0.9} 不等。应写 \texttt{fabs(a-b)<1e-6}。
+\end{itemize}
+
+\subsection{易错点清单}
+\begin{yicuodian}[第 2 章易错点（对应题 1–23）]
+\begin{enumerate}
+  \item \textbf{以为 \texttt{3/2} 得 1.5}：整数除法先得 1，再赋值，得 1.0。（题1）
+  \item \textbf{以为 \texttt{(int)} 会四舍五入}：一律向零截断。（题3）
+  \item \textbf{把 \texttt{'\textbackslash 010'} 当十进制 10}：八进制 10 = 8。（题3）
+  \item \textbf{scanf 里 double 用了 \texttt{\%f}}：类型不匹配，输入数据直接错，别指望输出正常。（题4、5）
+  \item \textbf{scanf 漏 \texttt{\&} / 传 \texttt{NULL} / 传野指针}：崩溃或未定义。（题6、7）
+  \item \textbf{字符数组没留 \texttt{'\textbackslash 0'} 位置}：\texttt{\%s} 越界读到随机内存。（题6、7）
+  \item \textbf{printf 格式与参数类型不匹配}：\texttt{\%f} 打 \texttt{char*} 属未定义。（题7）
+  \item \textbf{忘 \texttt{||} 短路}：\texttt{a++ \&\& ++b || c++} 中左真则 \texttt{c++} 不执行。（题8）
+  \item \textbf{把后置 \texttt{b++} 的值当成自增后的值}：后置表达式的值是原值。（题9、16）
+  \item \textbf{三目只看一个分支}：\texttt{?:} 另一分支完全不执行，别两边都算。（题9）
+  \item \textbf{同一变量多次自增当成确定值}：\texttt{(++i)+(i++)} 是未定义行为，只能选“结果未定义”。（题10）
+  \item \textbf{函数实参求值顺序当从左到右}：\texttt{printf("\%d,\%d",i,i++)} 结果不确定。（题11）
+  \item \textbf{逗号优先级搞错}：有括号取最后一值，没括号只取第一段。\texttt{x=(a+1,b++,++c)} 得 4。（题12、23）
+  \item \textbf{浮点用 == 比较}：\texttt{a-b==c} 因精度误差为 0（不相等）。（题13）
+  \item \textbf{忘了单目优先级最高}：\texttt{++} 高于 \texttt{\%}、\texttt{+}、\texttt{<}。（题14）
+  \item \textbf{\texttt{10<a<15} 当区间判断}：左结合恒为 1，不等于“a 在区间内”。（题15）
+  \item \textbf{德摩根取反时比较符没翻转}、\texttt{\&\&}/\texttt{||} 没互换。（题17、18、19）
+  \item \textbf{复合赋值从左往右算}：应右结合、从右往左，且左侧读的是“当时”的当前值；\texttt{a+=a-=a*a} 得 −60。（题20）
+  \item \textbf{不知道 \texttt{\&\&} 高于 \texttt{||}}：\texttt{++a||++b\&\&++c} 中 \texttt{++b} 被短路不执行。（题21）
+  \item \textbf{复合赋值表达式的值}：是赋值后变量新值；\texttt{x\%=(k\%=5)} 值是 0，\texttt{(x\%=k)-(k\%=5)} 值是 3。（题22）
+  \item \textbf{把 \texttt{j+=i} 当成不起作用的 \texttt{j+i}}：\texttt{x -= j += i} 得 −12。（题23）
+\end{enumerate}
+\end{yicuodian}
+
+\begin{tipbox}[自测指路 · 第 2 章]
+\begin{tabularx}{\linewidth}{p{5.2cm} X}
+\toprule
+知识点 & 对应题号\\
+\midrule
+类型转换与整除 & 题 1、2、3\\
+scanf/printf 格式匹配 & 题 4、5、6、7\\
+自增自减 / 短路 / 三目 & 题 8、9、16、21\\
+求值顺序与未定义行为 & 题 10、11\\
+逗号运算符与优先级 / 复合赋值 & 题 12、14、20、22、23\\
+关系运算左结合 / 德摩根 / 浮点比较 & 题 13、15、17、18、19\\
+\bottomrule
+\end{tabularx}
+\end{tipbox}
+
+\needspace{15\baselineskip}
+
+% =====================================================================================
+\section{结构化程序设计}
+% =====================================================================================
+
+\subsection{知识框架}
+
+\begin{keybox}[本章脉络]
+\textbf{选择结构}（if / else 配对、switch 穿透）→ \textbf{循环结构}（for / while / do-while 的执行流程）→ \textbf{跳转}（break / continue 的作用范围）→ \textbf{循环算法}（累加、通项、精度）。\\
+核心是“\textbf{控制流走向}”：每道题都要在草稿纸上把每一轮的变量值列出来。
+\end{keybox}
+
+\subsection{核心知识点}
+
+\subsubsection*{1. if 语句与悬挂 else\ \cstar\cstar}
+\begin{itemize}
+  \item 条件\textbf{非 0 即真}（负数 −1 也是真）。
+  \item 不带花括号时，语句体\textbf{只有紧跟的一条语句}；而 \texttt{if} 本身也是一条语句，所以嵌套 \texttt{if} 时外层语句体 = 整个内层 \texttt{if} 语句。
+  \item \textbf{外层条件为假 → 整个内层 if 被跳过}，内层条件根本不求值。
+  \item \textbf{悬挂 else}：\texttt{else} 永远与\textbf{离它最近、尚未配对}的 \texttt{if} 结合。想让它配外层，必须给内层加 \texttt{\{\}}。结论：\textbf{嵌套 if 一律加花括号}。
+\end{itemize}
+
+\subsubsection*{2. switch 语句（穿透是重点）\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item \texttt{switch(表达式)} 的表达式必须是\textbf{整型 / 字符型 / 枚举}，\textbf{不能是浮点或字符串}。
+  \item \texttt{case} 标签只是\textbf{入口}，不是边界：匹配后从该入口\textbf{一路往下执行}，直到遇到 \texttt{break} 或 \texttt{switch} 结束——这就是 \textbf{fall-through（穿透）}。
+  \item \texttt{default} 可以放在\textbf{任意位置}（不必最后），同样会向下穿透。
+  \item \texttt{break} 只能跳出它所在的那\textbf{一层} \texttt{switch}（嵌套 \texttt{switch} 时只跳内层）。
+  \item \texttt{switch} 不是循环：里面的 \texttt{continue} 作用于\textbf{外层循环}，跳过本次循环剩余部分。
+\end{itemize}
+
+\subsubsection*{3. 三种循环的执行流程\ \cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.2cm} X >{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+循环 & 执行顺序 & 最少执行次数\\
+\midrule
+\texttt{for(init; cond; incr)} & init → 判 cond（真）→ 循环体 → incr → 再判 cond…… & 0 次\\
+\texttt{while(cond)} & 先判 cond，再执行循环体 & 0 次\\
+\texttt{do \{...\} while(cond);} & 先执行循环体，再判 cond & \textbf{至少 1 次}（注意结尾分号）\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\begin{itemize}
+  \item \texttt{cond} 为空视为恒真：\texttt{for(;;)}、\texttt{while(1)} 都是死循环。
+  \item \textbf{循环体内修改循环变量会影响循环次数}；\texttt{for} 的 \texttt{incr} 仍照常执行。
+  \item \textbf{continue}：跳过本次剩余语句，进入下一次（\texttt{for} 仍会执行 \texttt{incr}）；\textbf{break}：结束整个循环。
+\end{itemize}
+
+\subsubsection*{4. 死循环的判定\ \cstar\cstar}
+\begin{itemize}
+  \item 条件恒真：\texttt{while(1)}、\texttt{for(;;)}、\texttt{while(1<=x<=2)}（关系左结合，恒真）；
+  \item 循环变量从不更新 / 更新方向不对；
+  \item 循环条件永远无法满足退出。
+\end{itemize}
+
+\subsubsection*{5. 循环累加与通项\ \cstar\cstar}
+\begin{itemize}
+  \item \textbf{逐轮列表}是最稳的方法：把“进入时变量值 → 本轮操作 → 退出时值”列成表。
+  \item \textbf{求和通项}：如 \texttt{$\pi$/4 = 1 − 1/3 + 1/5 − 1/7 + …}，第 n 项 \texttt{4.0/(2n−1)}，符号交替用 \texttt{sign = -sign}。
+  \item \textbf{精度控制}：\texttt{while(fabs(term) >= EPS)}，\texttt{EPS} 取 \texttt{1e-6}；分母、分子用\textbf{浮点}（\texttt{4.0/...}）避免整除丢精度。
+  \item 前 n 个奇数之和 = $n^2$；等差数列求和用公式核对。
+\end{itemize}
+
+\subsection{易错点清单}
+\begin{yicuodian}[第 3 章易错点（对应题 1–13）]
+\begin{enumerate}
+  \item \textbf{以为 default 必须放最后 / 不穿透}：default 放最前照样向下穿透。（题1）
+  \item \textbf{忽略 do-while 的终止条件}：\texttt{while(s[i])} 是读完最后一个字符后判断（\texttt{s[9]='\textbackslash 0'} 正好结束）。（题1）
+  \item \textbf{把变量初值当成全 0}：题2 是 \texttt{v1=0,\ v2=1,\ v3=2}，算成全 0 会得 3,5,4（错）。（题2）
+  \item \textbf{漏算 fall-through}：\texttt{case 1} 无 break 会穿到 \texttt{case 2}；末尾无 break 与有 break 结果相同。（题2、5）
+  \item \textbf{以为 switch 里的 continue 只影响 switch}：它作用于外层循环。（题3）
+  \item \textbf{漏看 case 穿透到 default}：\texttt{case 4} 会继续执行 \texttt{default}。（题3）
+  \item \textbf{悬挂 if：内外层条件分别算}：外层假时内层不求值，输出保持初值 \texttt{8,7,6}。（题4）
+  \item \textbf{嵌套 switch 的 break 作用域}：内层 break 只跳内层，外层继续穿透，得 \texttt{a=2,b=1}。（题5）
+  \item \textbf{把 \texttt{1<=x<=2} 当区间}：恒真，循环靠 break 才停。（题6、7）
+  \item \textbf{do-while 第 4 轮后 x 的变化}：\texttt{y=x--} 使 x 从 0 变 −1，别漏。（题7）
+  \item \textbf{循环体改循环变量}：\texttt{for(a=0;a<=5;a++) a+=2;} 逐轮 0→2→3→5→6，退出 a=6。（题8）
+  \item \textbf{continue 与 break 混淆}：continue 结束“本次”，break 结束“整个”。（题9）
+  \item \textbf{步长变量误当会变}：\texttt{b} 恒为 2，只有 a 在变。（题10）
+  \item \textbf{累加填空漏精度/符号/整除}：$\pi$ 级数要用 \texttt{4.0}、\texttt{sign} 交替、\texttt{fabs(term)>=EPS}。（题11）
+  \item \textbf{for 终止值看错}：\texttt{incr} 表达式会影响最终退出值，逐轮推。（题12）
+  \item \textbf{死循环判定}：空条件、恒真条件、循环变量不更新都是死循环。（题13）
+\end{enumerate}
+\end{yicuodian}
+
+\begin{tipbox}[自测指路 · 第 3 章]
+\begin{tabularx}{\linewidth}{p{5.2cm} X}
+\toprule
+知识点 & 对应题号\\
+\midrule
+switch 穿透 / default 位置 / 嵌套 break & 题 1、2、3、5\\
+悬挂 if / else 配对 & 题 4\\
+do-while 与恒真条件 & 题 6、7\\
+循环体内改循环变量 & 题 8\\
+continue 与 break & 题 9、10\\
+循环累加填空（$\pi$ 级数） & 题 11\\
+for 终止值 / 死循环判定 & 题 12、13\\
+\bottomrule
+\end{tabularx}
+\end{tipbox}
+
+\needspace{15\baselineskip}
+
+% =====================================================================================
+\section{数组}
+% =====================================================================================
+
+\subsection{知识框架}
+
+\begin{keybox}[本章脉络]
+\textbf{一维数组}（数组名、初始化、下标）→ \textbf{二维数组}（行优先、定义、矩阵运算）→ \textbf{字符数组与字符串}（\texttt{'\textbackslash 0'}、转义、\texttt{sizeof/strlen}）→ \textbf{字符串算法}（逆序、删除、计数、比较）。\\
+贯穿全章的一条红线：\textbf{内存里是怎么排的}。
+\end{keybox}
+
+\subsection{核心知识点}
+
+\subsubsection*{1. 数组名与初始化\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item 数组是\textbf{同类型元素的连续存储}，下标从 \textbf{0} 到 \textbf{n−1}，C \textbf{不做越界检查}。
+  \item \textbf{数组名代表首元素地址，不是左值}：不能 \texttt{a=b}（整体赋值）、不能 \texttt{a++}、不能 \texttt{\&(i+j)}（\texttt{i+j} 是右值）；\texttt{a+1}、\texttt{\&a[0]} 合法。比较 \texttt{a==b} 合法但恒为 0（两个不同数组地址不可能相等）——\textbf{题目问“能否编译”时要选它}。
+  \item \textbf{部分初始化自动补 0}：\texttt{int arr[5]=\{0\};} 全部为 0（\texttt{arr[3]=0}），不是随机值。这与“局部变量不初始化是垃圾值”不同。
+  \item \textbf{VLA（C99）}：数组大小可以是运行时变量，如 \texttt{int n; scanf("\%d",\&n); int a[n];}，所以“数组大小必须是常量表达式”是\textbf{错误}说法。
+  \item \texttt{sizeof(a)} 得整个数组\textbf{字节数}；元素个数 = \texttt{sizeof(a)/sizeof(a[0])}；\texttt{sizeof} 是运算符，\texttt{sizeof(x++)} 不会真的自增。
+\end{itemize}
+
+\subsubsection*{2. 一维数组与排序\ \cstar\cstar}
+\begin{itemize}
+  \item \textbf{冒泡排序边界}：外层 \texttt{i<n-1}，内层 \texttt{j<n-1-i}（因为要访问 \texttt{a[j+1]}，写成 \texttt{j<n-i} 会越界）。
+  \item \textbf{升降序}：\texttt{if(a[j] > a[j+1])} 交换 → 升序；\texttt{if(a[j] < a[j+1])} 交换 → 降序。
+  \item 输出要用 \texttt{a[i]}，不能写 \texttt{a}（那是地址）。
+  \item \textbf{字符可作下标}：字符按 ASCII 当整数，\texttt{'a'=97}、\texttt{'d'-'a'=3}，故 \texttt{a['d'-'a']} = \texttt{a[3]}。
+\end{itemize}
+
+\subsubsection*{3. sizeof 与 strlen 的区别\ \cstar\cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.6cm} X X}
+\toprule
+对比项 & \texttt{sizeof(x)} & \texttt{strlen(x)}\\
+\midrule
+数的是什么 & 数组占的\textbf{字节数}（含 \texttt{'\textbackslash 0'} 那一格） & 从开头到第一个 \texttt{'\textbackslash 0'} 的\textbf{字符个数}（不含 \texttt{'\textbackslash 0'}）\\
+何时计算 & 编译期运算符，看类型/对象大小 & 运行时函数，看实际内容\\
+\texttt{char x[]="12345"} & 6 & 5\\
+\texttt{char y[]（初值含 \textbackslash 0）} & 6 & 5\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\noindent 要点：字符串字面量\textbf{自带} \texttt{'\textbackslash 0'}；初值表\textbf{不会}自动补 \texttt{'\textbackslash 0'}（除非写明）。若 \texttt{y} 写成不带 \texttt{'\textbackslash 0'} 的 5 个字符，则 \texttt{sizeof(y)=5}。
+
+\subsubsection*{4. 二维数组\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item \textbf{行优先存储}：\texttt{a[i][j]} 的地址随 j 连续增加，再换行。
+  \item \textbf{定义只能省略第一维}，第二维必须写：\texttt{int a[][2]} 合法，\texttt{int a[2][]} 非法。初始化时由“行数”推导第一维。
+  \item 初始化花括号：\texttt{\{\{1\},\{2\},\{3\},4\}} 中裸值 \texttt{4} 会\textbf{开启新的一行}，所以是 4 行。
+  \item \textbf{主对角线} \texttt{x[i][i]}；\textbf{副（反）对角线} \texttt{x[i][n-1-i]}（注意是“最大下标 n−1”，不是长度 n）。
+  \item \textbf{矩阵转置}：\texttt{b[j][i]=a[i][j]}；\textbf{原地转置}只扫下三角 \texttt{j<i}，用 \texttt{temp} 三步交换：\texttt{temp=a[i][j]; a[i][j]=a[j][i]; a[j][i]=temp;}（若扫整个矩阵会换两次等于没换）。
+  \item \textbf{矩阵乘法}：\texttt{c[i][j] += a[i][k]*b[k][j]}，中间指标是 k。
+\end{itemize}
+
+\subsubsection*{5. 字符数组与字符串处理\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item \textbf{字符串 = 以 \texttt{'\textbackslash 0'} 结尾的字符数组}；\texttt{strlen} 数到第一个 \texttt{'\textbackslash 0'} 为止。
+  \item \textbf{转义序列占 1 字节}：\texttt{'\textbackslash n'}、\texttt{'\textbackslash t'}、\texttt{'\textbackslash\textbackslash'}、\texttt{'\textbackslash x41'} 各算 1 个字符；\texttt{'\textbackslash 010'} = 8（八进制）。
+  \item \textbf{原地逆序}：双指针 \texttt{i=0,\ j=strlen(s)-1}，交换后 \texttt{i<j} 时继续（\texttt{i<j} 而非 \texttt{i<=j}）。
+  \item \textbf{原地删除指定字符}：读指针 \texttt{i}、写指针 \texttt{k}，符合保留条件就 \texttt{s[k++]=s[i]}，最后 \texttt{s[k]='\textbackslash 0'}。
+  \item \textbf{字符计数}：桶数组 \texttt{int cnt[26]=\{0\}; cnt[s[i]-'a']++;}，可求最多/最少。
+  \item \textbf{二维字符数组}：\texttt{char a[][6]}；\texttt{scanf("\%6s", a[i])} 限制宽度防溢出；\texttt{\%6s} 最小宽 6 右对齐，\texttt{\%-6s} 左对齐。
+  \item \textbf{字符串比较}：逐字符比，返回\textbf{首个不同字符的 ASCII 差}。核心循环见下方代码。
+\end{itemize}
+\begin{lstlisting}[language=C]
+while (*s1 && *s2 && *s1 == *s2) { s1++; s2++; }
+return *s1 - *s2;   /* 首个不同字符的 ASCII 差 */
+\end{lstlisting}
+
+\subsection{易错点清单}
+\begin{yicuodian}[第 4 章易错点（对应题 1–23）]
+\begin{enumerate}
+  \item \textbf{数组名当普通变量改}：\texttt{a=b}、\texttt{a++}、\texttt{\&(i+j)} 都非法；\texttt{j=a+1} 合法。（题1）
+  \item \textbf{因“没意义”排除合法式}：\texttt{a==b} 合法（值恒 0），问“能否编译”要选它。（题2）
+  \item \textbf{以为 \texttt{\{0\}} 只初始化第一个、其余随机}：其余自动补 0。（题3）
+  \item \textbf{以为数组大小必须是常量}：C99 起支持 VLA。（题4）
+  \item \textbf{冒泡内层边界写成 \texttt{j<6-i}}：访问 \texttt{a[j+1]} 越界，应为 \texttt{j<6-1-i}。（题5）
+  \item \textbf{升降序写反}：降序用 \texttt{<}，升序用 \texttt{>}。（题5）
+  \item \textbf{输出写成 \texttt{a} 而非 \texttt{a[i]}}：打印的是地址。（题5）
+  \item \textbf{下标用未初始化变量}：\texttt{a[g-c]} 中 g 未初始化，未定义。（题6）
+  \item \textbf{sizeof 与 strlen 混淆}：\texttt{"12345"} 的 sizeof 是 6、strlen 是 5。（题7）
+  \item \textbf{二维只省第一维}：\texttt{a[2][]} 非法。（题11）
+  \item \textbf{初始化裸值不开启新行}：\texttt{\{\{1\},\{2\},\{3\},4\}} 是 4 行，得 32。（题8）
+  \item \textbf{以为 4 个元素就占 4 字节}：二维按整行分配，\texttt{char[2][3]=6}。（题9）
+  \item \textbf{副对角线写成 \texttt{x[i][3-i]}}：应为 \texttt{x[i][2-i]}，否则越界；主对角线 \texttt{x[i][i]} 得 159 是干扰项。（题12）
+  \item \textbf{原地转置漏 \texttt{temp} 回填 / 内层用 \texttt{j<3}}：必须 \texttt{j<i} 且 \texttt{a[j][i]=temp}。（题13）
+  \item \textbf{矩阵乘法指标用错}：\texttt{c[i][j]} 用 \texttt{a[i][k]*b[k][j]}，中间是 k。（题10）
+  \item \textbf{忽略 \texttt{'\textbackslash 0'}}：\texttt{\textbackslash 0} 与 strlen、字符串字节数都相关。（题14–17）
+  \item \textbf{转义序列按“多个字符”数}：\texttt{'\textbackslash 010'}、\texttt{'\textbackslash x41'} 各算 1 字节。（题15、16）
+  \item \textbf{逆序边界写 \texttt{i<=j}}：会多换一次，用 \texttt{i<j}。（题18、19）
+  \item \textbf{原地删除后忘补 \texttt{'\textbackslash 0'}}：新串需手动终止。（题20）
+  \item \textbf{\%6s 宽度理解反}：默认右对齐，\texttt{\%-6s} 左对齐。（题22）
+  \item \textbf{字符串比较返回 0/1}：应返回首个不同字符的 ASCII 差。（题23）
+\end{enumerate}
+\end{yicuodian}
+
+\begin{tipbox}[自测指路 · 第 4 章]
+\begin{tabularx}{\linewidth}{p{5.4cm} X}
+\toprule
+知识点 & 对应题号\\
+\midrule
+数组名非左值 / 合法表达式 & 题 1、2\\
+初始化补 0 / VLA / sizeof & 题 3、4、8、9\\
+冒泡排序边界与升降序 & 题 5\\
+字符作下标 & 题 6\\
+sizeof 与 strlen & 题 7、14、15、16、17\\
+二维数组定义与初始化 & 题 8、9、11\\
+副对角线 / 矩阵转置 / 矩阵乘法 & 题 10、12、13\\
+字符串逆序 / 删除 / 计数 / 比较 & 题 18、19、20、21、23\\
+二维字符数组与 \texttt{\%6s} & 题 22\\
+\bottomrule
+\end{tabularx}
+\end{tipbox}
+
+\needspace{15\baselineskip}
+
+% =====================================================================================
+\section{函数}
+% =====================================================================================
+
+\subsection{知识框架}
+
+\begin{keybox}[本章脉络]
+\textbf{函数定义与调用} → \textbf{参数传递}（值传递 / 地址传递 / 数组作参）→ \textbf{递归}（出口、参数收敛、语句位置）→ \textbf{存储类别与作用域}（auto/register/static/extern）→ \textbf{宏与预处理}（文本替换、括号陷阱）。\\
+两条主线：\textbf{数据怎么传} 与 \textbf{变量活多久、谁能看见}。
+\end{keybox}
+
+\subsection{核心知识点}
+
+\subsubsection*{1. 参数传递\ \cstar\cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.4cm} X X X}
+\toprule
+传递方式 & 形参 & 能否改实参的值 & 能否改实参指向的数据\\
+\midrule
+\texttt{void f(int x)} & 副本 & \cbad & —\\
+\texttt{void f(int *p)} & 地址副本 & \cbad（改 p 本身无效） & \cok（改 \texttt{*p} 有效）\\
+\texttt{void f(int a[])} & 首元素地址 & \cbad & \cok（同一块内存）\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\begin{itemize}
+  \item \textbf{值传递}：形参是实参副本，函数内改形参不影响实参。
+  \item \textbf{数组作参数}：退化为首元素指针，形参和实参是\textbf{同一块内存}，函数内改元素会影响原数组（与“传副本”的直觉相反）。
+  \item \textbf{二维数组作形参}：必须写第二维，如 \texttt{void f(int a[][N])}（可省第一维）。
+  \item \textbf{结构体}传指针是为了\textbf{避免拷贝整个结构体}。
+  \item \textbf{按列处理}看下标：\texttt{a[j][i]}（i 固定、j 变）才是按列。
+\end{itemize}
+
+\subsubsection*{2. 递归\ \cstar\cstar\cstar}
+\begin{itemize}
+  \item 递归 = 函数调用自身，必须满足两条：(1) 有\textbf{出口（base case）}；(2) 参数\textbf{向出口收敛}（如 \texttt{n/10}、\texttt{n-1}）。否则无限递归 → 栈溢出。
+  \item \textbf{语句位置决定执行顺序}：写在递归调用\textbf{之前} → “递”的时候执行（正序）；写在\textbf{之后} → “归”的时候执行（逆序/回溯）。
+  \item 经典：辗转相减求 gcd；数字逐位输出（打印在递归前 → 高位到低位）。
+  \item 典型结论：\texttt{sub(\&x,4,1)} 回溯累加 4+2+1=7；\texttt{add(\&x,3,2)} 累加 1+3+5=9；\texttt{gcd(24,36)}=12。
+\end{itemize}
+
+\subsubsection*{3. 存储类别与作用域\ \cstar\cstar\cstar}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.7cm} p{2.6cm} p{2.6cm} p{2.0cm} X}
+\toprule
+存储类别 & 存放位置 & 生命周期 & 作用域 & 初值\\
+\midrule
+\texttt{auto}（默认） & 栈 & 函数执行期间 & 函数内 & 不确定（垃圾值）\\
+\texttt{register} & 寄存器（建议） & 函数执行期间 & 函数内 & 不确定\\
+\texttt{static} 局部 & 静态区 & \textbf{整个程序} & 函数内 & \textbf{自动为 0}\\
+\texttt{extern}/全局 & 静态区 & 整个程序 & 全程序 & 自动为 0\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\begin{itemize}
+  \item \textbf{static 局部变量}：只初始化\textbf{一次}，跨函数调用\textbf{保留上次的值}，但作用域仍只在函数内（别的函数看不见）。\textbf{作用域 $\neq$ 生命周期}是本章核心。
+  \item \textbf{默认存储类别}：函数内局部变量不写时默认 \texttt{auto}。
+  \item \textbf{extern} 是\textbf{声明}（变量定义在别处），不改值、不分配；题目问“其他函数不能访问又要保留值” → 选 \texttt{static}。
+  \item 全局变量：定义在所有函数外，本文件处处可见，初值 0。
+\end{itemize}
+
+\subsubsection*{4. 宏与编译预处理\ \cstar\cstar}
+\begin{itemize}
+  \item \texttt{\#define} 是\textbf{文本替换}，在预处理阶段完成，\textbf{不做类型检查}。
+  \item \textbf{函数式宏必须加括号}：参数加括号、整体再套一层括号。\\
+  \texttt{\#define SQ(x) ((x)*(x))} 才安全；写成 \texttt{\#define SQ(x) x*x}，则 \texttt{SQ(a+1)} 展开成 \texttt{a+1*a+1}，完全按运算符优先级走，结果错。
+  \item 宏展开后\textbf{单纯按运算符优先级}计算；带副作用参数（如 \texttt{SQ(i++)}）会被展开多次，慎用。
+  \item 对象宏 \texttt{\#define N 4}；可用 \texttt{\#undef} 取消。
+\end{itemize}
+
+\subsection{易错点清单}
+\begin{yicuodian}[第 5 章易错点（对应题 1–17）]
+\begin{enumerate}
+  \item \textbf{以为改形参就能改实参}：值传递改的是副本；想改实参要传地址并改 \texttt{*p}。（题1、14）
+  \item \textbf{以为数组作参传的是副本}：实际传首地址，改元素会影响原数组。（题1）
+  \item \textbf{二维数组形参漏第二维}：必须写成 \texttt{a[][N]}。（题2）
+  \item \textbf{把按列当成按行}：\texttt{a[j][i]} 才是按列；写反会得 \texttt{1,1,1,1,...}。（题2）
+  \item \textbf{第二次调用把 y 当新数组}：y 是同一块内存，第二次是覆盖不是追加。（题2）
+  \item \textbf{递归没有出口 / 参数不收敛}：\texttt{digit(n)} 应改 \texttt{digit(n/10)}，否则无限递归。（题5）
+  \item \textbf{双引号 \texttt{"a"} 与单引号 \texttt{'a'} 混用}：\texttt{n+"a"} 是整数加指针，错；要 \texttt{n+'a'}。（题5）
+  \item \textbf{递归语句位置理解错}：调用\textbf{后}的语句是回溯执行（逆序）。（题3、4、7）
+  \item \textbf{把递归硬推成循环}：本题恰好是累加才“碰巧”对，换运算就错。（题3）
+  \item \textbf{static 局部当普通局部}：它全程只有一份、只初始化一次、跨调用保留。（题7、13）
+  \item \textbf{static 的作用域与生命周期混淆}：作用域仍限函数内，但生命周期是整个程序。（题8）
+  \item \textbf{把“不被其他函数访问”当 extern}：方向反了，应选 static。（题9）
+  \item \textbf{漏看 \texttt{extern}}：\texttt{extern int x;} 让 x 绑定全局变量，不是新局部变量。（题10）
+  \item \textbf{全局变量作用域理解反}：全局变量在函数内可直接用。（题11）
+  \item \textbf{默认存储类别不是 auto}：局部变量默认 \texttt{auto}。（题12）
+  \item \textbf{宏不加括号}：\texttt{\#define SQ(x) x*x} 展开 \texttt{SQ(a+1)} 得 \texttt{a+1*a+1}，错。（题16）
+  \item \textbf{宏整体不加括号}：\texttt{\#define SQ(x) (x)*(x)} 在 \texttt{1/SQ(a)} 时仍出错，要整体再套一层。（题16、17）
+  \item \textbf{以为宏有类型检查 / 只算一次}：纯文本替换，副作用参数会被展开多次。（题16、17）
+\end{enumerate}
+\end{yicuodian}
+
+\begin{tipbox}[自测指路 · 第 5 章]
+\begin{tabularx}{\linewidth}{p{5.6cm} X}
+\toprule
+知识点 & 对应题号\\
+\midrule
+值传递 / 地址传递 / 数组作参 & 题 1、14\\
+二维数组作函数参数、按列求最值 & 题 2\\
+递归执行顺序（回溯） & 题 3、4\\
+递归出口与无限递归 & 题 5\\
+递归求最大公约数 & 题 6\\
+static 局部变量 + 递归 & 题 7、13、15\\
+存储类别 / 作用域 / 生命周期 & 题 8、9、12、15\\
+extern 与全局变量 & 题 10、11\\
+宏展开与括号 & 题 16、17\\
+\bottomrule
+\end{tabularx}
+\end{tipbox}
+
+\needspace{15\baselineskip}
+
+% =====================================================================================
+\appendix
+\section{运算符优先级与结合性总表}
+% =====================================================================================
+
+\begin{center}\small
+\begin{longtable}{>{\bfseries}p{1.0cm} p{8.6cm} >{\raggedright\arraybackslash}p{3.6cm}}
+\toprule
+优先级 & 运算符 & 结合性\\
+\midrule
+\endhead
+1 & \texttt{()} \texttt{[]} \texttt{->} \texttt{.}（成员/下标/调用） & 左\\
+2 & \texttt{++ --}（前缀）\ \texttt{! \textasciitilde}\ \texttt{\& * + -}（单目）\ \texttt{(类型)} \texttt{sizeof} & 右\\
+3 & \texttt{* / \%} & 左\\
+4 & \texttt{+ -} & 左\\
+5 & \texttt{<< >>} & 左\\
+6 & \texttt{< <= > >=} & 左\\
+7 & \texttt{== !=} & 左\\
+8 & \texttt{\&}（按位与） & 左\\
+9 & \texttt{\^{}}（按位异或） & 左\\
+10 & \texttt{|}（按位或） & 左\\
+11 & \texttt{\&\&}（逻辑与） & 左\\
+12 & \texttt{||}（逻辑或） & 左\\
+13 & \texttt{?:}（条件） & 右\\
+14 & \texttt{= += -= *= /= \%= <<= >>= \&= \^{}= |=} & 右\\
+15 & \texttt{,}（逗号） & 左\\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\noindent\textbf{记忆口诀}：括号成员第一；单目第二；乘除取余第三；加减第四；移位第五；关系第六；相等第七；位与、异或、位或依次；逻辑与、逻辑或；条件；赋值；逗号最低。\\
+\textbf{右结合只有三处}：单目运算、条件运算 \texttt{?:}、赋值运算。
+
+% =====================================================================================
+\section{高频“坑”口诀（考前速览）}
+% =====================================================================================
+
+\begin{keybox}[15 条口诀]
+\begin{enumerate}
+  \item 标识符：字母数字下划线，数字不开头，关键字不撞，大小写有别。
+  \item 转义：八进制只 0–7，\texttt{'\textbackslash 08'} 是坑；十六进制 \texttt{\textbackslash x} 随便长。
+  \item 多字符常量 \texttt{'Class'} 不正规；浮点小数点只能一个、指数必须整数。
+  \item \texttt{3/2=1}：类型看操作数，不看左边变量；\texttt{(int)} 向零截断不四舍五入。
+  \item scanf：格式对类型，double 用 \texttt{\%lf}，参数必取地址，字符串要有 \texttt{'\textbackslash 0'}。
+  \item 自增：前置先加后取，后置先取后加；同一变量多次改 = 未定义。
+  \item 短路：\texttt{\&\&} 左假停，\texttt{||} 左真停；\texttt{\&\&} 高于 \texttt{||}。
+  \item 逗号：值取最后一个，优先级最低；复合赋值右结合、值取新值。
+  \item \texttt{10<a<15} 恒为真；德摩根取反要翻比较符、换 \texttt{\&\&}/\texttt{||}。
+  \item switch 穿透：case 是入口不是边界，default 可放最前；break 只跳一层。
+  \item 悬挂 else 配最近 if；嵌套 if 一律加花括号。
+  \item 数组名不是左值：不能赋值、不能自增、\texttt{\&(i+j)} 非法；部分初始化自动补 0。
+  \item 二维只省第一维；副对角是 \texttt{x[i][n-1-i]}；原地转置只扫 \texttt{j<i}。
+  \item sizeof 数字节（含 \texttt{'\textbackslash 0'}），strlen 数字符（不含）；字符串字面量自带 \texttt{'\textbackslash 0'}。
+  \item 值传递改不了实参，数组传址能改元素；static 局部只初始化一次、跨调用保留；宏参数与整体都要加括号。
+\end{enumerate}
+\end{keybox}
+
+% =====================================================================================
+\section{自测使用建议}
+% =====================================================================================
+
+\begin{tipbox}[推荐复习节奏（可按考试时间压缩）]
+\begin{enumerate}
+  \item \textbf{第 1 遍（通读）}：每章看“知识框架 + 核心知识点”，把 \cstar\cstar\cstar 条目抄进自己的速记本。
+  \item \textbf{第 2 遍（刷题）}：按“自测指路”表的题号顺序做题；做完对答案，把踩中的易错点标号记下来。
+  \item \textbf{第 3 遍（复盘）}：只回看“易错点清单”里自己标过的条目，并重做错题。
+  \item \textbf{考前 1 天}：只看附录 A（优先级表）与附录 B（口诀），把易错点清单快速过一遍。
+\end{enumerate}
+\end{tipbox}
+
+\vspace{6pt}
+\noindent\textbf{在线题库入口}：\texttt{https://mind-city.com/question/}\\
+（第 1 章 \texttt{01-basics}，第 2 章 \texttt{02-data-and-expressions}，第 3 章 \texttt{03-control-flow}，第 4 章 \texttt{04-arrays}，第 5 章 \texttt{05-functions}）
+
+\vspace{10pt}
+\begin{center}
+\small\color{gray}
+—— 本讲义由备考题库第 1–5 章 85 道题反向整理，配合原题使用效果最佳 ——
+\end{center}
+
+\end{document}

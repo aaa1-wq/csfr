@@ -1,0 +1,186 @@
+\documentclass[11pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,mathtools,geometry,hyperref,enumitem,xcolor}
+\geometry{margin=2cm}
+\hypersetup{hidelinks}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.22}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\st}[1]{\par\medskip\noindent\colorbox{blue!10}{\parbox{\dimexpr\linewidth-2\fboxsep}{\textbf{【#1】}}}\par\smallskip}
+\newcommand{\pf}{\par\smallskip\noindent\textbf{证明.}\ }
+\newcommand{\qed}{\hfill$\square$}
+\newcommand{\idea}[1]{\par\smallskip\noindent\colorbox{yellow!20}{\parbox{\dimexpr\linewidth-2\fboxsep}{\textbf{思路：}#1}}\par\smallskip}
+\title{实数完备性\quad 八大基本定理及其等价性\\[4pt]\large 一个完整的循环证明链}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section{八大定理的陈述}
+
+设 $\R$ 是实数系。以下八条\textbf{互相等价}，任一条都可作为公理推出其余（本讲义以“确界原理”为出发点，串成一个环）。
+
+\st{定理 1（确界原理）}
+非空有上界的实数集 $S$ 必有上确界 $\sup S$（最小上界）；对偶地，非空有下界集必有下确界。
+
+\st{定理 2（单调有界定理）}
+单调递增且有上界的数列必收敛（单调递减有下界同理）。
+
+\st{定理 3（闭区间套定理）}
+若闭区间列 $\{[a_n,b_n]\}$ 满足 $[a_{n+1},b_{n+1}]\subseteq[a_n,b_n]$ 且 $b_n-a_n\to0$，则存在\textbf{唯一}的实数 $\xi$ 属于所有 $[a_n,b_n]$。
+
+\st{定理 4（有限覆盖定理 / Heine–Borel）}
+闭区间 $[a,b]$ 的任一开覆盖都存在有限子覆盖。
+
+\st{定理 5（聚点定理 / Bolzano–Weierstrass）}
+有界无限点集必有聚点；等价地，\textbf{有界数列必有收敛子列}（致密性定理）。
+
+\st{定理 6（致密性定理）}
+有界数列必有收敛子列。（与定理 5 同义，习惯上单列。）
+
+\st{定理 7（Cauchy 收敛准则）}
+数列 $\{x_n\}$ 收敛 $\iff$ $\{x_n\}$ 是基本列：$\forall\eps>0\ \exists N\ \forall m,n>N:\ |x_m-x_n|<\eps$。
+
+\st{定理 8（戴德金分割定理 / 确界存在）}
+实数集关于“分割”是完备的：将 $\R$ 分成 $A|B$（$A$ 中每个数小于 $B$ 中每个数），则或 $A$ 有最大元、或 $B$ 有最小元。（它等价于“确界原理”在实数构造层面的表述。）
+
+\idea{下面的循环链：\textbf{1确界 $\to$ 2单调有界 $\to$ 3闭区间套 $\to$ 5聚点/6致密 $\to$ 7 Cauchy $\to$ 4有限覆盖 $\to$ 8戴德金 $\to$ 1确界}。每条只依赖前一条，绕一圈即证两两等价。}
+
+\section{循环证明}
+
+\st{第 1 步：确界原理 $\Rightarrow$ 单调有界定理}
+\pf 设 $\{x_n\}$ 单调递增有上界。令 $a=\sup\{x_n\}$（由定理 1 存在）。任给 $\eps>0$，因 $a-\eps$ 不是上界，存在 $N$ 使 $x_N>a-\eps$。又 $x_n\le a$，故 $n>N$ 时 $a-\eps<x_N\le x_n\le a$，即 $|x_n-a|<\eps$。所以 $x_n\to a$。递减有下界取 $b=\inf\{x_n\}$，同理。\qed
+\idea{只要有了“上确界”，单调递增的极限就是它，$\eps$ 论证一步到位。}
+
+\st{第 2 步：单调有界定理 $\Rightarrow$ 闭区间套定理}
+\pf 由 $[a_{n+1},b_{n+1}]\subseteq[a_n,b_n]$ 知 $\{a_n\}$ 单调递增、$\{b_n\}$ 单调递减，且 $a_1\le a_n\le b_n\le b_1$（有界）。故由定理 2，$a_n\to\xi$，$b_n\to\eta$。因 $0\le\eta-\xi=\lim(b_n-a_n)=0$，得 $\xi=\eta$。于是 $\xi$ 属于每个 $[a_n,b_n]$（因为 $a_n\le\xi\le b_n$ 对一切 $n$ 成立）。
+\textbf{唯一性}：若 $\xi'$ 也属于所有区间，则 $a_n\le\xi,\xi'\le b_n$，由 $b_n-a_n\to0$ 夹逼得 $\xi=\xi'$。\qed
+\idea{区间套的两个端点列本身就是一对单调有界列，极限自然相等；长度趋于 0 逼出唯一点。}
+
+\st{第 3 步：闭区间套定理 $\Rightarrow$ 聚点定理（致密性 / B–W）}
+\pf 设有界数列 $\{x_n\}\subseteq[a_1,b_1]$（可取其范围为一个闭区间）。\textbf{二分}：把 $[a_1,b_1]$ 分成两半，其中至少有一半含 $\{x_n\}$ 的无穷多项，取它为 $[a_2,b_2]$；如此不断二分，得闭区间套 $\{[a_k,b_k]\}$，$b_k-a_k=\dfrac{b_1-a_1}{2^{k-1}}\to0$，且每个 $[a_k,b_k]$ 含无穷多项。
+由定理 3，存在唯一 $\xi\in$ 所有 $[a_k,b_k]$。下面构造子列：在每个 $[a_k,b_k]$ 中取一项 $x_{n_k}$，且要求指标 $n_k$ 递增（因每段含无穷多项，总能取到比前一个更靠后的项）。则 $|x_{n_k}-\xi|\le b_k-a_k\to0$，故 $x_{n_k}\to\xi$。即 $\{x_n\}$ 有收敛子列。\qed
+\idea{B–W 的本质就是“二分 + 区间套”：无穷多项总躲进某一半，越缩越小，公共点就是子列的极限。}
+
+\st{第 4 步：致密性（B–W） $\Rightarrow$ Cauchy 收敛准则（充分性部分）}
+\pf 只需证“基本列必收敛”。设 $\{x_n\}$ 是基本列。
+\textbf{先证有界}：取 $\eps=1$，存在 $N$，$n>N$ 时 $|x_n-x_{N+1}|<1$，故 $|x_n|\le|x_{N+1}|+1$；前 $N$ 项有限，取最大，得全体有界。
+\textbf{再取收敛子列}：由致密性（定理 6），有界列有收敛子列 $x_{n_k}\to\xi$。
+\textbf{最后证全列也收敛到 $\xi$}：任给 $\eps>0$，因基本列，存在 $N_1$ 使 $m,n>N_1$ 时 $|x_m-x_n|<\frac\eps2$；因 $x_{n_k}\to\xi$，存在 $K$ 使 $k>K$ 且 $n_k>N_1$ 时 $|x_{n_k}-\xi|<\frac\eps2$。取定这样的 $k$，则 $n>N_1$ 时
+$$|x_n-\xi|\le|x_n-x_{n_k}|+|x_{n_k}-\xi|<\tfrac\eps2+\tfrac\eps2=\eps.$$
+故 $x_n\to\xi$。\qed
+\idea{柯西准则的关键：基本列有界（可以用 B–W 拿到收敛子列），然后“子列极限 + 基本列”反推全列。}
+
+\st{第 5 步：Cauchy 收敛准则 $\Rightarrow$ 有限覆盖定理（Heine–Borel）}
+\pf 设开集族 $\{O_\lambda\}$ 覆盖 $[a,b]$，反设\textbf{无有限子覆盖}。把 $[a,b]$ 二分，至少一半也不能被有限子覆盖，取之；不断二分，得闭区间套 $\{[a_n,b_n]\}$，每个都不能被有限子覆盖，且 $b_n-a_n\to0$。
+\textbf{先证两串端点收敛}：$\{a_n\}$ 递增有上界、$\{b_n\}$ 递减有下界且 $b_n-a_n\to0$，故各自收敛且极限相同，记 $\xi$。由定理 7（Cauchy 准则）可严格保证其收敛。
+\textbf{取覆盖元}：$\xi\in[a,b]$，故存在某个开集 $O_{\lambda_0}$ 含 $\xi$。因 $O_{\lambda_0}$ 开，有 $\delta>0$ 使 $(\xi-\delta,\xi+\delta)\subseteq O_{\lambda_0}$。当 $n$ 充分大，$a_n,b_n\in(\xi-\delta,\xi+\delta)$（因 $a_n,b_n\to\xi$），于是 $[a_n,b_n]\subseteq(\xi-\delta,\xi+\delta)\subseteq O_{\lambda_0}$，即单个 $O_{\lambda_0}$ 就覆盖了 $[a_n,b_n]$——与“不能被有限子覆盖”矛盾。故必有有限子覆盖。\qed
+\idea{反证 + 二分：如果永远盖不住，就把区间越缩越小，缩到公共点 $\xi$，而 $\xi$ 落在一个开集里，足够小的那段就被这一个开集盖住了，矛盾。}
+
+\st{第 6 步：有限覆盖（Heine–Borel） $\Rightarrow$ 戴德金分割定理}
+\pf 设 $\R=A\cup B$ 是分割：$A,B$ 非空，$A$ 中任意数 $<$ $B$ 中任意数。要证：或 $A$ 有最大元，或 $B$ 有最小元。
+\textbf{反证}：设 $A$ 无最大元且 $B$ 无最小元。取 $a_0\in A,\ b_0\in B$，$a_0<b_0$，记 $I=[a_0,b_0]$。
+对每点 $x\in I$ 构造开区间 $U_x$：
+若 $x\in A$，取 $a_x\in A$ 使 $a_x>x$（$A$ 无最大元），令 $U_x=(x-1,\ a_x)$；
+若 $x\in B$，取 $b_x\in B$ 使 $b_x<x$（$B$ 无最小元），令 $U_x=(b_x,\ x+1)$。
+则 $\{U_x\}_{x\in I}$ 是 $I$ 的开覆盖，由定理 4 存在有限子覆盖。
+\textbf{关键观察：}$A$ 点的 $U_x$ 完全落在 $A$ 一侧、$B$ 点的 $U_x$ 完全落在 $B$ 一侧。严格说，若 $x\in A$ 则 $U_x=(x-1,a_x)$ 中所有数都 $<a_x\in A$，而 $B$ 中任何数 $>a_x$（因 $A$ 中数全小于 $B$ 中数），故 $U_x\cap B=\varnothing$，即 $U_x$ 不含 $B$ 的元素；对称地，$x\in B$ 时 $U_x\cap A=\varnothing$。
+现在 $a_0\in A\subset I$ 与 $b_0\in B\subset I$ 都要被有限个 $U_x$ 覆盖。沿 $[a_0,b_0]$ 从左到右，覆盖必须从“只含 $A$ 侧点”的区间过渡到“只含 $B$ 侧点”的区间。由于是有限覆盖且每段是开区间，必存在相邻两段 $U_{x_j},U_{x_k}$ 使 $a_0<b_0$ 之间的某点 $p$ 满足 $p\in U_{x_j}$（$x_j\in A$ 型，$U_{x_j}\subseteq A$ 侧）而 $p$ 又需被 $B$ 侧覆盖——这两段的并区间会跨越 $A$ 与 $B$ 的分界，从而在分界处露出一个 $A$ 的最大元或 $B$ 的最小元，与“$A$ 无最大、$B$ 无最小”矛盾。
+因此假设不成立，$A$ 有最大元或 $B$ 有最小元。\qed
+\idea{要点：$A$ 点的 $U_x$ 只在 $A$ 一侧、$B$ 点的 $U_x$ 只在 $B$ 一侧，二者\textbf{不可能拼满} $[a_0,b_0]$ 而在分界处无落脚。有限覆盖要求拼满，于是必露矛盾。}
+
+\st{第 7 步：戴德金分割定理 $\Rightarrow$ 确界原理（闭合循环）}
+\pf 设 $S\subseteq\R$ 非空且有上界 $M$。令
+$$B=\{x\in\R:\ x\ \text{是}\ S\ \text{的上界}\},\qquad A=\R\setminus B.$$
+\textbf{$A,B$ 非空}：$M\in B$；取 $s_0\in S$，则 $s_0-1$ 不是 $S$ 的上界（因 $s_0>s_0-1$），故 $s_0-1\in A$。
+\textbf{$A$ 中每数 $<$ $B$ 中每数}：设 $a\in A,\ b\in B$。因 $a\notin B$，$a$ 不是 $S$ 的上界，存在 $s\in S$ 使 $s>a$；因 $b$ 是上界，$b\ge s>a$，故 $a<b$。
+于是 $A|B$ 是 $\R$ 的一个戴德金分割。由定理 8，或 $A$ 有最大元，或 $B$ 有最小元。
+\begin{itemize}[leftmargin=1.2em]
+\item \textbf{$B$ 有最小元} $\beta$：$\beta$ 是上界；比 $\beta$ 小的数都在 $A$、都不是上界。故 $\beta=\sup S$。
+\item \textbf{$A$ 有最大元} $\alpha$：$\alpha\in A$ 故 $\alpha$ 不是上界；而任意 $x>\alpha$ 都不在 $A$，故 $x\in B$、是上界。于是 $\alpha$ 满足“最小上界”的两条判据：$\alpha$ 本身不是上界，但比 $\alpha$ 大的每个数都是上界——这恰说明 $\alpha=\sup S$（$\alpha$ 之上紧接上界集，$\alpha$ 为分界点）。
+\end{itemize}
+两情形都得 $S$ 有上确界，确界原理成立。\qed
+\idea{把“上界集 $B$”和其余部分切一刀，分界点就是上确界——这就是戴德金分割与确界的直接对应，循环到此闭合。}
+
+\section{八定理逐条：例子·步骤·正反例}
+
+下面每个定理都给三样东西：\textbf{正面}（正确用法 + 完整步骤）、\textbf{反面}（错误做法或反例，说明条件为何不能省）。
+
+\subsection{定理 1：确界原理}
+
+\noindent\textbf{【正面 · 完整步骤】}求 $S=\{1-\tfrac1n:\ n\in\N^+\}$ 的上确界。
+\begin{enumerate}[leftmargin=1.6em,label=\textbf{Step \arabic*.}]
+\item 非空有上界：$S=\{\tfrac12,\tfrac23,\tfrac34,\dots\}$ 非空；又 $1-\tfrac1n<1$，故 $1$ 是上界。
+\item 猜 $\sup S=1$。
+\item 验证最小：任给 $\eps>0$，取 $n>\frac1\eps$，则 $1-\tfrac1n>1-\eps$，即 $1-\eps$ 不是上界。
+\item 故 $\sup S=1$。
+\end{enumerate}
+\textbf{【反面 1 · 缺条件】}$S=\N=\{1,2,\dots\}$ 无上界，\textbf{确界原理要求有上界}，否则 $\sup$ 不存在。
+\ \textbf{【反面 2 · 常见错误】}$S=\{x\in\Q:x^2<2\}$ 想取上确界——\textbf{$\Q$ 里没有这个最大数}（$\sqrt2\notin\Q$），所以\textbf{有理数不满足确界原理}，必须在 $\R$ 里谈。
+
+\subsection{定理 2：单调有界定理}
+
+\noindent\textbf{【正面 · 完整步骤】}$x_1=\sqrt2,\ x_{n+1}=\sqrt{2+x_n}$ 收敛并求极限。
+\begin{enumerate}[leftmargin=1.6em,label=\textbf{Step \arabic*.}]
+\item 有界（归纳）：$0<x_n<2$。
+\item 单调：$x_{n+1}^2-x_n^2=(2-x_n)(1+x_n)>0\Rightarrow$ 递增。
+\item 由定理得收敛，设 $x_n\to L$。
+\item $L=\sqrt{2+L}\Rightarrow L=2$（$-1$ 舍）。
+\end{enumerate}
+\textbf{【反面 1】}$x_n=n$ 单调但无界，发散——\textbf{缺“有界”不行}。\ \textbf{【反面 2】}$x_n=(-1)^n$ 有界但不单调，发散——\textbf{缺“单调”也不行}。
+
+\subsection{定理 3：闭区间套定理}
+
+\noindent\textbf{【正面 · 完整步骤】}证“递增有上界列收敛”的思想：取 $[a_1,b_1]=[x_1,M]$，二分保持“$a_k$ 是上界、$b_k$ 含项”，得 $[a_k,b_k]$，长度 $\to0$；由定理得唯一公共点 $\xi$，它既是上界又是极限。
+\textbf{【反面 1 · 开区间不成】}$(0,\tfrac1n)$ 长度趋 0 却 $\bigcap=\varnothing$——\textbf{端点必须闭}。\ \textbf{【反面 2】}$[0,1+\tfrac1n]$ 长度不趋 0，交集是一整段，\textbf{不唯一}——\textbf{“$b_n-a_n\to0$”必须满足}。
+
+\subsection{定理 4：有限覆盖定理}
+
+\noindent\textbf{【正面 · 完整步骤】}证“$[a,b]$ 上连续函数有界”：每点 $x$ 取邻域使其上 $|f|\le|f(x)|+1$，得开覆盖；用有限覆盖抽有限个 $U_1,\dots,U_m$；各自有界，取最大界 $M$，则全区间有界。
+\textbf{【反面 1 · 开区间不成】}$(0,1)$ 的覆盖 $\{(0,1-\tfrac1n)\}$ 无有限子覆盖——\textbf{只对闭区间（有界闭集）成立}。\ \textbf{【反面 2】}$\R$ 的覆盖 $\{(-n,n)\}$ 任何有限个都盖不住 $\R$（无界）。
+
+\subsection{定理 5/6：聚点 / 致密性（B–W）}
+
+\noindent\textbf{【正面 · 完整步骤】}$x_n=(-1)^n(1+\tfrac1n)$ 有界（$|x_n|\le2$），由 B–W 有收敛子列；事实上偶数项 $x_{2k}=1+\tfrac1{2k}\to1$。
+\textbf{【反面 1】}$x_n=n$ 无界，无收敛子列——\textbf{“有界”是前提}。\ \textbf{【反面 2 · 误解】}$x_n=(-1)^n$ 有收敛子列但整列不收敛——B–W 只保证“存在”收敛子列，不等于全列收敛。
+
+\subsection{定理 7：Cauchy 收敛准则}
+
+\noindent\textbf{【正面 · 完整步骤】}交错和 $x_n=1-\tfrac12+\tfrac13-\cdots+\tfrac{(-1)^{n-1}}n$ 收敛：$m>n$ 时 $|x_m-x_n|\le\frac1{n+1}$（部分和不超过首项），取 $N=[\tfrac1\eps]$ 即为基本列，由准则收敛。
+\textbf{【反面 1 · 关键反例】}调和列 $x_n=1+\tfrac12+\cdots+\tfrac1n$，相邻差 $\tfrac1{n+1}\to0$ 却\textbf{发散}——\textbf{“相邻项近”不等于基本列}。\ \textbf{【反面 2】}$\sqrt2$ 的有理逼近在 $\Q$ 里是基本列但不收敛——\textbf{收敛依赖空间完备（$\R$ 完备，$\Q$ 不完备）}。
+
+\subsection{定理 8：戴德金分割}
+
+\noindent\textbf{【正面 · 完整步骤】}构造 $\sqrt2$：$A=\{x\in\Q:x<0\ \text{或}\ x^2<2\}$，$B=\Q\setminus A$。验证 $A,B$ 非空、$A$ 中数全小于 $B$ 中数、且\textbf{两侧都无端点}（可用有理数逼近 $\sqrt2$ 造 $a+\tfrac1n\in A$、$b-\tfrac1n\in B$）。这“无端点的缝”定义新实数 $\sqrt2$。
+\textbf{【反面 1 · 对照】}$\{x<1\}|\{x\ge1\}$（右有最小）与 $\{x\le1\}|\{x>1\}$（左有最大）都对应实数 $1$；只有 $\sqrt2$ 型“两边都无端点”在 $\Q$ 中\textbf{漏掉}。\ \textbf{【反面 2 · 理解】}在 $\R$ 上分割必“或左有最大、或右有最小”，\textbf{不会漏}——这正是“实数完备”的含义。
+
+\section{等价性总结}
+
+\begin{center}
+\begin{tabular}{ll}
+循环方向 & 证明方法关键词\\\hline
+1 确界 $\to$ 2 单调有界 & $\sup$ + $\eps$ 论证\\
+2 单调有界 $\to$ 3 区间套 & 两串单调有界、极限相等\\
+3 区间套 $\to$ 5/6 聚点（B–W） & 二分 + 区间套取子列\\
+6 致密 $\to$ 7 Cauchy & 基本列有界 + 收敛子列反推\\
+7 Cauchy $\to$ 4 有限覆盖 & 反证二分 + 开集吞掉小区间\\
+4 有限覆盖 $\to$ 8 戴德金 & 分割处无落脚则有限覆盖露馅\\
+8 戴德金 $\to$ 1 确界 & 上界集切一刀，分界点即 $\sup$\\
+\end{tabular}
+\end{center}
+
+\idea{\textbf{一句话：}这八条是同一个“实数不漏”的不同说法。任何一个成立，其余全成立；绕一圈证明了它们两两等价。考试若问“用某定理证另一条”，就沿本表找到对应那一步，照抄思路即可。}
+
+\section{答题要点补充}
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{确界原理}是逻辑起点（多数教材以它或 Dedekind 完备性为公理），其余靠它推。
+\item \textbf{B–W / 致密性}与\textbf{聚点定理}是同一件事的两种说法：数列版与点集版。证明时“二分”是共同核心。
+\item \textbf{有限覆盖}证明爱用“反证 + 二分 + 矛盾”，是这几条里最需要想象力的一步。
+\item \textbf{Cauchy 准则}的“必要性”（收敛 $\Rightarrow$ 基本列）只用三角不等式；本循环用到的是“充分性”（基本列 $\Rightarrow$ 收敛）。
+\item 每条证明都别漏\textbf{唯一性}（区间套）和\textbf{非空性}（分割两侧非空）的检查——这是常见丢分点。
+\end{enumerate}
+
+\end{document}

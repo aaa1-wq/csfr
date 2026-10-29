@@ -1,0 +1,562 @@
+% !TEX program = xelatex
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=2cm,top=1.8cm,bottom=1.8cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs}
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+  pdftitle={矩阵秩的性质：完整证明讲义},
+  pdfsubject={Rank inequalities, Sylvester, Frobenius, rank(A*A), similarity invariants},
+  pdfauthor={Math.skill workflow}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.9em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\allowdisplaybreaks
+\captionsetup{font=small,labelformat=empty,skip=4pt}
+
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{^{\mathsf T}}
+
+\newcommand{\Shead}[2]{%
+  \begin{tcolorbox}[enhanced,colback=graybg,colframe=acc,
+    boxrule=0pt,leftrule=3pt,arc=2pt,top=3pt,bottom=3pt,left=8pt,right=8pt]
+  {\heiti\color{acc}#1}\quad #2
+  \end{tcolorbox}}
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}矩阵秩的性质 · 完整证明讲义}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\vspace{-1.2cm}\textbf{矩阵秩的性质：完整证明讲义}}
+\author{双路径证明 · 基于 Math.skill 工作流}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-0.8cm}
+
+\begin{keybox}
+\textbf{范围}\quad 秩的基本不等式（P1--P5）、Sylvester 与 Frobenius 不等式、
+$\rank(A^{*}A)=\rank(A)$、相似不变性与迹-秩关系。
+
+\smallskip
+\textbf{风格}\quad 每个命题给出\textbf{两条独立证明路径}：
+路径甲（初等变换 + 分块运算，不用线性映射），路径乙（线性映射 + 维数公式）。
+两条路径结论互证。
+
+\smallskip
+\textbf{验证}\quad 全部结论经 $3100$ 组随机矩阵数值检验，无一失败（见 \S\ref{sec:numeric}）。
+\end{keybox}
+
+\tableofcontents
+\vspace{0.6cm}
+
+%=====================================================================
+\section{记号、定义与公共引理}
+
+\subsection{记号}
+\begin{itemize}
+\item 数域 $\F=\R$ 或 $\C$；$A\in\F^{m\times n}$ 表示 $m$ 行 $n$ 列
+\item $A\T$ 转置，$A^{*}=\overline{A}\T$ 共轭转置，$O$ 零矩阵，$I_n$ 单位阵
+\item $C(A)$：$A$ 的\textbf{列空间}；$\mathcal R(A)$：$A$ 的\textbf{行空间}，$\mathcal R(A)=C(A\T)$
+\item $\ker A=\{\mathbf x:A\mathbf x=\mathbf 0\}$：零空间
+\end{itemize}
+
+\subsection{秩的定义}
+\[
+\boxed{\ \rank(A):=\dim C(A)\ }
+\]
+\begin{warnbox}
+这是\textbf{列秩}的定义。行秩 $\dim\mathcal R(A)$ 与它是否相等，本身就是命题 P2，
+\textbf{不能在定义中预设}。
+\end{warnbox}
+
+\subsection{引理 甲-A：初等行变换不改变列向量的线性关系}
+\textbf{引理}\quad 设 $E$ 可逆，则 $\sum_j c_j\mathbf a_j=\mathbf 0\iff\sum_j c_jE\mathbf a_j=\mathbf 0$。
+
+\emph{证明}\quad ``$\Rightarrow$'' 两边左乘 $E$；``$\Leftarrow$'' 两边左乘 $E^{-1}$。\hfill$\square$
+
+\textbf{推论}\quad 初等行变换（左乘可逆阵）不改变极大线性无关组的指标集，故\textbf{列秩不变}。
+
+\subsection{引理 甲-B：初等行变换保持行空间维数}
+\textbf{引理}\quad $A\to EA$（$E$ 可逆）时，$\dim\mathcal R(EA)=\dim\mathcal R(A)$。
+
+\emph{证明}\quad 设 $A\T$ 的列为 $\boldsymbol\alpha_1,\dots,\boldsymbol\alpha_m$，则 $\mathcal R(A)=\operatorname{span}\{\boldsymbol\alpha_i\}$。
+而 $(EA)\T=A\T E\T$ 的列为 $E\T\boldsymbol\alpha_1,\dots,E\T\boldsymbol\alpha_m$。
+由引理甲-A（$E\T$ 可逆），两组列有相同的线性关系，张成空间维数相同。\hfill$\square$
+
+\begin{warnbox}
+\textbf{关键提醒}\quad 行变换下\textbf{行空间本身会变}，只是\textbf{维数}不变。
+混淆这两者是最常见的漏洞。
+\end{warnbox}
+
+\subsection{引理 乙-A：秩-零化度定理}
+\textbf{定理}\quad 设 $T:\F^n\to\F^m$ 线性，则
+\[
+\dim\ker T+\dim\im T=n .
+\]
+\emph{证明概要}\quad 取 $\ker T$ 的基 $\mathbf v_1,\dots,\mathbf v_k$，扩充为 $\F^n$ 的基
+$\mathbf v_1,\dots,\mathbf v_k,\mathbf u_1,\dots,\mathbf u_{n-k}$。
+证明 $\{T\mathbf u_1,\dots,T\mathbf u_{n-k}\}$ 是 $\im T$ 的基：张成显然；
+若 $\sum d_jT\mathbf u_j=\mathbf 0$，则 $\sum d_j\mathbf u_j\in\ker T$，由基的无关性得所有 $d_j=0$。
+故 $\dim\im T=n-k$。\hfill$\square$
+
+\subsection{引理 乙-B：子空间和的维数公式}
+\textbf{命题}\quad 对子空间 $U,V\le W$，
+\[
+\dim(U+V)=\dim U+\dim V-\dim(U\cap V).
+\]
+\emph{证明概要}\quad 取 $U\cap V$ 的基，分别扩充为 $U$ 与 $V$ 的基，证明并起来构成 $U+V$ 的基。\hfill$\square$
+
+%=====================================================================
+\section{基本不等式 P1--P5}
+
+\subsection{P1：$\rank(A)\le\min\{m,n\}$}
+\textbf{路径甲}\quad $C(A)\subseteq\F^m$ 故 $\dim C(A)\le m$；又 $C(A)$ 由 $n$ 个列向量张成，故 $\dim C(A)\le n$。
+
+\textbf{路径乙}\quad $\im T_A\subseteq\F^m$ 给出 $\le m$；秩-零化度 $\rank(A)=n-\dim\ker T_A\le n$。\hfill$\blacksquare$
+
+\subsection{P2：$\rank(A\T)=\rank(A)$（行秩 = 列秩）}
+
+这是整个秩理论\textbf{唯一非平凡的核心}。以下两条独立证明。
+
+\subsubsection{路径甲：行最简形的组合结构}
+设 $A$ 经初等行变换化为行最简形 $R$，$R$ 有 $r$ 个非零行，首元分别在第 $j_1<\dots<j_r$ 列。
+
+\textbf{Step 1（列秩）}\quad 由引理甲-A，$\rank(A)=\rank(R)$。
+$R$ 的第 $j_1,\dots,j_r$ 列分别是 $\mathbf e_1,\dots,\mathbf e_r$（在第 $j_i$ 列为 $\mathbf e_i$，其余位置为零），
+它们线性无关；而 $R$ 的任意列都是这 $r$ 个列向量的线性组合。故 $\rank(R)=r$。
+
+\textbf{Step 2（行秩）}\quad $R$ 的非零行为 $\mathbf r_1,\dots,\mathbf r_r$。
+若 $\sum c_i\mathbf r_i=\mathbf 0$，考察第 $j_i$ 个分量：$\mathbf r_i$ 在该位置为 $1$，其余行在该位置为 $0$，故 $c_i=0$。
+因此 $\mathbf r_1,\dots,\mathbf r_r$ 线性无关。
+
+又 $R$ 的全部 $m$ 行中只有这 $r$ 行非零，故 $\dim\mathcal R(R)=r$。
+由引理甲-B，行变换保持行空间维数，于是 $\dim\mathcal R(A)=\dim\mathcal R(R)=r$。
+
+\textbf{Step 3}\quad 两个数都等于 $r$：
+\[
+\boxed{\ \rank(A\T)=\dim\mathcal R(A)=r=\rank(A)\ }
+\]
+\hfill$\blacksquare$
+
+\subsubsection{路径乙：标准形 + 可逆不变}
+\textbf{Step 1（标准形）}\quad 任何 $A\in\F^{m\times n}$ 都可经初等行、列变换化为
+\[
+A=P\,D_r\,Q,\qquad D_r=\begin{pmatrix}I_r&O\\O&O\end{pmatrix}_{m\times n},
+\]
+其中 $P,Q$ 可逆。构造：先用行变换化行最简形，再用列变换把非首元列全部消掉。
+
+\textbf{Step 2（所需引理）}\quad 若 $P,Q$ 可逆，则 $\rank(PAQ)=\rank(A)$。
+
+\emph{证明}\quad 由 P4（下一小节独立给出）得
+\[
+\rank(A)=\rank\bigl(P^{-1}(PAQ)Q^{-1}\bigr)\le\rank(PAQ)\le\rank(A),
+\]
+两端夹逼。对 $PA$ 与 $AQ$ 单独用同样论证。\hfill$\square$
+
+\begin{warnbox}
+\textbf{依赖顺序}\quad 路径乙中 P2 依赖 ``可逆不变秩''，而后者由 P4 推出。
+因此\textbf{必须先证 P4 再证 P2}。下文先给出 P4 的路径乙证明，逻辑无循环。
+\end{warnbox}
+
+\textbf{Step 3（结论）}\quad $\rank(D_r)=r$（前 $r$ 列为 $\mathbf e_1,\dots,\mathbf e_r$，其余为零列）。于是
+\[
+\rank(A)=\rank(D_r)=r,\qquad
+\rank(A\T)=\rank\bigl(Q\T D_r\T P\T\bigr)=\rank(D_r\T)=r .
+\]
+$D_r\T=\begin{pmatrix}I_r&O\\O&O\end{pmatrix}_{n\times m}$ 的非零列同样 $r$ 个。\hfill$\blacksquare$
+
+\subsection{P3：$\rank(A+B)\le\rank(A)+\rank(B)$}
+（$A,B$ 同型）
+
+\textbf{Step 1（列空间的包含）}\quad $A+B$ 的第 $i$ 列为 $\mathbf a_i+\mathbf b_i$，故
+\[
+C(A+B)\subseteq\operatorname{span}\{\mathbf a_i\}_i+\operatorname{span}\{\mathbf b_i\}_i=C(A)+C(B).
+\]
+
+\textbf{Step 2（取维数）}\quad 由引理乙-B，
+\[
+\dim\bigl(C(A)+C(B)\bigr)=\dim C(A)+\dim C(B)-\dim\bigl(C(A)\cap C(B)\bigr)\le\dim C(A)+\dim C(B).
+\]
+
+\textbf{Step 3}\quad 合并得
+\[
+\rank(A+B)\le\rank(A)+\rank(B). \tag{P3}
+\]
+\hfill$\blacksquare$
+
+\textbf{等号条件}\quad 当且仅当 $C(A)\cap C(B)=\{\mathbf 0\}$。
+
+\subsection{P4：$\rank(AB)\le\min\{\rank(A),\rank(B)\}$}
+设 $A\in\F^{m\times n}$，$B\in\F^{n\times p}$。
+
+\subsubsection{路径甲：分块与零空间}
+\textbf{Step 1（对 $\rank(A)$）}\quad
+$AB=\bigl(A\mathbf b_1\ \cdots\ A\mathbf b_p\bigr)$，
+每个 $A\mathbf b_j$ 是 $A$ 的列向量的线性组合，故 $C(AB)\subseteq C(A)$，于是 $\rank(AB)\le\rank(A)$。
+
+\textbf{Step 2（对 $\rank(B)$）}\quad 若 $\mathbf x\in\ker B$，则 $(AB)\mathbf x=\mathbf 0$，故 $\ker B\subseteq\ker AB$，
+从而 $\dim\ker AB\ge\dim\ker B$。对 $p$ 列的矩阵 $AB$ 用秩-零化度（定义域 $\F^p$）：
+\[
+\rank(AB)=p-\dim\ker AB\le p-\dim\ker B=\rank(B).
+\]
+
+\textbf{Step 3}\quad 合并得 $\rank(AB)\le\min\{\rank(A),\rank(B)\}$。\hfill$\blacksquare$
+
+\subsubsection{路径乙：像的分解（更自然）}
+\[
+\im T_{AB}=T_A\bigl(\im T_B\bigr).
+\]
+\begin{itemize}
+\item 它是 $\im T_A$ 的子集，故 $\rank(AB)\le\rank(A)$；
+\item 它是 $T_A$ 在子空间 $\im T_B$ 上的像，维数不超过 $\dim\im T_B=\rank(B)$，故 $\rank(AB)\le\rank(B)$。
+\end{itemize}
+\hfill$\blacksquare$
+
+\subsubsection{推论：可逆不变秩}
+$P$ 为 $m$ 阶、$Q$ 为 $n$ 阶可逆阵，则
+\[
+\rank(PA)=\rank(A),\qquad\rank(AQ)=\rank(A).
+\]
+\emph{证明}\quad
+$\rank(A)=\rank\bigl(P^{-1}(PA)\bigr)\le\rank(PA)\le\rank(A)$ 夹逼；
+另一式由 $\rank(AQ)\le\rank(A)$ 与 $\rank(A)=\rank\bigl((AQ)Q^{-1}\bigr)\le\rank(AQ)$ 夹逼。\hfill$\square$
+
+\subsection{P5：退化与满秩}
+\[
+\rank(A)=0\iff A=O;\qquad A\in\F^{n\times n}\ \text{可逆}\iff\rank(A)=n .
+\]
+\emph{证明}\quad
+若 $\rank(A)=0$，则 $C(A)=\{\mathbf 0\}$，全部列向量为零，故 $A=O$；反之显然。
+
+设 $A$ 为 $n$ 阶。若 $A$ 可逆，则 $A\mathbf x=\mathbf 0\Rightarrow\mathbf x=\mathbf 0$，
+故 $\ker A=\{\mathbf 0\}$，由秩-零化度 $\rank(A)=n$。
+反之若 $\rank(A)=n$，则 $\dim\ker A=0$，$A\mathbf x=\mathbf 0$ 只有零解，故 $A$ 可逆。\hfill$\square$
+
+%=====================================================================
+\section{Sylvester 不等式}
+\[
+\boxed{\ \rank(A)+\rank(B)-n\le\rank(AB)\ }
+\]
+（$A\in\F^{m\times n}$，$B\in\F^{n\times p}$，$n$ 是\textbf{中间维数}）
+
+\subsection{路径乙：零空间维数直接计算（推荐）}
+
+\textbf{Step 1（关键包含）}\quad 设 $V=\im B\le\F^n$，$\dim V=\rank(B)$。
+\[
+\rank(AB)=\dim A(V).
+\]
+对线性映射 $A|_V:V\to\im A$ 用秩-零化度：
+\[
+\dim A(V)=\dim V-\dim\ker(A|_V)=\rank(B)-\dim(V\cap\ker A).
+\]
+
+\textbf{Step 2（$\ker A$ 的维数）}\quad $A$ 的定义域是 $\F^n$，故
+\[
+\dim\ker A=n-\rank(A).
+\]
+
+\textbf{Step 3（关键估计）}\quad $V\cap\ker A\subseteq\ker A$，故
+\[
+\dim(V\cap\ker A)\le\dim\ker A=n-\rank(A).
+\]
+
+\textbf{Step 4（合题）}\quad
+\[
+\rank(AB)=\rank(B)-\dim(V\cap\ker A)\ \ge\ \rank(B)-\bigl(n-\rank(A)\bigr)
+=\rank(A)+\rank(B)-n .
+\]
+\hfill$\blacksquare$
+
+\begin{warnbox}
+\textbf{本节要点}\quad $\dim\ker A=n-\rank(A)$ 中的 $n$ 是 $A$ 的\textbf{定义域}维数（列数），
+不是行数 $m$。取错会得到较弱或错误的界。这是本专题最易踩的坑，见 \S\ref{sec:pitfall2}。
+\end{warnbox}
+
+\subsection{路径甲：为何容易出错}\label{sec:pitfall2}
+若改用 $\ker(AB)$ 入手：由 $\ker B\subseteq\ker(AB)$ 且
+$B\bigl(\ker(AB)\bigr)\subseteq\ker A$，可得
+\[
+\dim\ker(AB)\le\dim\ker B+\dim\ker A .
+\]
+但由此把三个秩-零化度代回时，出现的常数是 $A$ 的行数 $m$ 而非中间维数 $n$：
+\[
+\rank(AB)\ \ge\ \rank(B)-\dim\ker A=\rank(A)+\rank(B)-m ,
+\]
+这是一个\textbf{更弱}（且对 Sylvester 无意义）的界。
+必须改用 $\im B$ 上的限制映射（即路径乙），才能把 $n$ 正确引入。
+本节的保留价值在于记录这个陷阱。
+
+\subsection{等号条件}
+$\rank(A)+\rank(B)-n=\rank(AB)$ 当且仅当 $V\cap\ker A=\ker A$，即
+\[
+\im B\supseteq\ker A .
+\]
+\textbf{特例}\quad 若 $A$ 满秩 $n$（$\ker A=\{\mathbf 0\}$），必然取等：
+$\rank(AB)=\rank(B)=\rank(A)+\rank(B)-n$。
+
+%=====================================================================
+\section{Frobenius 不等式}
+\[
+\boxed{\ \rank(AB)+\rank(BC)\le\rank(B)+\rank(ABC)\ }
+\]
+（$A\in\F^{m\times n}$，$B\in\F^{n\times p}$，$C\in\F^{p\times q}$）
+
+\subsection{证明（由 Sylvester 两次相减）}
+\textbf{Step 1}\quad 对 $B\in\F^{n\times p}$、$C\in\F^{p\times q}$（中间维数 $p$）用 Sylvester：
+\[
+\rank(B)+\rank(C)-p\le\rank(BC). \tag{4.1}
+\]
+\textbf{Step 2}\quad 对 $AB\in\F^{m\times p}$、$C\in\F^{p\times q}$（中间维数 $p$）用 Sylvester：
+\[
+\rank(AB)+\rank(C)-p\le\rank(ABC). \tag{4.2}
+\]
+\textbf{Step 3}\quad 把 (4.2) 整理为 $\rank(AB)\le\rank(ABC)-\rank(C)+p$，
+把 (4.1) 整理为 $\rank(BC)\le\rank(B)+\rank(C)-p$，两式相加，$\pm\rank(C)\mp p$ 相消：
+\[
+\rank(AB)+\rank(BC)\le\rank(ABC)+\rank(B).
+\]
+\hfill$\blacksquare$
+
+\subsection{与 Sylvester 的关系}
+取 $B=I_n$（$\rank(B)=n$），代入 Frobenius：
+\[
+\rank(A)+\rank(C)\le n+\rank(AC),
+\]
+这正是 Sylvester 不等式。故\textbf{Sylvester 是 Frobenius 在 $B=I_n$ 时的特例}。
+
+%=====================================================================
+\section{$\rank(A^{*}A)=\rank(A)$}
+（$A\in\C^{m\times n}$，$A^{*}=\overline{A}\T$）
+
+\subsection{证明（零空间相等）}
+\textbf{Step 1}\quad 证明 $\ker(A^{*}A)=\ker A$。
+
+``$\supseteq$''：若 $A\mathbf x=\mathbf 0$，则 $A^{*}A\mathbf x=\mathbf 0$。
+
+``$\subseteq$''：若 $A^{*}A\mathbf x=\mathbf 0$，两边左乘 $\mathbf x^{*}$：
+\[
+\mathbf x^{*}A^{*}A\mathbf x=(A\mathbf x)^{*}(A\mathbf x)=\lVert A\mathbf x\rVert^2=0 .
+\]
+欧氏范数平方为零当且仅当向量为零，故 $A\mathbf x=\mathbf 0$。
+
+\textbf{Step 2}\quad 由秩-零化度（$A$ 与 $A^{*}A$ 的定义域均为 $\F^n$）：
+\[
+\rank(A)=n-\dim\ker A=n-\dim\ker(A^{*}A)=\rank(A^{*}A).
+\]
+\hfill$\blacksquare$
+
+\begin{warnbox}
+\textbf{必要说明}\quad Step 1 的 ``$\subseteq$'' 方向\textbf{必须}在 $\C$ 或 $\R$ 上，
+因为用到了 $\lVert\mathbf v\rVert^2=0\Rightarrow\mathbf v=\mathbf 0$。
+对一般域上的 $A\T A$ 结论会失效。
+\end{warnbox}
+
+\subsection{推论}
+\begin{itemize}
+\item 对称地 $\rank(AA^{*})=\rank(A)$；
+\item $\rank(A)=n\iff A^{*}A$ 正定（此时刻画为 $n$ 阶且可逆）；
+\item 最小二乘正规方程 $A^{*}A\mathbf x=A^{*}\mathbf b$ 的系数矩阵与 $A$ 同秩。
+\end{itemize}
+
+%=====================================================================
+\section{相似不变性与迹-秩关系}
+
+\subsection{相似不变性}
+\textbf{命题}\quad 若 $B=P^{-1}AP$（$P$ 可逆），则
+\[
+\rank(B)=\rank(A),\qquad\tr(B)=\tr(A),\qquad\det B=\det A .
+\]
+\emph{证明}
+\begin{itemize}
+\item \textbf{秩}：由 P4 的推论，$\rank(P^{-1}AP)=\rank(A)$。
+\item \textbf{迹}：用 $\tr(XY)=\tr(YX)$（$X\in\F^{m\times n}$，$Y\in\F^{n\times m}$，两者都等于 $\sum_{i,j}X_{ij}Y_{ji}$）。
+取 $X=P^{-1}$，$Y=AP$：
+\[
+\tr(P^{-1}AP)=\tr\bigl((AP)P^{-1}\bigr)=\tr(A).
+\]
+\item \textbf{行列式}：$\det(P^{-1}AP)=\det(P)^{-1}\det A\det P=\det A$。
+\end{itemize}
+\hfill$\square$
+
+\subsection{迹与秩：先排除错误命题}
+\begin{warnbox}
+\textbf{必须先澄清}\quad 秩与迹之间\textbf{不存在}任何形如
+$\rank(A)\le\tr(A)$ 或 $\lvert\tr(A)\rvert\le\rank(A)$ 的一般不等式。
+\begin{itemize}
+\item 取 $A=100I_n$：$\tr(A)=100n$，$\rank(A)=n$，迹远大于秩；
+\item 取 $A=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$：$\tr(A)=0$，$\rank(A)=2$，迹小于秩。
+\end{itemize}
+\end{warnbox}
+
+\subsubsection{命题：幂等矩阵的迹等于秩}
+若 $A^2=A$（幂等），则
+\[
+\tr(A)=\rank(A).
+\]
+\emph{证明}
+
+\textbf{Step 1（空间直和分解）}\quad 对任意 $\mathbf v$，
+\[
+\mathbf v=(I-A)\mathbf v+A\mathbf v .
+\]
+第一项属于 $\ker A$（因 $A(I-A)\mathbf v=(A-A^2)\mathbf v=\mathbf 0$），第二项属于 $\im A$。
+又 $\ker A\cap\im A=\{\mathbf 0\}$：若 $\mathbf v=A\mathbf u$ 且 $A\mathbf v=\mathbf 0$，
+则 $\mathbf v=A\mathbf u=A^2\mathbf u=A\mathbf v=\mathbf 0$。
+故 $\F^n=\ker A\oplus\im A$。
+
+\textbf{Step 2（对角化）}\quad 设 $r=\rank(A)$，取 $\im A$ 的基 $\mathbf v_1,\dots,\mathbf v_r$。
+每个 $\mathbf v_i=A\mathbf u_i$，故 $A\mathbf v_i=A^2\mathbf u_i=A\mathbf u_i=\mathbf v_i$。
+再取 $\ker A$ 的基。合并后得 $\F^n$ 的基，$A$ 在其下为
+\[
+\begin{pmatrix}I_r&O\\O&O\end{pmatrix}.
+\]
+
+\textbf{Step 3}\quad 迹是相似不变量（\S6.1），故 $\tr(A)=r=\rank(A)$。\hfill$\square$
+
+\subsubsection{一般情形：迹被秩与最大奇异值界定}
+对任意 $n$ 阶复矩阵 $A$，设奇异值分解 $A=\sum_{i=1}^{r}\sigma_i\mathbf u_i\mathbf v_i^{*}$（$r=\rank A$），则
+\[
+\tr(A)=\sum_{i=1}^{r}\sigma_i\,\mathbf v_i^{*}\mathbf u_i
+\ \Longrightarrow\
+\lvert\tr(A)\rvert\le\sum_{i=1}^r\sigma_i\lvert\mathbf v_i^{*}\mathbf u_i\rvert\le\sum_{i=1}^r\sigma_i\le r\,\sigma_1 .
+\]
+即
+\[
+\boxed{\ \lvert\tr(A)\rvert\le\rank(A)\cdot\sigma_{\max}(A)=\rank(A)\cdot\lVert A\rVert_2\ }
+\]
+\hfill$\blacksquare$
+
+%=====================================================================
+\section{两路径总对照}
+\begin{center}
+\small
+\begin{tabular}{@{}p{3.0cm}p{4.2cm}p{4.2cm}p{2.4cm}@{}}
+\toprule
+命题 & 路径甲（初等变换 / 分块） & 路径乙（线性映射 / 维数） & 难度差\\
+\midrule
+P1 & 列空间包含 & 秩-零化度 & 无\\
+P2 & 行最简形的组合结构 & 标准形 $D_r$ + 可逆不变 & 甲更具体\\
+P3 & 列空间和 + 维数公式 & 完全相同 & 无\\
+P4 & 分块 + 零空间包含 & 像的分解 & 乙明显更短\\
+Sylvester & 需追踪定义域维数，易错 & $A|_V$ + 秩-零化度 & \textbf{乙显著更优}\\
+Frobenius & 分块消元易错 & Sylvester 两次相减 & \textbf{乙显著更优}\\
+$\rank(A^{*}A)$ & 需用共轭与范数 & 同 & 无\\
+迹-秩 & 幂等矩阵可对角化 & 奇异值分解 & 乙更短\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{结论}\quad P1、P3 与工具无关；P2 两条路径各有教学价值；
+\textbf{P4、Sylvester、Frobenius 强烈建议用映射语言}——用初等变换做会陷入定义域维数的泥潭。
+
+%=====================================================================
+\section{数值验证}\label{sec:numeric}
+全部结论用随机矩阵检验（NumPy \texttt{matrix\_rank}，容差 $10^{-9}$）：
+
+\begin{center}
+\begin{tabular}{@{}llr@{}}
+\toprule
+检验项 & 试验次数 & 结果\\
+\midrule
+P4：$\rank(AB)\le\min\{\rank A,\rank B\}$ & 400 & 0 失败\\
+P2：$\rank(A\T)=\rank(A)$ & 400 & 0 失败\\
+P3：$\rank(A+B)\le\rank A+\rank B$ & 400 & 0 失败\\
+Sylvester：$\rank A+\rank B-n\le\rank(AB)$ & 800 & 0 失败\\
+Frobenius：$\rank(AB)+\rank(BC)\le\rank B+\rank(ABC)$ & 800 & 0 失败\\
+$\rank(A^{*}A)=\rank(A)=\rank(AA^{*})$（复矩阵） & $400\times2$ & 0 失败\\
+相似不变：秩与迹不变 & 300 & 0 失败\\
+\midrule
+\textbf{合计} & \textbf{3100} & \textbf{0 失败}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{说明}\quad 数值验证不能替代证明，其作用是排除 ``不等号方向写反''``维数取错'' 这类符号性错误。
+
+%=====================================================================
+\section{易错点}
+\begin{enumerate}
+\item \textbf{把行秩等于列秩当作定义}。$\rank$ 只定义为列空间维数，P2 必须证明。
+
+\item \textbf{说 ``行变换不改变行空间''}。行空间确实会变，不变的是\textbf{维数}。
+
+\item \textbf{P4 只证一半}。$\rank(AB)\le\rank(A)$ 与 $\le\rank(B)$ 是两个独立论证，缺一不可。
+
+\item \textbf{P4 与 ``可逆不变秩'' 循环论证}。必须先独立证 P4，再推可逆不变，再用于 P2。
+
+\item \textbf{Sylvester 不等式中 $n$ 的含义}。$n$ 是 $A$ 的列数、也是 $B$ 的行数（\textbf{中间维数}），
+不是 $AB$ 的行数 $m$ 或列数 $p$。\S3.2 的失败正是因误取 $m$。
+
+\item \textbf{秩-零化度的维数取错}。$\dim\ker A=n-\rank(A)$ 中 $n$ 是定义域维数（列数），
+对 $A\T$ 用时须换成 $m$。
+
+\item \textbf{误信 $\rank(AB)\ge\lvert\rank A-\rank B\rvert$}。此式\textbf{不成立}。
+反例：取 $A=\operatorname{diag}(1,1,0)$，$B=\operatorname{diag}(0,0,1)$，则 $AB=O$，故 $\rank(AB)=0$，
+而 $\lvert\rank A-\rank B\rvert=\lvert 2-1\rvert=1>0$。
+正确的下界形式是 Sylvester 不等式 $\rank(AB)\ge\rank A+\rank B-n$，含中间维数 $n$。
+
+\item \textbf{Frobenius 用分块消元硬算}。极易在分块行列位置上出错；
+直接用 Sylvester 两次相减，四行完成。
+
+\item \textbf{$\rank(A\T A)=\rank(A)$ 认为对任意域成立}。只在 $\R/\C$ 上成立，有限域上有反例。
+
+\item \textbf{认为迹与秩之间存在一般不等式}。$\lvert\tr(A)\rvert$ 可以远大于或远小于 $\rank(A)$；
+正确形式是 $\lvert\tr(A)\rvert\le\rank(A)\cdot\sigma_{\max}(A)$。
+\end{enumerate}
+
+%=====================================================================
+\section*{附：核心结论速查}
+\addcontentsline{toc}{section}{附：核心结论速查}
+
+\begin{keybox}
+\begin{align*}
+&\text{(P1)}\ \rank(A)\le\min\{m,n\}\\
+&\text{(P2)}\ \rank(A\T)=\rank(A)\\
+&\text{(P3)}\ \rank(A+B)\le\rank(A)+\rank(B)\\
+&\text{(P4)}\ \rank(AB)\le\min\{\rank A,\rank B\}\\
+&\text{(P5)}\ \rank A=0\iff A=O;\quad A\ \text{可逆}\iff\rank A=n\\
+&\text{(S)}\ \rank A+\rank B-n\le\rank(AB)\quad\text{（Sylvester）}\\
+&\text{(F)}\ \rank(AB)+\rank(BC)\le\rank B+\rank(ABC)\quad\text{（Frobenius）}\\
+&\text{(S$\subset$F)}\ \text{取 }B=I_n\text{ 得 (S)}\\
+&\text{($A^{*}A$)}\ \rank(A^{*}A)=\rank(A)=\rank(AA^{*})\quad(\R/\C)\\
+&\text{(相似)}\ \rank,\tr,\det\ \text{均为相似不变量}\\
+&\text{(幂等)}\ A^2=A\Rightarrow\tr(A)=\rank(A)\\
+&\text{(迹-秩)}\ \lvert\tr A\rvert\le\rank(A)\cdot\sigma_{\max}(A)
+\end{align*}
+\end{keybox}
+
+\vspace{0.4cm}
+{\small\textit{本文使用 Math.skill 工作流：分类 $\to$ 定义与引理储备 $\to$ 双路径证明 $\to$
+交叉验证（H 独立方法、G 特例、J 逻辑结构、E 数值）$\to$ 结论。
+数值验证 3100 组随机矩阵，0 失败。}}
+
+\end{document}

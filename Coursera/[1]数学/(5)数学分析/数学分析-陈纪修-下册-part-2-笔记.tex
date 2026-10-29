@@ -1,0 +1,1791 @@
+\documentclass[11pt]{ctexart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx,booktabs,hyperref,geometry}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\geometry{a4paper,margin=2.5cm}
+
+% 页眉不转大写（保留「Euclid」的原始拼写）
+\makeatletter
+\renewcommand{\sectionmark}[1]{\markright{\thesection\quad #1}}
+\makeatother
+% 取消链接的彩色方框
+\hypersetup{hidelinks}
+
+\newenvironment{chaptersummary}
+  {\par\medskip\noindent\textbf{本章小结：}\begin{quote}}
+  {\end{quote}}
+
+% ---- 定理环境 ----
+\theoremstyle{plain}
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}[thm]{引理}
+\newtheorem{cor}[thm]{推论}
+\newtheorem{prop}[thm]{命题}
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{定义}
+\newtheorem{ex}[thm]{例}
+\newtheorem{xca}[thm]{习题}
+\theoremstyle{remark}
+\newtheorem*{rem}{注}
+\newtheorem*{sol}{解}
+\newtheorem*{completion}{补充证明}
+
+% 与教材编号一致的手工标号（教材号与本章节号不完全对应）
+\newcommand{\srcnum}[1]{\textbf{#1}}
+
+\title{数学分析（陈纪修·下册）第十一章\\[2pt]
+\large Euclid 空间上的极限和连续 —— 笔记}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section*{阅读说明}
+\addcontentsline{toc}{section}{阅读说明}
+
+\begin{itemize}
+  \item \textbf{来源}：陈纪修《数学分析》下册第十一章，对应原书第 98--119 页（PDF 共 22 页，
+        扫描件、无文字层，逐页人工识读转写）。
+  \item \textbf{术语归一}：原书写作「Euclid 空间」，本笔记统一记为
+        \textbf{Euclidean space}（原文拼写 Euclid）。本章语境下它始终指具体坐标空间，
+        故一律写作 Euclidean space (\(\mathbb{R}^n\))。
+  \item \textbf{证明标记}：原书以「证明留给读者」「证明留作习题」「请读者自己补出证明」
+        省略的证明，本笔记补出并置于标有 \textbf{补充证明} 的环境中，与教材原有证明相区分。
+  \item \textbf{编号}：定义、定理编号沿用教材编号（如定义 11.1.1、定理 11.1.9），
+        便于与书对照；习题按原书顺序重排。
+\end{itemize}
+
+\subsection*{本章逻辑主线}
+\begin{enumerate}
+  \item 在 \(\mathbb{R}^n\) 上由内积 \(\to\) 范数 \(\to\) 距离，得到 Euclidean space 的度量结构（\S 1 前半）。
+  \item 由距离定义邻域、收敛，进而建立开集、闭集、聚点等点集拓扑语言（\S 1 前半）。
+  \item 得到「\(\mathbb{R}^n\) 上的基本定理」：Cantor 闭区域套、Bolzano--Weierstrass、
+        Cauchy 收敛原理、Heine--Borel，四者相互等价（\S 1 后半）。
+  \item 把上述工具用于多元函数的极限与连续，特别区分重极限与累次极限（\S 2）。
+  \item 借助紧性与连通性，把闭区间上连续函数的三大性质推广到 \(\mathbb{R}^n\) 的紧集（\S 3）。
+\end{enumerate}
+
+\newpage
+
+% =====================================================================
+\section{Euclid 空间上的基本定理}
+
+\srcnum{（原书第 98--106 页）}
+
+到目前為止，我们在数学分析课程中学习的都只是一元函数的分析性质。现实生活中，
+除极简单的情形外，仅用一个自变量与一个因变量来描述的问题其实很少。即使是物理中
+研究质点运动这样相对容易的问题，也需要三个空间变量 \(x,y,z\) 与一个时间变量 \(t\)，
+以及多个函数值（位置、速度、加速度、动量等）。这种多自变量、多因变量的变化关系，
+反映到数学上就是多元函数（或多元函数组，即向量值函数）。
+
+本节转向研究多元函数（组）。其分析性质无非也是极限理论、连续性、可微性、可积性等，
+它们与一元函数的相应性质既有紧密联系，又有很大差别。
+
+\subsection{Euclid 空间上的距离与极限}
+
+极限理论是整个数学分析的基础。在给出多元函数极限定义之前，先回顾一元函数的情形。
+
+\paragraph{一元极限的回顾。}
+\[
+  \lim_{x\to x_0} f(x)=A
+  \iff \forall \varepsilon>0,\ \exists\delta>0,\ \forall x\,(0<|x-x_0|<\delta):\
+  |f(x)-A|<\varepsilon .
+\]
+这意味着在自变量的变化过程中，只要 \(x\) 与 \(x_0\) 充分接近（\(x\neq x_0\)），
+函数值 \(f(x)\) 就可以与 \(A\) 任意接近。而这个「接近」，不论用符号
+\(0<|x-x_0|<\delta\)、\(|f(x)-A|<\varepsilon\) 表示，还是用「\(x\) 在 \(x_0\) 的
+\(\delta\) 去心邻域 \(O(x_0,\delta)\setminus\{x_0\}\) 中」「落在点 \(A\) 的
+\(\varepsilon\) 邻域中」表示，实质上都是用\textbf{绝对值}，即一维空间中两点间的
+\textbf{距离}刻画的。显然，若没有距离的概念，就无所谓「接近」或「不接近」，
+也就没有「收敛」与「发散」。\textbf{收敛就是距离趋向于零}。
+
+对于多元函数（组），上述的 \(x,x_0\)（及 \(f(x),A\)）都由多个分量组成。
+为了研究多元函数的性质，先把「距离」推广到高维空间，
+定义出类似于「绝对值」的度量标准，再在其上定义极限，进而构筑整个多元分析理论。
+
+\subsubsection{\texorpdfstring{\(\mathbb{R}^n\) 的代数与内积结构}{Rn 的代数与内积结构}}
+
+记 \(\mathbf{R}\) 为实数全体。定义 \(n\) 个 \(\mathbf{R}\) 的 Descartes 乘积集为
+\[
+  \mathbf{R}^n=\underbrace{\mathbf{R}\times\mathbf{R}\times\cdots\times\mathbf{R}}_{n\text{ 个}}
+  =\{(x_1,x_2,\cdots,x_n)\mid x_i\in\mathbf{R},\ i=1,2,\cdots,n\}.
+\]
+\(\mathbf{R}^n\) 中的元素 \(\boldsymbol{x}=(x_1,x_2,\cdots,x_n)\) 称为\textbf{向量}或\textbf{点}，
+\(x_i\) 称为 \(\boldsymbol{x}\) 的第 \(i\) 个\textbf{坐标}。特别地，\(\mathbf{R}^n\) 中的零元素记为
+\(\boldsymbol{0}=(0,0,\cdots,0)\)。
+
+设 \(\boldsymbol{x}=(x_1,\cdots,x_n)\)、\(\boldsymbol{y}=(y_1,\cdots,y_n)\in\mathbf{R}^n\)，
+\(\lambda\in\mathbf{R}\)，定义 \(\mathbf{R}^n\) 中的加法与数乘
+\begin{align*}
+  \boldsymbol{x}+\boldsymbol{y}&=(x_1+y_1,\;x_2+y_2,\;\cdots,\;x_n+y_n),\\
+  \lambda\boldsymbol{x}&=(\lambda x_1,\;\lambda x_2,\;\cdots,\;\lambda x_n),
+\end{align*}
+则 \(\mathbf{R}^n\) 成为\textbf{向量空间}。
+
+若再在 \(\mathbf{R}^n\) 上引入\textbf{内积}运算
+\[
+  \langle \boldsymbol{x},\boldsymbol{y}\rangle
+  =x_1y_1+x_2y_2+\cdots+x_ny_n=\sum_{k=1}^{n}x_ky_k,
+\]
+则它就被称为 \textbf{Euclidean space}（原文拼写 Euclid）(\(\mathbb{R}^n\))。
+
+\begin{prop}[内积的基本性质]\label{prop:inner}
+设 \(\boldsymbol{x},\boldsymbol{y},\boldsymbol{z}\in\mathbf{R}^n\)，\(\lambda,\mu\in\mathbf{R}\)，则
+\begin{enumerate}
+  \item （正定性）\(\langle \boldsymbol{x},\boldsymbol{x}\rangle\ge 0\)，
+        且 \(\langle \boldsymbol{x},\boldsymbol{x}\rangle=0\) 当且仅当 \(\boldsymbol{x}=\boldsymbol{0}\)；
+  \item （对称性）\(\langle \boldsymbol{x},\boldsymbol{y}\rangle=\langle \boldsymbol{y},\boldsymbol{x}\rangle\)；
+  \item （线性性）\(\langle \lambda\boldsymbol{x}+\mu\boldsymbol{y},\boldsymbol{z}\rangle
+        =\lambda\langle \boldsymbol{x},\boldsymbol{z}\rangle
+        +\mu\langle \boldsymbol{y},\boldsymbol{z}\rangle\)；
+  \item （Schwarz 不等式）\(\langle \boldsymbol{x},\boldsymbol{y}\rangle^2
+        \le\langle \boldsymbol{x},\boldsymbol{x}\rangle\langle \boldsymbol{y},\boldsymbol{y}\rangle\)。
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+仅说明 (4)。由 (1)--(3) 可得，对于任意 \(\lambda\in\mathbf{R}\) 都成立
+\[
+  \langle \lambda\boldsymbol{x}+\boldsymbol{y},\lambda\boldsymbol{x}+\boldsymbol{y}\rangle
+  =\lambda^2\langle \boldsymbol{x},\boldsymbol{x}\rangle
+  +2\lambda\langle \boldsymbol{x},\boldsymbol{y}\rangle
+  +\langle \boldsymbol{y},\boldsymbol{y}\rangle\ge 0,
+\]
+即关于 \(\lambda\) 的二次三项式非负，故其判别式不大于零：
+\[
+  4\langle \boldsymbol{x},\boldsymbol{y}\rangle^2
+  -4\langle \boldsymbol{x},\boldsymbol{x}\rangle\langle \boldsymbol{y},\boldsymbol{y}\rangle\le 0 .
+\]
+这就得到了 Schwarz 不等式。
+\end{proof}
+
+\subsubsection{距离与范数}
+
+平面解析几何中两点 \(\boldsymbol{x}=(x_1,x_2)\)、\(\boldsymbol{y}=(y_1,y_2)\) 间的距离公式
+\[
+  \sqrt{(x_1-y_1)^2+(x_2-y_2)^2}
+\]
+给我们以启示：可以按照这样的方式，为具有更多分量的「点」定义两点间的距离。
+仍用绝对值的符号表示推广到 \(\mathbf{R}^n\) 上的「距离」。
+
+\begin{defn}[距离与范数，教材定义 11.1.1]\label{def:dist}
+Euclidean space \(\mathbf{R}^n\) 中任意两点
+\(\boldsymbol{x}=(x_1,\cdots,x_n)\)、\(\boldsymbol{y}=(y_1,\cdots,y_n)\) 的\textbf{距离}定义为
+\[
+  |\boldsymbol{x}-\boldsymbol{y}|
+  =\sqrt{(x_1-y_1)^2+(x_2-y_2)^2+\cdots+(x_n-y_n)^2},
+\]
+并称
+\[
+  \|\boldsymbol{x}\|=\sqrt{\langle \boldsymbol{x},\boldsymbol{x}\rangle}
+  =\sqrt{\sum_{k=1}^{n}x_k^2}
+\]
+为 \(\boldsymbol{x}\) 的 \textbf{Euclid 范数}（简称\textbf{范数}）。
+\end{defn}
+
+显然，\(\boldsymbol{x}\) 的范数 \(\|\boldsymbol{x}\|\) 就是 \(\boldsymbol{x}\) 到
+\(\boldsymbol{0}\) 的距离（即 \(\boldsymbol{x}\) 的模长）。
+
+\begin{thm}[距离的三性质，教材定理 11.1.1]\label{thm:metric}
+距离满足以下性质：对任意 \(\boldsymbol{x},\boldsymbol{y},\boldsymbol{z}\in\mathbf{R}^n\)，
+\begin{enumerate}
+  \item （正定性）\(|\boldsymbol{x}-\boldsymbol{y}|\ge 0\)，
+        且 \(|\boldsymbol{x}-\boldsymbol{y}|=0\) 当且仅当 \(\boldsymbol{x}=\boldsymbol{y}\)；
+  \item （对称性）\(|\boldsymbol{x}-\boldsymbol{y}|=|\boldsymbol{y}-\boldsymbol{x}|\)；
+  \item （三角不等式）\(|\boldsymbol{x}-\boldsymbol{z}|
+        \le|\boldsymbol{x}-\boldsymbol{y}|+|\boldsymbol{y}-\boldsymbol{z}|\)。
+\end{enumerate}
+\end{thm}
+
+\begin{completion}
+原书将证明留给读者。补出如下。
+
+(1)、(2) 由定义立得。
+
+(3) 记 \(\boldsymbol{u}=\boldsymbol{x}-\boldsymbol{y}\)，\(\boldsymbol{v}=\boldsymbol{y}-\boldsymbol{z}\)，
+则 \(\boldsymbol{x}-\boldsymbol{z}=\boldsymbol{u}+\boldsymbol{v}\)，故只需证明
+\(\|\boldsymbol{u}+\boldsymbol{v}\|\le\|\boldsymbol{u}\|+\|\boldsymbol{v}\|\)。
+由命题 \ref{prop:inner} 的 Schwarz 不等式，
+\begin{align*}
+  \|\boldsymbol{u}+\boldsymbol{v}\|^2
+  &=\langle \boldsymbol{u}+\boldsymbol{v},\boldsymbol{u}+\boldsymbol{v}\rangle\\
+  &=\|\boldsymbol{u}\|^2+2\langle \boldsymbol{u},\boldsymbol{v}\rangle+\|\boldsymbol{v}\|^2\\
+  &\le\|\boldsymbol{u}\|^2+2|\langle \boldsymbol{u},\boldsymbol{v}\rangle|+\|\boldsymbol{v}\|^2\\
+  &\le\|\boldsymbol{u}\|^2+2\|\boldsymbol{u}\|\,\|\boldsymbol{v}\|+\|\boldsymbol{v}\|^2\\
+  &=(\|\boldsymbol{u}\|+\|\boldsymbol{v}\|)^2 .
+\end{align*}
+两边开平方即得三角不等式。
+\end{completion}
+
+\subsubsection{邻域与点列的收敛}
+
+定义了距离，就可以引入\textbf{邻域}以及\textbf{收敛}的概念。
+
+\begin{defn}[\(\delta\) 邻域，教材定义 11.1.2]\label{def:nbhd}
+设 \(\boldsymbol{a}=(a_1,a_2,\cdots,a_n)\in\mathbf{R}^n\)，\(\delta>0\)，点集
+\begin{align*}
+  O(\boldsymbol{a},\delta)
+  &=\{\boldsymbol{x}\in\mathbf{R}^n\mid |\boldsymbol{x}-\boldsymbol{a}|<\delta\}\\
+  &=\Bigl\{\boldsymbol{x}\in\mathbf{R}^n\ \Big|\
+    \sqrt{(x_1-a_1)^2+(x_2-a_2)^2+\cdots+(x_n-a_n)^2}<\delta\Bigr\}
+\end{align*}
+称为点 \(\boldsymbol{a}\) 的 \textbf{\(\delta\) 邻域}，\(\boldsymbol{a}\) 称为这个邻域的\textbf{中心}，
+\(\delta\) 称为邻域的\textbf{半径}。
+\end{defn}
+
+特别地，\(O(\boldsymbol{a},\delta)\) 在 \(\mathbf{R}\) 上就是开区间，
+在 \(\mathbf{R}^2\) 上是开圆盘，在 \(\mathbf{R}^3\) 上则是开球。
+
+\begin{defn}[点列的收敛，教材定义 11.1.3]\label{def:seqconv}
+设 \(\{\boldsymbol{x}_k\}\) 是 \(\mathbf{R}^n\) 中的一个点列。若存在定点
+\(\boldsymbol{a}\in\mathbf{R}^n\)，对于任意给定的 \(\varepsilon>0\)，存在正整数 \(K\)，
+使得当 \(k>K\) 时成立
+\[
+  |\boldsymbol{x}_k-\boldsymbol{a}|<\varepsilon
+  \qquad(\text{即}\ \boldsymbol{x}_k\in O(\boldsymbol{a},\varepsilon)),
+\]
+则称点列 \(\{\boldsymbol{x}_k\}\) \textbf{收敛于} \(\boldsymbol{a}\)，记为
+\(\displaystyle\lim_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{a}\)，
+而称 \(\boldsymbol{a}\) 为点列 \(\{\boldsymbol{x}_k\}\) 的\textbf{极限}。
+
+一个点列不收敛就称其\textbf{发散}。
+\end{defn}
+
+记 \(\boldsymbol{x}_k=(x_1^k,x_2^k,\cdots,x_n^k)\ (k=1,2,\cdots)\)，
+\(\boldsymbol{a}=(a_1,a_2,\cdots,a_n)\)，利用不等式
+\[
+  |x_j^k-a_j|\le|\boldsymbol{x}_k-\boldsymbol{a}|
+  =\sqrt{\sum_{i=1}^{n}(x_i^k-a_i)^2}
+  \le\sum_{i=1}^{n}|x_i^k-a_i|,\qquad j=1,2,\cdots,n,
+\]
+可以得到：
+
+\begin{thm}[按分量收敛，教材定理 11.1.2]\label{thm:component}
+\(\displaystyle\lim_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{a}\) 的充分必要条件是
+\(\displaystyle\lim_{k\to\infty}x_i^k=a_i\ (i=1,2,\cdots,n)\)。
+\end{thm}
+
+据此定理，可以利用对点列分量的讨论，将一维的一些结论平行地推广到高维去。
+
+前面已给出了 \(\mathbf{R}\) 中收敛数列的一些性质，如唯一性、有界性、保序性、夹逼性
+及四则运算法则。由于高维的两个点之间不存在大小关系，
+因此\textbf{保序性}和\textbf{夹逼性}这两个与比较大小有关的性质不再有意义。
+
+有界性牵涉到点的模长，我们对高维点集的有界性作如下定义：
+
+\begin{defn}[有界集，教材定义 11.1.4]\label{def:bounded}
+设 \(S\) 是 \(\mathbf{R}^n\) 上的点集。若存在正数 \(M\)，使得对于任意
+\(\boldsymbol{x}\in S\) 成立
+\[
+  \|\boldsymbol{x}\|\le M,
+\]
+（或等价地，存在正数 \(M'\) 使得 \(S\subset O(\boldsymbol{0},M')\)），则称 \(S\) 为\textbf{有界集}。
+\end{defn}
+
+可以证明唯一性（收敛点列的极限是唯一的）、有界性（收敛点列必定有界）
+和极限的线性运算法则在\textbf{高维情况依然成立}。
+
+\subsubsection{开集与闭集}
+
+在一维的情况，闭区间上的许多重要结果，如闭区间套定理、连续函数的若干性质，
+在开区间是不成立的。因此有理由相应地对高维空间的点集作类似划分。
+
+设 \(S\) 是 \(\mathbf{R}^n\) 上的点集，它在 \(\mathbf{R}^n\) 上的补集
+\(\mathbf{R}^n\setminus S\) 记为 \(S^c\)。对于任意 \(\boldsymbol{x}\in\mathbf{R}^n\)，
+从其邻域与 \(S\) 的关系来分，无非是下列三种情况之一：
+
+\begin{enumerate}
+  \item 存在 \(\boldsymbol{x}\) 的一个 \(\delta\) 邻域 \(O(\boldsymbol{x},\delta)\) 完全落在 \(S\) 中
+        （注意：这时 \(\boldsymbol{x}\) \emph{必}属于 \(S\)），这时称 \(\boldsymbol{x}\) 是 \(S\) 的\textbf{内点}。
+        \(S\) 的内点全体称为 \(S\) 的\textbf{内部}，记为 \(S^\circ\)。
+  \item 存在 \(\boldsymbol{x}\) 的一个 \(\delta\) 邻域 \(O(\boldsymbol{x},\delta)\) 完全不落在 \(S\) 中，
+        这时称 \(\boldsymbol{x}\) 是 \(S\) 的\textbf{外点}。
+  \item 不存在 \(\boldsymbol{x}\) 的具有上述性质的 \(\delta\) 邻域，即 \(\boldsymbol{x}\) 的任意
+        \(\delta\) 邻域既包含 \(S\) 中的点，又包含不属于 \(S\) 的点，
+        那么就称 \(\boldsymbol{x}\) 是 \(S\) 的\textbf{边界点}。\(S\) 的边界点的全体称为 \(S\) 的
+        \textbf{边界}，记为 \(\partial S\)。
+\end{enumerate}
+
+要注意的是，内点必属于 \(S\)，外点必不属于 \(S\)（或者说必属于 \(S^c\)），
+但\textbf{边界点可能属于 \(S\)，也可能不属于 \(S\)}。
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=1.0]
+    \draw[thick] (0,0) circle (1.9);
+    \fill (0.75,0.6) circle (2.2pt);
+    \draw (0.75,0.6) circle (0.28);
+    \draw (1.03,0.60)--(1.35,0.18);
+    \node[font=\small,anchor=west] at (1.38,0.18) {内点};
+    \fill (-1.9,0) circle (2.2pt);
+    \draw (-1.9,0) circle (0.28);
+    \node[left,font=\small] at (-2.45,-0.55) {边界点};
+    \fill (1.62,-1.62) circle (2.2pt);
+    \node[below right,font=\small] at (1.7,-1.68) {外点};
+  \end{tikzpicture}
+  \caption{内点、外点与边界点的示意图（原书图 11.1.1）}
+\end{figure}
+
+进一步，若存在 \(\boldsymbol{x}\) 的一个邻域，其中\textbf{只有} \(\boldsymbol{x}\) 点属于 \(S\)，
+则称 \(\boldsymbol{x}\) 是 \(S\) 的\textbf{孤立点}。显然，孤立点必是边界点。
+
+若 \(\boldsymbol{x}\) 的任意邻域都含有 \(S\) 中的无限个点，则称 \(\boldsymbol{x}\) 是 \(S\) 的
+\textbf{聚点}。\(S\) 的聚点的全体记为 \(S'\)。显然，\(S\) 的内点必是 \(S\) 的聚点；
+\(S\) 的边界点，只要不是 \(S\) 的孤立点，也必是 \(S\) 的聚点。
+因此 \(S\) 的聚点可能属于 \(S\)，也可能不属于 \(S\)。
+例如在 \(\mathbf{R}\) 中，\(0\) 是点集 \(\bigl\{\tfrac{1}{n}\ \big|\ n=1,2,\cdots\bigr\}\) 的聚点，
+但它不属于这个点集。
+
+\begin{thm}[聚点的点列刻画，教材定理 11.1.3]\label{thm:cluster}
+\(\boldsymbol{x}\) 是点集 \(S\,(\subset\mathbf{R}^n)\) 的聚点的充分必要条件是：
+存在点列 \(\{\boldsymbol{x}_k\}\) 满足 \(\boldsymbol{x}_k\in S\)，
+\(\boldsymbol{x}_k\neq\boldsymbol{x}\ (k=1,2,\cdots)\)，使得
+\(\displaystyle\lim_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{x}\)。
+\end{thm}
+
+\begin{completion}
+原书将此证明留作习题（习题 6）。补出如下。
+
+\textbf{充分性}\ 设存在满足条件的点列。任取 \(\boldsymbol{x}\) 的邻域
+\(O(\boldsymbol{x},\delta)\)。由 \(\lim\limits_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{x}\)，
+存在 \(K\) 使得当 \(k>K\) 时 \(\boldsymbol{x}_k\in O(\boldsymbol{x},\delta)\)。
+由于 \(\boldsymbol{x}_k\in S\) 且 \(\boldsymbol{x}_k\neq\boldsymbol{x}\)，而这样的下标 \(k\) 有无穷多个，
+故 \(O(\boldsymbol{x},\delta)\) 含有 \(S\) 中无限个异于 \(\boldsymbol{x}\) 的点。
+由 \(\delta\) 的任意性，\(\boldsymbol{x}\) 是 \(S\) 的聚点。
+
+\textbf{必要性}\ 设 \(\boldsymbol{x}\) 是 \(S\) 的聚点。对每个正整数 \(m\)，
+邻域 \(O\bigl(\boldsymbol{x},\tfrac{1}{m}\bigr)\) 含有 \(S\) 中无限个点，
+故可取 \(\boldsymbol{x}_m\in S\cap O\bigl(\boldsymbol{x},\tfrac{1}{m}\bigr)\) 且
+\(\boldsymbol{x}_m\neq\boldsymbol{x}\)（若所有这样的点都等于 \(\boldsymbol{x}\)，
+则该邻域中 \(S\) 的点至多一个，矛盾）。
+于是 \(|\boldsymbol{x}_m-\boldsymbol{x}|<\tfrac{1}{m}\to 0\)，即
+\(\boldsymbol{x}_m\to \boldsymbol{x}\)。
+\end{completion}
+
+现在可以引出「开」和「闭」的概念了。
+
+\begin{defn}[开集、闭集与闭包，教材定义 11.1.5]\label{def:openset}
+设 \(S\) 是 \(\mathbf{R}^n\) 上的点集。若 \(S\) 中的每一个点都是它的内点，
+则称 \(S\) 为\textbf{开集}；若 \(S\) 中包含了它的所有的聚点，则称 \(S\) 为\textbf{闭集}。
+
+\(S\) 与它的聚点全体 \(S'\) 的并集称为 \(S\) 的\textbf{闭包}，记为 \(\overline{S}\)。
+\end{defn}
+
+\begin{ex}[教材例 11.1.1]\label{ex:annulus}
+在 \(\mathbf{R}^2\) 上，设
+\[
+  S=\{(\boldsymbol{x},y)\mid 1\le x^2+y^2<4\},
+\]
+那么
+\begin{align*}
+  S^\circ&=\{(x,y)\mid 1<x^2+y^2<4\};\\
+  \partial S&=\{(x,y)\mid x^2+y^2=1\}\cup\{(x,y)\mid x^2+y^2=4\};\\
+  S'&=\{(x,y)\mid 1\le x^2+y^2\le 4\}=\overline{S}.
+\end{align*}
+\end{ex}
+
+\begin{ex}[邻域是开集，教材例 11.1.2]\label{ex:nbhdopen}
+证明邻域是开集。
+\end{ex}
+
+\begin{proof}
+设邻域为 \(O(\boldsymbol{a},r)\)，\(\boldsymbol{q}\) 为 \(O(\boldsymbol{a},r)\) 上的任一点，
+则 \(|\boldsymbol{q}-\boldsymbol{a}|<r\)，因此存在正数 \(h\) 使得
+\[
+  |\boldsymbol{q}-\boldsymbol{a}|<r-h .
+\]
+于是，对任意 \(\boldsymbol{x}\in O(\boldsymbol{q},h)\)，由三角不等式成立
+\[
+  |\boldsymbol{x}-\boldsymbol{a}|\le|\boldsymbol{x}-\boldsymbol{q}|+|\boldsymbol{q}-\boldsymbol{a}|<r,
+\]
+因此 \(\boldsymbol{x}\in O(\boldsymbol{a},r)\)，即 \(O(\boldsymbol{q},h)\subset O(\boldsymbol{a},r)\)。
+所以 \(\boldsymbol{q}\) 是 \(O(\boldsymbol{a},r)\) 的内点。由 \(\boldsymbol{q}\) 的任意性，
+\(O(\boldsymbol{a},r)\) 是开集。
+\end{proof}
+
+容易证明：集合
+\(\{\boldsymbol{x}\in\mathbf{R}^n\mid a_i<x_i<b_i,\ i=1,\cdots,n\}\) 和
+\(\{\boldsymbol{x}\in\mathbf{R}^n\mid \sum_{i=1}^{n}(x_i-a_i)^2<r^2\}\)
+都是开集，它们分别称为 \(n\) 维\textbf{开矩形}和 \(n\) 维\textbf{开球}；
+集合
+\(\{\boldsymbol{x}\in\mathbf{R}^n\mid a_i\le x_i\le b_i,\ i=1,\cdots,n\}\) 和
+\(\{\boldsymbol{x}\in\mathbf{R}^n\mid \sum_{i=1}^{n}(x_i-a_i)^2\le r^2\}\)
+都是闭集，它们分别称为 \(n\) 维\textbf{闭矩形}和 \(n\) 维\textbf{闭球}。
+
+关于闭集有如下重要结论，它对于一些问题的证明是个有力的工具。
+
+\begin{thm}[闭集的补集刻画，教材定理 11.1.4]\label{thm:closed}
+\(\mathbf{R}^n\) 上的点集 \(S\) 为闭集的充分必要条件是 \(S^c\) 是开集。
+\end{thm}
+
+\begin{proof}
+\textbf{必要性}\ 若 \(S\) 为闭集，由于 \(S\) 的一切聚点都属于 \(S\)，
+因此对于任意 \(\boldsymbol{x}\in S^c\)，\(\boldsymbol{x}\) 不是 \(S\) 的聚点。
+也就是说，存在 \(\boldsymbol{x}\) 的邻域 \(O(\boldsymbol{x},\delta)\)，
+使得 \(O(\boldsymbol{x},\delta)\cap S=\varnothing\)，即
+\(O(\boldsymbol{x},\delta)\subset S^c\)。因此 \(S^c\) 是开集。
+
+\textbf{充分性}\ 对任意 \(\boldsymbol{x}\in S^c\)，由于 \(S^c\) 是开集，
+因此存在 \(\boldsymbol{x}\) 的邻域 \(O(\boldsymbol{x},\delta)\)，使得
+\(O(\boldsymbol{x},\delta)\subset S^c\)，即 \(\boldsymbol{x}\) 不是 \(S\) 的聚点。
+所以如果 \(S\) 有聚点，它就一定属于 \(S\)。因此 \(S\) 为闭集。
+\end{proof}
+
+从这个定理立即得到：\(\mathbf{R}^n\) 上的点集 \(S\) 为开集的充分必要条件是
+\(S^c\) 是闭集。
+
+以下的引理是第一章 \S 1 中的 De Morgan 公式推广至任意多个集合的情况，
+其证明方法完全类似于第一章。
+
+\begin{lem}[De Morgan 公式，教材引理 11.1.1]\label{lem:demorgan}
+设 \(\{S_\alpha\}\) 是 \(\mathbf{R}^n\) 中的一组（有限或无限多个）子集，则
+\begin{enumerate}
+  \item \(\displaystyle\Bigl(\bigcup_\alpha S_\alpha\Bigr)^c=\bigcap_\alpha S_\alpha^{\,c}\)；
+  \item \(\displaystyle\Bigl(\bigcap_\alpha S_\alpha\Bigr)^c=\bigcup_\alpha S_\alpha^{\,c}\)。
+\end{enumerate}
+\end{lem}
+
+\begin{thm}[开集、闭集的对偶运算，教材定理 11.1.5]\label{thm:unioninter}
+\begin{enumerate}
+  \item 任意一组开集 \(\{S_\alpha\}\) 的并集 \(\bigcup_\alpha S_\alpha\) 是开集；
+  \item 任意一组闭集 \(\{T_\alpha\}\) 的交集 \(\bigcap_\alpha T_\alpha\) 是闭集；
+  \item 任意有限个开集 \(S_1,S_2,\cdots,S_k\) 的交集
+        \(\bigcap_{i=1}^{k}S_i\) 是开集；
+  \item 任意有限个闭集 \(T_1,T_2,\cdots,T_k\) 的并集
+        \(\bigcup_{i=1}^{k}T_i\) 是闭集。
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+(1) 设 \(\boldsymbol{x}\in\bigcup_\alpha S_\alpha\)，那么存在某个 \(\alpha\)，使得
+\(\boldsymbol{x}\in S_\alpha\)。而 \(S_\alpha\) 是开集，因此 \(\boldsymbol{x}\) 就是
+\(S_\alpha\) 的内点，所以也是 \(\bigcup_\alpha S_\alpha\) 的内点，
+这说明 \(\bigcup_\alpha S_\alpha\) 是开集。
+
+(2) 由 De Morgan 公式可得
+\[
+  \Bigl(\bigcap_\alpha T_\alpha\Bigr)^c=\bigcup_\alpha T_\alpha^{\,c}.
+\]
+\(T_\alpha\) 是闭集，从而 \(T_\alpha^{\,c}\) 是开集。由 (1) 知
+\(\bigcup_\alpha T_\alpha^{\,c}\) 是开集，这说明了 \(\bigcap_\alpha T_\alpha\) 的补集是开集，
+因此它是闭集。
+
+(3) 设 \(\boldsymbol{x}\in\bigcap_{i=1}^{k}S_i\)，则对每个 \(i=1,2,\cdots,k\) 都有
+\(\boldsymbol{x}\in S_i\)。由于 \(S_i\) 是开集，因此存在 \(\boldsymbol{x}\) 的邻域
+\(O(\boldsymbol{x},r_i)\)，使得 \(O(\boldsymbol{x},r_i)\subset S_i\)。
+取 \(r=\min\limits_{1\le i\le k}(r_i)\)，那么
+\(O(\boldsymbol{x},r)\subset\bigcap_{i=1}^{k}S_i\)，即 \(\boldsymbol{x}\) 是
+\(\bigcap_{i=1}^{k}S_i\) 的内点，因此 \(\bigcap_{i=1}^{k}S_i\) 是开集。
+
+(4) 利用 De Morgan 公式和 (3) 的结论就可以得出。
+\end{proof}
+
+\begin{rem}
+请读者举例说明：\textbf{任意多个开集的交不一定仍是开集}；
+\textbf{任意多个闭集的并也不一定仍是闭集}。
+例如在 \(\mathbf{R}\) 中，开集族 \(\bigl\{\bigl(-\tfrac{1}{n},\tfrac{1}{n}\bigr)\bigr\}_{n=1}^{\infty}\)
+的交是 \(\{0\}\)，不是开集。
+\end{rem}
+
+\subsection{Euclid 空间上的基本定理}
+
+下面主要以二维的情况为例，将实数理论中的一些重要结果推广到高维去。
+
+\begin{thm}[闭矩形套定理，教材定理 11.1.6]\label{thm:rectnest}
+设 \(\Delta_k=[a_k,b_k]\times[c_k,d_k]\ (k=1,2,\cdots)\) 是 \(\mathbf{R}^2\) 上一列闭矩形，如果
+\begin{enumerate}
+  \item \(\Delta_{k+1}\subset\Delta_k\)，即
+        \(a_k\le a_{k+1}<b_{k+1}\le b_k\)，
+        \(c_k\le c_{k+1}<d_{k+1}\le d_k\)，\(k=1,2,\cdots\)；
+  \item \(\sqrt{(b_k-a_k)^2+(d_k-c_k)^2}\to 0\ (k\to\infty)\)，
+\end{enumerate}
+则存在唯一的点 \(\boldsymbol{a}=(\xi,\eta)\in\bigcap_{k=1}^{\infty}\Delta_k\)，且
+\[
+  \lim_{k\to\infty}a_k=\lim_{k\to\infty}b_k=\xi,\qquad
+  \lim_{k\to\infty}c_k=\lim_{k\to\infty}d_k=\eta .
+\]
+\end{thm}
+
+\begin{proof}
+这只要分别对 \(\{[a_k,b_k]\}\) 与 \(\{[c_k,d_k]\}\) 运用直线上的闭区间套定理就可以证明。
+\end{proof}
+
+定理中的「闭」（闭集）和「套」（依次包含）是本质的，
+而集合 \(\Delta_k\) 是否是闭矩形则无关紧要。读者还不难证明更一般的结论：
+
+\begin{thm}[Cantor 闭区域套定理，教材定理 11.1.6$'$]\label{thm:cantor}
+设 \(\{S_k\}\) 是 \(\mathbf{R}^n\) 上的非空闭集序列，满足
+\[
+  S_1\supset S_2\supset\cdots\supset S_k\supset S_{k+1}\supset\cdots,
+\]
+以及 \(\lim\limits_{k\to\infty}\operatorname{diam}S_k=0\)，则存在唯一一点属于
+\(\bigcap_{k=1}^{\infty}S_k\)。
+\end{thm}
+
+\begin{rem}
+定理中的 \(\operatorname{diam}\) 指集合的直径：
+\[
+  \operatorname{diam}S=\sup\{|\boldsymbol{x}-\boldsymbol{y}|\mid \boldsymbol{x},\boldsymbol{y}\in S\},
+\]
+它称为 \(S\) 的\textbf{直径}。
+\end{rem}
+
+\begin{ex}[三角形中线交于一点，教材例 11.1.3]\label{ex:median}
+证明：三角形的中线交于一点。
+\end{ex}
+
+\begin{proof}
+我们将以 \(A,B,C\) 为顶点的、加上边界的三角形记为 \(\triangle ABC\)
+（如图 \ref{fig:median}），它是闭集。
+
+显然 \(\triangle ABC\) 的三条中线 \(AA_1,BB_1,CC_1\) 包含在 \(\triangle ABC\) 中，
+因此它们的两两交点也包含在 \(\triangle ABC\) 中，且
+\[
+  \triangle A_1B_1C_1\subset\triangle ABC .
+\]
+注意三条中线 \(AA_1,BB_1,CC_1\) 上各有一段 \(A_1A_2\)、\(B_1B_2\)、\(C_1C_2\)
+成为 \(\triangle A_1B_1C_1\) 的三条中线，所以 \(\triangle ABC\) 的三条中线的两两交点
+也就是 \(\triangle A_1B_1C_1\) 的三条中线的两两交点，且交点也包含在
+\(\triangle A_1B_1C_1\) 中，同时又有
+\[
+  \triangle A_2B_2C_2\subset\triangle A_1B_1C_1 .
+\]
+如此做下去的话，就得到三角形组成的闭集序列
+\[
+  \triangle ABC\supset\triangle A_1B_1C_1\supset\triangle A_2B_2C_2\supset\cdots,
+\]
+显然它们满足
+\[
+  \lim_{k\to\infty}\operatorname{diam}\triangle A_kB_kC_k=0,
+\]
+因此存在唯一的公共点 \(O\) 属于所有这些三角形。
+
+因为 \(\triangle ABC\) 的三条中线的两两交点始终包含在每一个三角形内，
+所以三条中线必定交于一点，而 \(O\) 点就是它们的交点。
+\end{proof}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=1.15]
+    \coordinate (A) at (0,2.6);
+    \coordinate (B) at (-1.9,0);
+    \coordinate (C) at (2.2,0);
+    \coordinate (A1) at ($(B)!0.5!(C)$);
+    \coordinate (B1) at ($(A)!0.5!(C)$);
+    \coordinate (C1) at ($(A)!0.5!(B)$);
+    \coordinate (A2) at ($(B1)!0.5!(C1)$);
+    \coordinate (B2) at ($(A1)!0.5!(C1)$);
+    \coordinate (C2) at ($(A1)!0.5!(B1)$);
+    \draw[thick] (A)--(B)--(C)--cycle;
+    \draw (A)--(A1);
+    \draw (B)--(B1);
+    \draw (C)--(C1);
+    \draw[dashed] (A1)--(B1)--(C1)--cycle;
+    \draw[dashed] (A2)--(B2)--(C2)--cycle;
+    \foreach \p/\n/\a in {A/A/above,B/B/left,C/C/right,A1/A_1/below,B1/B_1/right,C1/C_1/left,
+                          A2/A_2/left,B2/B_2/below,C2/C_2/right}
+      \fill (\p) circle (1.6pt);
+    \node[above] at (A) {$A$};
+    \node[left] at (B) {$B$};
+    \node[right] at (C) {$C$};
+    \node[below,font=\small] at (A1) {$A_1$};
+    \node[right,font=\small] at (B1) {$B_1$};
+    \node[left,font=\small] at (C1) {$C_1$};
+    \node[left,font=\small] at (A2) {$A_2$};
+    \node[below left,font=\small] at (B2) {$B_2$};
+    \node[below right,font=\small] at (C2) {$C_2$};
+  \end{tikzpicture}
+  \caption{三角形中线交于一点：逐次取中点（原书图 11.1.2）}
+  \label{fig:median}
+\end{figure}
+
+\begin{thm}[Bolzano--Weierstrass 定理，教材定理 11.1.7]\label{thm:bw}
+\(\mathbf{R}^n\) 上的有界点列 \(\{\boldsymbol{x}_k\}\) 中必有收敛子列。
+\end{thm}
+
+\begin{proof}
+以二维的情况为例。只要先对 \(\{\boldsymbol{x}_k\}=\{(x_k,y_k)\}\) 的第一个分量
+\(\{x_k\}\) 用一维的 Bolzano--Weierstrass 定理，找到其收敛子列 \(\{x_{n_k}\}\)；
+再对数列 \(\{y_{n_k}\}\) 用一维的 Bolzano--Weierstrass 定理，找到其收敛子列
+\(\{y_{n_{k_m}}\}\)，则 \(\{(x_{n_{k_m}},y_{n_{k_m}})\}\) 就是 \(\{\boldsymbol{x}_k\}\) 的收敛子列。
+\end{proof}
+
+从这个定理立即得到：
+
+\begin{cor}[教材推论 11.1.1]\label{cor:accum}
+\(\mathbf{R}^n\) 上的有界无限点集至少有一个聚点。
+\end{cor}
+
+\begin{defn}[基本（Cauchy）点列，教材定义 11.1.6]\label{def:cauchy}
+若 \(\mathbf{R}^n\) 上的点列 \(\{\boldsymbol{x}_k\}\) 满足：对于任意给定的
+\(\varepsilon>0\)，存在正整数 \(K\)，使得对任意 \(k,l>K\)，成立
+\[
+  |\boldsymbol{x}_k-\boldsymbol{x}_l|<\varepsilon,
+\]
+则称 \(\{\boldsymbol{x}_k\}\) 为\textbf{基本点列}（或 \textbf{Cauchy 点列}）。
+\end{defn}
+
+\begin{thm}[Cauchy 收敛原理，教材定理 11.1.8]\label{thm:cauchy}
+\(\mathbf{R}^n\) 上的点列 \(\{\boldsymbol{x}_k\}\) 收敛的充分必要条件是：
+\(\{\boldsymbol{x}_k\}\) 为基本点列。
+\end{thm}
+
+\begin{proof}
+\textbf{必要性}\ 设 \(\{\boldsymbol{x}_k\}\) 收敛于 \(\boldsymbol{a}\)，那么对于任意给定的
+\(\varepsilon>0\)，存在正整数 \(K\)，使得当 \(k>K\) 时成立
+\[
+  |\boldsymbol{x}_k-\boldsymbol{a}|<\frac{\varepsilon}{2}.
+\]
+因此当 \(k,l>K\) 时，由三角不等式得
+\[
+  |\boldsymbol{x}_k-\boldsymbol{x}_l|\le|\boldsymbol{x}_k-\boldsymbol{a}|
+  +|\boldsymbol{x}_l-\boldsymbol{a}|<\varepsilon,
+\]
+即 \(\{\boldsymbol{x}_k\}\) 为基本点列。
+
+\textbf{充分性}\ 若 \(\{\boldsymbol{x}_k\}\) 为基本点列，记
+\(\boldsymbol{x}_k=(x_1^k,x_2^k,\cdots,x_n^k)\ (k=1,2,\cdots)\)，则由不等式
+\[
+  |x_i^k-x_i^l|\le|\boldsymbol{x}_k-\boldsymbol{x}_l|,\qquad i=1,2,\cdots,n,
+\]
+可知对每一个固定的 \(i=1,2,\cdots,n\)，数列 \(\{x_i^k\}\) 是基本数列，
+因此收敛。再由定理 \ref{thm:component} 即知点列 \(\{\boldsymbol{x}_k\}\) 收敛。
+\end{proof}
+
+因此，第二章中给出的从实数的连续性到实数的完备性的 5 个等价定理中，
+除了「确界存在定理」和「单调有界数列收敛定理」由于涉及点之间的大小关系
+而在高维空间中不再有意义之外，其余结论在高维空间中依然成立。
+
+\subsubsection{紧集}
+
+现在引入一个重要的概念。
+
+\begin{defn}[开覆盖与紧集，教材定义 11.1.7]\label{def:compact}
+设 \(S\) 为 \(\mathbf{R}^n\) 上的点集。如果 \(\mathbf{R}^n\) 中的一组开集
+\(\{U_\alpha\}\) 满足 \(\bigcup_\alpha U_\alpha\supset S\)，那么称 \(\{U_\alpha\}\) 为
+\(S\) 的一个\textbf{开覆盖}。
+
+如果 \(S\) 的任意一个开覆盖 \(\{U_\alpha\}\) 中总存在一个有限子覆盖，
+即存在 \(\{U_\alpha\}\) 中的有限个开集 \(\{U_{\alpha_i}\}_{i=1}^{\rho}\)，
+满足 \(\bigcup_{i=1}^{\rho}U_{\alpha_i}\supset S\)，则称 \(S\) 为\textbf{紧集}。
+\end{defn}
+
+\begin{thm}[Heine--Borel 定理，教材定理 11.1.9]\label{thm:heineborel}
+\(\mathbf{R}^n\) 上的点集 \(S\) 是紧集的充分必要条件为：它是\textbf{有界闭集}。
+\end{thm}
+
+\begin{proof}
+只证明 \(n=2\) 的情形。
+
+\textbf{必要性}\ 设 \(S\) 为紧集，先证它是有界的。显然
+\(\{O(\boldsymbol{x},1)\mid \boldsymbol{x}\in S\}\) 是 \(S\) 的一个开覆盖，
+因为 \(S\) 是紧集，因此存在 \(S\) 的有限子覆盖，即存在
+\(\boldsymbol{x}_1,\boldsymbol{x}_2,\cdots,\boldsymbol{x}_p\)，使得
+\(S\subset\bigcup_{i=1}^{p}O(\boldsymbol{x}_i,1)\)。这就说明了 \(S\) 是有界集。
+
+再用反证法证明 \(S\) 是闭集。设存在 \(S\) 的聚点
+\(\boldsymbol{a}\notin S\)，构造开集
+\[
+  U_n=\Bigl\{\boldsymbol{x}\ \Big|\ |\boldsymbol{x}-\boldsymbol{a}|>\frac{1}{n}\Bigr\},
+\]
+则 \(\bigcup_{n=1}^{\infty}U_n=\mathbf{R}^2\setminus\{\boldsymbol{a}\}\supset S\)，
+即 \(\{U_n\}\) 是 \(S\) 的一个开覆盖。
+
+由聚点定义，存在由无穷多个点组成的点列
+\(\{\boldsymbol{x}_k\}\ (\boldsymbol{x}_k\in S,\ \boldsymbol{x}_k\neq\boldsymbol{a})$
+满足 \(\lim\limits_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{a}\)。
+由于对任意一个固定的 \(m\)，\(U_m\) 中至多含有 \(\{\boldsymbol{x}_k\}\) 中有限个点，
+因此在 \(\{U_n\}\) 中不存在 \(S\) 的有限子覆盖，这就与 \(S\) 是紧集产生了矛盾。
+所以 \(S\) 是闭集。
+
+\textbf{充分性}\ 用反证法。假设 \(S\) 是有界闭集，但不是紧的，
+那么存在 \(S\) 的一个开覆盖 \(\{U_\alpha\}\)，它不包含 \(S\) 的有限子覆盖。
+
+由于 \(S\) 为有界点集，那么它必包含在某个 \(2\) 维闭正方形 \(I_1\) 中。
+将 \(I_1\) 分成 \(4\) 个全等的闭正方形 \(I_{11},I_{12},I_{13},I_{14}\)，
+那么至少有一个 \(I_{1k}\ (1\le k\le 4)\)，使得 \(I_{1k}\cap S\) 不能被
+\(\{U_\alpha\}\) 中的有限个元素所覆盖，取其为 \(I_2\)。
+
+同样将 \(I_2\) 分成 \(4\) 个全等的闭正方形 \(I_{21},I_{22},I_{23},I_{24}\)，
+也至少有一个 \(I_{2k}\ (1\le k\le 4)\)，使得 \(I_{2k}\cap S\) 不能被
+\(\{U_\alpha\}\) 中的有限个元素所覆盖，取其为 \(I_3\)。
+
+如此下去就得到一列正方形
+\[
+  I_1\supset I_2\supset I_3\supset\cdots,
+\]
+满足
+\begin{enumerate}
+  \item 闭集 \(I_l\cap S\ (l=1,2,3,\cdots)\) 不能被 \(\{U_\alpha\}\) 中的有限个元素所覆盖；
+  \item \(\lim\limits_{l\to\infty}\operatorname{diam}(I_l\cap S)=0\)。
+\end{enumerate}
+由定理 \ref{thm:cantor}，存在唯一的一点
+\(\boldsymbol{a}=(\xi,\eta)\in\bigcap_{l=1}^{\infty}(I_l\cap S)\)。
+
+任取包含点 \(\boldsymbol{a}\) 的开集 \(U_*\in\{U_\alpha\}\)，只要适当选择 \(r\)，
+就有 \(O(\boldsymbol{a},r)\subset U_*\)。又由于
+\(\lim\limits_{l\to\infty}\operatorname{diam}(I_l\cap S)=0\)，
+则当 \(l\) 充分大时就成立 \(I_l\cap S\subset O(\boldsymbol{a},r)\subset U_*\)。
+这就导出了矛盾。
+\end{proof}
+
+\begin{thm}[紧性的等价刻画，教材定理 11.1.10]\label{thm:compacteq}
+设 \(S\) 是 \(\mathbf{R}^n\) 上的点集，那么以下三个命题等价：
+\begin{enumerate}
+  \item \(S\) 是有界闭集；
+  \item \(S\) 是紧集；
+  \item \(S\) 的任一无限子集在 \(S\) 中必有聚点。
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+(1) 与 (2) 的等价性就是定理 \ref{thm:heineborel}。
+
+(1) \(\Rightarrow\) (3)：设 \(S\) 是有界闭集。由推论 \ref{cor:accum} 即知 \(S\) 的无限子集
+必有聚点，而 \(S\) 是闭集，因此这个聚点必属于 \(S\)。
+
+(3) \(\Rightarrow\) (1)：若 \(S\) 的任一无限子集在 \(S\) 中都有聚点，
+则显然 \(S\) 中的任一收敛点列 \(\{\boldsymbol{x}_k\}\) 的极限必属于 \(S\)，
+因此 \(S\) 含有它的全部聚点，即 \(S\) 是闭集。
+
+若此时 \(S\) 无界，那么在 \(S\) 中存在点列 \(\{\boldsymbol{x}_k\}\)，满足
+\[
+  \|\boldsymbol{x}_k\|>k,\qquad k=1,2,\cdots .
+\]
+显然 \(\{\boldsymbol{x}_k\}\) 是无限集，且在 \(\mathbf{R}^n\) 中（因而在 \(S\) 中）没有聚点。
+这个矛盾表明 \(S\) 是有界的。
+\end{proof}
+
+\begin{rem}[本章的基本定理]
+Cantor 闭区域套定理、Bolzano--Weierstrass 定理、Cauchy 收敛原理和
+Heine--Borel 定理称为 Euclidean space 上的\textbf{基本定理}，它们是\textbf{相互等价}的。
+\end{rem}
+
+\subsubsection{习题}
+
+\begin{enumerate}
+  \item 证明定理 11.1.1：距离满足正定性、对称性和三角不等式。
+  \item 证明：若 \(\mathbf{R}^n\) 中的点列 \(\{\boldsymbol{x}_k\}\) 收敛，则其极限是唯一的。
+  \item 设 \(\mathbf{R}^n\) 中的点列 \(\{\boldsymbol{x}_k\}\) 和 \(\{\boldsymbol{y}_k\}\) 收敛，
+        证明：对于任何实数 \(\alpha,\beta\)，成立等式
+        \[
+          \lim_{k\to\infty}(\alpha\boldsymbol{x}_k+\beta\boldsymbol{y}_k)
+          =\alpha\lim_{k\to\infty}\boldsymbol{x}_k+\beta\lim_{k\to\infty}\boldsymbol{y}_k .
+        \]
+  \item 求下列 \(\mathbf{R}^2\) 中子集的内部、边界与闭包：
+        \begin{enumerate}
+          \item[(1)] \(S=\{(x,y)\mid x>0,\,y\neq 0\}\)；
+          \item[(2)] \(S=\{(x,y)\mid 0<x^2+y^2\le 1\}\)；
+          \item[(3)] \(S=\bigl\{(x,y)\ \big|\ 0<x\le 1,\ y=\sin\tfrac{1}{x}\bigr\}\)。
+        \end{enumerate}
+  \item 求下列点集的全部聚点：
+        \begin{enumerate}
+          \item[(1)] \(S=\bigl\{(-1)^k\tfrac{k}{k+1}\ \big|\ k=1,2,\cdots\bigr\}\)；
+          \item[(2)] \(S=\Bigl\{\Bigl(\cos\tfrac{2k\pi}{5},\sin\tfrac{2k\pi}{5}\Bigr)
+                \ \Big|\ k=1,2,\cdots\Bigr\}\)；
+          \item[(3)] \(S=\{(x,y)\mid (x^2+y^2)(y^2-x^2+1)\le 0\}\)。
+        \end{enumerate}
+  \item 证明定理 11.1.3：\(\boldsymbol{x}\) 是点集 \(S\,(\subset\mathbf{R}^n)\) 的聚点的
+        充分必要条件是：存在 \(S\) 中的点列 \(\{\boldsymbol{x}_k\}\)，
+        满足 \(\boldsymbol{x}_k\neq\boldsymbol{x}\ (k=1,2,\cdots)\)，且
+        \(\lim\limits_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{x}\)。
+  \item 设 \(U\) 是 \(\mathbf{R}^2\) 上的开集，是否 \(U\) 的每个点都是它的聚点？
+        对于 \(\mathbf{R}^2\) 中的闭集又如何呢？
+  \item 证明 \(S\subset\mathbf{R}^n\) 的所有内点组成的点集 \(S^\circ\) 必是开集。
+  \item 证明 \(S\subset\mathbf{R}^n\) 的闭包 \(\overline{S}=S\cup S'\) 必是闭集。
+  \item 设 \(E,F\subset\mathbf{R}^n\)。若 \(E\) 为开集，\(F\) 为闭集，
+        证明：\(E\setminus F\) 为开集，\(F\setminus E\) 为闭集。
+  \item 证明 Cantor 闭区域套定理。
+  \item 举例说明：满足 \(\lim\limits_{k\to\infty}|\boldsymbol{x}_{k+1}-\boldsymbol{x}_k|=0\)
+        的点列 \(\{\boldsymbol{x}_k\}\) 不一定收敛。
+  \item 设 \(E,F\subset\mathbf{R}^n\) 为紧集，证明 \(E\cap F\) 和 \(E\cup F\) 为紧集。
+  \item 用定义证明点集 \(\bigl\{0\bigr\}\cup\bigl\{\tfrac{1}{k}\ \big|\ k=1,2,\cdots\bigr\}$
+        是 \(\mathbf{R}\) 中的紧集。
+  \item 应用 Heine--Borel 定理直接证明：\(\mathbf{R}^n\) 上有界无限点集必有聚点。
+\end{enumerate}
+
+\begin{chaptersummary}
+本节的核心是把一维的「距离 — 邻域 — 收敛 — 开闭集 — 完备性 — 紧性」整条链条
+搬到 \(\mathbb{R}^n\) 上。值得强调的三点：
+\begin{enumerate}
+  \item 高维\textbf{没有大小关系}，故保序性、夹逼性失效，凡涉及「谁大谁小」的论证
+        （如单调有界原理、确界存在定理）不能直接推广；而涉及\textbf{距离}与
+        \textbf{分量}的论证（Cauchy 原理、Bolzano--Weierstrass）则可逐分量搬用。
+  \item Heine--Borel 定理（紧 $\Leftrightarrow$ 有界闭）在本章是作为
+        \emph{定理}证明的，它是 \(\mathbb{R}^n\) 这一具体空间的特殊性质。
+  \item 四个基本定理相互等价，且都等价于实数的完备性——
+        它们是后续所有多元分析结论（尤其 \S 3 的紧集上连续函数性质）的技术基础。
+\end{enumerate}
+\end{chaptersummary}
+
+\newpage
+
+% =====================================================================
+\section{多元连续函数}
+
+\srcnum{（原书第 107--114 页）}
+
+\subsection{多元函数}
+
+在科学技术及日常生活中，常常遇到的是因变量的变化与几个自变量有关。
+例如一定量的理想气体的压强 \(p\)、体积 \(V\) 和热力学温度 \(T\) 之间具有关系
+\[
+  p=\frac{RT}{V}\qquad (R\text{ 是普适气体常量}),
+\]
+即压强 \(p\) 的变化同时依赖于 \(V\) 和 \(T\)。
+
+再如圆台的体积 \(V\) 和它的两个底半径 \(R,r\) 及高 \(h\) 之间有关系
+\[
+  V=\frac{\pi h}{3}\bigl(R^2+Rr+r^2\bigr),
+\]
+即体积 \(V\) 的变化同时依赖于 \(R,r\) 和 \(h\)。
+
+这种例子举不胜举。它们表示的是因变量随多个自变量的变化而相应变化的某种规律，
+这是一元函数推广，即\textbf{多元函数}。
+
+\begin{defn}[\(n\) 元函数，教材定义 11.2.1]\label{def:multifunc}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的点集，\(D\) 到 \(\mathbf{R}\) 的映射
+\[
+  f\colon D\to\mathbf{R},\qquad \boldsymbol{x}\mapsto z
+\]
+称为 \textbf{\(n\) 元函数}，记为 \(z=f(\boldsymbol{x})\)。这时，\(D\) 称为 \(f\) 的
+\textbf{定义域}，\(f(D)=\{z\in\mathbf{R}\mid z=f(\boldsymbol{x}),\ \boldsymbol{x}\in D\}$
+称为 \(f\) 的\textbf{值域}，
+\(\Gamma=\{(\boldsymbol{x},z)\in\mathbf{R}^{n+1}\mid z=f(\boldsymbol{x}),\ \boldsymbol{x}\in D\}$
+称为 \(f\) 的\textbf{图像}。
+\end{defn}
+
+\begin{ex}[教材例 11.2.1]\label{ex:ellipsoid}
+\(z=\sqrt{1-\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}}\) 是二元函数，
+其定义域为
+\[
+  D=\Bigl\{(x,y)\in\mathbf{R}^2\ \Big|\ \frac{x^2}{a^2}+\frac{y^2}{b^2}\le 1\Bigr\},
+\]
+函数的图像是一个上半椭球面（如图 \ref{fig:ellipsoid}）。
+\end{ex}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=1.0]
+    \draw[->] (-2.6,0)--(2.9,0) node[right,font=\small] {$y$};
+    \draw[->] (0,-1.5)--(0,2.5) node[above,font=\small] {$z$};
+    \draw[->] (-1.35,-0.78)--(-2.1,-1.22) node[left,font=\small] {$x$};
+    \draw[thick] (0,0) ellipse (2.2 and 0.6);
+    \draw[thick] (0,0) ellipse (0.8 and 1.6);
+    \draw (-2.2,0)--(-2.2,0);
+    \node[font=\small] at (2.05,1.15) {$z=\sqrt{1-\frac{x^2}{a^2}-\frac{y^2}{b^2}}$};
+    \fill (0,0) circle (1.5pt);
+    \node[below left,font=\small] at (0,0) {$O$};
+  \end{tikzpicture}
+  \caption{上半椭球面（原书图 11.2.1）}
+  \label{fig:ellipsoid}
+\end{figure}
+
+\subsection{多元函数的极限}
+
+现在我们将一元函数的极限定义推广到多元函数。
+
+\begin{defn}[重极限，教材定义 11.2.2]\label{def:lim}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的开集，
+\(\boldsymbol{x}_0=(x_1^0,x_2^0,\cdots,x_n^0)\in D\) 为一定点，
+\(z=f(\boldsymbol{x})\) 是定义在 \(D\setminus\{\boldsymbol{x}_0\}\) 上的 \(n\) 元函数，
+\(A\) 是一个实数。如果对于任意给定的 \(\varepsilon>0\)，存在 \(\delta>0\)，
+使得当 \(\boldsymbol{x}\in O(\boldsymbol{x}_0,\delta)\setminus\{\boldsymbol{x}_0\}\) 时，成立
+\[
+  |f(\boldsymbol{x})-A|<\varepsilon,
+\]
+则称当 \(\boldsymbol{x}\) 趋于 \(\boldsymbol{x}_0\) 时 \(f\) \textbf{收敛}，并称 \(A\) 为 \(f\)
+当 \(\boldsymbol{x}\) 趋于 \(\boldsymbol{x}_0\) 时的（\(n\) 重）\textbf{极限}，记为
+\[
+  \lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})=A
+  \quad\Bigl(\text{或 } f(\boldsymbol{x})\to A\ (\boldsymbol{x}\to\boldsymbol{x}_0),
+  \text{ 或 }\lim_{\substack{x_1\to x_1^0\\ \vdots\\ x_n\to x_n^0}}f(x_1,\cdots,x_n)=A\Bigr).
+\]
+\end{defn}
+
+\begin{rem}
+在上面的定义中，「\(\boldsymbol{x}\in O(\boldsymbol{x}_0,\delta)\setminus\{\boldsymbol{x}_0\}\)」
+也可以用下面的条件
+\[
+  |x_1-x_1^0|<\delta,\ |x_2-x_2^0|<\delta,\ \cdots,\ |x_n-x_n^0|<\delta,
+  \quad \boldsymbol{x}\neq\boldsymbol{x}_0
+\]
+替代。
+\end{rem}
+
+\begin{ex}[教材例 11.2.2]\label{ex:lim1}
+设 \(f(x,y)=(x+y)\sin\dfrac{y}{x^2+y^2}\)，证明
+\(\lim\limits_{(x,y)\to(0,0)}f(x,y)=0\)。
+\end{ex}
+
+\begin{proof}
+由于
+\[
+  \bigl|f(x,y)-0\bigr|
+  =\Bigl|(x+y)\sin\frac{y}{x^2+y^2}\Bigr|
+  \le|x+y|\le|x|+|y|,
+\]
+所以，对于任意给定的 \(\varepsilon>0\)，只要取 \(\delta=\dfrac{\varepsilon}{2}\)，
+那么当 \(|x-0|<\delta\)，\(|y-0|<\delta\)，且 \((x,y)\neq(0,0)\) 时，
+\[
+  |f(x,y)-0|\le|x|+|y|<\delta+\delta=\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon .
+\]
+这说明了 \(\lim\limits_{(x,y)\to(0,0)}f(x,y)=0\)。
+\end{proof}
+
+对一元函数而言，只要在 \(\boldsymbol{x}_0\) 的左、右极限存在且相等，
+那么函数在 \(\boldsymbol{x}_0\) 处的极限就存在。而多元函数就没有这样简单。
+根据极限存在的定义，要求当 \(\boldsymbol{x}\) 以任何方式趋于 \(\boldsymbol{x}_0\) 时，
+函数值都趋于同一个极限。这就为我们判断函数极限的不存在提供了方便，
+因为若自变量沿不同的两条曲线趋于某一定点时，函数的极限不同或不存在，
+那么这个函数在该点的极限一定不存在。
+
+\begin{ex}[教材例 11.2.3]\label{ex:lim2}
+设 \(f(x,y)=\dfrac{xy}{x^2+y^2}\)，\((x,y)\neq(0,0)\)。
+
+显然，当点 \((x,y)\) 沿 \(x\) 轴和 \(y\) 轴趋于 \((0,0)\) 时，\(f(x,y)\) 的极限都是 \(0\)。
+但它沿直线 \(y=mx\) 趋于 \((0,0)\) 时，
+\[
+  \lim_{\substack{x\to 0\\ y=mx}}f(x,y)=\lim_{x\to 0}\frac{mx^2}{x^2+m^2x^2}
+  =\frac{m}{1+m^2},
+\]
+上式对于不同的 \(m\) 有不同的极限值。这说明 \(f(x,y)\) 在点 \((0,0)\) 的极限不存在。
+\end{ex}
+
+\begin{ex}[教材例 11.2.4]\label{ex:lim3}
+设 \(f(x,y)=\dfrac{(y^2-x)^2}{y^4+x^2}\)，\((x,y)\neq(0,0)\)。
+
+当点 \((x,y)\) 沿直线 \(y=mx\) 趋于 \((0,0)\) 时，成立
+\[
+  \lim_{\substack{x\to 0\\ y=mx}}f(x,y)
+  =\lim_{x\to 0}\frac{(m^2x^2-x)^2}{m^4x^4+x^2}=1;
+\]
+当点 \((x,y)\) 沿 \(y\) 轴趋于 \((0,0)\) 时，也成立
+\(\lim\limits_{\substack{y\to 0\\ x=0}}f(x,y)=1\)。因此当点 \((x,y)\) 沿任何直线
+趋于 \((0,0)\) 时，\(f(x,y)\) 极限存在且相等。
+
+但 \(f(x,y)\) 在点 \((0,0)\) 的极限不存在。事实上，\(f\) 在抛物线 \(y^2=x\) 上的值为 \(0\)，
+因此当点 \((x,y)\) 沿这条抛物线趋于 \((0,0)\) 时，它的极限为 \(0\)。
+\end{ex}
+
+\begin{rem}
+例 \ref{ex:lim3} 说明：\textbf{即使沿任意直线极限存在且相等，仍不能保证重极限存在}——
+还必须考虑抛物线等其他路径。这是多元极限与一元极限的本质差别。
+\end{rem}
+
+一元函数的极限性质，如唯一性、局部有界性、局部保序性、局部夹逼性及极限的
+四则运算法则，对二元函数依然成立，这里不再赘述。
+
+\subsection{累次极限}
+
+对重极限 \(\lim\limits_{(x,y)\to(x_0,y_0)}f(x,y)\)，人们很自然会想到的是，
+能否在一定条件下将重极限分解成为两个独立的极限 \(x\to x_0\) 和 \(y\to y_0\)，
+再利用一元函数的极限理论和方法逐个处理之？这后一种极限称为\textbf{累次极限}。
+
+\begin{defn}[二次极限，教材定义 11.2.3]\label{def:iterated}
+设 \(D\) 是 \(\mathbf{R}^2\) 上的开集，\((x_0,y_0)\in D\) 为一定点，
+\(z=f(x,y)\) 为定义在 \(D\setminus\{(x_0,y_0)\}\) 上的二元函数。
+如果对于每个固定的 \(y\neq y_0\)，极限
+\(\lim\limits_{x\to x_0}f(x,y)\) 存在，并且极限
+\[
+  \lim_{y\to y_0}\lim_{x\to x_0}f(x,y)
+\]
+存在，那么称此极限值为函数 \(f(x,y)\) 在点 \((x_0,y_0)\) 的
+\textbf{先对 \(x\) 后对 \(y\) 的二次极限}。
+
+同理可定义\textbf{先对 \(y\) 后对 \(x\) 的二次极限}
+\(\lim\limits_{x\to x_0}\lim\limits_{y\to y_0}f(x,y)\)。
+\end{defn}
+
+累次极限存在与重极限存在的关系很复杂。例 \ref{ex:lim2} 和例 \ref{ex:lim3}
+其实已经告诉我们，二次极限存在不能保证二重极限存在。而从下面的例子可以知道，
+二重极限存在同样不能保证二次极限存在。
+
+\begin{ex}[二重极限存在，但两个二次极限不存在，教材例 11.2.5]\label{ex:iter1}
+设
+\[
+  f(x,y)=
+  \begin{cases}
+    (x^2+y^2)\sin\dfrac{1}{x}\cos\dfrac{1}{y}, & x\neq 0\ \text{且}\ y\neq 0,\\[6pt]
+    0, & x=0\ \text{或}\ y=0 .
+  \end{cases}
+\]
+\end{ex}
+
+\begin{sol}
+由于 \(|f(x,y)|\le x^2+y^2\)，所以 \(\lim\limits_{(x,y)\to(0,0)}f(x,y)=0\)。
+但在 \((0,0)\) 点两个二次极限显然不存在。
+\end{sol}
+
+\begin{ex}[二重极限存在，两个二次极限中有一个不存在，教材例 11.2.6]\label{ex:iter2}
+设
+\[
+  f(x,y)=
+  \begin{cases}
+    y\sin\dfrac{1}{x}, & x\neq 0\ \text{且}\ y\neq 0,\\[6pt]
+    0, & x=0\ \text{或}\ y=0 .
+  \end{cases}
+\]
+\end{ex}
+
+\begin{sol}
+在 \((0,0)\) 点显然有 \(\lim\limits_{(x,y)\to(0,0)}f(x,y)=0\)，即二重极限存在，且
+\[
+  \lim_{x\to 0}\lim_{y\to 0}f(x,y)=\lim_{x\to 0}\Bigl[\lim_{y\to 0}y\sin\frac{1}{x}\Bigr]=0,
+\]
+但先对 \(x\) 后对 \(y\) 的二次极限不存在。
+\end{sol}
+
+此外，一个二次极限存在不能保证另一个二次极限也存在；即使两个二次极限都存在，
+也不一定相等。也就是说，\textbf{两个极限运算不一定可以交换次序}。
+
+不过，在二重极限存在时，我们有下面的结果：
+
+\begin{thm}[累次极限与重极限，教材定理 11.2.1]\label{thm:iterated}
+若二元函数 \(f(x,y)\) 在 \((x_0,y_0)\) 点存在二重极限
+\[
+  \lim_{(x,y)\to(x_0,y_0)}f(x,y)=A,
+\]
+且当 \(x\neq x_0\) 时存在极限
+\[
+  \lim_{y\to y_0}f(x,y)=\varphi(x),
+\]
+那么 \(f(x,y)\) 在 \((x_0,y_0)\) 点的先对 \(y\) 后对 \(x\) 的二次极限存在且与二重极限相等，即
+\[
+  \lim_{x\to x_0}\lim_{y\to y_0}f(x,y)=\lim_{x\to x_0}\varphi(x)
+  =\lim_{(x,y)\to(x_0,y_0)}f(x,y)=A .
+\]
+\end{thm}
+
+\begin{proof}
+只要证明 \(\lim\limits_{x\to x_0}\varphi(x)=A\) 即可。
+
+对于任意给定的 \(\varepsilon>0\)，由于
+\(\lim\limits_{(x,y)\to(x_0,y_0)}f(x,y)=A\)，所以存在 \(\delta>0\)，
+使得当 \(0<\sqrt{(x-x_0)^2+(y-y_0)^2}<\delta\) 时有
+\[
+  |f(x,y)-A|<\frac{\varepsilon}{2},
+\]
+于是对于每个满足 \(0<|x-x_0|<\delta\) 的 \(x\)，令 \(y\to y_0\)，就得到
+\[
+  |\varphi(x)-A|=\lim_{y\to y_0}|f(x,y)-A|\le\frac{\varepsilon}{2}<\varepsilon .
+\]
+这就是说，对于任意给定的 \(\varepsilon>0\)，存在 \(\delta>0\)，使得当
+\(0<|x-x_0|<\delta\) 时，
+\[
+  |\varphi(x)-A|<\varepsilon .
+\]
+\end{proof}
+
+同样可证：在二重极限存在的情况下，如果当 \(y\neq y_0\)，\(x\to x_0\) 时存在极限
+\(\lim\limits_{x\to x_0}f(x,y)=\psi(y)\)，那么
+\[
+  \lim_{y\to y_0}\lim_{x\to x_0}f(x,y)=\lim_{y\to y_0}\psi(y)
+  =\lim_{(x,y)\to(x_0,y_0)}f(x,y).
+\]
+所以，\textbf{若函数 \(f(x,y)\) 的二重极限及两个二次极限都存在，则三者必相等}，即
+\[
+  \lim_{y\to y_0}\lim_{x\to x_0}f(x,y)
+  =\lim_{x\to x_0}\lim_{y\to y_0}f(x,y)
+  =\lim_{(x,y)\to(x_0,y_0)}f(x,y).
+\]
+这意味着，此时极限运算可以交换次序。
+
+\subsection{多元函数的连续性}
+
+\begin{defn}[连续，教材定义 11.2.4]\label{def:cont}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的开集，\(z=f(\boldsymbol{x})\) 是定义在 \(D\) 上的函数，
+\(\boldsymbol{x}_0\in D\) 为一定点。如果
+\[
+  \lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})=f(\boldsymbol{x}_0),
+\]
+则称函数 \(f\) 在点 \(\boldsymbol{x}_0\) \textbf{连续}。用「\(\varepsilon\)--\(\delta\)」语言来说就是：
+如果对于任意给定的 \(\varepsilon>0\)，存在 \(\delta>0\)，使得当
+\(\boldsymbol{x}\in O(\boldsymbol{x}_0,\delta)\) 时，成立
+\[
+  |f(\boldsymbol{x})-f(\boldsymbol{x}_0)|<\varepsilon,
+\]
+则称函数 \(f\) 在点 \(\boldsymbol{x}_0\) 连续。
+
+如果函数 \(f\) 在 \(D\) 上每一点连续，就称 \(f\) 在 \(D\) 上连续，
+或称 \(f\) 是 \(D\) 上的\textbf{连续函数}。
+\end{defn}
+
+\begin{ex}[教材例 11.2.7]\label{ex:cont1}
+函数 \(f(x,y)=\sin\sqrt{x^2+y^2}\) 在 \(\mathbf{R}^2\) 上连续。
+\end{ex}
+
+\begin{proof}
+设 \((x_0,y_0)\) 为 \(\mathbf{R}^2\) 上的任一点，则有
+\begin{align*}
+  |f(x,y)-f(x_0,y_0)|
+  &=\Bigl|\sin\sqrt{x^2+y^2}-\sin\sqrt{x_0^2+y_0^2}\Bigr|\\
+  &=2\Bigl|\cos\frac{\sqrt{x^2+y^2}+\sqrt{x_0^2+y_0^2}}{2}\Bigr|
+    \cdot\Bigl|\sin\frac{\sqrt{x^2+y^2}-\sqrt{x_0^2+y_0^2}}{2}\Bigr|\\
+  &\le 2\Bigl|\sin\frac{\sqrt{x^2+y^2}-\sqrt{x_0^2+y_0^2}}{2}\Bigr|\\
+  &\le\Bigl|\sqrt{x^2+y^2}-\sqrt{x_0^2+y_0^2}\Bigr|\\
+  &\le\sqrt{(x-x_0)^2+(y-y_0)^2}
+  \qquad(\text{利用三角不等式}).
+\end{align*}
+于是，对于任意给定的 \(\varepsilon>0\)，取 \(\delta=\varepsilon\)，
+当 \(\sqrt{(x-x_0)^2+(y-y_0)^2}<\delta\) 时就成立
+\[
+  |f(x,y)-f(x_0,y_0)|<\varepsilon .
+\]
+这说明 \(f(x,y)\) 在点 \((x_0,y_0)\) 连续。由于 \((x_0,y_0)\) 为 \(\mathbf{R}^2\) 上的
+任意一点，所以 \(f(x,y)\) 在 \(\mathbf{R}^2\) 上连续。
+\end{proof}
+
+一元连续函数和差积商及复合函数性质同样可以平行地推广到多元连续函数。
+
+\begin{ex}[教材例 11.2.8]\label{ex:cont2}
+计算极限 \(\lim\limits_{(x,y)\to(1,0)}\dfrac{\ln(x+e^y)}{\sqrt{x^2+y^2}}\)。
+\end{ex}
+
+\begin{sol}
+注意到函数 \(\ln(x+e^y)\) 和 \(\sqrt{x^2+y^2}\) 在其自然定义域上的连续性，
+由极限的运算法则，得到
+\[
+  \lim_{(x,y)\to(1,0)}\frac{\ln(x+e^y)}{\sqrt{x^2+y^2}}
+  =\frac{\lim\limits_{(x,y)\to(1,0)}\ln(x+e^y)}
+        {\lim\limits_{(x,y)\to(1,0)}\sqrt{x^2+y^2}}
+  =\ln 2 .
+\]
+\end{sol}
+
+\begin{ex}[教材例 11.2.9]\label{ex:cont3}
+计算极限 \(\lim\limits_{(x,y)\to(0,0)}\dfrac{\sin\bigl[(y+1)\sqrt{x^2+y^2}\bigr]}{\sqrt{x^2+y^2}}\)。
+\end{ex}
+
+\begin{sol}
+利用 \(\lim\limits_{t\to 0}\dfrac{\sin t}{t}=1\)，得到
+\begin{align*}
+  \lim_{(x,y)\to(0,0)}\frac{\sin\bigl[(y+1)\sqrt{x^2+y^2}\bigr]}{\sqrt{x^2+y^2}}
+  &=\lim_{(x,y)\to(0,0)}
+    \frac{\sin\bigl[(y+1)\sqrt{x^2+y^2}\bigr]}{(y+1)\sqrt{x^2+y^2}}\cdot(y+1)\\
+  &=\lim_{(x,y)\to(0,0)}
+    \frac{\sin\bigl[(y+1)\sqrt{x^2+y^2}\bigr]}{(y+1)\sqrt{x^2+y^2}}
+    \cdot\lim_{(x,y)\to(0,0)}(y+1)=1 .
+\end{align*}
+\end{sol}
+
+\subsection{向量值函数}
+
+平面解析几何中熟知的参数方程
+\[
+  \begin{cases}
+    x=\varphi(t),\\ y=\psi(t),
+  \end{cases}\qquad t\in[t_0,t_1]
+\]
+是一元函数的另一种推广：多个因变量（\(x\) 和 \(y\)）按某种规律，
+随自变量 \(t\) 的变化而相应变化。一般地，
+
+\begin{defn}[向量值函数，教材定义 11.2.5]\label{def:vectorfunc}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的点集，\(D\) 到 \(\mathbf{R}^m\) 的映射
+\[
+  f\colon D\to\mathbf{R}^m,\qquad
+  \boldsymbol{x}=(x_1,x_2,\cdots,x_n)\mapsto
+  \boldsymbol{z}=(z_1,z_2,\cdots,z_m)
+\]
+称为 \textbf{\(n\) 元 \(m\) 维向量值函数}（或\textbf{多元函数组}），
+记为 \(\boldsymbol{z}=f(\boldsymbol{x})\)。\(D\) 称为 \(f\) 的\textbf{定义域}，
+\(f(D)=\{\boldsymbol{z}\in\mathbf{R}^m\mid \boldsymbol{z}=f(\boldsymbol{x}),\ \boldsymbol{x}\in D\}\)
+称为 \(f\) 的\textbf{值域}。
+\end{defn}
+
+多元函数是 \(m=1\) 的特殊情形。
+
+显然，每个 \(z_i\ (i=1,2,\cdots,m)\) 都是 \(\boldsymbol{x}\) 的函数
+\(z_i=f_i(\boldsymbol{x})\)，它称为 \(f\) 的第 \(i\) 个\textbf{坐标}（或\textbf{分量}）函数，
+于是，\(f\) 可以表达为分量形式
+\[
+  \begin{cases}
+    z_1=f_1(\boldsymbol{x}),\\
+    z_2=f_2(\boldsymbol{x}),\\
+    \cdots\cdots\cdots\cdots\\
+    z_m=f_m(\boldsymbol{x}),
+  \end{cases}\qquad \boldsymbol{x}\in D .
+\]
+因此 \(f\) 又可表示为
+\[
+  f=(f_1,f_2,\cdots,f_m).
+\]
+
+\begin{ex}[教材例 11.2.10]\label{ex:cone}
+设映射
+\[
+  f\colon [0,+\infty)\times[0,2\pi)\to\mathbf{R}^3,\qquad
+  (r,\theta)\mapsto(x,y,z),
+\]
+的具体分量形式是
+\[
+  \begin{cases}
+    x=x(r,\theta)=r\cos\theta,\\
+    y=y(r,\theta)=r\sin\theta,\\
+    z=z(r,\theta)=r,
+  \end{cases}\qquad r\in[0,+\infty),\ \theta\in[0,2\pi),
+\]
+这是二元三维向量值函数，在空间解析几何中知道，这是三维空间上的一张半圆锥面。
+\end{ex}
+
+我们引进极限的概念：
+
+\begin{defn}[向量值函数的极限，教材定义 11.2.2$'$]\label{def:vlim}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的开集，\(\boldsymbol{x}_0\in D\) 为一定点，
+\(f\colon D\setminus\{\boldsymbol{x}_0\}\to\mathbf{R}^m\) 是映射（向量值函数），
+\(\boldsymbol{A}\) 是一个 \(m\) 维向量。如果对于任意给定的 \(\varepsilon>0\)，
+存在 \(\delta>0\)，使得当
+\(\boldsymbol{x}\in O(\boldsymbol{x}_0,\delta)\setminus\{\boldsymbol{x}_0\}\) 时，成立
+\[
+  |f(\boldsymbol{x})-\boldsymbol{A}|<\varepsilon
+  \qquad(\text{即}\ f(\boldsymbol{x})\in O(\boldsymbol{A},\varepsilon)),
+\]
+则称 \(\boldsymbol{A}\) 为当 \(\boldsymbol{x}\) 趋于 \(\boldsymbol{x}_0\) 时 \(f\) 的\textbf{极限}，
+并称当 \(\boldsymbol{x}\) 趋于 \(\boldsymbol{x}_0\) 时 \(f\) \textbf{收敛}。记为
+\[
+  \lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})=\boldsymbol{A}
+  \quad\text{或}\quad f(\boldsymbol{x})\to\boldsymbol{A}\ (\boldsymbol{x}\to\boldsymbol{x}_0).
+\]
+\end{defn}
+
+再引进连续的概念：
+
+\begin{defn}[连续映射，教材定义 11.2.4$'$]\label{def:contmap}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的开集，\(\boldsymbol{x}_0\in D\) 为一定点，
+\(f\colon D\to\mathbf{R}^m\) 是映射（向量值函数）。如果 \(f\) 满足
+\[
+  \lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})=f(\boldsymbol{x}_0),
+\]
+那么称 \(f\) 在 \(\boldsymbol{x}_0\) 点\textbf{连续}。用「\(\varepsilon\)--\(\delta\)」语言来说就是：
+如果对于任意给定的 \(\varepsilon>0\)，存在 \(\delta>0\)，使得当
+\(\boldsymbol{x}\in O(\boldsymbol{x}_0,\delta)\) 时，成立
+\[
+  |f(\boldsymbol{x})-f(\boldsymbol{x}_0)|<\varepsilon
+  \qquad(\text{即}\ f(\boldsymbol{x})\in O(f(\boldsymbol{x}_0),\varepsilon)),
+\]
+则称 \(f\) 在点 \(\boldsymbol{x}_0\) 连续。
+
+如果映射 \(f\) 在 \(D\) 上每一点连续，就称 \(f\) 在 \(D\) 上连续。
+这时称映射 \(f\) 为 \(D\) 上的\textbf{连续映射}。
+\end{defn}
+
+如果我们如前所述将 \(f\colon D\to\mathbf{R}^m\) 表示为
+\(f=(f_1,f_2,\cdots,f_m)\)，那么下面的定理说明了
+我们可以利用坐标函数来判断 \(f\) 的连续性。也就是说，
+\textbf{映射（向量值函数）的连续性可以归结到它的坐标函数的连续性上去}。
+
+\begin{thm}[分量判据，教材定理 11.2.2]\label{thm:coordcont}
+设 \(D\) 是 \(\mathbf{R}^n\) 上的开集，\(\boldsymbol{x}_0\in D\) 为一定点。
+那么映射 \(f\colon D\to\mathbf{R}^m\) 在 \(\boldsymbol{x}_0\) 点连续的充分必要条件为：
+函数 \(f_1,f_2,\cdots,f_m\) 在 \(\boldsymbol{x}_0\) 点连续。
+\end{thm}
+
+\begin{proof}
+定理的证明可由不等式
+\begin{align*}
+  |f_j(\boldsymbol{x})-f_j(\boldsymbol{x}_0)|
+  &\le|f(\boldsymbol{x})-f(\boldsymbol{x}_0)|
+  =\sqrt{\sum_{i=1}^{m}\bigl(f_i(\boldsymbol{x})-f_i(\boldsymbol{x}_0)\bigr)^2}\\
+  &\le\sum_{i=1}^{m}|f_i(\boldsymbol{x})-f_i(\boldsymbol{x}_0)|
+  \qquad (j=1,2,\cdots,m)
+\end{align*}
+直接得到。
+\end{proof}
+
+\begin{ex}[连续曲面，教材例 11.2.11]\label{ex:surface}
+设 \(D=\{(u,v)\in\mathbf{R}^2\mid a<u<b,\ c<v<d\}\)。映射
+\[
+  f\colon D\to\mathbf{R}^3,\qquad (u,v)\mapsto(x,y,z)
+\]
+是二元三维向量值函数，它写成分量形式就是
+\[
+  \begin{cases}
+    x=x(u,v),\\ y=y(u,v),\\ z=z(u,v),
+  \end{cases}\qquad (u,v)\in D .
+\]
+如果 \(x(u,v),y(u,v),z(u,v)\) 都是 \(D\) 上的连续函数，从几何上看，
+这就是三维空间上的连续曲面的一般方程。
+\end{ex}
+
+下面讨论复合映射的连续性。
+
+设 \(\Omega\) 是 \(\mathbf{R}^k\) 上的开集，\(D\) 为 \(\mathbf{R}^n\) 上的开集，
+\(g\colon D\to\mathbf{R}^k\) 与 \(f\colon\Omega\to\mathbf{R}^m\) 为映射，
+并且 \(g\) 的值域 \(g(D)\) 满足 \(g(D)\subset\Omega\)，则可以定义复合映射
+\[
+  f\circ g\colon D\to\mathbf{R}^m,\qquad \boldsymbol{u}\mapsto f(g(\boldsymbol{u})).
+\]
+
+\begin{thm}[复合映射的连续性，教材定理 11.2.3]\label{thm:composite}
+如果 \(g\) 在 \(D\) 上连续，\(f\) 在 \(\Omega\) 上连续，
+那么复合映射 \(f\circ g\) 在 \(D\) 上连续。
+\end{thm}
+
+\begin{completion}
+原书让读者自己补出证明。补出如下。
+
+任取 \(\boldsymbol{u}_0\in D\)，需证 \(f\circ g\) 在 \(\boldsymbol{u}_0\) 连续。
+
+给定 \(\varepsilon>0\)。因 \(f\) 在 \(\boldsymbol{y}_0=g(\boldsymbol{u}_0)\in\Omega\) 连续，
+存在 \(\eta>0\)，使得当 \(\boldsymbol{y}\in\Omega\) 且
+\(|\boldsymbol{y}-\boldsymbol{y}_0|<\eta\) 时，
+\[
+  |f(\boldsymbol{y})-f(\boldsymbol{y}_0)|<\varepsilon .
+\]
+又因 \(g\) 在 \(\boldsymbol{u}_0\) 连续，对上述 \(\eta>0\) 存在 \(\delta>0\)，
+使得当 \(\boldsymbol{u}\in D\) 且 \(|\boldsymbol{u}-\boldsymbol{u}_0|<\delta\) 时，
+\[
+  |g(\boldsymbol{u})-g(\boldsymbol{u}_0)|<\eta .
+\]
+于是，当 \(\boldsymbol{u}\in D\) 且 \(|\boldsymbol{u}-\boldsymbol{u}_0|<\delta\) 时，
+由 \(g(\boldsymbol{u})\in g(D)\subset\Omega\) 且
+\(|g(\boldsymbol{u})-g(\boldsymbol{u}_0)|<\eta\)，可得
+\[
+  |(f\circ g)(\boldsymbol{u})-(f\circ g)(\boldsymbol{u}_0)|
+  =|f(g(\boldsymbol{u}))-f(g(\boldsymbol{u}_0))|<\varepsilon .
+\]
+由 \(\boldsymbol{u}_0\) 的任意性，\(f\circ g\) 在 \(D\) 上连续。
+\end{completion}
+
+\subsubsection{习题}
+
+\begin{enumerate}
+  \item 确定下列函数的自然定义域：
+        \begin{enumerate}
+          \item[(1)] \(u=\ln(y-x)+\dfrac{x}{\sqrt{1-x^2-y^2}}\)；
+          \item[(2)] \(u=\dfrac{1}{\sqrt{x}}+\dfrac{1}{\sqrt{y}}+\dfrac{1}{\sqrt{z}}\)；
+          \item[(3)] \(u=\sqrt{R^2-x^2-y^2-z^2}+\sqrt{x^2+y^2+z^2-r^2}\quad (R>r)\)；
+          \item[(4)] \(u=\arcsin\dfrac{z}{x^2+y^2}\)。
+        \end{enumerate}
+  \item 设 \(f\Bigl(\dfrac{y}{x}\Bigr)=\dfrac{x^3}{(x^2+y^2)^{3/2}}\ (x>0)\)，求 \(f(x)\)。
+  \item 若函数
+        \[
+          z(x,y)=\sqrt{y}+f\bigl(\sqrt{x}-1\bigr),
+        \]
+        且当 \(y=4\) 时 \(z=x+1\)，求 \(f(x)\) 和 \(z(x,y)\)。
+  \item 讨论下列函数当 \((x,y)\) 趋于 \((0,0)\) 时的极限是否存在：
+        \begin{enumerate}
+          \item[(1)] \(f(x,y)=\dfrac{x-y}{x+y}\)；
+          \item[(2)] \(f(x,y)=\dfrac{xy}{x^2+y^2}\)；
+          \item[(3)] \(f(x,y)=\begin{cases}1,&0<y<x^2,\\ 0,&\text{其他点};\end{cases}\)
+          \item[(4)] \(f(x,y)=\dfrac{x^3y^3}{x^4+y^8}\)。
+        \end{enumerate}
+  \item 对多元函数证明极限唯一性、局部有界性、局部保序性和局部夹逼性。
+  \item 对多元函数证明极限的四则运算法则：假设当 \(\boldsymbol{x}\) 趋于
+        \(\boldsymbol{x}_0\) 时函数 \(f(\boldsymbol{x})\) 和 \(g(\boldsymbol{x})\) 的极限存在，则
+        \begin{align*}
+          &\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}\bigl(f(\boldsymbol{x})\pm g(\boldsymbol{x})\bigr)
+           =\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})
+           \pm\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}g(\boldsymbol{x});\\
+          &\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}\bigl(f(\boldsymbol{x})\cdot g(\boldsymbol{x})\bigr)
+           =\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})
+           \cdot\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}g(\boldsymbol{x});\\
+          &\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}\frac{f(\boldsymbol{x})}{g(\boldsymbol{x})}
+           =\frac{\lim\limits_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})}
+                 {\lim\limits_{\boldsymbol{x}\to\boldsymbol{x}_0}g(\boldsymbol{x})}
+           \qquad\Bigl(\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}g(\boldsymbol{x})\neq 0\Bigr).
+        \end{align*}
+  \item 求下列各极限：
+        \begin{enumerate}
+          \item[(1)] \(\lim\limits_{(x,y)\to(0,1)}\dfrac{1-xy}{x^2+y^2}\)；
+          \item[(2)] \(\lim\limits_{(x,y)\to(0,0)}\dfrac{1+x^2+y^2}{x^4+y^4}\)；
+          \item[(3)] \(\lim\limits_{(x,y)\to(0,0)}\dfrac{\sqrt{1+xy}-1}{xy}\)；
+          \item[(4)] \(\lim\limits_{(x,y)\to(0,0)}\dfrac{x^2+y^2}{\sqrt{1+x^2+y^2}-1}\)；
+          \item[(5)] \(\lim\limits_{(x,y)\to(0,0)}\dfrac{\ln(x^2+e^{y^2})}{x^2+y^2}\)；
+          \item[(6)] \(\lim\limits_{(x,y)\to(0,0)}\dfrac{\sin(x^3+y^3)}{x^2+y^2}\)；
+          \item[(7)] \(\lim\limits_{(x,y)\to(0,0)}\dfrac{1-\cos(x^2+y^2)}{(x^2+y^2)x^2y^2}\)；
+          \item[(8)] \(\lim\limits_{\substack{x\to+\infty\\ y\to+\infty}}(x^2+y^2)e^{-(x+y)}\)。
+        \end{enumerate}
+  \item 讨论下列函数在原点的二重极限和二次极限：
+        \begin{enumerate}
+          \item[(1)] \(f(x,y)=\dfrac{x^2y^2}{x^2y^2+(x-y)^2}\)；
+          \item[(2)] \(f(x,y)=\dfrac{x^2(1+x^2)-y^2(1+y^2)}{x^2+y^2}\)；
+          \item[(3)] \(f(x,y)=x\sin\dfrac{1}{y}+y\sin\dfrac{1}{x}\)。
+        \end{enumerate}
+  \item 验证函数
+        \[
+          f(x,y)=
+          \begin{cases}
+            \dfrac{2}{x^2}\Bigl(y-\dfrac{1}{2}x^2\Bigr), & x>0\ \text{且}\ \tfrac{1}{2}x^2<y\le x^2,\\[6pt]
+            \dfrac{1}{x^2}\bigl(2x^2-y\bigr), & x>0\ \text{且}\ x^2<y<2x^2,\\[6pt]
+            0, & \text{其他点}
+          \end{cases}
+        \]
+        在原点不连续，而在其他点连续。
+  \item 讨论函数
+        \[
+          f(x,y)=
+          \begin{cases}
+            \dfrac{x^2y}{x^2+y^2}, & x^2+y^2\neq 0,\\[6pt]
+            0, & x^2+y^2=0
+          \end{cases}
+        \]
+        的连续范围。
+  \item 设 \(f(t)\) 在区间 \((a,b)\) 上具有连续导数，
+        \(D=(a,b)\times(a,b)\)，定义 \(D\) 上的函数
+        \[
+          F(x,y)=
+          \begin{cases}
+            \dfrac{f(x)-f(y)}{x-y}, & x\neq y,\\[6pt]
+            f'(x), & x=y .
+          \end{cases}
+        \]
+        证明：对于任何 \(c\in(a,b)\) 成立
+        \[
+          \lim_{(x,y)\to(c,c)}F(x,y)=f'(c).
+        \]
+  \item 设二元函数 \(f(x,y)\) 在开集 \(D\subset\mathbf{R}^2\) 内对于变量 \(x\) 是连续的，
+        对于变量 \(y\) 满足 Lipschitz 条件：
+        \[
+          |f(x,y')-f(x,y'')|\le L|y'-y''|,
+        \]
+        其中 \((x,y'),(x,y'')\in D\)，\(L\) 为常数（通常称为 \textbf{Lipschitz 常数}）。
+        证明 \(f(x,y)\) 在 \(D\) 上连续。
+  \item 证明：若 \(f\) 和 \(g\) 是 \(D\) 到 \(\mathbf{R}^m\) 上的连续映射，
+        则映射 \(f+g\) 与函数 \(\langle f,g\rangle\) 在 \(D\) 上都是连续的。
+  \item 证明复合映射的连续性定理（定理 \ref{thm:composite}）。
+\end{enumerate}
+
+\begin{chaptersummary}
+本节的关键区分是\textbf{重极限}与\textbf{累次极限}：
+\begin{itemize}
+  \item 重极限要求「任何路径」趋近都得到同一值，条件更强；
+  \item 重极限存在 $\Rightarrow$ 二次极限（在存在的前提下）与之相等，
+        反之不成立（例 \ref{ex:iter1}、例 \ref{ex:iter2}）；
+  \item 判极限不存在时，只需找到两条给出不同极限的路径
+        （直线不够用，例 \ref{ex:lim3} 说明还需试抛物线等）。
+\end{itemize}
+连续性即 \(\lim_{\boldsymbol{x}\to\boldsymbol{x}_0}f(\boldsymbol{x})=f(\boldsymbol{x}_0)\)，
+向量值函数的连续性可用分量判据（定理 \ref{thm:coordcont}）降为一元问题；
+复合运算保持连续性（定理 \ref{thm:composite}）。
+\end{chaptersummary}
+
+\newpage
+
+% =====================================================================
+\section{连续函数的性质}
+
+\srcnum{（原书第 115--119 页）}
+
+\subsection{紧集上的连续映射}
+
+现在，我们将一元函数在闭区间上的重要性质推广到多元连续函数。
+
+回顾对一元函数的处理过程，是通过引入\textbf{单侧连续}的概念，先将「连续」从区间的
+内点延伸到区间的端点（即区间的边界点），从而将函数在开区间上连续扩展到在闭区间上连续，
+再对闭区间上连续函数进行讨论的。
+
+现在对高维点集作类似处理，先将连续的概念扩展到点集的边界点。
+
+\begin{defn}[在点集上连续，教材定义 11.3.1]\label{def:contK}
+设点集 \(K\subset\mathbf{R}^n\)，\(f\colon K\to\mathbf{R}^m\) 为映射（向量值函数），
+\(\boldsymbol{x}_0\in K\)。如果对于任意给定的 \(\varepsilon>0\)，存在 \(\delta>0\)，
+使得当 \(\boldsymbol{x}\in O(\boldsymbol{x}_0,\delta)\cap K\) 时，成立
+\[
+  |f(\boldsymbol{x})-f(\boldsymbol{x}_0)|<\varepsilon
+  \qquad(\text{即}\ f(\boldsymbol{x})\in O(f(\boldsymbol{x}_0),\varepsilon)),
+\]
+则称 \(f\) 在点 \(\boldsymbol{x}_0\) \textbf{连续}。
+
+如果映射 \(f\) 在 \(K\) 上每一点连续，就称 \(f\) 在 \(K\) 上连续，
+或称 \(f\) 为 \(K\) 上的\textbf{连续映射}。
+\end{defn}
+
+也就是说，当 \(\boldsymbol{x}_0\) 是 \(K\) 的内点时，这就是原来的定义；
+当 \(\boldsymbol{x}_0\) 是 \(K\) 的边界点时，只要求函数在 \(\boldsymbol{x}_0\) 的
+\(\delta\) 邻域中属于 \(K\) 的那些点满足不等式
+\[
+  |f(\boldsymbol{x})-f(\boldsymbol{x}_0)|<\varepsilon .
+\]
+请读者与一元函数的单侧连续定义相比较。
+
+闭区间实质上是一维空间中的有界闭集，顺理成章地，在讨论高维空间上连续函数的性质时，
+应该要求 \(f\) 的定义域是高维空间中的有界闭集，即\textbf{紧集}。
+这样，一元函数在闭区间上的性质就可以拓展至多元函数，
+这也是引进紧集概念的一个原因。
+
+先给出紧集上的连续映射的一个重要性质。
+
+\begin{thm}[连续映射将紧集映成紧集，教材定理 11.3.1]\label{thm:imagecompact}
+设 \(K\) 是 \(\mathbf{R}^n\) 中紧集，\(f\colon K\to\mathbf{R}^m\) 为连续映射。
+则 \(K\) 的像集
+\[
+  f(K)=\{\boldsymbol{y}\in\mathbf{R}^m\mid \boldsymbol{y}=f(\boldsymbol{x}),\ \boldsymbol{x}\in K\}
+\]
+是紧集。
+\end{thm}
+
+\begin{proof}
+根据定理 \ref{thm:compacteq}，只要证明 \(f(K)\) 中的任意一个无限点集必有聚点
+属于 \(f(K)\) 就可以了。因为每一个无限点集都有可列无限点集，
+即点列形式的子集，所以只要证明 \(f(K)\) 的任意一个点列必有聚点属于 \(f(K)\) 即可。
+
+设 \(\{\boldsymbol{y}_k\}\) 为 \(f(K)\) 的任意一个点列。对于每个 \(\boldsymbol{y}_k\)，
+任取一个满足 \(f(\boldsymbol{x}_k)=\boldsymbol{y}_k\) 的
+\(\boldsymbol{x}_k\in K\ (k=1,2,\cdots)\)，则 \(\{\boldsymbol{x}_k\}\) 为紧集 \(K\) 中的点列，
+它必有聚点属于 \(K\)，即存在 \(\{\boldsymbol{x}_k\}\) 的子列
+\(\{\boldsymbol{x}_{k_l}\}\) 满足
+\[
+  \lim_{l\to\infty}\boldsymbol{x}_{k_l}=\boldsymbol{a}\in K .
+\]
+由 \(f\) 在 \(\boldsymbol{a}\) 点的连续性得
+\[
+  \lim_{l\to\infty}\boldsymbol{y}_{k_l}
+  =\lim_{l\to\infty}f(\boldsymbol{x}_{k_l})=f(\boldsymbol{a}),
+\]
+即 \(f(\boldsymbol{a})\) 是 \(\{\boldsymbol{y}_k\}\) 的一个聚点，它显然属于 \(f(K)\)。
+因此，\(f(K)\) 是紧集。
+\end{proof}
+
+设 \(f(\boldsymbol{x})\) 是 \(\mathbf{R}^n\) 中紧集 \(K\) 上的连续函数，
+那么 \(f(K)\) 是 \(\mathbf{R}\) 中的紧集，因此是\textbf{有界闭集}，
+并且数集 \(f(K)\) 有最大值和最小值。于是就可得到以下结论：
+
+\begin{thm}[有界性定理，教材定理 11.3.2]\label{thm:boundedcont}
+设 \(K\) 是 \(\mathbf{R}^n\) 中紧集，\(f\) 是 \(K\) 上的连续函数，则 \(f\) 在 \(K\) 上有界。
+\end{thm}
+
+\begin{thm}[最值定理，教材定理 11.3.3]\label{thm:extreme}
+设 \(K\) 是 \(\mathbf{R}^n\) 中紧集，\(f\) 是 \(K\) 上的连续函数，
+则 \(f\) 在 \(K\) 上必能取到最大值和最小值，即存在 \(\boldsymbol{\xi}_1,\boldsymbol{\xi}_2\in K\)，
+使得对于一切 \(\boldsymbol{x}\in K\) 成立
+\[
+  f(\boldsymbol{\xi}_1)\le f(\boldsymbol{x})\le f(\boldsymbol{\xi}_2).
+\]
+\end{thm}
+
+现在引入一致连续的概念。
+
+\begin{defn}[一致连续，教材定义 11.3.2]\label{def:unifcont}
+设 \(K\) 是 \(\mathbf{R}^n\) 中点集，\(f\colon K\to\mathbf{R}^m\) 为映射。
+如果对于任意给定的 \(\varepsilon>0\)，存在 \(\delta>0\)，使得
+\[
+  |f(\boldsymbol{x}')-f(\boldsymbol{x}'')|<\varepsilon
+\]
+对于 \(K\) 中所有满足 \(|\boldsymbol{x}'-\boldsymbol{x}''|<\delta\) 的
+\(\boldsymbol{x}',\boldsymbol{x}''\) 成立，则称 \(f\) 在 \(K\) 上\textbf{一致连续}。
+\end{defn}
+
+显然，一致连续的映射一定是连续的，但反之不然。
+
+\begin{thm}[一致连续性定理，教材定理 11.3.4]\label{thm:unifcontthm}
+设 \(K\) 是 \(\mathbf{R}^n\) 中紧集，\(f\colon K\to\mathbf{R}^m\) 为连续映射，
+则 \(f\) 在 \(K\) 上一致连续。
+\end{thm}
+
+\begin{proof}
+对于任意给定的 \(\varepsilon>0\)，由于 \(f\) 在 \(K\) 上连续，
+因此对于任意的 \(\boldsymbol{a}\in K\)，存在 \(\delta_{\boldsymbol{a}}>0\)，
+使得当 \(\boldsymbol{x}\in O(\boldsymbol{a},\delta_{\boldsymbol{a}})\cap K\) 时，
+\[
+  |f(\boldsymbol{x})-f(\boldsymbol{a})|<\frac{\varepsilon}{2}.
+\]
+显然开集族
+\(\Bigl\{O\Bigl(\boldsymbol{a},\dfrac{\delta_{\boldsymbol{a}}}{2}\Bigr)
+\ \Big|\ \boldsymbol{a}\in K\Bigr\}\) 是 \(K\) 的一个开覆盖。
+由于 \(K\) 是紧集，因此存在其中有限个开集
+$O\Bigl(\boldsymbol{a}_1,\dfrac{\delta_{\boldsymbol{a}_1}}{2}\Bigr),
+ O\Bigl(\boldsymbol{a}_2,\dfrac{\delta_{\boldsymbol{a}_2}}{2}\Bigr),\ \cdots,\
+ O\Bigl(\boldsymbol{a}_p,\dfrac{\delta_{\boldsymbol{a}_p}}{2}\Bigr)$
+覆盖了 \(K\)。
+
+记 \(\delta=\dfrac{1}{2}\min\limits_{1\le i\le p}\{\delta_{\boldsymbol{a}_i}\}\)，
+那么对于 \(K\) 中满足 \(|\boldsymbol{x}'-\boldsymbol{x}''|<\delta\) 的任意
+\(\boldsymbol{x}'\) 和 \(\boldsymbol{x}''\)，不妨设
+\(\boldsymbol{x}'\in O\Bigl(\boldsymbol{a}_i,\dfrac{\delta_{\boldsymbol{a}_i}}{2}\Bigr)\)
+\((1\le i\le p)\)，则有
+\[
+  |\boldsymbol{x}''-\boldsymbol{a}_i|
+  \le|\boldsymbol{x}''-\boldsymbol{x}'|+|\boldsymbol{x}'-\boldsymbol{a}_i|
+  <\frac{1}{2}\delta_{\boldsymbol{a}_i}+\frac{1}{2}\delta_{\boldsymbol{a}_i}
+  =\delta_{\boldsymbol{a}_i},
+\]
+于是成立 \(|f(\boldsymbol{x}'')-f(\boldsymbol{a}_i)|<\dfrac{\varepsilon}{2}\)。因此
+\[
+  |f(\boldsymbol{x}')-f(\boldsymbol{x}'')|
+  \le|f(\boldsymbol{x}')-f(\boldsymbol{a}_i)|+|f(\boldsymbol{x}'')-f(\boldsymbol{a}_i)|
+  <\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon .
+\]
+由定义，\(f\) 在 \(K\) 上一致连续。
+\end{proof}
+
+\subsection{连通集与连通集上的连续映射}
+
+在直线上，区间实质上是「连成一体」的点集，在高维空间，「连成一体」的点集
+就是下面定义的连通集。
+
+\begin{defn}[道路与连通集，教材定义 11.3.3]\label{def:connected}
+设 \(S\) 是 \(\mathbf{R}^n\) 中点集，若连续映射
+\[
+  \boldsymbol{\gamma}\colon[0,1]\to\mathbf{R}^n
+\]
+的值域全部落在 \(S\) 中，即满足 \(\boldsymbol{\gamma}([0,1])\subset S\)，
+则称 \(\boldsymbol{\gamma}\) 为 \(S\) 中的\textbf{道路}，
+\(\boldsymbol{\gamma}(0)\) 与 \(\boldsymbol{\gamma}(1)\) 分别称为道路的\textbf{起点}与\textbf{终点}。
+
+若 \(S\) 中的任意两点 \(\boldsymbol{x},\boldsymbol{y}\) 之间，
+都存在 \(S\) 中以 \(\boldsymbol{x}\) 为起点、\(\boldsymbol{y}\) 为终点的道路，
+则称 \(S\) 为\textbf{（道路）连通的}，或称 \(S\) 为\textbf{连通集}。
+\end{defn}
+
+直观地说，这意味着 \(S\) 中任意两点可以用全部位于 \(S\) 中的曲线相联结。
+显然 \(\mathbf{R}\) 上的连通子集为区间，而且 \(\mathbf{R}\) 上的连通子集为紧集的
+充要条件为：它是闭区间。
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=1.0]
+    \draw[thick] (0,0) circle (1.75);
+    \draw[thick] (0,0) circle (1.0);
+    \fill (0.6,1.2) circle (2pt);
+    \node[above right,font=\small] at (0.62,1.22) {\(\boldsymbol{x}\)};
+    \fill (-0.35,-1.35) circle (2pt);
+    \node[below,font=\small] at (-0.35,-1.4) {\(\boldsymbol{y}\)};
+  \end{tikzpicture}
+  \caption{环形连通区域：\(\boldsymbol{x}\) 与 \(\boldsymbol{y}\) 可由区域内道路相连（原书图 11.3.1）}
+\end{figure}
+
+\begin{defn}[区域，教材定义 11.3.4]\label{def:domain}
+连通的开集称为\textbf{（开）区域}。（开）区域的闭包称为\textbf{闭区域}。
+\end{defn}
+
+例如，若 \(\boldsymbol{a}\in\mathbf{R}^n\)，那么开球
+\[
+  S=\{\boldsymbol{x}\in\mathbf{R}^n\mid |\boldsymbol{x}-\boldsymbol{a}|<r\}
+\]
+是区域；集合
+\[
+  S=\{\boldsymbol{x}\in\mathbf{R}^n\mid a_i<x_i<b_i,\ i=1,2,\cdots,n\}
+\]
+也是区域。
+
+\begin{thm}[连续映射将连通集映成连通集，教材定理 11.3.5]\label{thm:imageconn}
+连续映射将连通集映射成连通集。
+\end{thm}
+
+\begin{proof}
+设 \(D\) 是 \(\mathbf{R}^n\) 中的连通集，\(f\colon D\to\mathbf{R}^m\) 为连续映射，
+现证明 \(f\) 的像集
+\[
+  f(D)=\{\boldsymbol{y}\in\mathbf{R}^m\mid \boldsymbol{y}=f(\boldsymbol{x}),\ \boldsymbol{x}\in D\}
+\]
+是连通集。
+
+对任意 \(f(\boldsymbol{x}),f(\boldsymbol{y})\in f(D)\)，\(\boldsymbol{x},\boldsymbol{y}\in D\)，
+由 \(D\) 的连通性，知道存在连续映射
+\[
+  \boldsymbol{\gamma}\colon[0,1]\to D\subset\mathbf{R}^n,
+\]
+使得 \(\boldsymbol{\gamma}(0)=\boldsymbol{x}\)，\(\boldsymbol{\gamma}(1)=\boldsymbol{y}\)。
+于是对于连续映射 \(f\circ\boldsymbol{\gamma}\) 来说，有
+\(f(\boldsymbol{\gamma}([0,1]))\subset f(D)\)，且
+\(f(\boldsymbol{\gamma}(0))=f(\boldsymbol{x})\) 及
+\(f(\boldsymbol{\gamma}(1))=f(\boldsymbol{y})\)。这就是说，\(f\circ\boldsymbol{\gamma}\)
+是 \(f(D)\) 中以 \(f(\boldsymbol{x})\) 为起点，以 \(f(\boldsymbol{y})\) 为终点的道路。
+
+由 \(f(\boldsymbol{x}),f(\boldsymbol{y})\) 的任意性即知 \(f(D)\) 是连通的。
+\end{proof}
+
+\begin{cor}[教材推论 11.3.1]\label{cor:interval}
+连续函数将连通的紧集映射成闭区间。
+\end{cor}
+
+由此立即得到：
+
+\begin{thm}[中间值定理，教材定理 11.3.6]\label{thm:ivt}
+设 \(K\) 为 \(\mathbf{R}^n\) 中连通的紧集，\(f\) 是 \(K\) 上的连续函数，
+则 \(f\) 可取到它在 \(K\) 上的最小值 \(m\) 与最大值 \(M\) 之间的一切值。
+换言之，\(f\) 的值域是闭区间 \([m,M]\)。
+\end{thm}
+
+\subsubsection{习题}
+
+\begin{enumerate}
+  \item 设 \(D\subset\mathbf{R}^n\)，\(f\colon D\to\mathbf{R}^m\) 为连续映射。
+        如果 \(D\) 中的点列 \(\{\boldsymbol{x}_k\}\) 满足
+        \(\lim\limits_{k\to\infty}\boldsymbol{x}_k=\boldsymbol{a}\)，且
+        \(\boldsymbol{a}\in D\)，证明
+        \[
+          \lim_{k\to\infty}f(\boldsymbol{x}_k)=f(\boldsymbol{a}).
+        \]
+  \item 设 \(f\) 是 \(\mathbf{R}^n\) 上的连续函数，\(c\) 为实数。设
+        \[
+          A_c=\{\boldsymbol{x}\in\mathbf{R}^n\mid f(\boldsymbol{x})<c\},\qquad
+          B_c=\{\boldsymbol{x}\in\mathbf{R}^n\mid f(\boldsymbol{x})\le c\},
+        \]
+        证明：\(A_c\) 为 \(\mathbf{R}^n\) 上的开集，\(B_c\) 为 \(\mathbf{R}^n\) 上的闭集。
+  \item 设二元函数
+        \[
+          f(x,y)=\frac{1}{1-xy},\qquad (x,y)\in D=[0,1]\times[0,1],
+        \]
+        证明：\(f\) 在 \(D\) 上连续，但不一致连续。
+  \item 设 \(A\) 为 \(\mathbf{R}^n\) 上的非空子集，定义 \(\mathbf{R}^n\) 上的函数 \(f\) 为
+        \[
+          f(\boldsymbol{x})=\inf\bigl\{|\boldsymbol{x}-\boldsymbol{y}|\ \big|\ \boldsymbol{y}\in A\bigr\},
+        \]
+        它称为 \(\boldsymbol{x}\) 到 \(A\) 的距离。证明：
+        \begin{enumerate}
+          \item[(1)] 当且仅当 \(\boldsymbol{x}\in\overline{A}\) 时 \(f(\boldsymbol{x})=0\)；
+          \item[(2)] 对于任意 \(\boldsymbol{x}',\boldsymbol{x}''\in\mathbf{R}^n\)，不等式
+                \[
+                  |f(\boldsymbol{x}')-f(\boldsymbol{x}'')|
+                  \le|\boldsymbol{x}'-\boldsymbol{x}''|
+                \]
+                成立，从而 \(f\) 在 \(\mathbf{R}^n\) 上一致连续；
+          \item[(3)] 若 \(A\) 是紧集，则对于任意 \(c>0\)，点集
+                \(\{\boldsymbol{x}\in\mathbf{R}^n\mid f(\boldsymbol{x})\le c\}\) 是紧集。
+        \end{enumerate}
+  \item 设二元函数 \(f\) 在 \(\mathbf{R}^2\) 上连续，证明：
+        \begin{enumerate}
+          \item[(1)] 若 \(\lim\limits_{x^2+y^2\to+\infty}f(x,y)=+\infty\)，
+                则 \(f\) 在 \(\mathbf{R}^2\) 上的最小值必定存在；
+          \item[(2)] 若 \(\lim\limits_{x^2+y^2\to+\infty}f(x,y)=0\)，
+                则 \(f\) 在 \(\mathbf{R}^2\) 上的最大值与最小值至少存在一个。
+        \end{enumerate}
+  \item 设 \(f\) 是 \(\mathbf{R}^n\) 上的连续函数，满足
+        \begin{enumerate}
+          \item[(1)] 当 \(\boldsymbol{x}\neq\boldsymbol{0}\) 时成立 \(f(\boldsymbol{x})>0\)；
+          \item[(2)] 对于任意 \(\boldsymbol{x}\) 与 \(c>0\)，成立 \(f(c\boldsymbol{x})=cf(\boldsymbol{x})\)，
+        \end{enumerate}
+        证明：存在 \(a>0,b>0\)，使得
+        \[
+          a|\boldsymbol{x}|\le f(\boldsymbol{x})\le b|\boldsymbol{x}| .
+        \]
+  \item 设 \(f\colon\mathbf{R}^n\to\mathbf{R}^m\) 为连续映射，证明：对于 \(\mathbf{R}^n\) 中的
+        任意子集 \(A\)，成立
+        \[
+          f(\overline{A})\subset\overline{f(A)} .
+        \]
+        举例说明 \(f(\overline{A})\) 能够是 \(\overline{f(A)}\) 的真子集。
+  \item 设 \(f\) 是有界开区域 \(D\subset\mathbf{R}^2\) 上的一致连续函数，证明：
+        \begin{enumerate}
+          \item[(1)] 可以将 \(f\) 连续延拓到 \(D\) 的边界上，即存在定义在
+                \(\overline{D}\) 上的连续函数 \(\widetilde{f}\)，使得
+                \(\widetilde{f}\big|_D=f\)；
+          \item[(2)] \(f\) 在 \(D\) 上有界。
+        \end{enumerate}
+\end{enumerate}
+
+\begin{chaptersummary}
+本节把闭区间上连续函数的三大定理推广到 \(\mathbf{R}^n\)：
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  一元（闭区间） & 多元（紧集 \(K\)） & 依据 \\
+  \midrule
+  有界性 & 定理 \ref{thm:boundedcont} & 定理 \ref{thm:imagecompact}：像集紧 $\Rightarrow$ 有界 \\
+  最值性 & 定理 \ref{thm:extreme} & 同上，像集为紧集（有界闭） \\
+  一致连续 & 定理 \ref{thm:unifcontthm} & 紧性（有限子覆盖）+ 连续 \\
+  介值性 & 定理 \ref{thm:ivt} & 定理 \ref{thm:imageconn}：像集连通 + 紧 \\
+  \bottomrule
+\end{tabular}
+\end{center}
+注意：介值性需要 \(K\) \textbf{既紧又连通}；仅有紧性只能得到像集是闭区间之外的
+紧集（在 \(\mathbf{R}\) 中即若干闭区间的并）。
+\end{chaptersummary}
+
+\end{document}

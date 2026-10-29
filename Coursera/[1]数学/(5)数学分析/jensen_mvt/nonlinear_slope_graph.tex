@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1.8cm]{geometry}
+\usepackage{ctex}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{array}
+\usepackage{booktabs}
+\usetikzlibrary{arrows.meta,calc}
+\tcbuselibrary{skins,breakable}
+
+\definecolor{curve}{RGB}{30,90,180}
+\definecolor{secline}{RGB}{220,60,60}
+\definecolor{tang}{RGB}{230,140,20}
+\definecolor{grayt}{RGB}{110,110,110}
+\definecolor{boxbg}{RGB}{245,249,255}
+
+\pagestyle{empty}
+\begin{document}
+
+\begin{center}
+{\Large\bfseries 非线性函数：某点切线斜率绝对值 $>$ 割线斜率绝对值}\\[2pt]
+{\small 几何意义图示\quad(在 $[a,b]$ 连续、在 $(a,b)$ 可导、且非线性)}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[x=2.05cm,y=2.05cm,>=Stealth,font=\small]
+  % 坐标轴
+  \draw[->,gray] (-0.1,0)--(3.95,0) node[right,black]{$x$};
+  \draw[->,gray] (0,-0.1)--(0,1.95) node[above,black]{$f$};
+
+  % 曲线 f(x)=0.4(x-2)^2+0.5
+  \draw[curve,very thick,domain=0.6:3.6,samples=100,smooth]
+       plot (\x,{0.4*(\x-2)*(\x-2)+0.5});
+
+  % 关键点
+  \coordinate (A) at (0.6,1.284);
+  \coordinate (B) at (3.6,1.524);
+  \coordinate (X) at (3.4,1.284);
+
+  % 割线 AB
+  \draw[secline,very thick] (A)--(B);
+
+  % 割线的斜率三角形：run 3, rise 0.24
+  \draw[grayt,thin,dashed] (A)--(3.6,1.284);
+  \draw[grayt,thin,dashed] (3.6,1.284)--(B);
+  \node[grayt,font=\scriptsize,below] at (2.05,1.284){run $=b-a$};
+
+  % 切线 at X, 斜率 1.12
+  \draw[tang,very thick] (2.9,0.724)--(3.75,1.676);
+
+  % 切线斜率三角形: run 0.4, rise 0.448
+  \draw[tang,thin] (3.0,0.836)--(3.4,0.836)--(3.4,1.284);
+  \node[tang,font=\scriptsize,below] at (3.2,0.836){$0.4$};
+  \node[tang,font=\scriptsize,right] at (3.4,1.02){$0.448$};
+
+  % 点
+  \fill (A) circle (1.8pt) node[below left,black]{$a$};
+  \fill (B) circle (1.8pt) node[above left,black]{$b$};
+  \fill (X) circle (2pt);
+  \draw[dashed,grayt] (X)--(3.4,0) node[below,black]{$\xi$};
+
+  % 数值标签（带边框，避免与曲线重叠混淆）
+  \node[secline,draw=secline,fill=white,rounded corners,inner sep=1.5pt,
+        font=\scriptsize,anchor=west] at (1.35,1.50){割线斜率 $k=0.08$};
+  \node[tang,draw=tang,fill=white,rounded corners,inner sep=1.5pt,
+        font=\scriptsize,anchor=east] at (3.35,0.62){切线斜率 $f'(\xi)=1.12$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{-2mm}
+\begin{center}
+\small 割线斜率 $k=0.08$；在 $\xi$ 处切线斜率 $f'(\xi)=1.12$，故 $|f'(\xi)|=1.12>|k|=0.08$。
+\end{center}
+
+\begin{tcolorbox}[colback=boxbg,colframe=curve!70,breakable,
+  title={\bfseries 辅助函数法：先构造 $h$，再分 $k$ 的符号与 $f(c)$ 的位置}]
+\small
+设 $k=\dfrac{f(b)-f(a)}{b-a}$，\textbf{构造辅助函数}
+\[
+h(x)=f(x)-f(a)-k(x-a).
+\]
+则\quad $h(a)=0,\ \ h(b)=f(b)-f(a)-k(b-a)=0$；\quad $h'(x)=f'(x)-k$；\quad
+$f$ 非线性 $\iff h\not\equiv 0$。
+
+\vspace{1mm}
+\textbf{取偏差非零的内点.} $h$ 连续、$h(a)=h(b)=0$ 且 $h\not\equiv0$，故存在内点 $c\in(a,b)$ 使 $h(c)\neq0$。
+记 $L(x)=f(a)+k(x-a)$ 为过 $a,b$ 的弦，则
+\[
+h(c)=f(c)-L(c)\quad\begin{cases}
+>0, & f(c)\ \text{在弦上方},\\[1pt]
+<0, & f(c)\ \text{在弦下方}.
+\end{cases}
+\]
+
+\vspace{1mm}
+\textbf{关键恒等式（割线斜率 $=k+$ 偏差/区间长）.}
+\[
+\frac{f(c)-f(a)}{c-a}=k+\frac{h(c)}{c-a},\qquad
+\frac{f(b)-f(c)}{b-c}=k-\frac{h(c)}{b-c}. \tag{$\ast$}
+\]
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=white,colframe=tang!80,breakable,
+  title={\bfseries 分情况讨论：$k>0$ 或 $k<0$；再分 $f(c)$ 在弦上方或下方}]
+\small
+在每种情形下，于所取子区间上对 $f(x)-\sigma x$ 用\textbf{罗尔定理}（即拉格朗日中值定理），
+得到某 $\xi$ 使 $f'(\xi)=\sigma$，再比较 $|\sigma|$ 与 $|k|$。
+
+\vspace{1mm}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{>{\centering\arraybackslash}p{1.0cm} >{\centering\arraybackslash}p{2.5cm} >{\centering\arraybackslash}p{1.9cm} >{\centering\arraybackslash}p{4.1cm} >{\centering\arraybackslash}p{3.0cm}}
+\toprule
+$k$ & $f(c)$ 位置 & 取子区间 & 割线斜率 $\sigma$ & 结论\\
+\midrule
+$k>0$ & 上方 ($h(c)>0$) & $[a,c]$ & $\sigma=k+\dfrac{h(c)}{c-a}>k>0$ & $|f'(\xi)|=\sigma>|k|$\\
+$k>0$ & 下方 ($h(c)<0$) & $[c,b]$ & $\sigma=k-\dfrac{h(c)}{b-c}>k>0$ & $|f'(\xi)|=\sigma>|k|$\\
+$k<0$ & 下方 ($h(c)<0$) & $[a,c]$ & $\sigma=k+\dfrac{h(c)}{c-a}<k<0$ & $|f'(\xi)|=|\sigma|>|k|$\\
+$k<0$ & 上方 ($h(c)>0$) & $[c,b]$ & $\sigma=k-\dfrac{h(c)}{b-c}<k<0$ & $|f'(\xi)|=|\sigma|>|k|$\\
+$k=0$ & $h(c)\neq0$ & $[a,c]\,/\,[c,b]$ & $\sigma=\dfrac{h(c)}{c-a}$ 或 $-\dfrac{h(c)}{b-c}\neq0$ & $|f'(\xi)|>0=|k|$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5mm}
+{\footnotesize\textbf{为何这样选区间？} $k>0$ 时：$h(c)>0$ 取\emph{左段}、$h(c)<0$ 取\emph{右段}，都得 $\sigma>k>0$；$k<0$ 时方向相反，取相应一段使 $\sigma<k<0$（即 $|\sigma|>|k|$）。$h(c)\neq0$ 保证严格不等号。\par}
+\end{tcolorbox}
+
+\end{document}

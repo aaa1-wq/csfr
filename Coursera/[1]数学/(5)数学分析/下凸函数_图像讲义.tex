@@ -1,0 +1,185 @@
+\documentclass[10pt]{ctexart}
+\usepackage[a4paper,margin=2cm,top=1.8cm,bottom=1.8cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{hyperref}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{acc2}{HTML}{8A4B1B}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.9em,itemsep=2pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\allowdisplaybreaks
+\captionsetup{font=small,labelformat=empty,skip=4pt}
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\Shead}[2]{%
+  \begin{tcolorbox}[enhanced,colback=graybg,colframe=acc,
+    boxrule=0pt,leftrule=3pt,arc=2pt,top=3pt,bottom=3pt,left=8pt,right=8pt]
+  {\heiti\color{acc}#1}\quad #2
+  \end{tcolorbox}}
+\newtcolorbox{cmpbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{acc}数学分析 · 专题讲义 · 下凸函数}
+\fancyhead[R]{\footnotesize\color{acc}配图版}
+\fancyfoot[C]{\footnotesize\color{black!55}\thepage\,/\,\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\graphicspath{{figs/out/}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\heiti 下凸函数：从定义到图像}\\[6pt]
+{\small 专题讲义（配 6 幅示意图）\quad 对应 2021 期中第 1 题 (3) 与第 4 题 (2)}\\[4pt]
+{\footnotesize\color{black!60}先看图，再看定义；每个等价说法都配一张图，最后指出它在试卷里的用法}
+\end{center}
+\hrule height 1.2pt
+\vspace{4pt}
+
+%========================================================
+\Shead{一、一句话定义}{弦在曲线上方}
+
+设 $f$ 在区间 $I$ 上有定义。若对任意 $x_1,x_2\in I$ 与任意 $t\in[0,1]$，
+\[
+f\big(tx_1+(1-t)x_2\big)\ \le\ t f(x_1)+(1-t)f(x_2),
+\]
+则称 $f$ 在 $I$ 上是\textbf{下凸}（凸）函数。
+
+看图 1：当 $t$ 从 $0$ 变到 $1$，点 $tx_1+(1-t)x_2$ 从 $x_2$ 走到 $x_1$；右端 $t f(x_1)+(1-t)f(x_2)$ 正是对应\textbf{弦}（两点连线）上的高度。不等式说的是——\textbf{弦永远不低于曲线}。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{fig1_chord.png}
+\caption{图 1　红色竖段 = 弦高 − 曲线高，它 $\ge 0$ 就是下凸。}
+\end{figure}
+
+\textbf{命名的由来}：$y=x^2$ 那样「开口向上」的曲线叫下凸；开口向下（如 $y=-x^2$）的叫\textbf{上凸}（凹）。
+
+%========================================================
+\Shead{二、两种凸性的对比}{看弦的位置就分清了}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{fig2_convex_concave.png}
+\caption{图 2　同一个「两点连线」操作：左图弦在曲线上方（下凸），右图弦在曲线下方（上凸）。}
+\end{figure}
+
+\begin{center}\small
+\begin{tabular}{l c c}
+\toprule
+ & 下凸（凸） & 上凸（凹）\\
+\midrule
+弦的位置 & 在曲线上方 & 在曲线下方 \\
+二阶导（若存在） & $f''\ge 0$ & $f''\le 0$ \\
+典型例子 & $x^2,\ e^x,\ |x|$ & $\ln x,\ \sqrt{x},\ -x^2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{提醒}：不同教材的「凸 / 凹」叫法可能相反。答题时附上几何描述（弦在曲线上方）或二阶导符号，就不会被误判。
+
+%========================================================
+\Shead{三、等价说法三种}{考试任选其一，最好写两种}
+
+下面三种说法与定义\emph{完全等价}，配图见图 4（中点）、图 3（切线）、图 5（二阶导）。
+
+\noindent\textbf{(1) 中点形式（最省事的等价定义）}
+\[
+f\!\left(\frac{x_1+x_2}{2}\right)\ \le\ \frac{f(x_1)+f(x_2)}{2}.
+\]
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{fig4_midpoint.png}
+\caption{图 4　$x_1=-2,\ x_2=1.6$ 时：曲线在中点的高度 $0.04$，小于弦的中点高度 $3.28$。}
+\end{figure}
+
+它只取 $t=\frac12$。由它可以推出 $t=\frac{k}{2^n}$ 的全部情形（反复二分），再对一般 $t$ 取极限，就回到定义。
+
+\noindent\textbf{(2) 切线形式（可导时）}
+\[
+f(y)\ \ge\ f(x)+f'(x)(y-x)\qquad(\forall x,y\in I).
+\]
+右边正是曲线在 $x$ 处的切线。所以「下凸」= 曲线始终位于它自己每条切线的\textbf{上方}——图 3 中切线整条压在抛物线下面，只在切点相碰。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{fig3_tangent.png}
+\caption{图 3　$f(x)=x^2$ 在 $x_0=0.8$ 处的切线 $y=1.6x-0.64$。}
+\end{figure}
+
+\noindent\textbf{(3) 二阶导形式（判别工具）}
+若 $f$ 在 $I$ 上二阶可导，则
+\[
+f\ \text{下凸}\iff f''(x)\ge0\quad(\forall x\in I).
+\]
+这是考场上最快的一招：算一次二阶导，看符号即可。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{fig5_examples.png}
+\caption{图 5　常见函数：抛物线、指数、绝对值都是下凸；对数、根号是上凸。}
+\end{figure}
+
+%========================================================
+\Shead{四、一个纯几何的推论（常用于证明）}{极值点必是最低点}
+
+下凸函数在内部点处若取极小值，则它就是全局最小值；直观地说，弦都在上方，不可能有「曲线的低洼」在两个点之间还冒出来。这解释了为什么第 2 题 (5) 里「最值不在端点 + Fermat 引理」能直接得出结论。
+
+%========================================================
+\Shead{五、它在本次试卷中的用处}{第 4 题 (2) 的常数 $\frac18$ 从哪来}
+
+第 4 题 (2) 要证 $\max|f|\le\frac18(b-a)^2\max|f''|$。证明走到一半会得到
+\[
+|f(x)|\le\frac{M}{2}(x-a)(b-x),\qquad M=\max|f''| .
+\]
+接下来的放大就是一道\textbf{上凸}问题：令 $t=\dfrac{x-a}{b-a}\in[0,1]$，则
+\[
+(x-a)(b-x)=(b-a)^2\,t(1-t)\ \le\ (b-a)^2\cdot\frac14 ,
+\]
+因为 $t(1-t)$ 是开口向下的抛物线，在 $t=\frac12$（即 $x=\frac{a+b}{2}$）取最大值 $\frac14$（图 6）。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{fig6_oneeighth.png}
+\caption{图 6　$t(1-t)$ 的最大值是 $1/4$，乘上前面的 $\frac M2$ 正好得到 $\frac M8$。}
+\end{figure}
+
+于是
+\[
+|f(x)|\le\frac{M}{2}\cdot\frac{(b-a)^2}{4}=\frac18 M(b-a)^2 ,
+\]
+这就把 $\frac18$ 找出来了。取 $f(x)=\dfrac M2(x-a)(b-x)$ 时等号成立，所以 $\frac18$ 是最优常数。
+
+%========================================================
+\Shead{六、小结（背这一页就够）}{}
+
+\begin{cmpbox}
+\begin{itemize}
+\item \textbf{定义}：$f(tx_1+(1-t)x_2)\le tf(x_1)+(1-t)f(x_2)$，$t\in[0,1]$——弦在曲线上方。
+\item \textbf{等价}：中点形式；可导时的切线形式 $f(y)\ge f(x)+f'(x)(y-x)$；二阶导 $f''\ge0$。
+\item \textbf{命名}：下凸 $=$ 开口向上 $=$ 弦在上方；上凸 $=$ 凹 $=$ 弦在下方（各书叫法可能相反，答题时补几何描述）。
+\item \textbf{考试用法}：判凸性用 $f''$ 符号；证明不等式（如 $\frac18$ 那个常数）时，把二次式化成 $t(1-t)$ 或 $(x-a)(b-x)$ 再用凸性放大。
+\end{itemize}
+\end{cmpbox}
+
+\end{document}

@@ -1,0 +1,28 @@
+{
+  "schema": "ppt-master.source_to_md.profile.v1",
+  "converter": "ppt_to_md.py",
+  "conversion_type": "pptx",
+  "source": {
+    "path": "week5_business_source.pptx",
+    "name": "week5_business_source.pptx",
+    "suffix": ".pptx",
+    "kind": "file",
+    "exists": true,
+    "size_bytes": 1931951
+  },
+  "outputs": {
+    "markdown": "week5_business_source.md",
+    "asset_dir": "week5_business_source_files",
+    "image_manifest": "week5_business_source_files/image_manifest.json",
+    "image_count": 14
+  },
+  "markdown": {
+    "line_count": 227,
+    "char_count": 11067,
+    "heading_count": 26,
+    "table_count": 1,
+    "image_ref_count": 14,
+    "link_count": 0
+  },
+  "warnings": []
+}

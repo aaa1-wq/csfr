@@ -1,0 +1,499 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=2.1cm]{geometry}
+\usepackage{ctex}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{array}
+\usetikzlibrary{arrows.meta,calc,decorations.pathreplacing,positioning}
+\tcbuselibrary{skins,breakable}
+
+% ---------- 配色 ----------
+\definecolor{curve}{RGB}{30,90,180}      % 函数曲线 蓝
+\definecolor{secline}{RGB}{220,60,60}    % 割线 红
+\definecolor{auxc}{RGB}{20,150,90}       % 辅助函数 绿
+\definecolor{tang}{RGB}{230,140,20}      % 切线 橙
+\definecolor{grayt}{RGB}{110,110,110}
+\definecolor{boxbg}{RGB}{245,249,255}
+
+\newcommand{\ax}{\vec{a}}
+% 统一坐标单位
+\title{\textbf{中值定理的辅助函数构造与图像演化}\\[2pt]
+\large 罗尔定理 \quad$\to$\quad 拉格朗日中值定理 \quad$\to$\quad 柯西中值定理}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-8mm}
+
+\begin{tcolorbox}[colback=boxbg,colframe=curve!70,title={\bfseries 核心思想}]
+三个中值定理的共同骨架是\emph{“造一个辅助函数 $F$，让 $F$ 在区间两端取相同值（通常为 $0$），
+对 $F$ 用罗尔定理得 $F'(\xi)=0$，再展开 $F'$ 即得目标恒等式”}。
+拉格朗日是“$f$ 减去割线”，柯西是“$f$ 减去按 $g$ 参数化的插值曲线”。
+\end{tcolorbox}
+
+\noindent\textbf{记号约定．}本讲义统一用
+$f\in C\big([a,b]\big)\cap D\big((a,b)\big)$ 表示\;\emph{$f$ 在闭区间 $[a,b]$ 上连续、在开区间 $(a,b)$ 内可导}。
+其中 $C[a,b]$ 记 $[a,b]$ 上的连续函数类，$D(a,b)$ 记 $(a,b)$ 内的可导函数类。
+（说明：此交集写法是约定俗成的简写，严格地应理解为「$f\in C[a,b]$ 且 $f|_{(a,b)}\in D(a,b)$」两句话。）
+
+\begin{tcolorbox}[colback=orange!6,colframe=orange!70!black,title={\bfseries 注记：三个定理的条件\textbf{并非完全相同}}]
+\emph{公共前提}（三者都有）：$f$（柯西中 $f,g$ 同）在 $[a,b]$ 上连续、在 $(a,b)$ 内可导，
+即 $f\in C[a,b]\cap D(a,b)$；且\textbf{只需一阶可导}（不要求 $f'$ 连续，更不要求二阶可导）。
+
+\vspace{1.5mm}
+\emph{各自的额外条件}（关键差别！）：
+\begin{itemize}
+  \item \textbf{罗尔}：额外要求 $\;f(a)=f(b)$；
+  \item \textbf{拉格朗日}：\emph{无}额外条件（条件最弱）；
+  \item \textbf{柯西}：额外要求 $\;\boxed{g'(x)\neq 0\ \text{于}\ (a,b)}$。
+\end{itemize}
+\emph{必须强调}：柯西的 $g'(x)\neq0$ \textbf{不能省}——它保证 $g(b)-g(a)\neq0$，否则结论中的分式无意义，定理失效。
+因此\textbf{不能说}「三定理都只要求 $C\cap D$」；$C\cap D$ 只是公共部分。
+\end{tcolorbox}
+
+\noindent\textbf{另注．}前文凸性判据 $f''\ge0\Rightarrow f$ 下凸，用的是\emph{二阶可导} $+f''\ge0$，
+前提比本节中值定理（一阶可导）\textbf{更强}，两者不可混为一谈。
+
+% =====================================================================
+\section{罗尔定理（基准）}
+
+\begin{tcolorbox}[colback=white,colframe=grayt,title={\bfseries 罗尔定理 (Rolle)}]
+设 $f\in C\big([a,b]\big)\cap D\big((a,b)\big)$（即在 $[a,b]$ 上连续、在 $(a,b)$ 内可导），且 $\;f(a)=f(b)\;$。
+则存在 $\xi\in(a,b)$，使
+\[
+f'(\xi)=0 .
+\]
+\textbf{几何意义}：两端等高的曲线，中间必有一处切线水平。
+\end{tcolorbox}
+
+下面所有构造，都是想办法把“两端不等高”的函数\emph{改造}成满足 $F(a)=F(b)$ 的形状，
+从而踩进罗尔定理。
+
+% =====================================================================
+\section{拉格朗日中值定理：减割线构造辅助函数}
+
+\begin{tcolorbox}[colback=white,colframe=curve,title={\bfseries 拉格朗日中值定理 (Lagrange)}]
+设 $f\in C\big([a,b]\big)\cap D\big((a,b)\big)$（即在 $[a,b]$ 上连续、在 $(a,b)$ 内可导），则存在 $\xi\in(a,b)$，使
+\[
+f'(\xi)=\frac{f(b)-f(a)}{b-a}.
+\]
+\textbf{几何意义}：曲线上某点切线平行于两端连线（割线）。
+\end{tcolorbox}
+
+\subsection*{辅助函数的构造}
+过端点 $(a,f(a)),(b,f(b))$ 的\emph{割线}
+\[
+\ell(x)=f(a)+\frac{f(b)-f(a)}{b-a}\,(x-a).
+\]
+作\emph{差函数}（$f$ 减去割线）：
+\[
+\boxed{\,F(x)=f(x)-\ell(x)=f(x)-f(a)-\frac{f(b)-f(a)}{b-a}(x-a)\,}
+\]
+验证罗尔三条件：
+\begin{itemize}
+  \item 连续、可导：$F$ 是 $f$ 减一个线性函数，显然满足；
+  \item 两端等高：$F(a)=0$，且 $F(b)=f(b)-f(a)-\dfrac{f(b)-f(a)}{b-a}(b-a)=0$。
+\end{itemize}
+由罗尔定理，存在 $\xi\in(a,b)$ 使 $F'(\xi)=0$。而
+\[
+F'(x)=f'(x)-\frac{f(b)-f(a)}{b-a}\;\Longrightarrow\;
+f'(\xi)=\frac{f(b)-f(a)}{b-a}. \qquad\blacksquare
+\]
+\textbf{一句话}：\emph{“差割线”——减去那条斜线，两端就落回同一水平高度。}
+
+% ---------------------------------------------------------------------
+\subsection*{图像演化（四阶段）}
+
+% 公共函数：f(x)=0.6+0.5*(x-1)+0.35*(x-1)^2 ，用于阶段1/2/4
+% 端点 a=1 -> f=0.6 ; b=3.6 -> f=0.6+0.5*2.6+0.35*6.76=0.6+1.3+2.366=4.266
+% 割线斜率 k=(4.266-0.6)/2.6=1.41
+% f'(x)=0.5+0.7(x-1)=1.41 -> x-1=1.3 -> xi=2.3 ; f(2.3)=0.6+0.5*1.3+0.35*1.69=0.6+0.65+0.5915=1.8415
+\begin{center}
+\begin{tikzpicture}[scale=0.92,>=Stealth]
+
+% ---------- 阶段1：原函数，两端不等高 ----------
+\begin{scope}[xshift=0cm]
+  \draw[->,gray] (0,0)--(4.4,0) node[right,black]{$x$};
+  \draw[->,gray] (0,0)--(0,4.9) node[above,black]{$f$};
+  \draw[curve,very thick,domain=1.0:3.6,samples=70,smooth]
+        plot (\x, {0.6+0.5*(\x-1)+0.35*(\x-1)*(\x-1)});
+  \fill (1.0,0.6) circle (1.8pt) node[below left,black]{$a$};
+  \fill (3.6,4.266) circle (1.8pt) node[above left,black]{$b$};
+  \draw[dashed,grayt] (1.0,0.6)--(1.0,0);
+  \draw[dashed,grayt] (3.6,4.266)--(0,4.266) node[left,black,font=\scriptsize]{$f(b)$};
+  \draw[dashed,grayt] (1.0,0.6)--(0,0.6) node[left,black,font=\scriptsize]{$f(a)$};
+  \node[black,font=\small,align=center] at (2.2,5.35){阶段 1：原函数 $f$\\ $f(a)\neq f(b)$};
+  \node[grayt,font=\scriptsize] at (2.2,-0.7){罗尔条件不满足};
+\end{scope}
+
+% ---------- 阶段2：画出割线 ----------
+\begin{scope}[xshift=5.6cm]
+  \draw[->,gray] (0,0)--(4.4,0) node[right,black]{$x$};
+  \draw[->,gray] (0,0)--(0,4.9) node[above,black]{$f$};
+  \draw[curve,very thick,domain=1.0:3.6,samples=70,smooth]
+        plot (\x, {0.6+0.5*(\x-1)+0.35*(\x-1)*(\x-1)});
+  \draw[secline,very thick] (1.0,0.6)--(3.6,4.266);
+  \node[secline,font=\small] at (1.55,2.35){$\ell(x)$};
+  \fill (1.0,0.6) circle (1.8pt) node[below left,black]{$a$};
+  \fill (3.6,4.266) circle (1.8pt) node[above left,black]{$b$};
+  \node[black,font=\small,align=center] at (2.2,5.35){阶段 2：画割线 $\ell(x)$\\[1pt]};
+  \node[grayt,font=\scriptsize] at (2.2,-0.7){$\ell$ 连接两端点};
+\end{scope}
+
+% ---------- 阶段3：F=f-ell，两端归零 ----------
+\begin{scope}[xshift=11.2cm]
+  \draw[->,gray] (0,0)--(4.4,0) node[right,black]{$x$};
+  \draw[->,gray] (0,-1.9)--(0,1.6) node[above,black]{$F$};
+  \draw[grayt,dashed] (1.0,0)--(3.6,0);
+  % F(x)=0.9*(x-1)(x-3.6)，开口向上，中间为负
+  \draw[auxc,very thick,domain=1.0:3.6,samples=70,smooth]
+        plot (\x, {0.9*(\x-1)*(\x-3.6)});
+  % 顶点在 x=2.3, y=0.9*(1.3)*(-1.3)=-1.521
+  \fill (1.0,0) circle (1.8pt) node[above left,black]{$a$};
+  \fill (3.6,0) circle (1.8pt) node[above right,black]{$b$};
+  \fill (2.3,-1.521) circle (1.8pt);
+  \draw[tang,thick] (1.6,-1.521)--(3.0,-1.521);
+  \node[tang,font=\scriptsize,right] at (3.0,-1.521){$F'(\xi)=0$};
+  \node[black,font=\small,align=center] at (2.2,2.15){阶段 3：$F=f-\ell$\\ 端点归零};
+  \node[grayt,font=\scriptsize] at (2.2,-2.45){$F(a)=F(b)=0$，罗尔可用};
+\end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{3mm}
+\begin{center}
+\begin{tikzpicture}[scale=0.98,>=Stealth]
+% ---------- 阶段4：还原到 f，切线平行割线 ----------
+\begin{scope}[xshift=0cm]
+  \draw[->,gray] (0,0)--(5.0,0) node[right,black]{$x$};
+  \draw[->,gray] (0,0)--(0,5.0) node[above,black]{$f$};
+  \draw[curve,very thick,domain=1.0:3.6,samples=70,smooth]
+        plot (\x, {0.6+0.5*(\x-1)+0.35*(\x-1)*(\x-1)});
+  % 割线
+  \draw[secline,very thick] (1.0,0.6)--(3.6,4.266);
+  \node[secline,font=\scriptsize] at (3.15,2.75){割线};
+  % 切线: 过(2.3,1.8415) 斜率1.41
+  \draw[tang,very thick] (1.35,{1.8415-1.41*0.95})--(3.35,{1.8415+1.41*1.05});
+  \node[tang,font=\scriptsize,below right] at (3.35,{1.8415+1.41*1.05}){切线 $\parallel$ 割线};
+  \fill (2.3,1.8415) circle (2pt) node[below left,black]{$\xi$};
+  \fill (1.0,0.6) circle (1.8pt) node[below left,black]{$a$};
+  \fill (3.6,4.266) circle (1.8pt) node[above left,black]{$b$};
+  \node[black,font=\small] at (3.4,5.75){阶段 4：还原——$f'(\xi)=\dfrac{f(b)-f(a)}{b-a}$};
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{tcolorbox}[colback=boxbg,colframe=auxc!70,title={\bfseries 演化逻辑小结}]
+阶段 1（两端不等高，罗尔失效）$\xrightarrow{\text{减割线}}$ 阶段 2（引入 $\ell$）
+$\xrightarrow{\text{作差}}$ 阶段 3（$F$ 两端归零，罗尔生效）
+$\xrightarrow{\text{翻译回 }f}$ 阶段 4（$f$ 在某点切线平行割线）。
+\end{tcolorbox}
+
+% =====================================================================
+\section{柯西中值定理：减“按 $g$ 参数化的插值曲线”}
+
+\begin{tcolorbox}[colback=white,colframe=curve,title={\bfseries 柯西中值定理 (Cauchy)}]
+设 $f,g\in C\big([a,b]\big)\cap D\big((a,b)\big)$（即在 $[a,b]$ 上连续、在 $(a,b)$ 内可导），且 $g'(x)\neq 0$ 于 $(a,b)$。
+则存在 $\xi\in(a,b)$，使
+\[
+\frac{f'(\xi)}{g'(\xi)}=\frac{f(b)-f(a)}{g(b)-g(a)}.
+\]
+\textbf{几何意义}：把点 $(g(t),f(t))$ 看作参数曲线，则某点处切向量与两端连线平行。
+\end{tcolorbox}
+
+\subsection*{辅助函数构造（关键技巧）}
+令分母 $g(b)-g(a)$ 恒记为 $\Delta g$。构造
+\[
+\boxed{\,F(x)=\big(f(x)-f(a)\big)\cdot \Delta g-\big(g(x)-g(a)\big)\cdot\big(f(b)-f(a)\big)\,}
+\]
+（$\Delta g=g(b)-g(a)$）验证：
+\[
+F(a)=\big(0\big)\Delta g-\big(0\big)(f(b)-f(a))=0,
+\]
+\[
+F(b)=\big(f(b)-f(a)\big)\Delta g-\big(\Delta g\big)\big(f(b)-f(a)\big)=0 .
+\]
+故 $F(a)=F(b)=0$，满足罗尔条件。由罗尔定理存在 $\xi$ 使 $F'(\xi)=0$：
+\[
+F'(x)=f'(x)\,\Delta g-g'(x)\,\big(f(b)-f(a)\big)
+\;\Longrightarrow\;
+\frac{f'(\xi)}{g'(\xi)}=\frac{f(b)-f(a)}{g(b)-g(a)}.\qquad\blacksquare
+\]
+\textbf{注意}：当 $g(x)=x$ 时 $\Delta g=b-a,\ g'=1$，立刻退化为\emph{拉格朗日}。
+柯西是拉格朗日的“参数化升级版”。
+
+\begin{tcolorbox}[colback=boxbg,colframe=curve!60,title={\bfseries 与拉格朗日构造的对应}]
+拉格朗日：$F=f-\ell$（减去 \emph{一个变量 $x$} 的割线）。\;
+柯西：$F=\big(f(x)-f(a)\big)\Delta g-\big(g(x)-g(a)\big)\Delta f$（减去 \emph{以 $g$ 为参数} 的插值）。
+把后者正规化并令 $g(x)=x$，即回到前者。核心都是“让 $F$ 在 $a,b$ 处相等”。
+\end{tcolorbox}
+
+% ---------------------------------------------------------------------
+\subsection*{条件逐条说明}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabular}{>{\centering\arraybackslash}p{4.6cm} >{\centering\arraybackslash}p{3.4cm} >{\centering\arraybackslash}p{6.6cm}}
+\toprule
+\textbf{条件} & \textbf{作用} & \textbf{若缺失会怎样}\\
+\midrule
+$f,g\in C\big([a,b]\big)$（连续） & 保证 $F$ 连续 & 罗尔定理失效（无法取到最值/连续）\\
+$f,g\in D\big((a,b)\big)$（可导） & 保证 $F$ 可导、$F'$ 存在 & 无法计算 $F'(\xi)=0$ 的导数\\
+$g'(x)\neq 0$ 于 $(a,b)$ & 保证 $g(b)\neq g(a)$，分母非零 & 分式无意义；且 $g$ 必单射\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{关键}：由 $g'(x)\neq0$，对 $g$ 用拉格朗日定理有
+$g(b)-g(a)=g'(\eta)(b-a)\neq 0$（因 $g'\neq0$ 且 $b-a\neq0$），
+所以分母 $g(b)-g(a)\neq 0$，结论中的分式有意义。这条条件是柯西定理\emph{特有}的。
+
+\subsection*{完整证明（严格逐行）}
+
+\noindent\textbf{目标．} 证明存在 $\xi\in(a,b)$，使
+$\dfrac{f'(\xi)}{g'(\xi)}=\dfrac{f(b)-f(a)}{g(b)-g(a)}$。
+
+\vspace{2mm}
+\noindent\textbf{第 1 步：先确认分母非零.}
+由 $g'(x)\neq0$ 于 $(a,b)$、$g$ 在 $[a,b]$ 连续可导，对 $g$ 用拉格朗日中值定理：
+存在 $\eta\in(a,b)$ 使 $g(b)-g(a)=g'(\eta)(b-a)$。
+因 $g'(\eta)\neq0$、$b-a\neq0$，故 $g(b)-g(a)\neq0$。于是右端分式有意义。$\checkmark$
+
+\vspace{2mm}
+\noindent\textbf{第 2 步：构造辅助函数.} 记 $\Delta f=f(b)-f(a)$，$\Delta g=g(b)-g(a)\neq0$。令
+\[
+F(x)=\big(f(x)-f(a)\big)\,\Delta g-\big(g(x)-g(a)\big)\,\Delta f .
+\]
+
+\vspace{2mm}
+\noindent\textbf{第 3 步：验证罗尔三条件.}
+\begin{itemize}
+  \item \emph{连续}：$f,g$ 在 $[a,b]$ 连续，线性组合仍连续，故 $F$ 在 $[a,b]$ 连续；
+  \item \emph{可导}：$f,g$ 在 $(a,b)$ 可导，故 $F$ 在 $(a,b)$ 可导；
+  \item \emph{两端等高}：
+  \[
+  F(a)=\underbrace{\big(f(a)-f(a)\big)}_{0}\Delta g-\underbrace{\big(g(a)-g(a)\big)}_{0}\Delta f=0,
+  \]
+  \[
+  F(b)=\big(f(b)-f(a)\big)\Delta g-\big(g(b)-g(a)\big)\Delta f
+      =\Delta f\cdot\Delta g-\Delta g\cdot\Delta f=0 .
+  \]
+  故 $F(a)=F(b)=0$。$\checkmark$
+\end{itemize}
+
+\vspace{2mm}
+\noindent\textbf{第 4 步：对 $F$ 用罗尔定理.}
+存在 $\xi\in(a,b)$ 使 $F'(\xi)=0$。
+
+\vspace{2mm}
+\noindent\textbf{第 5 步：计算 $F'$ 并导出结论.}
+\begin{align*}
+F'(x)&=\frac{d}{dx}\Big[\big(f(x)-f(a)\big)\Delta g-\big(g(x)-g(a)\big)\Delta f\Big]\\
+     &=f'(x)\,\Delta g-g'(x)\,\Delta f .
+\end{align*}
+代入 $F'(\xi)=0$：
+\[
+f'(\xi)\,\Delta g-g'(\xi)\,\Delta f=0
+\;\Longrightarrow\;
+f'(\xi)\,\big(g(b)-g(a)\big)=g'(\xi)\,\big(f(b)-f(a)\big).
+\]
+两边同除 $g'(\xi)\,\big(g(b)-g(a)\big)$。由第 1 步 $g(b)-g(a)\neq0$，且 $g'(\xi)\neq0$（条件保证），故
+\[
+\boxed{\;\frac{f'(\xi)}{g'(\xi)}=\frac{f(b)-f(a)}{g(b)-g(a)}\;}\qquad\blacksquare
+\]
+
+\begin{tcolorbox}[colback=boxbg,colframe=auxc!70,title={\bfseries 证明逻辑链}]
+$g'\neq0\Rightarrow$ 分母非零 $\Rightarrow$ 构造 $F=(f-f(a))\Delta g-(g-g(a))\Delta f$
+$\Rightarrow F(a)=F(b)=0\Rightarrow$ 罗尔 $\Rightarrow F'(\xi)=0\Rightarrow$ 移项相除得结论。
+\end{tcolorbox}
+
+\noindent\textbf{退化检验．} 取 $g(x)=x$：$\Delta g=b-a$、$g'(\xi)=1$，结论化为
+$f'(\xi)=\dfrac{f(b)-f(a)}{b-a}$，正是拉格朗日定理——说明柯西确实是拉格朗日的推广。
+
+% ---------------------------------------------------------------------
+\subsection*{法二：反函数法（完全不同的思路）}
+
+\noindent 上面的证明是「构造辅助函数 + 罗尔」。下面给出教材采用的\textbf{另一条完全不同的思路}：
+把 $g$ 当作新的自变量，用\emph{反函数}把 $f$ 复合到 $y$ 轴上，再对复合函数用\emph{拉格朗日}。
+
+\vspace{2mm}
+\noindent\textbf{第 1 步：$g$ 严格单调（保证反函数存在）.}
+由 $g\in C[a,b]\cap D(a,b)$、$g'(x)\neq0$ 于 $(a,b)$，且导函数具介值性质（达布定理），故 $g'$ 恒正或恒负，
+从而 $g$ 在 $[a,b]$ 上\emph{严格单调}。不妨设 $g$ 严格单调\emph{增加}。
+
+\vspace{2mm}
+\noindent\textbf{第 2 步：引出反函数.}
+记 $\alpha=g(a)$、$\beta=g(b)$（$g$ 单增 $\Rightarrow \alpha<\beta$）。由反函数存在定理及反函数导数定理，
+在 $[\alpha,\beta]$ 上存在反函数 $g^{-1}(y)$：它在 $[\alpha,\beta]$ 连续、$(\alpha,\beta)$ 内可导，且
+\[
+\big[g^{-1}(y)\big]'=\frac{1}{g'(x)},\qquad x=g^{-1}(y). \tag{1}
+\]
+并且 $g^{-1}$ 在 $[\alpha,\beta]$ 上也严格单调增加。
+
+\vspace{2mm}
+\noindent\textbf{第 3 步：构造复合函数 $F(y)=f\big(g^{-1}(y)\big)$，$y\in[\alpha,\beta]$.}
+由 $f$ 连续、$g^{-1}$ 连续 $\Rightarrow F$ 在 $[\alpha,\beta]$ 连续；由 $f$ 可导、$g^{-1}$ 可导 $\Rightarrow F$ 在 $(\alpha,\beta)$ 可导。
+故 $F$ 满足\emph{拉格朗日}中值定理的条件。
+
+\vspace{2mm}
+\noindent\textbf{第 4 步：对 $F$ 用拉格朗日.}
+存在 $\eta\in(\alpha,\beta)$，使
+\[
+F'(\eta)=\frac{F(\beta)-F(\alpha)}{\beta-\alpha}.
+\]
+
+\vspace{2mm}
+\noindent\textbf{第 5 步：分别计算两端.}
+\begin{itemize}
+\item \emph{右端}：由 $g^{-1}(\beta)=b,\ g^{-1}(\alpha)=a,\ \beta-\alpha=g(b)-g(a)$，
+\[
+\frac{F(\beta)-F(\alpha)}{\beta-\alpha}
+=\frac{f\big(g^{-1}(\beta)\big)-f\big(g^{-1}(\alpha)\big)}{\beta-\alpha}
+=\frac{f(b)-f(a)}{g(b)-g(a)}.
+\]
+\item \emph{左端}：用链式法则（外层 $f$，内层 $g^{-1}$）及 (1)，
+\[
+F'(y)=\big\{f\big(g^{-1}(y)\big)\big\}'
+=f'\big(g^{-1}(y)\big)\cdot\big[g^{-1}(y)\big]'
+=f'(x)\cdot\frac{1}{g'(x)}\Big|_{x=g^{-1}(y)}.
+\]
+在 $y=\eta$ 处取值，并令 $\xi=g^{-1}(\eta)$（即 $g(\xi)=\eta$，$\xi\in(a,b)$），得
+\[
+F'(\eta)=f'(\xi)\cdot\frac{1}{g'(\xi)}=\frac{f'(\xi)}{g'(\xi)}.
+\]
+\end{itemize}
+
+\vspace{2mm}
+\noindent\textbf{第 6 步：合并.} 把两端代回 $F'(\eta)=\dfrac{F(\beta)-F(\alpha)}{\beta-\alpha}$：
+\[
+\boxed{\;\frac{f'(\xi)}{g'(\xi)}=\frac{f(b)-f(a)}{g(b)-g(a)}\;}\qquad\blacksquare
+\]
+
+\begin{tcolorbox}[colback=boxbg,colframe=auxc!70,title={\bfseries 两种证明对照}]
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{5.6cm} >{\raggedright\arraybackslash}p{5.6cm}}
+\toprule
+& \textbf{法一：辅助函数 + 罗尔} & \textbf{法二：反函数 + 复合 + 拉格朗日}\\
+\midrule
+辅助函数 & $F(x)=(f{-}f(a))\Delta g-(g{-}g(a))\Delta f$ & $F(y)=f\big(g^{-1}(y)\big)$\\
+核心定理 & 罗尔定理 & 拉格朗日（用于 $F$）\\
+$g'\neq0$ 的用处 & 保证分母 $g(b)-g(a)\neq0$ & 保证 $g$ 严格单调 $\Rightarrow$ 反函数存在\\
+主要工具 & 求导、因式整理 & 反函数定理 + 链式法则\\
+几何直观 & 某点切线 $\parallel$ 弦 & 把 $g$ 当作新自变量\\
+\bottomrule
+\end{tabular}
+\end{tcolorbox}
+
+\noindent\textbf{核心思想．} 法二把柯西定理看成「\emph{拉格朗日定理在参数 $g$ 下的形式}」：
+$g$ 可逆，就以 $g$ 为新坐标，则 $f$ 关于 $g$ 的变化率 $\dfrac{df}{dg}$ 在某点恰等于差商 $\dfrac{\Delta f}{\Delta g}$。
+
+% ---------------------------------------------------------------------
+\subsection*{图像（参数曲线视角）}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.12,>=Stealth]
+  % 左图：F(x) 辅助函数两端归零
+  \begin{scope}[xshift=0cm]
+    \draw[->,gray] (0,0)--(4.2,0) node[right,black]{$x$};
+    \draw[->,gray] (0,-1.9)--(0,1.7) node[above,black]{$F$};
+    \draw[grayt,dashed] (0.8,0)--(3.6,0);
+    % F=0.9*(x-0.8)(x-3.6) 顶点 x=2.2, y=0.9*1.4*(-1.4)=-1.764
+    \draw[auxc,very thick,domain=0.8:3.6,samples=80,smooth]
+      plot (\x,{0.9*(\x-0.8)*(\x-3.6)});
+    \fill (0.8,0) circle (1.8pt) node[above left,black]{$a$};
+    \fill (3.6,0) circle (1.8pt) node[above right,black]{$b$};
+    \fill (2.2,-1.764) circle (1.8pt);
+    \draw[tang,thick] (1.45,-1.764)--(2.95,-1.764)
+        node[right,black,font=\scriptsize]{$F'(\xi)=0$};
+    \node[black,font=\small] at (2.1,2.25){辅助函数 $F$（柯西版）};
+    \node[grayt,font=\scriptsize] at (2.1,-2.45){$F(a)=F(b)=0$，罗尔生效};
+  \end{scope}
+
+  % 右图：参数曲线 (g(t), f(t))
+  \begin{scope}[xshift=8.6cm]
+    \draw[->,gray] (0,0)--(4.4,0) node[right,black]{$u=g(t)$};
+    \draw[->,gray] (0,0)--(0,4.2) node[above,black]{$v=f(t)$};
+    \draw[curve,very thick,domain=0.4:3.4,samples=80,smooth]
+      plot (\x,{0.5+0.45*\x+0.14*\x*\x});
+    \fill (0.4,{0.5+0.45*0.4+0.14*0.16}) circle (1.8pt)
+        node[below left,black,font=\scriptsize]{$\big(g(a),f(a)\big)$};
+    \fill (3.4,{0.5+0.45*3.4+0.14*3.4*3.4}) circle (1.8pt)
+        node[above left,black,font=\scriptsize]{$\big(g(b),f(b)\big)$};
+    % 弦
+    \draw[secline,very thick]
+      (0.4,{0.5+0.45*0.4+0.14*0.16})--(3.4,{0.5+0.45*3.4+0.14*3.4*3.4});
+    % 切线平行处 u=1.9 v=1.8604，弦斜率0.982
+    \fill (1.9,1.8604) circle (2pt) node[above right,black]{$\xi$};
+    \draw[tang,very thick] (1.15,{1.8604-0.982*0.75})--(2.75,{1.8604+0.982*0.85})
+        node[below right,black,font=\scriptsize]{切向量 $\parallel$ 弦};
+    \node[black,font=\small] at (2.2,4.75){参数曲线 $\big(g(t),f(t)\big)$};
+    \node[grayt,font=\scriptsize] at (2.2,-0.6){柯西定理的几何图像};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+% =====================================================================
+\section{三个中值定理对比}
+
+\subsection*{条件与结论对照}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{>{\centering\arraybackslash}p{2.1cm} >{\centering\arraybackslash}p{3.5cm} >{\centering\arraybackslash}p{4.6cm} >{\centering\arraybackslash}p{4.4cm}}
+\toprule
+\textbf{定理} & \textbf{条件} & \textbf{结论} & \textbf{辅助函数 / 视角}\\
+\midrule
+\textbf{罗尔} & $f\in C[a,b]\cap D(a,b)$，\newline $f(a)=f(b)$ & $\exists\,\xi,\; f'(\xi)=0$ & 基准；无需辅助函数\\
+\addlinespace
+\textbf{拉格朗日} & $f\in C[a,b]\cap D(a,b)$ & $\exists\,\xi,\; f'(\xi)=\dfrac{f(b)-f(a)}{b-a}$ & $F=f-\ell$\newline （减 $x$ 的割线）\\
+\addlinespace
+\textbf{柯西} & $f,g\in C[a,b]\cap D(a,b)$，\newline $g'(x)\neq0$ & $\exists\,\xi,\; \dfrac{f'(\xi)}{g'(\xi)}=\dfrac{f(b)-f(a)}{g(b)-g(a)}$ & $F=(f-f(a))\Delta g-(g-g(a))\Delta f$\newline （$g$ 参数化插值）\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{包含关系（谁是谁的特例）}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth,node distance=1.0cm and 1.6cm,
+  box/.style={draw,rounded corners,fill=boxbg,thick,minimum width=3.0cm,minimum height=1.0cm,align=center}]
+  \node[box] (cauchy) {\textbf{柯西}\\ 最一般};
+  \node[box,below left=1.2cm and 0.3cm of cauchy] (lag) {\textbf{拉格朗日}\\ $g(x)=x$};
+  \node[box,below right=1.2cm and 0.3cm of cauchy] (rolle) {\textbf{罗尔}\\ 且 $f(a)=f(b)$};
+  \draw[->,thick,curve!80] (cauchy)--(lag) node[midway,above left,font=\scriptsize]{取 $g=x$};
+  \draw[->,thick,curve!80] (cauchy)--(rolle) node[midway,above right,font=\scriptsize]{取 $g=x$ 且 $f(a)=f(b)$};
+  \draw[->,thick,auxc!80] (lag)--(rolle) node[midway,below,font=\scriptsize]{再加 $f(a)=f(b)$};
+\end{tikzpicture}
+\end{center}
+
+\begin{tcolorbox}[colback=boxbg,colframe=auxc!70,title={\bfseries 记忆要点}]
+\;
+\textbf{罗尔 $\subset$ 拉格朗日 $\subset$ 柯西}（后者由前者取特殊 $g$ 或加特殊条件得到）。\\
+\textbf{辅助函数一句话}：
+罗尔无需构造；拉格朗日“差割线”$F=f-\ell$；柯西“差参数插值”。
+三者的统一动作都是：\emph{构造 $F$ 使 $F(a)=F(b)$，然后对 $F$ 用罗尔。}
+\end{tcolorbox}
+
+% =====================================================================
+\section*{附：三个辅助函数的验证速查}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\centering\arraybackslash}p{2.4cm} >{\centering\arraybackslash}p{6.8cm} c c}
+\toprule
+\textbf{定理} & \textbf{辅助函数 $F(x)$} & $F(a)$ & $F(b)$\\
+\midrule
+罗尔 & $F=f$（直接 & $0$ & $0$\\
+     & 用条件 $f(a)=f(b)$） & & \\
+拉格朗日 & $F=f(x)-f(a)-\dfrac{f(b)-f(a)}{b-a}(x-a)$ & $0$ & $0$\\
+柯西 & $F=(f-f(a))\Delta g-(g-g(a))\Delta f$ & $0$ & $0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{其中 $\Delta f=f(b)-f(a),\ \Delta g=g(b)-g(a)$。三行都能让罗尔定理直接落地。}
+
+\end{document}

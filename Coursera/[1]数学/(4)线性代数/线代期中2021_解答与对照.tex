@@ -1,0 +1,431 @@
+\documentclass[10pt]{ctexart}
+\usepackage[a4paper,margin=2.1cm,top=1.8cm,bottom=1.9cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{array,booktabs}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{acc2}{HTML}{8A4B1B}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+
+\setlist[itemize]{leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\allowdisplaybreaks
+
+\newcommand{\qq}{\operatorname{rank}}
+\newcommand{\dm}{\dim}
+\newcommand{\Img}{\operatorname{Im}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\R}{\mathbb{R}}
+
+\newcommand{\Qhead}[2]{%
+  \begin{tcolorbox}[enhanced,colback=graybg,colframe=acc,
+    boxrule=0pt,leftrule=3pt,arc=2pt,top=3pt,bottom=3pt,left=8pt,right=8pt]
+  {\heiti\color{acc}#1}\quad #2
+  \end{tcolorbox}}
+\newcommand{\Vhead}[1]{\vspace{2pt}{\heiti\color{acc2}#1}\par\vspace{-2pt}}
+\newtcolorbox{cmpbox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{acc}线性代数 · 2021 期中 · 解答与对照}
+\fancyhead[R]{\footnotesize\color{acc}COMP12004.08}
+\fancyfoot[C]{\footnotesize\color{black!55}第 \thepage 页，共 \pageref{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\heiti 复旦大学信息科学与工程学院}\\[6pt]
+{\Large\heiti 《线性代数》期中考试 · 解答与对照}\\[8pt]
+{\small 课程代码 COMP12004.08\quad 闭卷\quad 100 分钟\quad 共 8 页 9 题\quad 2021 年 11 月}\\[4pt]
+{\footnotesize\color{black!60}每题给出“标准版”与“另一版”两种写法，末尾附对比点评；全部数值经精确有理数运算复核}
+\end{center}
+\vspace{-4pt}
+\hrule height 1.2pt
+\vspace{4pt}
+
+%==================== 1 ====================
+\Qhead{第 1 题（10 分）}{若 $x=[1,-2,1,0]^T,\ y=[0,1,-2,1]^T$，求 $x^Ty$、$xy^T$ 与 $(xy^T)^5$，要求有计算过程。}
+
+\Vhead{版本 A：标准版（先算数，再算矩阵，最后一招定局）}
+\textbf{解}
+(1) 内积是数：$x^Ty=\sum_{i=1}^{4}x_iy_i=1\cdot0+(-2)\cdot1+1\cdot(-2)+0\cdot1=-4$。
+
+(2) 外积是 $4\times4$ 矩阵，第 $(i,j)$ 元为 $x_iy_j$：
+\[
+xy^{T}=\begin{bmatrix}0&1&-2&1\\0&-2&4&-2\\0&1&-2&1\\0&0&0&0\end{bmatrix}.
+\]
+校验：每一行都是 $y^T$ 的 $x_i$ 倍，每一列都是 $x$ 的 $y_j$ 倍。
+
+(3) 关键：$x^Ty=y^Tx=-4$ 是\textbf{数}，可随意移到前面：
+\[
+(xy^{T})^{5}=x(y^{T}x)(y^{T}x)(y^{T}x)(y^{T}x)y^{T}=x\,(y^{T}x)^{4}y^{T}=(-4)^{4}xy^{T}=256\,xy^{T}.
+\]
+即每个元素乘 $256$：
+\[
+(xy^{T})^{5}=\begin{bmatrix}0&256&-512&256\\0&-512&1024&-512\\0&256&-512&256\\0&0&0&0\end{bmatrix}.
+\]
+
+\Vhead{版本 B：秩 1 结构（一般结论）}
+一次乘积即可看出结构：$(xy^T)^2=x(y^Tx)y^T=s\,xy^T$（$s=-4$），归纳得 $(xy^T)^k=s^{k-1}xy^T$。
+\textbf{一般结论}：对任意同维 $u,v$，$(uv^T)^k=(v^Tu)^{k-1}uv^T$；$uv^T$ 的特征值只有一个可能非零 $v^Tu$，其余全为 $0$。
+
+\begin{cmpbox}
+\textbf{对比点评}：两版结果一致，考场写版本 A。扣分点：(i) 把 $x^Ty$ 写成 $4\times1$ 向量（它是 $1\times1$，本质是数）；(ii) 把数提出去时没说明 $y^Tx=x^Ty$；(iii) 硬乘四次导致符号错。
+\end{cmpbox}
+
+%==================== 2 ====================
+\Qhead{第 2 题（12 分）}{讨论以下线性方程组当 $\lambda$ 取不同值时解的情况（无解、唯一解、无穷多解），若有解写出解集。}
+\[
+\begin{cases}
+\lambda x_1+x_2+x_3=1\\
+x_1-\lambda x_2+x_3=\lambda\\
+x_1+x_2-\lambda x_3=\lambda^{2}
+\end{cases}
+\]
+
+\Vhead{版本 A：增广矩阵消元（考场推荐，一次得三种情形）}
+\[
+\bar A=\begin{bmatrix}\lambda&1&1&1\\1&-\lambda&1&\lambda\\1&1&-\lambda&\lambda^2\end{bmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}
+\begin{bmatrix}1&1&-\lambda&\lambda^2\\1&-\lambda&1&\lambda\\\lambda&1&1&1\end{bmatrix}
+\xrightarrow[R_3-\lambda R_1]{R_2-R_1}
+\begin{bmatrix}1&1&-\lambda&\lambda^2\\0&-1-\lambda&1+\lambda&\lambda-\lambda^2\\0&1-\lambda&1+\lambda^2&1-\lambda^3\end{bmatrix}
+\]
+
+\textbf{(i) $\lambda=-1$}：第 2 行变为 $(0,0,0,0)$，第 3 行化为 $(0,2,2,2)$，即
+\[
+x_1=1,\qquad x_2+x_3=0\ \Rightarrow\ \text{无穷多解：}\ x=(1,\ t,\ -t)^{T},\ t\in\R .
+\]
+
+\textbf{(ii) $\lambda=2$}：
+\[
+\bar A=\begin{bmatrix}2&1&1&1\\1&-2&1&2\\1&1&-2&4\end{bmatrix}\longrightarrow
+\begin{bmatrix}1&1&-2&4\\0&-3&3&-2\\0&0&12&-19\end{bmatrix}
+\Rightarrow x_3=-\tfrac{19}{12},\quad x_2=-\tfrac{11}{12},\quad x_1=\tfrac74 .
+\]
+即\textbf{唯一解} $\left(\tfrac74,\,-\tfrac{11}{12},\,-\tfrac{19}{12}\right)$。
+
+\textbf{(iii) 其余 $\lambda\neq-1$}：此时行列式非零（见版本 B），\textbf{唯一解}。以 $\lambda=0$ 为例：$x_2+x_3=1,\ x_1+x_3=0,\ x_1+x_2=0$，解得 $\left(-\tfrac12,\tfrac12,\tfrac12\right)$。
+
+\Vhead{版本 B：行列式分类 + Cramer}
+\[
+D=\begin{vmatrix}\lambda&1&1\\1&-\lambda&1\\1&1&-\lambda\end{vmatrix}
+=\lambda(\lambda^2-1)+(\lambda+1)+(\lambda+1)
+=(\lambda+1)\big(\lambda^2-\lambda+2\big).
+\]
+其中 $\lambda^2-\lambda+2$ 的判别式 $1-8<0$，恒不为零，所以
+\[
+D=0\iff\lambda=-1 .
+\]
+分类结论：$\lambda=-1$ 时秩为 $2$ 且相容，无穷多解；其余一切 $\lambda$ 唯一解。
+
+\vspace{2pt}
+\begin{center}\small
+\begin{tabular}{c c c}
+\toprule
+$\lambda$ & 解的情况 & 解\\
+\midrule
+$\lambda=-1$ & 无穷多解 & $(1,\,t,\,-t)^T,\ t\in\R$\\
+$\lambda=2$ & 唯一解 & $\left(\tfrac74,\,-\tfrac{11}{12},\,-\tfrac{19}{12}\right)$\\
+$\lambda\neq-1$ 的其他值 & 唯一解 & 由 Cramer 法则给出\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{抽查验算}（代回原方程均成立）：$\lambda=3\Rightarrow\left(\tfrac74,-\tfrac{11}{8},-\tfrac{23}{8}\right)$；$\lambda=4\Rightarrow\left(\tfrac{23}{14},-\tfrac{111}{70},-\tfrac{279}{70}\right)$；$\lambda=0\Rightarrow\left(-\tfrac12,\tfrac12,\tfrac12\right)$。
+
+\begin{cmpbox}
+\textbf{对比点评}：本题\textbf{没有“无解”情形}，这是最大陷阱，很多同学会错写“$\lambda=-1$ 无解”。版本 A 一次消元就拿到全部情形；版本 B 只需求一个行列式，注意它的零点只有单重的 $\lambda=-1$（不是 $-1$ 与 $2$）。扣分点：漏掉“$\lambda=-1$ 时秩只有 2 但相容”；解集不写 $t\in\R$；不回代验证。
+\end{cmpbox}
+
+%==================== 3 ====================
+\Qhead{第 3 题（16 分）}{在常规矩阵加法与数乘下，所有 $2\times2$ 矩阵构成线性空间 $M^{2\times2}$。(1) 证明对称矩阵空间 $S^{2\times2}$ 为线性子空间（4 分）；(2) 给出两组不同的基（4 分）；(3) 求两组基间的过渡矩阵（4 分）；(4) 求 $M=\begin{bmatrix}2&1\\1&2\end{bmatrix}$ 在两组基下的展开系数（4 分）。}
+
+\Vhead{版本 A：标准版（三条判定 + 坐标向量）}
+\textbf{(1) 证}　记 $S=\{A\in M^{2\times2}\mid A^T=A\}$。
+\begin{itemize}
+  \item 非空：$O^T=O$，故 $O\in S$；
+  \item 对加法封闭：若 $A,B\in S$，则 $(A+B)^T=A^T+B^T=A+B$；
+  \item 对数乘封闭：$(kA)^T=kA^T=kA$。
+\end{itemize}
+由子空间判定定理，$S^{2\times2}$ 是线性子空间。（等价说法：$S$ 是齐次方程 $a_{12}-a_{21}=0$ 的解空间，故 $\dm S=4-1=3$。）
+
+\textbf{(2) 两组基}
+\[
+\text{基 I：}\ E_1=\begin{bmatrix}1&0\\0&0\end{bmatrix},\ E_2=\begin{bmatrix}0&0\\0&1\end{bmatrix},\ E_3=\begin{bmatrix}0&1\\1&0\end{bmatrix};
+\]
+\[
+\text{基 II：}\ G_1=\begin{bmatrix}1&0\\0&1\end{bmatrix},\ G_2=\begin{bmatrix}0&1\\1&0\end{bmatrix},\ G_3=\begin{bmatrix}1&0\\0&-1\end{bmatrix}.
+\]
+两组都对称，且都线性无关（把它们看成 $\R^4$ 中的坐标向量 $(1,0,0,0),(0,0,0,1),(0,1,1,0)$ 与 $(1,0,0,1),(0,1,1,0),(1,0,0,-1)$ 即可判断），故都是 $S^{2\times2}$ 的基。
+
+\textbf{(3) 过渡矩阵}　设 $(G_1,G_2,G_3)=(E_1,E_2,E_3)\,C$。由
+\[
+G_1=E_1+E_2,\qquad G_2=E_3,\qquad G_3=E_1-E_2
+\]
+逐列读出坐标，得
+\[
+C=\begin{bmatrix}1&0&1\\1&0&-1\\0&1&0\end{bmatrix},
+\qquad
+C^{-1}=\begin{bmatrix}\tfrac12&\tfrac12&0\\0&0&1\\\tfrac12&-\tfrac12&0\end{bmatrix},
+\]
+可直接验证 $CC^{-1}=I_3$。若课本约定 $(E_1,E_2,E_3)=(G_1,G_2,G_3)P$，则 $P=C^{-1}$。
+
+\textbf{(4) 展开系数}　$M=\begin{bmatrix}2&1\\1&2\end{bmatrix}$。
+\[
+M=2E_1+2E_2+1\cdot E_3
+\quad\Longrightarrow\quad [M]_{\text{I}}=(2,\ 2,\ 1)^{T}.
+\]
+又 $M=2G_1+0\cdot G_2+0\cdot G_3$，故
+\[
+[M]_{\text{II}}=(2,\ 0,\ 0)^{T}.
+\]
+一致性检验：$C^{-1}[M]_{\text{I}}=C^{-1}(2,2,1)^T=(2,0,0)^T=[M]_{\text{II}}$，完全吻合。
+
+\Vhead{版本 B：不引入 $\R^4$，直接在 $2\times2$ 矩阵上展开（可作验算）}
+设 $M=aG_1+bG_2+cG_3$，即
+\[
+\begin{bmatrix}2&1\\1&2\end{bmatrix}
+=a\begin{bmatrix}1&0\\0&1\end{bmatrix}+b\begin{bmatrix}0&1\\1&0\end{bmatrix}+c\begin{bmatrix}1&0\\0&-1\end{bmatrix}
+=\begin{bmatrix}a+c&b\\b&a-c\end{bmatrix}.
+\]
+比较元素得 $a+c=2,\ b=1,\ a-c=2$，故 $a=2,\ c=0$，即 $(a,b,c)=(2,0,0)$，与版本 A 一致。
+
+\begin{cmpbox}
+\textbf{对比点评}：(1) 三句话缺“非空”是常见扣分；(2) 两组基\textbf{必须不同}且都真在 $S$ 内；(3) 过渡矩阵方向约定各书不同，务必写清是 $(G)=(E)C$ 还是 $(E)=(G)P$，并给 $C^{-1}$ 做一次乘积检验；(4) 最后代回矩阵验算，10 秒就能发现“系数与基错位”。
+\end{cmpbox}
+
+%==================== 4 ====================
+\Qhead{第 4 题（10 分）}{计算三维空间中坐标为 $(1,-1,1)$ 的点 $x$ 到矩阵 $A=\begin{bmatrix}1&0&1\\0&1&2\\0&0&0\end{bmatrix}$ 的零空间 $N(A)$ 的距离，要求有具体步骤。}
+
+\Vhead{版本 A：几何投影法（推荐）}
+(i) 求 $N(A)$：解 $Ax=0$，
+\[
+x_1+x_3=0,\quad x_2+2x_3=0\ \Longrightarrow\ x=x_3(-1,-2,1)^{T},
+\]
+故 $N(A)=\spn\{u\}$，$u=(-1,-2,1)^T$，$\|u\|^2=6$。
+
+(ii) 把点 $p=(1,-1,1)^T$ 投影到直线 $N(A)$：
+\[
+\hat p=\frac{p^Tu}{u^Tu}u=\frac{(-1)+2+1}{6}(-1,-2,1)=\Big(-\tfrac13,-\tfrac23,\tfrac13\Big).
+\]
+
+(iii) 距离：
+\[
+d=\|p-\hat p\|=\Big\|\Big(\tfrac43,-\tfrac13,\tfrac23\Big)\Big\|
+=\sqrt{\frac{16+1+4}{9}}=\frac{\sqrt{21}}{3}\approx1.528 .
+\]
+\textbf{验算}：$p-\hat p$ 与 $u$ 的内积 $=-\tfrac43+\tfrac23+\tfrac23=0$，故 $\hat p$ 确为垂足。
+
+\Vhead{版本 B：二次型 / 最小二乘（不必先求垂足）}
+$N(A)$ 中点形如 $tu$，最小化
+\[
+f(t)=\|p-tu\|^2=\|p\|^2-2t(p^Tu)+t^2\|u\|^2=3-4t+6t^2 .
+\]
+由 $f'(t)=-4+12t=0$ 得 $t=\tfrac13$，于是
+\[
+d^2=f\Big(\tfrac13\Big)=3-\frac43+\frac23=\frac73,
+\qquad d=\sqrt{\frac73}=\frac{\sqrt{21}}{3}.
+\]
+等价地，用投影矩阵 $P^\perp=I-\frac{uu^T}{u^Tu}$ 有 $d^2=p^TP^\perp p=\|p\|^2-\frac{(u^Tp)^2}{\|u\|^2}=\frac73$。
+
+\begin{cmpbox}
+\textbf{对比点评}：两版一致，$d=\dfrac{\sqrt{21}}{3}=\sqrt{\dfrac73}$，垂足 $\Big(-\tfrac13,-\tfrac23,\tfrac13\Big)$。\textbf{最容易错的一步}：把 $A$ 的行向量当作 $N(A)$ 的法向量。注意 $N(A)$ 是行空间的正交补，$N(A)$ 自己的方向由 $r_1\times r_2=(-1,-2,1)^T$ 给出：第三行全零，两个有效方程相交出\textbf{一条直线}，不是平面。
+\end{cmpbox}
+
+%==================== 5 ====================
+\Qhead{第 5 题（10 分）}{$A=\begin{bmatrix}1&0\\0&0\end{bmatrix},\ B=\begin{bmatrix}0&1\\0&0\end{bmatrix}$，求两个零空间之和 $N(A)+N(B)$ 的基与维度。}
+
+\Vhead{版本 A：直接求}
+$Ax=(x_1,0)^T=0\Rightarrow x_1=0$，故 $N(A)=\spn\{(0,1)^T\}$；
+$Bx=(x_2,0)^T=0\Rightarrow x_2=0$，故 $N(B)=\spn\{(1,0)^T\}$。
+于是
+\[
+N(A)+N(B)=\spn\{(1,0)^T,(0,1)^T\}=\R^2,\qquad \dm=2 .
+\]
+基：$\{(1,0)^T,(0,1)^T\}$（即标准基）。
+
+\Vhead{版本 B：维数公式 + 直和验证}
+$N(A)\cap N(B)=\{x:x_1=0\text{ 且 }x_2=0\}=\{0\}$，由
+\[
+\dm\big(N(A)+N(B)\big)=\dm N(A)+\dm N(B)-\dm\big(N(A)\cap N(B)\big)=1+1-0=2
+\]
+且和空间是 $\R^2$ 的子空间，即得 $N(A)+N(B)=\R^2$，且为直和 $N(A)\oplus N(B)$。
+
+\begin{cmpbox}
+\textbf{对比点评}：两版结论相同——\textbf{维数 $2$，基 $\{(1,0)^T,(0,1)^T\}$}。易错：把 $N(B)$ 求成 $\{x_1=0\}$（$B$ 的第一行是 $(0,1)$，约束的是 $x_2$）；或直接说“两个 1 维子空间相加就是 2 维”而不验证交为零。
+\end{cmpbox}
+
+%==================== 6 ====================
+\Qhead{第 6 题（10 分）}{$v_1,v_2,v_3,v_4\in\R^4$ 为四个线性无关向量，证明 $\dm\spn\{v_1-v_2,\ v_2-v_3,\ v_3-v_4,\ v_4-v_1\}=3$。}
+
+\Vhead{版本 A：矩阵分解 + 秩}
+记 $u_1=v_1-v_2,\ u_2=v_2-v_3,\ u_3=v_3-v_4,\ u_4=v_4-v_1$，$V=[v_1,v_2,v_3,v_4]$（$4\times4$ 必可逆）。
+\[
+[u_1,u_2,u_3,u_4]=V\,D,\qquad
+D=\begin{bmatrix}1&0&0&-1\\-1&1&0&0\\0&-1&1&0\\0&0&-1&1\end{bmatrix}.
+\]
+右乘可逆矩阵不改变秩，故 $\dm\spn\{u_i\}=\qq D$。对 $D$ 消元：
+\[
+D\longrightarrow\begin{bmatrix}1&0&0&-1\\0&1&0&-1\\0&0&1&-1\\0&0&0&0\end{bmatrix},
+\qquad\text{且 }D(1,1,1,1)^T=0,
+\]
+零空间为 $1$ 维，因此 $\qq D=4-1=3$。
+
+\Vhead{版本 B：一上一下（最稳，考场首选）}
+\textbf{上界}：$u_1+u_2+u_3+u_4=(v_1-v_2)+(v_2-v_3)+(v_3-v_4)+(v_4-v_1)=0$，存在非平凡线性关系，故 $\dm\le3$。
+
+\textbf{下界}：设 $c_1u_1+c_2u_2+c_3u_3=0$，展开得
+\[
+c_1v_1+(c_2-c_1)v_2+(c_3-c_2)v_3-c_3v_4=0 .
+\]
+因 $v_1,v_2,v_3,v_4$ 线性无关，
+\[
+c_1=0,\quad c_2-c_1=0,\quad c_3-c_2=0,\quad -c_3=0
+\ \Longrightarrow\ c_1=c_2=c_3=0,
+\]
+故 $u_1,u_2,u_3$ 线性无关，$\dm\ge3$。综上 $\dm=3$。$\blacksquare$
+
+\begin{cmpbox}
+\textbf{对比点评}：两版都得 $3$。版本 B 两行写完上下界，最适合考场；版本 A 的关键是“右乘可逆矩阵不改变秩”和“零空间 1 维”。扣分点：只证 $\le3$ 就停手（或只证 $\ge3$）。
+\end{cmpbox}
+
+%==================== 7 ====================
+\Qhead{第 7 题（10 分）}{对矩阵 $A_{m\times n},\ B_{n\times s},\ C_{s\times t}$，证明 Frobenius 不等式 $\qq(ABC)\ge\qq(AB)+\qq(BC)-\qq(B)$。}
+
+\Vhead{版本 A：限制映射 + 秩-零化度（标准证法）}
+记 $E=\Img B\subseteq\R^n$，$E'=\Img(BC)$。由于 $\Img(BC)\subseteq\Img B$，有 $E'\subseteq E$，且 $\dm E=\qq B,\ \dm E'=\qq(BC)$。
+
+对线性映射 $A$ 在子空间 $E$ 上的限制 $A|_E$，有
+\[
+\Img(A|_E)=\Img(AB),\qquad \ker(A|_E)=N(A)\cap E .
+\]
+由秩-零化度定理，
+\[
+\qq(AB)=\dm E-\dm(N(A)\cap E)=\qq B-\dm(N(A)\cap E). \tag{1}
+\]
+同理，把 $A$ 作用在 $E'$ 上：
+\[
+\qq(ABC)=\dm E'-\dm(N(A)\cap E')=\qq(BC)-\dm(N(A)\cap E'). \tag{2}
+\]
+因 $E'\subseteq E$，有 $N(A)\cap E'\subseteq N(A)\cap E$，故 $\dm(N(A)\cap E')\le\dm(N(A)\cap E)$。由 (1)、(2) 两式相减：
+\[
+\qq(ABC)-\qq(BC)+\dm(N(A)\cap E')=\qq(AB)-\qq B+\dm(N(A)\cap E),
+\]
+即
+\[
+\qq(ABC)=\qq(AB)+\qq(BC)-\qq B-\underbrace{\Big[\dm(N(A)\cap E)-\dm(N(A)\cap E')\Big]}_{\ge0}
+\le\qq(AB)+\qq(BC)-\qq B . \ \blacksquare
+\]
+
+\Vhead{版本 B：关键一行式（便于记忆与检查）}
+把两个等式直接相减即可看出本质：
+\[
+\qq(ABC)=\qq(BC)-\dm\big(N(A)\cap\Img(BC)\big)\ \ge\ \qq(BC)-\dm\big(N(A)\cap\Img B\big)=\qq(BC)-\qq B+\qq(AB).
+\]
+不等号来自 $\Img(BC)\subseteq\Img B$；两个等式都是“$A$ 限制在 $E$ 上”的秩-零化度。
+
+\begin{cmpbox}
+\textbf{对比点评}：核心链条就是上面那一行。扣分点：(i) 漏写 $\Img(BC)\subseteq\Img B$ 导致不等号方向反；(ii) 忘记 $\ker(A|_E)=N(A)\cap E$；(iii) 误用“$\qq(AB)\le\qq B$”之类更粗的不等式。
+\end{cmpbox}
+
+%==================== 8 ====================
+\Qhead{第 8 题（10 分）}{如果 $W$ 是线性空间 $V$ 的线性子空间，证明：(1) $W$ 的零元即为 $V$ 中的零元（2 分）；(2) 若 $\dm W=\dm V$，则 $W=V$（8 分）。}
+
+\Vhead{版本 A：标准版}
+\textbf{(1) 证}　设 $0_W$、$0_V$ 分别为 $W$、$V$ 的零元。因 $W\subseteq V$，故 $0_W\in V$，在 $V$ 中考虑 $0_W+0_V$：
+\begin{itemize}
+  \item 因 $0_W$ 是 $W$ 的零元（且 $0_V\in W$），有 $0_W+0_V=0_V$；
+  \item 因 $0_V$ 是 $V$ 的零元，有 $0_W+0_V=0_W$。
+\end{itemize}
+于是 $0_W=0_V$。
+
+\textbf{(2) 证}　设 $\dm V=n$，取 $W$ 的基 $w_1,\dots,w_n$（$W$ 是 $n$ 维的）。若存在 $v\in V\setminus W$，则 $w_1,\dots,w_n,v$ 线性无关：设
+\[
+c_1w_1+\cdots+c_nw_n+cv=0 .
+\]
+若 $c\neq0$，则 $v=-\frac{1}{c}\sum c_iw_i\in W$，矛盾，故 $c=0$；再由 $w_i$ 无关得 $c_i=0$。于是 $V$ 中有 $n+1$ 个线性无关向量，与 $\dm V=n$（任何无关组长度不超过 $n$）矛盾。故 $V\setminus W=\varnothing$，即 $W=V$。$\blacksquare$
+
+\Vhead{版本 B：基扩充定理}
+$W$ 的基 $\{w_1,\dots,w_n\}$ 可扩充为 $V$ 的基。扩充后向量个数为 $\dm V=n$，故扩充部分为空，$\{w_1,\dots,w_n\}$ 本身已是 $V$ 的基，从而 $\spn\{w_1,\dots,w_n\}=W=V$。
+
+\begin{cmpbox}
+\textbf{对比点评}：(1) 的唯一考点是\textbf{不能循环论证}，必须分别使用“$0_W$ 在 $W$ 中为零元”“$0_V$ 在 $V$ 中为零元”两条事实。(2) 两版都满分；若想更完整，可加一句“设 $V$ 有限维”（无限维时结论不成立，如可数无限维空间存在维数相同的真子空间）。
+\end{cmpbox}
+
+%==================== 9 ====================
+\Qhead{第 9 题（12 分）}{$W$ 是 $V$ 的线性子空间，$\dm V=n>\dm W=r$，给定 $W$ 的一组基 $\{w_1,\dots,w_r\}$。证明可在 $V\setminus W$ 中找到 $n-r$ 个线性无关向量 $\{v_1,\dots,v_{n-r}\}$，与 $\{w_1,\dots,w_r\}$ 共同构成 $V$ 的基。}
+
+\Vhead{版本 A：基扩充 + 补证“不在 $W$ 中”（标准答案）}
+由基扩充定理，存在 $V$ 的一组基
+\[
+\{w_1,\dots,w_r,\ z_1,\dots,z_{n-r}\}.
+\]
+\textbf{必须补的一句}：证明每个 $z_j\notin W=\spn\{w_1,\dots,w_r\}$。事实上，若 $z_j\in W$，则
+\[
+z_j=\sum_{i=1}^{r}c_iw_i\ \Longrightarrow\ z_j-\sum_{i=1}^{r}c_iw_i=0,
+\]
+这是该基的一个非平凡线性关系（$z_j$ 的系数为 $1\neq0$），与线性无关矛盾。故 $z_j\in V\setminus W$。
+
+取 $v_j=z_j$，则 $\{v_1,\dots,v_{n-r}\}\subseteq V\setminus W$，它们彼此线性无关（基的一部分），且与 $\{w_1,\dots,w_r\}$ 合起来恰是 $V$ 的基：共 $r+(n-r)=n$ 个线性无关向量。$\blacksquare$
+
+\Vhead{版本 B：逐步构造（不引用扩充定理，从零构造）}
+对 $k=0,1,\dots,n-r$ 归纳构造无关组 $\{w_1,\dots,w_r\}\cup\{u_1,\dots,u_k\}$。
+
+\emph{起始}：$k=0$，即 $W$ 的基。\emph{归纳步}：若 $r+k<n$，则这 $r+k$ 个向量不能张成整个 $V$（否则它们是 $V$ 的基，与 $\dm V=n>r+k$ 矛盾），故存在
+\[
+v\in V\setminus\spn\{w_1,\dots,w_r,u_1,\dots,u_k\}.
+\]
+特别地 $v\notin W$，且加入后仍线性无关，令 $u_{k+1}=v$。取到 $k=n-r$ 时，得到 $n$ 个线性无关向量，在 $n$ 维空间 $V$ 中即为基，且每个 $u_j\in V\setminus W$。$\blacksquare$
+
+\begin{cmpbox}
+\textbf{对比点评}：命题成立，但题干埋了坑——基扩充定理只保证“线性无关 + 张成”，\textbf{不保证} $v_j\notin W$。所以版本 A 中那一句反证不可省略，\textbf{漏写它就是本题最常见的扣分点}。另外 $\{v_j\}$ 之间彼此无关（基的子集）也要点出；收尾用“无关组长度 $=$ 维数 $\Rightarrow$ 是基”最干净。
+\end{cmpbox}
+
+\newpage
+%==================== 速查页 ====================
+\begin{center}
+{\Large\heiti 一页速查 · 答案与关键步骤}\\[4pt]
+{\footnotesize\color{black!60}考前 5 分钟扫一眼：结论、易错点、必写的话}
+\end{center}
+\vspace{-2pt}
+\hrule
+\vspace{6pt}
+\small
+
+\textbf{1.}\ $x^Ty=-4$；$xy^T$ 是 $4\times4$ 秩 1 矩阵；$\boxed{(xy^T)^5=(-4)^4xy^T=256\,xy^T}$。
+{\footnotesize\textit{必写：$x^Ty=y^Tx$ 是数，可提出来。}}
+
+\textbf{2.}\ $D=(\lambda+1)(\lambda^2-\lambda+2)$，零点只有 $\lambda=-1$。$\lambda=-1$：$x_1=1,\ x_2+x_3=0$，无穷多解 $(1,t,-t)^T$；$\lambda=2$：$\left(\tfrac74,-\tfrac{11}{12},-\tfrac{19}{12}\right)$；其余 $\lambda$：唯一解。\textbf{本题无“无解”情形}。
+
+\textbf{3.}\ 三元判定（非空 / 加法 / 数乘）；基 I：$E_1,E_2,E_3=\begin{bmatrix}0&1\\1&0\end{bmatrix}$；基 II：$G_1=I,\ G_2=E_3,\ G_3=\mathrm{diag}(1,-1)$；$C=\begin{bmatrix}1&0&1\\1&0&-1\\0&1&0\end{bmatrix}$；$\begin{bmatrix}2&1\\1&2\end{bmatrix}$ 在基 I 下 $(2,2,1)^T$，基 II 下 $(2,0,0)^T$。
+
+\textbf{4.}\ $N(A)=\spn\{(-1,-2,1)^T\}$，垂足 $\frac13(-1,-2,1)$，$\boxed{d=\dfrac{\sqrt{21}}{3}=\sqrt{\dfrac73}\approx1.528}$。
+{\footnotesize\textit{易错：$N(A)$ 是直线，方向 $=r_1\times r_2$。}}
+
+\textbf{5.}\ $N(A)=\spn\{(0,1)^T\},\ N(B)=\spn\{(1,0)^T\}$，和 $=\R^2$，\boxed{\text{维数 }2,\ \text{基 }\{(1,0)^T,(0,1)^T\}}。
+
+\textbf{6.}\ $\sum_i u_i=0$ 得 $\dim\le3$；设 $c_1u_1+c_2u_2+c_3u_3=0$ 展开比对得 $c_i=0$ 得 $\dim\ge3$。\boxed{=3}
+
+\textbf{7.}\ 一行式：$\qq(ABC)=\qq(BC)-\dm(N(A)\cap\Img(BC))\ge\qq(BC)-\dm(N(A)\cap\Img B)=\qq(BC)-\qq B+\qq(AB)$。
+{\footnotesize\textit{必写：$\Img(BC)\subseteq\Img B$；$\ker(A|_E)=N(A)\cap E$。}}
+
+\textbf{8.}\ (1) $0_W+0_V$ 分别等于 $0_V$ 与 $0_W$，故相等；(2) 反证：若 $v\notin W$ 则出现 $n+1$ 个无关向量，矛盾。
+{\footnotesize\textit{加一句“$V$ 有限维”更严谨。}}
+
+\textbf{9.}\ 基扩充得 $\{w_i,z_j\}$；\textbf{必补}：若 $z_j\in W$ 则 $z_j-\sum c_iw_i=0$ 与无关性矛盾，故 $z_j\in V\setminus W$。
+
+\end{document}

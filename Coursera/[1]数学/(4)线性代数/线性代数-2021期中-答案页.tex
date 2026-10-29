@@ -1,0 +1,314 @@
+% !TEX program = xelatex
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,margin=2.2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[table]{xcolor}
+\usepackage{enumitem,array,booktabs,lastpage,fancyhdr}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdftitle={线性代数期中 2021 答案页}}
+
+\definecolor{acc}{HTML}{1B4F8A}
+\definecolor{graybg}{HTML}{F2F5F9}
+\definecolor{cmpbg}{HTML}{FBF7EC}
+\definecolor{cmpline}{HTML}{C9A227}
+
+\xeCJKsetup{CJKmath=true}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[enumerate]{leftmargin=2em,itemsep=6pt,topsep=4pt}
+
+\newcommand{\Rr}{\mathbb{R}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Nul}{\operatorname{Nul}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\TT}{^{\mathsf T}}
+\newcommand{\bv}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+\newtcolorbox{ansbox}[1][]{enhanced,breakable,colback=graybg,colframe=acc,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=3pt,bottom=3pt,left=8pt,right=8pt,#1}
+\newtcolorbox{scorebox}[1][]{enhanced,breakable,colback=cmpbg,colframe=cmpline,
+  boxrule=0pt,leftrule=3pt,arc=2pt,top=2pt,bottom=2pt,left=7pt,right=7pt,#1}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{acc}2021 期中 · 参考答案与评分标准}
+\fancyhead[R]{\small\color{acc}第 \thepage\ 页 \,/\, 共 \pageref*{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries 2021 年秋季《线性代数》期中考试}\\[3pt]
+{\large 参考答案与评分标准}
+\end{center}
+
+\vspace{0.1cm}
+\begin{ansbox}
+\textbf{使用说明}\quad 本页只给答案要点与采分点，详细推导见同目录的《完整解答册》。
+评分标准按"关键步骤给分"列出，供自查或互批使用。
+\end{ansbox}
+
+\vspace{0.2cm}
+
+%=====================================================
+\section*{一、（10 分）$\mathbf x\TT\mathbf y$，$\mathbf x\mathbf y\TT$，$(\mathbf x\mathbf y\TT)^3$}
+
+\begin{ansbox}
+\[
+\mathbf x\TT\mathbf y=-4
+\]
+\[
+\mathbf x\mathbf y\TT=\bv{0&1&-2&1\\0&-2&4&-2\\0&1&-2&1\\0&0&0&0}
+\]
+\[
+(\mathbf x\mathbf y\TT)^3=16\,\mathbf x\mathbf y\TT=\bv{0&16&-32&16\\0&-32&64&-32\\0&16&-32&16\\0&0&0&0}
+\]
+\textbf{关键}：记 $\sigma=\mathbf x\TT\mathbf y$，则 $(\mathbf x\mathbf y\TT)^k=\sigma^{k-1}\mathbf x\mathbf y\TT$，故立方为 $\sigma^2=16$ 倍。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+$\mathbf x\TT\mathbf y$ 正确（2 分）；$\mathbf x\mathbf y\TT$ 四行全对（4 分，每行 1 分）；
+识别秩一结构并给出 $(\mathbf x\mathbf y\TT)^3=\sigma^2\mathbf x\mathbf y\TT$（3 分）；最终结果正确（1 分）。
+
+\textbf{常见错误}\quad 把 $\mathbf x\TT\mathbf y$ 当成 $1\times1$ 矩阵后又与 $\mathbf x\mathbf y\TT$ 混淆；
+或误算 $\sigma^3=(-4)^3=-64$ 的倍数（正确是 $\sigma^2=16$，因为 $(\mathbf x\mathbf y\TT)^3=\sigma^2\mathbf x\mathbf y\TT$）。
+\end{scorebox}
+
+%=====================================================
+\section*{二、（12 分）含参数方程组}
+
+\begin{ansbox}
+系数行列式
+\[
+D=\begin{vmatrix}\lambda&1&1\\1&-\lambda&1\\1&1&-\lambda\end{vmatrix}=\lambda^3+\lambda+2=(\lambda+1)(\lambda^2-\lambda+2).
+\]
+$\lambda^2-\lambda+2$ 判别式 $\Delta=1-8=-7<0$，无实根，故 $D=0$ 的\textbf{唯一实根为 $\lambda=-1$}。
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+$\lambda$ 的取值 & 解的情况\\
+\midrule
+$\lambda=-1$ & 无解\\
+$\lambda\ne-1$ & 唯一解\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{唯一解}（$D_i$ 为 Cramer 分子）：
+\[
+x_1=\frac{\lambda^3+3\lambda^2+\lambda-1}{\lambda^3+\lambda+2},\qquad
+x_2=\frac{-2\lambda^3+\lambda^2+1}{\lambda^3+\lambda+2},\qquad
+x_3=\frac{-\lambda^4-2\lambda^2+2\lambda+1}{\lambda^3+\lambda+2}.
+\]
+\textbf{抽查}：$\lambda=0$ 时 $x=(-\tfrac12,\tfrac12,\tfrac12)$；$\lambda=1$ 时 $x=(1,0,0)$；$\lambda=2$ 时 $x=(\tfrac74,-\tfrac{11}{12},-\tfrac{19}{12})$。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+写出系数行列式 $D=\lambda^3+\lambda+2$（3 分）；
+断言并论证 $D=0$ 只有实根 $\lambda=-1$（含判别式或分解，3 分）；
+$\lambda=-1$ 判为无解并给出理由（3 分）；
+$\lambda\ne-1$ 判为唯一解（3 分）。
+
+\textbf{常见错误}\quad 习惯性猜测 $\lambda=1$ 或 $\lambda=-1$ 都是"坏值"——
+本题 $\lambda=1$ 时 $D=4\ne0$，是唯一解，不是特殊情形。
+\textbf{务必先算判别式再断言根。}
+\end{scorebox}
+
+%=====================================================
+\section*{三、（16 分）$S^{2\times2}$ 的基与过渡矩阵}
+
+\begin{ansbox}
+\textbf{(1)} $S^{2\times2}=\{A:A\TT=A\}$。零矩阵对称；$A,B$ 对称 $\Rightarrow(A+B)\TT=A\TT+B\TT=A+B$；
+$(kA)\TT=kA$。故为子空间。
+
+\textbf{(2)} 两组基可取
+\[
+B_1=\{E_{11},\ E_{12}+E_{21},\ E_{22}\},\qquad
+B_2=\{E_{11},\ E_{12}+E_{21},\ \bv{0&1\\1&1}\}.
+\]
+其中 $E_{ij}$ 为单元素矩阵。$\dim S^{2\times2}=3$。
+
+\textbf{(3)} 由 $(B_2)=(B_1)T$，因 $\bv{0&1\\1&1}=(E_{12}+E_{21})+E_{22}$：
+\[
+T=\bv{1&0&0\\0&1&1\\0&0&1},\qquad T^{-1}=\bv{1&0&0\\0&1&-1\\0&0&1}.
+\]
+
+\textbf{(4)} $\bv{2&1\\1&2}=2E_{11}+1(E_{12}+E_{21})+2E_{22}$，
+故在 $B_1$ 下坐标为 $(2,1,2)\TT$；在 $B_2$ 下为 $T^{-1}(2,1,2)\TT=(2,-1,2)\TT$。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+(1) 三条子空间公理各 1 分，结论 1 分（共 4 分）；
+(2) 每组基正确 2 分（共 4 分）；
+(3) 过渡矩阵 4 分（写反方向扣 2 分）；
+(4) 两组坐标各 2 分（共 4 分）。
+
+\textbf{常见错误}\quad 过渡矩阵方向写反（把 $T$ 与 $T^{-1}$ 互换）；
+忘记"两组基必须都是基"，给出含线性相关向量的集合。
+\end{scorebox}
+
+%=====================================================
+\section*{四、（10 分）点到 $\Nul(A)$ 的距离}
+
+\begin{ansbox}
+$\Nul(A)$：$x_1+x_3=0$，$x_2+2x_3=0$，故
+\[
+\Nul(A)=\Span\{\mathbf b\},\qquad \mathbf b=(-1,-2,1)\TT .
+\]
+$\rank A=2$，$A$ 为 $3\times3$，故 $\dim\Nul(A)=1$，为\textbf{直线}。
+
+投影：$\dfrac{\mathbf x\cdot\mathbf b}{\mathbf b\cdot\mathbf b}=\dfrac{2}{6}=\dfrac13$，故
+\[
+\hat{\mathbf x}=\tfrac13\mathbf b=\left(-\tfrac13,-\tfrac23,\tfrac13\right)\TT,
+\qquad d=\left\lVert\mathbf x-\hat{\mathbf x}\right\rVert=\frac{\sqrt{21}}{3}\approx1.5275 .
+\]
+\textbf{校验}：$\cos\theta=\dfrac{2}{\sqrt3\cdot\sqrt6}=\dfrac{\sqrt2}{3}$，$d=\sqrt3\sqrt{1-\tfrac29}=\dfrac{\sqrt{21}}{3}$ \checkmark
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+求对 $\Nul(A)$ 的基（3 分）；指出 $\dim=1$（2 分）；投影公式或距离计算（4 分）；结果正确（1 分）。
+
+\textbf{常见错误}\quad 误把 $\Nul(A)$ 当平面，用点到平面公式 $\dfrac{|\mathbf n\cdot\mathbf x|}{\|\mathbf n\|}$——
+本题 $\Nul(A)$ 是一维直线，没有唯一法向量，该公式不适用。
+\end{scorebox}
+
+%=====================================================
+\section*{五、（10 分）$\Nul(A)+\Nul(B)$}
+
+\begin{ansbox}
+\[
+\Nul(A)=\Span\left\{\bv{0\\1}\right\},\qquad
+\Nul(B)=\Span\left\{\bv{1\\0}\right\}.
+\]
+两者线性无关，故
+\[
+\Nul(A)+\Nul(B)=\Rr^2,\qquad \dim=2,\qquad\text{基}\ \left\{\bv{1\\0},\bv{0\\1}\right\}.
+\]
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+两个零空间各 3 分；判断线性无关并给出和的基与维数（4 分）。
+
+\textbf{易混}：本题求的是\textbf{零空间}之和；若改求\textbf{左零空间} $\Nul(A\TT)+\Nul(B\TT)$，
+答案是 $\Span\{(0,1)\TT\}$、$\dim=1$（见 2022 卷第 5 题）。\textbf{转置与否结论完全不同。}
+\end{scorebox}
+
+%=====================================================
+\section*{六、（10 分）$\dim=3$ 的证明}
+
+\begin{ansbox}
+记 $\mathbf w_i=\mathbf v_i-\mathbf v_{i+1}$（$\mathbf v_5=\mathbf v_1$）。
+
+\textbf{上界}：$\mathbf w_1+\mathbf w_2+\mathbf w_3+\mathbf w_4=\mathbf 0$，故线性相关，$\dim\le3$。
+
+\textbf{下界}：设 $\sum c_i\mathbf w_i=\mathbf 0$，展开归并得
+\[
+(c_1-c_4)\mathbf v_1+(c_2-c_1)\mathbf v_2+(c_3-c_2)\mathbf v_3+(c_4-c_3)\mathbf v_4=\mathbf 0 .
+\]
+由 $\mathbf v_i$ 无关得 $c_1=c_4=c_2=c_3$，结合 $\sum c_i=0$ 得全为零。
+故 $\mathbf w_1,\mathbf w_2,\mathbf w_3$ 线性无关，$\dim\ge3$。
+
+上下界合并，$\dim=3$。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad 上界（找出线性关系，4 分）；下界（证明 3 个无关，5 分）；结论（1 分）。
+
+\textbf{常见错误}\quad 只做上界（"四个向量和为 0，所以维数不会超过 3"）就下结论。
+\textbf{"$\dim=k$"必须两头都证}，只做一边最多得一半分。
+\end{scorebox}
+
+%=====================================================
+\section*{七、（10 分）Frobenius 不等式}
+
+\begin{ansbox}
+\textbf{Sylvester 不等式}（引理）：对 $X\in\FF^{p\times q}$、$Y\in\FF^{q\times r}$，
+\[
+\rank(X)+\rank(Y)-q\le\rank(XY). \tag{S}
+\]
+
+\textbf{证明}：对 $B$、$C$（中间维数 $s$）用 (S)：
+\[
+\rank(B)+\rank(C)-s\le\rank(BC). \tag{1}
+\]
+对 $AB$、$C$（中间维数仍为 $s$）用 (S)：
+\[
+\rank(AB)+\rank(C)-s\le\rank(ABC). \tag{2}
+\]
+由 (2) 得 $\rank(AB)\le\rank(ABC)-\rank(C)+s$；由 (1) 得 $\rank(BC)\le\rank(B)+\rank(C)-s$。相加：
+\[
+\rank(AB)+\rank(BC)\le\rank(ABC)+\rank(B).
+\]
+\textbf{与 Sylvester 的关系}：取 $B=I_s$（$\rank=n$）即得 Sylvester，故 Sylvester 是 Frobenius 的特例。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad 正确陈述 Sylvester（2 分）；两次应用并正确配对中间维数（5 分）；
+整理得结论（2 分）；说明特例关系（1 分）。
+
+\textbf{常见错误}\quad 中间维数用错（把 $A$ 的行数 $m$ 当成中间维数）；
+或直接"感觉"不等式方向。\textbf{中间维数恒为 $B$ 的行数 $n$ 与 $C$ 的行数 $s$。}
+\end{scorebox}
+
+%=====================================================
+\section*{八、（10 分）子空间的两个命题}
+
+\begin{ansbox}
+\textbf{(1)} 设 $\mathbf 0_W$ 为 $W$ 的零元。它在 $V$ 中也满足"加任何向量不变"，而 $V$ 中这样的元素唯一
+（若 $\mathbf 0,\mathbf 0'$ 皆为零元，则 $\mathbf 0'=\mathbf 0'+\mathbf 0=\mathbf 0$），故 $\mathbf 0_W=\mathbf 0_V$。
+
+\textbf{(2)} 取 $W$ 的基 $\mathbf w_1,\dots,\mathbf w_r$（$r=\dim W$）。若 $W\ne V$，存在 $\mathbf v\in V\setminus W$。
+则 $\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v\}$ 线性无关（否则 $\mathbf v\in\Span\{\mathbf w_i\}=W$，矛盾），
+故 $\dim V\ge r+1>r=\dim W$，与 $\dim W=\dim V$ 矛盾。故 $W=V$。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+(1) 指出零元唯一性（2 分）；
+(2) 反证假设 $W\ne V$（2 分）；基扩充得矛盾（5 分）；结论（1 分）。
+\end{scorebox}
+
+%=====================================================
+\section*{九、（12 分）基扩充定理}
+
+\begin{ansbox}
+\textbf{归纳构造}\quad 设已有线性无关组
+$\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\}$（$k<n-r$），记其张成为 $U$。
+
+因 $k+r<n=\dim V$，故 $U\ne V$，存在 $\mathbf v_{k+1}\in V\setminus U$。把它加入后新组仍线性无关。
+
+重复 $n-r$ 次，得 $r+(n-r)=n$ 个线性无关向量，构成 $V$ 的基。
+\end{ansbox}
+
+\begin{scorebox}
+\textbf{采分点}\quad
+构造思路（每步取 $V\setminus U$ 中的向量，5 分）；证明新向量不与已有向量线性相关（4 分）；
+计数并断言构成基（3 分）。
+
+\textbf{重要提醒（原题表述）}\quad 题面要求"在 $V\setminus W$ 中找 $n-r$ 个线性无关向量"。
+若只要求每个 $\mathbf v_i\notin W$，结论\textbf{不成立}。反例（$n=3$、$r=1$、$n-r=2$）：
+
+取 $W=\Span\{\mathbf e_3\}$，$\mathbf v_1=(1,0,0)\TT$、$\mathbf v_2=(2,0,1)\TT$，
+两者都在 $V\setminus W$ 内且彼此无关，但 $\mathbf v_2-2\mathbf v_1=\mathbf e_3\in W$，
+故 $\{\mathbf e_3,\mathbf v_1,\mathbf v_2\}$ 线性相关，不能构成基。
+
+\textbf{应理解为}：$\mathbf v_{k+1}\notin\Span\{\mathbf w_1,\dots,\mathbf w_r,\mathbf v_1,\dots,\mathbf v_k\}$
+（比"$\notin W$"更强）。按此理解命题成立。
+\end{scorebox}
+
+\vspace{0.3cm}
+\begin{ansbox}
+\textbf{分数汇总}\quad
+一 10 + 二 12 + 三 16 + 四 10 + 五 10 + 六 10 + 七 10 + 八 10 + 九 12 $=$ \textbf{100 分}
+\end{ansbox}
+
+\end{document}

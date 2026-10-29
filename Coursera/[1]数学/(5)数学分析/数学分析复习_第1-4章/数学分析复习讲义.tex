@@ -1,0 +1,154 @@
+\documentclass[11pt,a4paper,UTF8]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,mathtools,geometry,hyperref,enumitem}
+\geometry{margin=2cm}
+\hypersetup{hidelinks}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\qitem}[1]{\par\smallskip\noindent\textbf{#1}\ }
+\title{数学分析（上册）第 1--4 章\\习题要点与解答}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\tableofcontents\newpage
+
+\section{第 1 章\quad 集合与映射（原书页 1--6）}
+\subsection*{§1 集合}
+\qitem{1.1} 证明 $n$ 元集有 $2^n$ 个子集。\textbf{解}：$\sum_{k=0}^n C_n^k=(1+1)^n=2^n$。\\
+\qitem{1.2} 无限集含可列子集；两可列集之并仍可列。\textbf{证}：逐个取新元素；$A\cup B=\{a_1,b_1,a_2,b_2,\dots\}$。\\
+\qitem{1.3} 指出错误：$\{0\}\ne\varnothing$；应为 $a\in\{a,b,c\}$、$\{a,b\}\subset\{a,b,c\}$；$\{a,b,\{a,b\}\}\ne\{a,b\}$。\\
+\qitem{1.4} 集合表示：(1) $\{x\mid-2<x\le3\}$；(2) $\{(x,y)\mid x>0,y>0\}$；(3) $\{x\mid0<x<1,x\in\mathbb Q\}$；(4) $\{x\mid x=k\pi+\frac\pi2\}$。\\
+\qitem{1.5} 证分配律 $A\cap(B\cup D)=(A\cap B)\cup(A\cap D)$ 与 De Morgan 律。双向包含 + 逻辑等价。\\
+\qitem{1.6} 消去律不成立。\textbf{例}：$A=\{a,b,c\},B=\{b,c,d\},C=\{c,d\}$。\\
+\qitem{1.7} $x\in A\cap B\Leftrightarrow x\in A$ 且 $x\in B$；$x\in A\cup B\Leftrightarrow x\in A$ 或 $x\in B$（按定义均正确）。
+
+\subsection*{§2 映射与函数}
+\qitem{2.1} $S=\{\alpha,\beta,\gamma\}\to T=\{a,b,c\}$：共 $3^3=27$ 个映射，双射 $3!=6$ 个。\\
+\qitem{2.2} 区间一一对应：$[a,b]\to[0,1]$ 取 $\frac{x-a}{b-a}$；$(0,1)\to\R$ 取 $-\cot(\pi x)$。\\
+\qitem{2.3} 复合函数定义域值域：(1) $\log_a(x^2-3)$；(2) $\arcsin3^x$；(3) $|\tan x|$；(4) $\sqrt{\frac{x-1}{x+1}}$。\\
+\qitem{2.5} 定义域值域：(1) $\log_a\sin x$；(2) $\sqrt{\cos x}$；(3) $\sqrt{4-3x-x^2}$ 定义域 $[-4,1]$、值域 $[0,\frac52]$；(4) $x^2+\frac1x$。\\
+\qitem{2.6} 函数相等：(1)(2) 不等，(3) 相等。\\
+\qitem{2.7} 函数方程：(1) $f(x)=2x^3-21x^2+77x-97$；(2) $f(x)=\frac{2x+1}{4x-1}$。\\
+\qitem{2.8} 迭代 $f=\frac1{1+x}$：Fibonacci 系数，$f^{\circ8}=\frac{21x+34}{34x+55}$。\\
+\qitem{2.9} 奇偶分解：$f=\frac{f(x)+f(-x)}2+\frac{f(x)-f(-x)}2$。\\
+\qitem{2.10--2.12} 分段函数建模（折线、面积、液体压强）。\\
+\qitem{2.13} 非单调双射：$f=x$（有理）、$1-x$（无理）。
+
+\section{第 2 章\quad 数列极限（原书页 7--25）}
+\subsection*{§1 实数系的连续性}
+\qitem{1.1} $\sqrt6$ 无理（反证+既约）；$\sqrt3+\sqrt2$ 无理。\\
+\qitem{1.2--1.3} 最大/最小数存在性；有界集的并与和集有界。\\
+\qitem{1.4--1.7} $\sup S=-\inf\{-x:x\in S\}$；确界唯一；$\sup S\ge\inf S$，等号时 $S$ 为单点。\\
+\qitem{1.8} $S=\{x\in\mathbb Q:x^2<3\}$ 无最大/最小数，在 $\mathbb Q$ 内无上下确界（$\mathbb Q$ 不完备）。
+
+\subsection*{§2 数列极限}
+\qitem{1} 证无穷小：$\frac{n+1}{n^2+1}<\frac2n$；$\frac{n^2}{3^n}<\frac1n$；$\frac{3^n}{n!}<\frac{3^5}{5!}(\frac12)^{n-5}$；$\frac{n!}{n^n}<\frac1n$。\\
+\qitem{2} 证极限：$\lim\frac{2n^2-1}{3n^2+2}=\frac23$（误差 $<\frac1{n^2}$）；$\lim\sqrt[n]{3n+2}=1$。\\
+\qitem{3} 错误定义反例：$x_n=-n$。\\
+\qitem{5} 奇偶子列同极限 $\Rightarrow$ 全列同极限。\\
+\qitem{6} $\sqrt{\cdot}$ 保极限：$|\sqrt{x_n}-\sqrt a|\le\sqrt{|x_n-a|}$。\\
+\qitem{8} 夹逼：$1\le(1+\frac12+\cdots+\frac1n)^{1/n}\le\sqrt[n]n\to1$；$\sum_{k=n^2}^{(n+1)^2}\frac1{\sqrt k}\to2$。\\
+\qitem{9} 极限：(1) 3；(2) $\frac12$；(5) $\frac12$；(6) $-\frac12$；(8) $\frac12$（裂项）；(10) 3。\\
+\qitem{10} $\frac{a_n}{a_{n+1}}\to l>1\Rightarrow a_n\to0$。
+
+\subsection*{§3 无穷大量}
+\qitem{1} 证无穷大：$\frac{n^2+1}{2n+1}$、$\log_a\frac1n$、$n-\arctan n$、$\sum\frac1{\sqrt{n+k}}$。\\
+\qitem{2} $\lim a_n=+\infty\Rightarrow\lim\frac{a_1+\cdots+a_n}n=+\infty$；$a_n>0,\lim a_n=0\Rightarrow\lim(a_1\cdots a_n)^{1/n}=0$。\\
+\qitem{4} Stolz：$\lim\frac{1^2+3^2+\cdots+(2n+1)^2}{n^3}=\frac43$；偏差 $\to4$。\\
+\qitem{5} Stolz 证 $\frac{\log_a n}{n}\to0$，$\frac{n^k}{a^n}\to0$。\\
+\qitem{6} Stolz 逆命题反例：$(-1)^nn$；$n^2$ 型。\\
+\qitem{7} $\sum\lambda^{n-k}a_k\to\frac a{1-\lambda}$（$0<\lambda<1$）。\\
+\qitem{8} $A_n$ 收敛、$p_n\uparrow+\infty$：$\frac{p_1a_1+\cdots+p_na_n}{p_n}\to0$。
+
+\subsection*{§4 收敛准则}
+\qitem{1} 由 $e$ 变形：(1) $\frac1e$；(2) $e$；(3) $\sqrt e$；(4) 1；(5) $e$。\\
+\qitem{2} 单调有界求极限（6 个递推）：(1) 2；(2) 2；(3) $-1$；(4) 4；(5) 0；(6) 1。\\
+\qitem{3} 递推判敛：$\frac23\cdot\frac35\cdots\to0$；$\frac{a^n}{n!}\to0$；$\frac{n!}{n^n}\to0$。\\
+\qitem{4} $x_{n+1}=\frac12(x_n+\frac2{x_n})$：$x_1=1\Rightarrow\sqrt2$；$x_1=-2\Rightarrow-\sqrt2$。\\
+\qitem{5} $x_{n+2}=\frac{x_{n+1}+x_n}2$：极限 $\frac{a+2b}3$。\\
+\qitem{6} 算术—几何平均、算术—调和平均：均收敛且极限相等。\\
+\qitem{7} $x_{n+1}=\frac1{2+x_n}$：极限 $\sqrt2-1$（奇偶子列）。\\
+\qitem{8--10} 单调判子列；有界不收敛造两子列；无界非无穷大造无穷大子列。\\
+\qitem{11} $\sup S\notin S$ 取严格增列 $\to a$。\\
+\qitem{12} 区间套唯一公共点。\\
+\qitem{13} Cauchy 证收敛：$\sum a_kq^k$；交错调和。\\
+\qitem{14} $|x_{n+1}-x_n|<\frac1{2^n}\Rightarrow$ 基本列。\\
+\qitem{15} $\operatorname{diam}A_k\to0\iff$ 收敛。\\
+\qitem{16} Cauchy 原理证单调有界收敛。
+
+\section{第 3 章\quad 函数极限与连续函数（原书页 26--46）}
+\subsection*{§1 函数极限}
+\qitem{1} 按 $\eps$-$\delta$ 证 $x^3\to8$（$|x^3-8|<19|x-2|$）；$\sqrt x\to2$；$\frac{x+1}{2x-1}\to\frac12$等。\\
+\qitem{2} 求极限：(1) $\frac23$；(7) $\cos a$；(8) 2；(9) 4；(10) $\frac12$（$\tan x-\sin x\sim\frac{x^3}2$）。\\
+\qitem{3--4} 夹逼：$x[\frac1x]\to1$；$x^{1/x}\to1$；$\frac{x^k}{a^x}\to0$；$\frac{\ln^k x}{x}\to0$。\\
+\qitem{5} 单侧：$2^{1/x}$ 型左右 $-1,1$；Dirichlet 极限不存在；$\frac1x-[\frac1x]$ 左右 1,0。\\
+\qitem{7} $\frac{2+e^{1/x}}{1+e^{1/x}}+\frac{\sin x}{|x|}\to1$。\\
+\qitem{9} $\lim f(x^2)=A\not\Rightarrow\lim f(x)=A$（符号函数反例）。\\
+\qitem{10} 命题否定式（$\eps_0$ 型）。\\
+\qitem{13} $\lim_{x\to+\infty}f$ 存在有限 $\iff$ 任意正无穷大 $x_n$ 使 $f(x_n)$ 收敛。
+
+\subsection*{§2 连续函数}
+\qitem{1} 证连续：$\sqrt x$（$\delta=\eps^2$）；$\sin\frac1x$；$\frac{\sin x}x$。\\
+\qitem{3} $f$ 连续 $\Rightarrow f^2,|f|$ 连续；反之不成立。\\
+\qitem{5} $\max\{f,g\}=\frac12(f+g+|f-g|)$ 连续。\\
+\qitem{7} $\lim f^g=\alpha^\beta$；求值 (2) $e^2$；(3) $e^{\cot a}$；(4) $e^{x+1}$；(5) $e^2$。\\
+\qitem{8} 间断点分类（可去/跳跃/无穷）。\\
+\qitem{9} $f(x^2)=f(x)$ 且连续 $\Rightarrow f$ 为常数。
+
+\subsection*{§3 无穷小/无穷大量的阶}
+\qitem{1} 等价阶：$x\to0$ 与 $x\to\infty$ 分别求 $a,\alpha$。\\
+\qitem{2} 增长速度：$\ln^k x\prec x^\alpha\prec a^x\prec[x]!$。\\
+\qitem{3} 计算：(1) $\frac16$；(5) $a^\alpha\ln a$；(8) $\frac1a$；(9) $e^2$；(10) $e^{-1}$；(11)(12) $\ln x$。
+
+\subsection*{§4 闭区间连续函数}
+\qitem{1} $[a,+\infty)$ 连续且极限有限 $\Rightarrow$ 有界。\\
+\qitem{5} 区间套证零点定理。\\
+\qitem{6} $x=a\sin x+b$ 有正根。\\
+\qitem{7} $x^3+px+q=0\ (p>0)$ 唯一实根。\\
+\qitem{8} 一致连续：$\sin\frac1x$ 在 $(0,1)$ 否；$\sqrt x$、$\ln x$、$\cos\sqrt x$ 是。\\
+\qitem{10} $f(0)=f(2)\Rightarrow\exists y-x=1,f(x)=f(y)$（$F=f(x+1)-f(x)$）。\\
+\qitem{15} $[a,+\infty)$ 连续且极限有限 $\Rightarrow$ 一致连续。
+
+\section{第 4 章\quad 微分（原书页 47--70）}
+\subsection*{§1 微分和导数}
+\qitem{1} 球镀铜：$\Delta V\approx4\pi r^2\Delta r$，$m\approx1.12$ g。\\
+\qitem{2} $\sqrt[3]{x^2}$ 除 $0$ 外可微。
+
+\subsection*{§2 导数的意义和性质}
+\qitem{1} 变形极限：(1) $-f'(x_0)$；(3) $2f'(x_0)$。\\
+\qitem{3} $f(1+\sin x)-3f(1-\sin x)=8x+\alpha$：$f(1)=0,f'(1)=2$。\\
+\qitem{4} 椭圆光学反射；\qitem{5} 双曲线切线截三角形面积 $2a^2$ 定值。\\
+\qitem{6} 不可导点：$|\sin x|$ 在 $k\pi$；$e^{-|x|}$ 在 0。\\
+\qitem{8} $f(0)=0$ 时 $|f|$ 可导 $\iff f'(0)=0$。\\
+\qitem{11} $f$ 在 0 可导 $\iff f(x)=xg(x)$（$g$ 连续），$f'(0)=g(0)$。
+
+\subsection*{§3 四则运算和反函数求导}
+\qitem{1} 定义证 $(\cos x)'=-\sin x$。\\
+\qitem{2} $(\csc x)'=-\csc x\cot x$；$(\arccos x)'=-\frac1{\sqrt{1-x^2}}$；$(\operatorname{arccot}x)'=-\frac1{1+x^2}$。\\
+\qitem{3} 14 个函数四则求导（见题库详列）。\\
+\qitem{5} $y=x$ 与 $y=\log_a x$ 相切 $\Rightarrow a=e^{1/e}$。\qitem{6} $y=x^n$ 切线交点极限 $\frac1e$。
+
+\subsection*{§4 复合函数求导}
+\qitem{1} 15 个复合求导：$(2x^2-x+1)^2$；$e^{x^2}\sin3x$；$\sin x^3$；$\cos\sqrt x$ 等。\\
+\qitem{3} 抽象函数：$[f(x^{2/3})]'=\frac2{3\sqrt[3]x}f'$；$[\arctan f]'=\frac{f'}{1+f^2}$。\\
+\qitem{4} 对数求导：$x^x\Rightarrow(1+\ln x)x^x$。\\
+\qitem{5} 隐函数：$x^3+y^3-3axy=0\Rightarrow y'=\frac{ay-x^2}{y^2-ax}$。\\
+\qitem{8} 参数方程：$x=a\cos^3t,y=a\sin^3t\Rightarrow\frac{dy}{dx}=-\tan t$。
+
+\subsection*{§5 高阶导数与高阶微分}
+\qitem{2} $n$ 阶导：$\sin^2\omega x$；$\frac1{x^2-5x+6}\Rightarrow(-1)^nn![\frac1{(x-3)^{n+1}}-\frac1{(x-2)^{n+1}}]$。\\
+\qitem{5} Leibniz：$\arctan x$、$\arcsin x$ 的 $y^{(n)}(0)$ 递推。\\
+\qitem{6} 隐函数二阶导。
+
+\section*{附录\quad 核心公式速查}
+\begin{itemize}[leftmargin=1.5em]
+\item $\eps$–$N$：$x_n\to a\iff\forall\eps>0\exists N\forall n>N:|x_n-a|<\eps$。
+\item 夹逼、Cauchy、单调有界、区间套、B--W。
+\item $\eps$–$\delta$：分子去心、连续不去心。
+\item 两重要极限：$\lim\frac{\sin x}x=1$，$\lim(1+\frac1x)^x=e$。
+\item 求导表 + 链式 + 隐函数 + 参数方程 + Leibniz。
+\end{itemize}
+
+\end{document}

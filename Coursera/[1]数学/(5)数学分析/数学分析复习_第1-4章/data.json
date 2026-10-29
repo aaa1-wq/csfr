@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "vaultName": "数学分析（上册）第1-4章",
+  "generatedAt": "2026-10-21",
+  "source": "《数学分析（第3版）上册 习题全解指南》第1-4章",
+  "masterIndexContent": "graph LR\n  Ch1[第1章 集合与映射]:::core --> Ch2[第2章 数列极限]:::core\n  Ch2 --> Ch3[第3章 函数极限与连续]:::core\n  Ch3 --> Ch4[第4章 微分]:::core\n  classDef core fill:#f9d,stroke:#a57",
+  "chapters": {
+    "01": {
+      "id": "01",
+      "slug": "01_第1章_集合与映射",
+      "number": 1,
+      "name": "第1章 集合与映射",
+      "star": 2,
+      "keypoints": [
+        {"number": 1, "title": "集合运算与命题辨析", "star": 2, "body": "子集计数 $2^n$；可列集（无限集含可列子集，可列∪可列可列）；分配律、De Morgan 律；消去律不成立需反例。"},
+        {"number": 2, "title": "映射计数与区间一一对应", "star": 2, "body": "映射 $|T|^{|S|}$ 个，双射 $|S|!$ 个；$[a,b]\\to[0,1]$：$x\\mapsto\\frac{x-a}{b-a}$；$(0,1)\\to\\mathbb R$：$x\\mapsto-\\cot(\\pi x)$。"},
+        {"number": 3, "title": "复合函数、定义域与值域", "star": 3, "body": "复合先算内层值域再与定义域取交；定义域三原则：分母非零、偶次根号内≥0、对数真数>0；函数相等需定义域和法则都同。"},
+        {"number": 4, "title": "函数方程与奇偶分解", "star": 2, "body": "代换法：令 $t=\\varphi(x)$ 反解；任意函数 $f=\\frac{f(x)+f(-x)}2+\\frac{f(x)-f(-x)}2$；迭代 $f=\\frac1{1+x}$ 呈 Fibonacci 系数。"}
+      ],
+      "examples": [
+        {"title": "例1.1 集合等式双向证明", "body": "$x\\in A\\cap(B\\cup D)\\Leftrightarrow x\\in A$ 且($x\\in B$或$x\\in D$)$\\Leftrightarrow x\\in(A\\cap B)\\cup(A\\cap D)$，双向包含。"},
+        {"title": "例1.2 函数方程", "body": "$f(\\frac{x}{x-1})=\\frac{3x-1}{3x+1}$，令 $t=\\frac{x}{x-1}$，$x=\\frac{t}{t-1}$，得 $f(x)=\\frac{2x+1}{4x-1}$。"},
+        {"title": "例1.3 定义域值域", "body": "$y=\\sqrt{4-3x-x^2}$：定义域 $[-4,1]$，值域 $[0,\\frac52]$。"},
+        {"title": "例1.4 非单调双射", "body": "$f(x)=x$（有理）、$1-x$（无理），对合故双射，但不单调。"}
+      ],
+      "formulas": [
+        {"name": "子集个数", "formula": "$$|\\mathcal P(T)|=2^n=\\sum_{k=0}^n C_n^k$$", "condition": "$|T|=n$", "note": "组合证明", "importance": "know", "meaning": "n元集子集数", "derivation": "按含k元素分类", "application": "集合计数", "related": ""},
+        {"name": "区间双射", "formula": "$$[a,b]\\to[0,1]:x\\mapsto\\frac{x-a}{b-a}$$", "condition": "$a<b$", "note": "", "importance": "familiar", "meaning": "线性映到单位区间", "derivation": "端点对齐", "application": "等势", "related": ""},
+        {"name": "奇偶分解", "formula": "$$f(x)=\\frac{f(x)+f(-x)}2+\\frac{f(x)-f(-x)}2$$", "condition": "定义域关于0对称", "note": "偶部+奇部", "importance": "must", "meaning": "任意函数拆偶奇", "derivation": "直接验证", "application": "函数性质", "related": ""}
+      ],
+      "quizQuestions": [
+        {"title": "自测1", "question": "$n$元集有多少子集？", "answer": "$2^n$，$\\sum C_n^k=2^n$。"},
+        {"title": "自测2", "question": "证明无限集含可列子集。", "answer": "逐个取新元素构造 $\\{a_1,a_2,\\dots\\}\\subset T$。"},
+        {"title": "自测6", "question": "$f(\\frac{x}{x-1})=\\frac{3x-1}{3x+1}$ 求 $f(x)$。", "answer": "$f(x)=\\frac{2x+1}{4x-1}$。"}
+      ],
+      "examMapping": "原书第1章 §1 题1-7、§2 题1-13。",
+      "deps": ["01"],
+      "depTypes": {"02": "tool"},
+      "files": {"讲解.md": "01_第1章_集合与映射/讲解.md", "题库.md": "01_第1章_集合与映射/题库.md", "速查.md": "01_第1章_集合与映射/速查.md"}
+    },
+    "02": {
+      "id": "02",
+      "slug": "02_第2章_数列极限",
+      "number": 2,
+      "name": "第2章 数列极限",
+      "star": 3,
+      "keypoints": [
+        {"number": 1, "title": "实数系的连续性：无理数与确界", "star": 3, "body": "无理数用反证+既约分数；$\\sup S=-\\inf\\{-x:x\\in S\\}$；$S=\\{x\\in\\mathbb Q:x^2<3\\}$ 在 $\\mathbb Q$ 内无上下确界。"},
+        {"number": 2, "title": "ε–N 语言与无穷小", "star": 3, "body": "$x_n\\to a\\iff\\forall\\varepsilon>0\\exists N\\forall n>N:|x_n-a|<\\varepsilon$；证无穷小先放大到 $\\le\\frac Cn$ 再取 $N$。"},
+        {"number": 3, "title": "夹逼定理", "star": 3, "body": "$a_n\\le c_n\\le b_n$，$a_n,b_n\\to L\\Rightarrow c_n\\to L$。"},
+        {"number": 4, "title": "收敛准则、子列与基本列", "star": 3, "body": "子列判别、$\\sqrt{\\cdot}$保极限、无穷小×有界、单调有界、区间套、B–W、Cauchy 原理。"}
+      ],
+      "examples": [
+        {"title": "例2.1 $\\mathbb Q$ 内确界不存在", "body": "$S=\\{x\\in\\mathbb Q:x^2<3\\}$ 无上确界：反设 $\\sup S=\\frac nm$，两种情况均矛盾。"},
+        {"title": "例2.2 按定义证无穷小", "body": "$\\frac{n^2}{3^n}<\\frac1n$（$n>3$），取 $N=\\max\\{3,[1/\\varepsilon]\\}$。"},
+        {"title": "例2.6 加权和", "body": "$\\sum\\lambda^{n-k}u_k\\to\\frac{a}{1-\\lambda}$（$|\\lambda|<1,u_k\\to a$）。"},
+        {"title": "例2.8 单调有界", "body": "$x_1=\\sqrt2,x_{n+1}=\\sqrt{2+x_n}$，有界递增，$L=2$。"}
+      ],
+      "formulas": [
+        {"name": "ε–N 定义", "formula": "$$x_n\\to a\\iff\\forall\\varepsilon>0\\exists N\\forall n>N:|x_n-a|<\\varepsilon$$", "condition": "", "note": "N 可依赖 ε 不依赖 n", "importance": "must", "meaning": "数列收敛", "derivation": "", "application": "一切数列极限", "related": "Cauchy"},
+        {"name": "夹逼", "formula": "$$a_n\\le c_n\\le b_n,\\ a_n,b_n\\to L\\Rightarrow c_n\\to L$$", "condition": "大 n 成立", "note": "", "importance": "must", "meaning": "两边夹", "derivation": "同一 ε 控制", "application": "和式极限", "related": ""},
+        {"name": "Cauchy 收敛原理", "formula": "$$\\forall\\varepsilon>0\\exists N\\forall m,n>N:|x_m-x_n|<\\varepsilon$$", "condition": "在 $\\mathbb R$ 中", "note": "完备性", "importance": "must", "meaning": "基本列收敛", "derivation": "有界+B–W", "application": "证收敛", "related": ""}
+      ],
+      "quizQuestions": [
+        {"title": "自测1", "question": "证明 $\\sqrt6$ 无理。", "answer": "反证+既约分数矛盾。"},
+        {"title": "自测4", "question": "奇偶子列同极限推全列。", "answer": "取 $N=\\max\\{2N_1,2N_2+1\\}$。"},
+        {"title": "自测5", "question": "求 $\\sum\\frac1{n+\\sqrt k}$ 极限。", "answer": "夹逼得 1。"}
+      ],
+      "examMapping": "原书第2章 §1 题1-8、§2 题1-14、§3 题1-8、§4 题1-16。",
+      "deps": ["02"],
+      "depTypes": {"01": "tool"},
+      "files": {"讲解.md": "02_第2章_数列极限/讲解.md", "题库.md": "02_第2章_数列极限/题库.md", "速查.md": "02_第2章_数列极限/速查.md"}
+    },
+    "03": {
+      "id": "03",
+      "slug": "03_第3章_函数极限与连续",
+      "number": 3,
+      "name": "第3章 函数极限与连续函数",
+      "star": 3,
+      "keypoints": [
+        {"number": 1, "title": "函数极限 ε–δ / ε–X", "star": 3, "body": "有限点去心；无穷用 X；无穷大用 G；先限 $|x-x_0|<1$ 控系数再取 $\\delta=\\min\\{1,\\varepsilon/C\\}$。"},
+        {"number": 2, "title": "单侧极限与 Heine 归结原则", "star": 3, "body": "左右极限换半邻域；Heine：极限存在 $\\iff$ 所有 $x_n\\to x_0$ 对应 $f(x_n)$ 同极限。"},
+        {"number": 3, "title": "连续与间断点分类", "star": 3, "body": "连续不去心；间断点第一类（可去/跳跃）第二类（不存在/无穷）；$f$连续⇒$f^2,|f|$连续。"},
+        {"number": 4, "title": "无穷小/无穷大量的阶", "star": 3, "body": "等价阶求 $a,\\alpha$；$\\ln^k x\\prec x^\\alpha\\prec a^x\\prec[x]!$；等价替换+Taylor。"},
+        {"number": 5, "title": "闭区间连续函数（Cantor 等）", "star": 3, "body": "有界最值、介值零点、一致连续；$[a,+\\infty)$ 连续且极限有限⇒有界且一致连续。"}
+      ],
+      "examples": [
+        {"title": "例3.1 按定义证 $x^3\\to8$", "body": "$|x^3-8|<19|x-2|$，取 $\\delta=\\min\\{1,\\varepsilon/19\\}$。"},
+        {"title": "例3.3 单侧极限", "body": "$\\frac{2^{1/x}+1}{2^{1/x}-1}$：左 -1 右 1，不存在。"},
+        {"title": "例3.5 零点存在", "body": "$x=a\\sin x+b$ 有正根，$f(0)<0,f(A)>0$。"},
+        {"title": "例3.7 一致连续判定", "body": "$\\sin\\frac1x$ 在 $(0,1)$ 非一致连续（子列），在 $(a,1)$ 一致连续。"}
+      ],
+      "formulas": [
+        {"name": "ε–δ 定义", "formula": "$$\\lim_{x\\to x_0}f=A\\iff\\forall\\varepsilon>0\\exists\\delta>0:0<|x-x_0|<\\delta\\Rightarrow|f-A|<\\varepsilon$$", "condition": "去心", "note": "", "importance": "must", "meaning": "函数极限", "derivation": "", "application": "极限证明", "related": "Heine"},
+        {"name": "重要极限", "formula": "$$\\lim_{x\\to0}\\frac{\\sin x}{x}=1,\\quad\\lim_{x\\to\\infty}(1+\\frac1x)^x=e$$", "condition": "", "note": "", "importance": "must", "meaning": "两重要极限", "derivation": "面积比较/积分估计", "application": "求极限", "related": "等价无穷小"},
+        {"name": "一致连续", "formula": "$$\\forall\\varepsilon>0\\exists\\delta>0\\forall x',x'':|x'-x''|<\\delta\\Rightarrow|f(x')-f(x'')|<\\varepsilon$$", "condition": "δ 不依赖点", "note": "", "importance": "must", "meaning": "整体一致", "derivation": "", "application": "Cantor 定理", "related": ""}
+      ],
+      "quizQuestions": [
+        {"title": "自测1", "question": "ε–δ 证 $\\lim\\frac{x-1}{3x+1}=\\frac12$。", "answer": "$\\delta=\\min\\{1,6\\varepsilon\\}$。"},
+        {"title": "自测3", "question": "证 Dirichlet 函数极限不存在。", "answer": "有理/无理子列极限不同。"},
+        {"title": "自测5", "question": "证 $x^3+px+q=0$ 唯一实根。", "answer": "严格增+零点定理。"}
+      ],
+      "examMapping": "原书第3章 §1 题1-15、§2 题1-9、§3 题1-3、§4 题1-15。",
+      "deps": ["03"],
+      "depTypes": {"02": "tool"},
+      "files": {"讲解.md": "03_第3章_函数极限与连续/讲解.md", "题库.md": "03_第3章_函数极限与连续/题库.md", "速查.md": "03_第3章_函数极限与连续/速查.md"}
+    },
+    "04": {
+      "id": "04",
+      "slug": "04_第4章_微分",
+      "number": 4,
+      "name": "第4章 微分",
+      "star": 3,
+      "keypoints": [
+        {"number": 1, "title": "微分与导数定义", "star": 3, "body": "导数极限定义；可微 $\\Delta y=f'\\Delta x+o(\\Delta x)$；可导⇒连续；微元法近似。"},
+        {"number": 2, "title": "导数的意义与性质", "star": 2, "body": "切线/法线斜率；左右导数相等⇔可导；$|f|$ 可导判别；$f(0)=0$ 时 $f=xg(x)$。"},
+        {"number": 3, "title": "四则运算与反函数求导", "star": 3, "body": "乘积/商法则；反函数 $(f^{-1})'=1/f'$；基本求导表。"},
+        {"number": 4, "title": "复合函数求导（链式）", "star": 3, "body": "链式；对数求导法（幂指）；隐函数；参数方程 $dy/dx=y_t'/x_t'$；一阶微分形式不变性。"},
+        {"number": 5, "title": "高阶导数与高阶微分", "star": 2, "body": "逐阶；常用 $(e^{ax})^{(n)},(\\sin ax)^{(n)}$；Leibniz 公式。"}
+      ],
+      "examples": [
+        {"title": "例4.1 微元法镀铜", "body": "$dV=4\\pi r^2dr$，$m=\\rho\\Delta V\\approx1.12$ g。"},
+        {"title": "例4.3 双曲线面积", "body": "$xy=a^2$ 切线截三角形面积 $2a^2$ 定值。"},
+        {"title": "例4.6 幂指函数", "body": "$y=x^x$，$y'=(1+\\ln x)x^x$。"},
+        {"title": "例4.8 有理分式 n 阶导", "body": "$y=\\frac1{x^2-5x+6}$，拆部分分式得 $y^{(n)}$。"}
+      ],
+      "formulas": [
+        {"name": "导数定义", "formula": "$$f'(x_0)=\\lim_{\\Delta x\\to0}\\frac{f(x_0+\\Delta x)-f(x_0)}{\\Delta x}$$", "condition": "", "note": "", "importance": "must", "meaning": "瞬时变化率", "derivation": "", "application": "一切求导", "related": "微分"},
+        {"name": "链式法则", "formula": "$$\\frac{d}{dx}f(g(x))=f'(g(x))g'(x)$$", "condition": "", "note": "", "importance": "must", "meaning": "复合求导", "derivation": "", "application": "复合函数", "related": ""},
+        {"name": "参数方程求导", "formula": "$$\\frac{dy}{dx}=\\frac{y'(t)}{x'(t)}$$", "condition": "$x'(t)\\ne0$", "note": "", "importance": "must", "meaning": "参数导数", "derivation": "$dy/dx=(dy/dt)/(dx/dt)$", "application": "参数曲线", "related": ""},
+        {"name": "Leibniz 公式", "formula": "$$(uv)^{(n)}=\\sum_{k=0}^n C_n^k u^{(k)}v^{(n-k)}$$", "condition": "", "note": "", "importance": "familiar", "meaning": "乘积高阶导", "derivation": "归纳", "application": "求 $y^{(n)}(0)$", "related": ""}
+      ],
+      "quizQuestions": [
+        {"title": "自测1", "question": "求 $\\lim\\frac{f(x_0+h)-f(x_0-h)}h$。", "answer": "$2f'(x_0)$。"},
+        {"title": "自测3", "question": "求 $y=(\\sin x)^x$ 导数。", "answer": "$y'=(\\sin x)^x(\\ln\\sin x+x\\cot x)$。"},
+        {"title": "自测6", "question": "求 $y=\\frac1{x+a}$ 的 $y^{(n)}$。", "answer": "$\\frac{(-1)^nn!}{(x+a)^{n+1}}$。"}
+      ],
+      "examMapping": "原书第4章 §1 题1-2、§2 题1-11、§3 题1-10、§4 题1-13、§5 题1-6。",
+      "deps": ["04"],
+      "depTypes": {"03": "tool"},
+      "files": {"讲解.md": "04_第4章_微分/讲解.md", "题库.md": "04_第4章_微分/题库.md", "速查.md": "04_第4章_微分/速查.md"}
+    }
+  }
+}
